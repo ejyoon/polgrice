@@ -1,0 +1,130 @@
+;; Define evaluative states
+(define states
+  (list 1 2 3 4))
+
+
+;; Prior probability of each evaluative state (fixme: taken from human experiments)
+(define (state-prior) 
+  (multinomial states 
+               '(1 1 1 1))) 
+
+;; Probability that given referent (e.g, self, listener, or another) 
+;; the speaker wants to be polite (i.e., maximize praise to the referent) 
+(define (politeness-prior referent)
+  (if (flip (second (assoc referent
+                           (list (list 'speaker 0.2) ; want to minimize praise for self
+                                 (list 'listener 0.8) ; want to maximize praise for listener
+                                 ))))
+      1
+      0))
+
+;; Prior on valence (desirability) associated with each state
+(define (valence-prior state)
+  (if (flip (second (assoc state
+                           (list (list 1 0.1) 
+                                 (list 2 0.3)
+                                 (list 3 0.7)
+                                 (list 4 0.9)
+                                 ))))
+      1
+      0))
+
+;; Uniform prior over QUDs 
+(define (qud-prior)
+  (multinomial (list 't 'p 'tp) '(0.25 0.25 0.50)))
+
+(define (qud-fn qud)
+  (second
+   (assoc qud
+          (list
+           (list 't (lambda (state politeness) state))
+           (list 'p (lambda (state politeness) politeness))
+           (list 'tp (lambda (state politeness) (list state politeness)))
+           ))))
+
+;; words and states associated with them
+(define (literal-interpretation words state)
+  (case words
+        (("great") (= state 4))
+        (("not great") (< state 4))
+        (("bad") (= state 1))
+        (("not bad") (> state 1))))
+
+
+;; define utterance
+(define utterances (list "great" "not great" "bad" "not bad"))
+
+(define (utterance-prior)
+  (multinomial utterances
+               '(1 1 1 1)))
+
+;; Literal listener, infers the qud value assuming the utterance is true of the state
+(define lit-listener
+  (mem
+   (lambda (utterance qud)
+     (enumeration-query
+      (define state (state-prior))
+      (define politeness (valence-prior state))
+      ((qud-fn qud) state politeness)
+      (literal-interpretation utterance state)))))
+
+;; Speaker, chooses an utterance to convey a particular value of the qud
+(define speaker
+  (mem
+   (lambda (val qud referent)
+     (enumeration-query
+      (define utterance (utterance-prior))
+      utterance
+      (equal? val (apply multinomial (lit-listener utterance qud)))
+      ))))
+
+;; Pragmatic listener, jointly infers the state, politeness, and QUD
+(define prag-listener
+  (mem
+   (lambda (utterance)
+     (enumeration-query
+      (define state (state-prior))
+      (define politeness (valence-prior state))
+      (define qud (qud-prior))
+;      (define qud 'p)
+;      (define qud 't)
+;      (define qud 'tp)
+      (define val ((qud-fn qud) state politeness)) 
+      
+      ;(list state politeness)
+      politeness
+      ;state
+      
+      
+      (equal? utterance
+              (apply multinomial (speaker val qud)))
+      ;(equal? state 2)
+      ;(equal? politeness 1)
+      ))))
+
+;; define speaker2, based on prag-listener
+(define speaker2
+  (mem
+   (lambda (state polite?)
+     (enumeration-query
+      (define utterance (utterance-prior))
+      
+      utterance
+      
+      (equal? (list state polite?) 
+              (apply multinomial (prag-listener utterance)))))))
+
+
+;(barplot (lit-listener "bad" 'tp))
+;(barplot (speaker 1 'p 'listener))
+(barplot (prag-listener "not bad") "politeness given 'not bad'")
+(barplot (prag-listener "not great") "politeness given 'not great'")
+
+;; (barplot (speaker2 3 0) "state=2 and not polite")
+;; (barplot (speaker2 3 1) "state=2 and polite")
+
+;(barplot (speaker2 0))
+;(barplot (speaker2 1))
+;(display (speaker2 3))
+;(barplot (speaker2 4))
+
