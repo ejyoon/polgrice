@@ -1,0 +1,101 @@
+{
+    "ApprovalTime": "2015-05-30T16:36:47Z",
+    "AutoApprovalTime": "2015-05-30T16:32:55Z",
+    "AssignmentId": "3L2IS5HSFAIZ72EASENU0AS92BDNUT",
+    "WorkerId": "A2TDGWWPX6IMIZ",
+    "answers": {
+        "data": {
+            "inferredProb8": [
+                0.575,
+                0.725,
+                0.625,
+                0.3
+            ],
+            "expt_gen": [
+                "interesting"
+            ],
+            "domain": [
+                "presentation",
+                "cookies",
+                "cake",
+                "poem"
+            ],
+            "numTrials": 4,
+            "language": [
+                "English"
+            ],
+            "expt_aim": [
+                "unsure"
+            ],
+            "inferredProb1": [
+                0.15,
+                0.125,
+                0.125,
+                0.225
+            ],
+            "inferredProb0": [
+                0.075,
+                0.075,
+                0.15,
+                0.175
+            ],
+            "inferredProb3": [
+                0.15,
+                0.2,
+                0.225,
+                0.45
+            ],
+            "inferredProb2": [
+                0.125,
+                0.2,
+                0.175,
+                0.35
+            ],
+            "cond": 3,
+            "inferredProb4": [
+                0.175,
+                0.35,
+                0.3,
+                0.525
+            ],
+            "inferredProb7": [
+                0.75,
+                0.8,
+                0.725,
+                0.35
+            ],
+            "inferredProb6": [
+                0.75,
+                0.825,
+                0.65,
+                0.35
+            ],
+            "inferredProb9": [
+                0.55,
+                0.65,
+                0.6,
+                0.125
+            ],
+            "inferredProb5": [
+                0.3,
+                0.775,
+                0.575,
+                0.6
+            ],
+            "character_thoughts": [
+                "They seemed fairly average"
+            ],
+            "order": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    "AcceptTime": "2015-05-30T15:30:12Z",
+    "HITId": "3Y3CZJSZ9KT0E1ITUIR1CYAG6JG5RU",
+    "Assignment": "",
+    "AssignmentStatus": "Approved",
+    "SubmitTime": "2015-05-30T15:32:55Z"
+}

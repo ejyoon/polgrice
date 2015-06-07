@@ -1,0 +1,101 @@
+{
+    "ApprovalTime": "2015-05-30T17:06:59Z",
+    "AutoApprovalTime": "2015-05-30T17:01:48Z",
+    "AssignmentId": "3DL65MZB8DFZR2KXDOZBGHCUHJ6CEK",
+    "WorkerId": "AAW7K3KWEL2HD",
+    "answers": {
+        "data": {
+            "inferredProb8": [
+                0.625,
+                0.5,
+                0.7,
+                0.6
+            ],
+            "expt_gen": [
+                "I tried to give them the benefit of the doubt that their work was at least probably decent, if not good or excellent."
+            ],
+            "domain": [
+                "cake",
+                "cookies",
+                "poem",
+                "presentation"
+            ],
+            "numTrials": 4,
+            "language": [
+                "English"
+            ],
+            "expt_aim": [
+                "Whether people assume things are more positive or negative?"
+            ],
+            "inferredProb1": [
+                0.25,
+                0.5,
+                0.5,
+                0.35
+            ],
+            "inferredProb0": [
+                0.25,
+                0.225,
+                0.35,
+                0.225
+            ],
+            "inferredProb3": [
+                0.425,
+                0.625,
+                0.575,
+                0.575
+            ],
+            "inferredProb2": [
+                0.25,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "cond": 3,
+            "inferredProb4": [
+                0.5,
+                0.725,
+                0.7,
+                0.675
+            ],
+            "inferredProb7": [
+                0.75,
+                0.6,
+                0.875,
+                0.625
+            ],
+            "inferredProb6": [
+                0.7,
+                0.65,
+                0.8,
+                0.675
+            ],
+            "inferredProb9": [
+                0.625,
+                0.425,
+                0.425,
+                0.375
+            ],
+            "inferredProb5": [
+                0.6,
+                0.775,
+                0.775,
+                0.75
+            ],
+            "character_thoughts": [
+                "They were fishing for compliments?"
+            ],
+            "order": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    "AcceptTime": "2015-05-30T15:47:05Z",
+    "HITId": "3Y3CZJSZ9KT0E1ITUIR1CYAG6JG5RU",
+    "Assignment": "",
+    "AssignmentStatus": "Approved",
+    "SubmitTime": "2015-05-30T16:01:48Z"
+}

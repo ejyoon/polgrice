@@ -1,0 +1,101 @@
+{
+    "ApprovalTime": "2015-05-30T16:46:50Z",
+    "AutoApprovalTime": "2015-05-30T16:45:43Z",
+    "AssignmentId": "31T4R4OBOSGEIN5NQGL5A7KDVW27CT",
+    "WorkerId": "A3QPV70356KC4O",
+    "answers": {
+        "data": {
+            "inferredProb8": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "expt_gen": [
+                "No"
+            ],
+            "domain": [
+                "cookies",
+                "poem",
+                "cake",
+                "presentation"
+            ],
+            "numTrials": 4,
+            "language": [
+                "English  "
+            ],
+            "expt_aim": [
+                "Did not understaND."
+            ],
+            "inferredProb1": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "inferredProb0": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "inferredProb3": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "inferredProb2": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "cond": 3,
+            "inferredProb4": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "inferredProb7": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "inferredProb6": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "inferredProb9": [
+                0.9,
+                0.5,
+                0.85,
+                0.5
+            ],
+            "inferredProb5": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "character_thoughts": [
+                "Liked to bake and eat."
+            ],
+            "order": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    "AcceptTime": "2015-05-30T15:41:18Z",
+    "HITId": "3Y3CZJSZ9KT0E1ITUIR1CYAG6JG5RU",
+    "Assignment": "",
+    "AssignmentStatus": "Approved",
+    "SubmitTime": "2015-05-30T15:45:43Z"
+}

@@ -1,0 +1,126 @@
+---
+title: "Probmods polite adj v2"
+author: "EJY"
+date: "June 1, 2015"
+output: html_document
+---
+
+Ver 2: 
+
+Posterior
+Q: How did my cookie taste? A: Bad, not bad, great, not great
+polite vs. impolite vs. baseline
+
+```{r warning=FALSE, message=FALSE}
+rm(list = ls())
+library(jsonlite)
+library(ggplot2)
+library(tidyr)
+library(binom)
+source("/Users/ericang/Documents/Courses/Psych204/polite_probmods/experiment/data_analysis/helper/useful.R")
+
+raw.data.path <- "/Users/ericang/Documents/Courses/Psych204/polite_probmods/experiment/versions/v2_statePosterior/production-results/"
+
+## LOOP TO READ IN FILES
+all.data <- data.frame()
+files <- dir(raw.data.path,pattern="*.json")
+
+for (file.name in files) {
+  
+  ## these are the two functions that are most meaningful
+  json_file <- readLines(paste(raw.data.path,file.name,sep=""))
+  json_file_str = paste(json_file, collapse = "")
+  json_file_str = gsub(",}", "}", json_file_str)
+  jso = jsonlite::fromJSON(json_file_str)
+  jso1 <- data.frame(jso)
+  jso1$subid <- substring(file.name, 1, 6)
+  
+  ## now here's where data get bound together
+  all.data <- rbind(all.data, jso1)
+}
+```
+
+Filter out participants and clean up.
+
+```{r}
+d <- all.data %>%
+  select(subid, answers.data.order, answers.data.polite, answers.data.utterance, num_range("answers.data.inferredProb", 0:9)) %>%
+  gather(score, prob, num_range("answers.data.inferredProb", 0:9)) %>%
+  mutate(score = substr(score, 26, 26))  %>%
+  mutate(polite = answers.data.polite) %>%
+  mutate(utterance = answers.data.utterance)
+```
+
+```{r}
+d$prob <- as.numeric(d$prob)
+d$score <- as.numeric(d$score)
+
+## for bootstrapping 95% confidence intervals
+theta <- function(x,xdata,na.rm=T) {mean(xdata[x],na.rm=na.rm)}
+ci.low <- function(x,na.rm=T) {
+  mean(x,na.rm=na.rm) - quantile(bootstrap(1:length(x),1000,theta,x,na.rm=na.rm)$thetastar,.025,na.rm=na.rm)}
+ci.high <- function(x,na.rm=T) {
+  quantile(bootstrap(1:length(x),1000,theta,x,na.rm=na.rm)$thetastar,.975,na.rm=na.rm) - mean(x,na.rm=na.rm)}
+
+# prob ~ score + utterance + polite
+mss <- d %>%
+  group_by(score, subid, utterance, polite) %>%
+  summarize(
+            prob = mean(prob, na.rm=TRUE)
+          )
+ms <- aggregate(prob ~ score + utterance + polite, mss, mean)
+ms$cih <- aggregate(prob ~ score + utterance + polite, mss, ci.high)$prob
+ms$cil <- aggregate(prob ~ score + utterance + polite, mss, ci.low)$prob
+
+qplot(score, prob, 
+      colour = polite,
+      data=subset(ms, prob!="NA")) + 
+  geom_line(aes(group=polite)) +
+  facet_grid(.~utterance) +
+  xlab("objective score") +
+  ylab("likelihood for the objective score") +
+  ggtitle("Score given utterance, based on politeness") +
+  geom_errorbar(aes(ymin=prob-cil,ymax=prob+cih,width=.1))
+
+# prob ~ score + utterance (only baseline)
+mss <- d %>%
+  group_by(score, subid, utterance, polite) %>%
+  summarize(
+            prob = mean(prob, na.rm=TRUE)
+          )
+ms <- aggregate(prob ~ score + utterance + polite, mss, mean)
+ms$cih <- aggregate(prob ~ score + utterance + polite, mss, ci.high)$prob
+ms$cil <- aggregate(prob ~ score + utterance + polite, mss, ci.low)$prob
+
+qplot(score, prob, 
+      colour = polite,
+      data=subset(ms, prob!="NA")) + 
+  geom_line(aes(group=polite)) +
+  facet_grid(.~utterance) +
+  xlab("objective score") +
+  ylab("likelihood for the objective score") +
+  ggtitle("Score given utterance, based on politeness") +
+  geom_errorbar(aes(ymin=prob-cil,ymax=prob+cih,width=.1))
+```
+
+```{r}
+# model
+model <- read.csv("/Users/ericang/Documents/Courses/Psych204/polite_probmods/experiment/versions/v2_statePosterior/posterior_model.csv")
+
+model$polite <- ordered(model$polite, levels = c("baseline","polite","impolite"))
+
+qplot(score, prob, 
+      colour = polite,
+      data=subset(model, prob!="NA")) + 
+  geom_line(aes(group=polite)) +
+  facet_grid(.~utterance) +
+  xlab("objective score") +
+  ylab("likelihood for the objective score") +
+  ggtitle("Model predictions: Score given utterance, based on politeness")
+```
+
+
+```{r}
+lmer <- lmer(prob ~ valence * utterance + (valence | subid), data=d)
+summary(lmer)
+```

@@ -1,0 +1,120 @@
+{
+    "ApprovalTime": "2015-06-01T20:46:48Z",
+    "AutoApprovalTime": "2015-06-01T20:44:10Z",
+    "AssignmentId": "37TRT2X24QROSDEJDPE72DJ449UBJV",
+    "WorkerId": "A2IGIN0WASUNUM",
+    "answers": {
+        "data": {
+            "domain": [
+                "presentation",
+                "poem",
+                "cookies",
+                "cake"
+            ],
+            "expt_gen": [
+                "None I can think of."
+            ],
+            "inferredProb0": [
+                0,
+                0,
+                0,
+                0.7
+            ],
+            "inferredProb3": [
+                0,
+                0,
+                0.7,
+                0.75
+            ],
+            "inferredProb2": [
+                0,
+                0,
+                0.7,
+                1
+            ],
+            "cond": 2,
+            "inferredProb4": [
+                0,
+                0,
+                0.7,
+                0
+            ],
+            "inferredProb7": [
+                0.675,
+                0.7,
+                0,
+                0
+            ],
+            "inferredProb6": [
+                0.5,
+                0,
+                0,
+                0
+            ],
+            "inferredProb9": [
+                0.675,
+                1,
+                0,
+                0
+            ],
+            "inferredProb8": [
+                0.675,
+                1,
+                0,
+                0
+            ],
+            "numTrials": 4,
+            "polite": [
+                "impolite",
+                "impolite",
+                "impolite",
+                "impolite"
+            ],
+            "character_thoughts": [
+                "Just that they were all blunt."
+            ],
+            "inferredProb1": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "language": [
+                "English"
+            ],
+            "expt_aim": [
+                "Interpreting vague feedback based on reputation (\"just how bad is bad?\")"
+            ],
+            "expt": "adj_statePos",
+            "context": [
+                null,
+                null,
+                null,
+                null
+            ],
+            "inferredProb5": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "utterance": [
+                "not_bad",
+                "great",
+                "not_great",
+                "bad"
+            ],
+            "order": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    "AcceptTime": "2015-06-01T19:17:21Z",
+    "HITId": "3RKHNXPHGWWVCCVD5ZQCJYGIB9QUKM",
+    "Assignment": "",
+    "AssignmentStatus": "Approved",
+    "SubmitTime": "2015-06-01T19:44:10Z"
+}

@@ -1,0 +1,101 @@
+{
+    "ApprovalTime": "2015-05-30T16:41:48Z",
+    "AutoApprovalTime": "2015-05-30T16:38:21Z",
+    "AssignmentId": "34S9DKFK73PGOBYF2FKJ3VYMYZOYN2",
+    "WorkerId": "A22KRF782ELLB0",
+    "answers": {
+        "data": {
+            "inferredProb8": [
+                0.325,
+                0.625,
+                0.675,
+                0.575
+            ],
+            "expt_gen": [
+                "No other comments."
+            ],
+            "domain": [
+                "presentation",
+                "poem",
+                "cake",
+                "cookies"
+            ],
+            "numTrials": 4,
+            "language": [
+                "English"
+            ],
+            "expt_aim": [
+                "I guess you're seeing how we interpret how people tell other people things that seem like judgments."
+            ],
+            "inferredProb1": [
+                0.125,
+                0.35,
+                0.3,
+                0.125
+            ],
+            "inferredProb0": [
+                0.075,
+                0.275,
+                0.275,
+                0.075
+            ],
+            "inferredProb3": [
+                0.35,
+                0.55,
+                0.4,
+                0.35
+            ],
+            "inferredProb2": [
+                0.225,
+                0.425,
+                0.325,
+                0.3
+            ],
+            "cond": 3,
+            "inferredProb4": [
+                0.4,
+                0.625,
+                0.425,
+                0.475
+            ],
+            "inferredProb7": [
+                0.425,
+                0.725,
+                0.7,
+                0.6
+            ],
+            "inferredProb6": [
+                0.475,
+                0.75,
+                0.6,
+                0.55
+            ],
+            "inferredProb9": [
+                0.225,
+                0.475,
+                0.55,
+                0.55
+            ],
+            "inferredProb5": [
+                0.45,
+                0.7,
+                0.425,
+                0.475
+            ],
+            "character_thoughts": [
+                "They seemed normal to me."
+            ],
+            "order": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    "AcceptTime": "2015-05-30T15:35:30Z",
+    "HITId": "3Y3CZJSZ9KT0E1ITUIR1CYAG6JG5RU",
+    "Assignment": "",
+    "AssignmentStatus": "Approved",
+    "SubmitTime": "2015-05-30T15:38:21Z"
+}

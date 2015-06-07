@@ -1,0 +1,120 @@
+{
+    "ApprovalTime": "2015-06-01T20:06:49Z",
+    "AutoApprovalTime": "2015-06-01T20:02:45Z",
+    "AssignmentId": "33IZTU6J811O4J0A5FF3JB1JJVTSXZ",
+    "WorkerId": "AAW7K3KWEL2HD",
+    "answers": {
+        "data": {
+            "domain": [
+                "cake",
+                "poem",
+                "cookies",
+                "presentation"
+            ],
+            "expt_gen": [
+                "It seemed very subjective, but I suppose that was the point."
+            ],
+            "inferredProb0": [
+                0.25,
+                0.225,
+                0.325,
+                0.2
+            ],
+            "inferredProb3": [
+                0.5,
+                0.225,
+                0.5,
+                0.175
+            ],
+            "inferredProb2": [
+                0.25,
+                0.225,
+                0.3,
+                0.175
+            ],
+            "cond": 2,
+            "inferredProb4": [
+                0.65,
+                0.35,
+                0.575,
+                0.3
+            ],
+            "inferredProb7": [
+                0.5,
+                0.675,
+                0.475,
+                0.6
+            ],
+            "inferredProb6": [
+                0.65,
+                0.6,
+                0.55,
+                0.5
+            ],
+            "inferredProb9": [
+                0.2,
+                0.825,
+                0.25,
+                0.375
+            ],
+            "inferredProb8": [
+                0.4,
+                0.775,
+                0.375,
+                0.5
+            ],
+            "numTrials": 4,
+            "polite": [
+                "impolite",
+                "impolite",
+                "impolite",
+                "impolite"
+            ],
+            "character_thoughts": [
+                "I am wondering whether the description of the ones who are supposed to not be polite are accurate, given what they said. Though it is hard to tell for sure without more information."
+            ],
+            "inferredProb1": [
+                0.25,
+                0.225,
+                0.3,
+                0.2
+            ],
+            "language": [
+                "English"
+            ],
+            "expt_aim": [
+                "How optimistic / pessimistic people are?"
+            ],
+            "expt": "adj_statePos",
+            "context": [
+                null,
+                null,
+                null,
+                null
+            ],
+            "inferredProb5": [
+                0.65,
+                0.5,
+                0.65,
+                0.425
+            ],
+            "utterance": [
+                "bad",
+                "great",
+                "not_great",
+                "not_bad"
+            ],
+            "order": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    "AcceptTime": "2015-06-01T18:58:35Z",
+    "HITId": "3RKHNXPHGWWVCCVD5ZQCJYGIB9QUKM",
+    "Assignment": "",
+    "AssignmentStatus": "Approved",
+    "SubmitTime": "2015-06-01T19:02:45Z"
+}

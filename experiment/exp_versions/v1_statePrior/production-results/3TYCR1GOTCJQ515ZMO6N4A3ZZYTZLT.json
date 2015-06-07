@@ -1,0 +1,101 @@
+{
+    "ApprovalTime": "2015-05-30T16:46:50Z",
+    "AutoApprovalTime": "2015-05-30T16:43:27Z",
+    "AssignmentId": "3TYCR1GOTCJQ515ZMO6N4A3ZZYTZLT",
+    "WorkerId": "A3JUNOSKEFAQ17",
+    "answers": {
+        "data": {
+            "inferredProb8": [
+                0.675,
+                0.575,
+                0.5,
+                0.5
+            ],
+            "expt_gen": [
+                ""
+            ],
+            "domain": [
+                "cookies",
+                "cake",
+                "presentation",
+                "poem"
+            ],
+            "numTrials": 4,
+            "language": [
+                "English"
+            ],
+            "expt_aim": [
+                "No idea."
+            ],
+            "inferredProb1": [
+                0,
+                0.025,
+                0,
+                0
+            ],
+            "inferredProb0": [
+                0.025,
+                0.025,
+                0,
+                0
+            ],
+            "inferredProb3": [
+                0,
+                0.025,
+                0.075,
+                0
+            ],
+            "inferredProb2": [
+                0,
+                0.025,
+                0.075,
+                0.025
+            ],
+            "cond": 3,
+            "inferredProb4": [
+                0,
+                0.025,
+                0.05,
+                0
+            ],
+            "inferredProb7": [
+                0.5,
+                0.5,
+                0.4,
+                0.5
+            ],
+            "inferredProb6": [
+                0,
+                0.025,
+                0.075,
+                0.45
+            ],
+            "inferredProb9": [
+                0.7,
+                0.6,
+                0.6,
+                0.55
+            ],
+            "inferredProb5": [
+                0,
+                0.025,
+                0.025,
+                0
+            ],
+            "character_thoughts": [
+                "They are looking for approval."
+            ],
+            "order": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    "AcceptTime": "2015-05-30T15:37:24Z",
+    "HITId": "3Y3CZJSZ9KT0E1ITUIR1CYAG6JG5RU",
+    "Assignment": "",
+    "AssignmentStatus": "Approved",
+    "SubmitTime": "2015-05-30T15:43:27Z"
+}

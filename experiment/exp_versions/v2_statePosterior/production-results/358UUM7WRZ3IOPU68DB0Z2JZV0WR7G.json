@@ -1,0 +1,120 @@
+{
+    "ApprovalTime": "2015-06-01T20:06:49Z",
+    "AutoApprovalTime": "2015-06-01T20:03:58Z",
+    "AssignmentId": "358UUM7WRZ3IOPU68DB0Z2JZV0WR7G",
+    "WorkerId": "A13XHFV3CFKIOL",
+    "answers": {
+        "data": {
+            "domain": [
+                "poem",
+                "presentation",
+                "cake",
+                "cookies"
+            ],
+            "expt_gen": [
+                "No"
+            ],
+            "inferredProb0": [
+                0,
+                0.525,
+                0,
+                0.75
+            ],
+            "inferredProb3": [
+                0.2,
+                0.675,
+                0,
+                0.7
+            ],
+            "inferredProb2": [
+                0,
+                0.825,
+                0,
+                0.8
+            ],
+            "cond": 3,
+            "inferredProb4": [
+                0.375,
+                0.525,
+                0,
+                0.65
+            ],
+            "inferredProb7": [
+                0.475,
+                0,
+                0.675,
+                0
+            ],
+            "inferredProb6": [
+                0.725,
+                0,
+                0.375,
+                0
+            ],
+            "inferredProb9": [
+                0.05,
+                0,
+                0.825,
+                0
+            ],
+            "inferredProb8": [
+                0.25,
+                0,
+                0.825,
+                0.025
+            ],
+            "numTrials": 4,
+            "polite": [
+                "baseline",
+                "baseline",
+                "baseline",
+                "baseline"
+            ],
+            "character_thoughts": [
+                "They seem like very honest people."
+            ],
+            "inferredProb1": [
+                0,
+                0.65,
+                0,
+                0.85
+            ],
+            "language": [
+                "English"
+            ],
+            "expt_aim": [
+                "Judging how we perceive the intent of sentences."
+            ],
+            "expt": "adj_statePos",
+            "context": [
+                null,
+                null,
+                null,
+                null
+            ],
+            "inferredProb5": [
+                0.575,
+                0.325,
+                0.125,
+                0.175
+            ],
+            "utterance": [
+                "not_bad",
+                "not_great",
+                "great",
+                "bad"
+            ],
+            "order": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    "AcceptTime": "2015-06-01T19:00:48Z",
+    "HITId": "3RKHNXPHGWWVCCVD5ZQCJYGIB9QUKM",
+    "Assignment": "",
+    "AssignmentStatus": "Approved",
+    "SubmitTime": "2015-06-01T19:03:58Z"
+}

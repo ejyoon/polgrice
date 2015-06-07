@@ -1,0 +1,162 @@
+\begin{thebibliography}{}
+
+\bibitem [\protect \citeauthoryear {%
+Bussey%
+}{%
+Bussey%
+}{%
+{\protect \APACyear {1999}}%
+}]{%
+bussey1999children}
+\APACinsertmetastar {%
+bussey1999children}%
+\begin{APACrefauthors}%
+Bussey, K.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1999}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Children's categorization and evaluation of different
+  types of lies and truths} {Children's categorization and evaluation of
+  different types of lies and truths}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Child Development}{70}{6}{1338--1347}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+DePaulo%
+\ \BBA {} Kashy%
+}{%
+DePaulo%
+\ \BBA {} Kashy%
+}{%
+{\protect \APACyear {1998}}%
+}]{%
+depaulo1998everyday}
+\APACinsertmetastar {%
+depaulo1998everyday}%
+\begin{APACrefauthors}%
+DePaulo, B\BPBI M.%
+\BCBT {}\ \BBA {} Kashy, D\BPBI A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1998}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Everyday lies in close and casual relationships.}
+  {Everyday lies in close and casual relationships.}{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Journal of personality and social
+  psychology}{74}{1}{63}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Goodman%
+\ \BBA {} Lassiter%
+}{%
+Goodman%
+\ \BBA {} Lassiter%
+}{%
+{\protect \APACyear {2014}}%
+}]{%
+goodman2014probabilistic}
+\APACinsertmetastar {%
+goodman2014probabilistic}%
+\begin{APACrefauthors}%
+Goodman, N\BPBI D.%
+\BCBT {}\ \BBA {} Lassiter, D.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2014}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Probabilistic semantics and pragmatics: Uncertainty in
+  language and thought} {Probabilistic semantics and pragmatics: Uncertainty in
+  language and thought}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Handbook of Contemporary Semantic Theory,
+  Wiley-Blackwell}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Grice%
+}{%
+Grice%
+}{%
+{\protect \APACyear {1975}}%
+}]{%
+grice1975logic}
+\APACinsertmetastar {%
+grice1975logic}%
+\begin{APACrefauthors}%
+Grice, H\BPBI P.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1975}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Logic and conversation} {Logic and conversation}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Syntax and semantics}{3}{}{41--58}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Kao%
+, Wu%
+, Bergen%
+\BCBL {}\ \BBA {} Goodman%
+}{%
+Kao%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2014}}%
+}]{%
+kao2014nonliteral}
+\APACinsertmetastar {%
+kao2014nonliteral}%
+\begin{APACrefauthors}%
+Kao, J\BPBI T.%
+, Wu, J\BPBI Y.%
+, Bergen, L.%
+\BCBL {}\ \BBA {} Goodman, N\BPBI D.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2014}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Nonliteral understanding of number words} {Nonliteral
+  understanding of number words}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Proceedings of the National Academy of
+  Sciences}{111}{33}{12002--12007}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Talwar%
+, Murphy%
+\BCBL {}\ \BBA {} Lee%
+}{%
+Talwar%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2007}}%
+}]{%
+talwar2007white}
+\APACinsertmetastar {%
+talwar2007white}%
+\begin{APACrefauthors}%
+Talwar, V.%
+, Murphy, S\BPBI M.%
+\BCBL {}\ \BBA {} Lee, K.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2007}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {White lie-telling in children for politeness purposes}
+  {White lie-telling in children for politeness purposes}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{International journal of behavioral
+  development}{31}{1}{1--11}.
+\PrintBackRefs{\CurrentBib}
+
+\end{thebibliography}

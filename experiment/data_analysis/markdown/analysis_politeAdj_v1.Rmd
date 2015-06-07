@@ -1,0 +1,82 @@
+---
+title: "Probmods polite adj v1"
+author: "EJY"
+date: "June 1, 2015"
+output: html_document
+---
+
+Ver 1: 
+
+Q: How did my cookie taste? A: Bad, not bad, great, not great
+
+```{r warning=FALSE, message=FALSE}
+rm(list = ls())
+library(jsonlite)
+library(ggplot2)
+library(tidyr)
+library(binom)
+source("/Users/ericang/Documents/Courses/Psych204/polite_probmods/experiment/data_analysis/helper/useful.R")
+
+raw.data.path <- "/Users/ericang/Documents/Courses/Psych204/polite_probmods/experiment/versions/v1_statePrior/production-results/"
+
+## LOOP TO READ IN FILES
+all.data <- data.frame()
+files <- dir(raw.data.path,pattern="*.json")
+
+for (file.name in files) {
+  
+  ## these are the two functions that are most meaningful
+  json_file <- readLines(paste(raw.data.path,file.name,sep=""))
+  json_file_str = paste(json_file, collapse = "")
+  json_file_str = gsub(",}", "}", json_file_str)
+  jso = jsonlite::fromJSON(json_file_str)
+  jso1 <- data.frame(jso)
+  jso1$subid <- substring(file.name, 1, 6)
+  
+  ## now here's where data get bound together
+  all.data <- rbind(all.data, jso1)
+}
+```
+
+Filter out participants and clean up.
+
+```{r}
+d <- all.data %>%
+  select(subid, answers.data.order, num_range("answers.data.inferredProb", 0:9)) %>%
+  gather(score, prob, num_range("answers.data.inferredProb", 0:9)) %>%
+  mutate(score = substr(score, 26, 26)) 
+```
+
+```{r}
+d$prob <- as.numeric(d$prob)
+d$score <- as.numeric(d$score)
+
+## for bootstrapping 95% confidence intervals
+theta <- function(x,xdata,na.rm=T) {mean(xdata[x],na.rm=na.rm)}
+ci.low <- function(x,na.rm=T) {
+  mean(x,na.rm=na.rm) - quantile(bootstrap(1:length(x),1000,theta,x,na.rm=na.rm)$thetastar,.025,na.rm=na.rm)}
+ci.high <- function(x,na.rm=T) {
+  quantile(bootstrap(1:length(x),1000,theta,x,na.rm=na.rm)$thetastar,.975,na.rm=na.rm) - mean(x,na.rm=na.rm)}
+
+mss <- d %>%
+  group_by(score, subid) %>%
+  summarize(
+            prob = mean(prob, na.rm=TRUE)
+          )
+ms <- aggregate(prob ~ score, mss, mean)
+ms$cih <- aggregate(prob ~ score, mss, ci.high)$prob
+ms$cil <- aggregate(prob ~ score, mss, ci.low)$prob
+
+qplot(score, prob, 
+      geom="line",
+      data=subset(ms, prob!="NA")) + 
+  xlab("objective score") +
+  ylab("likelihood for the objective score") +
+  ggtitle("prior distribution") +
+  geom_errorbar(aes(ymin=prob-cil,ymax=prob+cih,width=.1))
+```
+
+```{r}
+lmer <- lmer(prob ~ valence * utterance + (valence | subid), data=d)
+summary(lmer)
+```

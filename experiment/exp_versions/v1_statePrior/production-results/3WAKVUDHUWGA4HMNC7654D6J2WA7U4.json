@@ -1,0 +1,101 @@
+{
+    "ApprovalTime": "2015-05-30T16:46:50Z",
+    "AutoApprovalTime": "2015-05-30T16:43:13Z",
+    "AssignmentId": "3WAKVUDHUWGA4HMNC7654D6J2WA7U4",
+    "WorkerId": "A2SBUJ21EZ2FVG",
+    "answers": {
+        "data": {
+            "inferredProb8": [
+                0.775,
+                0.675,
+                0.325,
+                0.775
+            ],
+            "expt_gen": [
+                "They could be asking for a compliment, but generally people are just looking for honest feedback."
+            ],
+            "domain": [
+                "poem",
+                "cookies",
+                "presentation",
+                "cake"
+            ],
+            "numTrials": 4,
+            "language": [
+                "English"
+            ],
+            "expt_aim": [
+                "I do not know."
+            ],
+            "inferredProb1": [
+                0.5,
+                0.375,
+                0.25,
+                0.45
+            ],
+            "inferredProb0": [
+                0.5,
+                0.35,
+                0.35,
+                0.375
+            ],
+            "inferredProb3": [
+                0.5,
+                0.35,
+                0.325,
+                0.375
+            ],
+            "inferredProb2": [
+                0.5,
+                0.25,
+                0.35,
+                0.275
+            ],
+            "cond": 3,
+            "inferredProb4": [
+                0.5,
+                0.5,
+                0.3,
+                0.825
+            ],
+            "inferredProb7": [
+                0.7,
+                0.675,
+                0.3,
+                0.875
+            ],
+            "inferredProb6": [
+                0.7,
+                0.65,
+                0.325,
+                0.725
+            ],
+            "inferredProb9": [
+                0.8,
+                0.8,
+                0.4,
+                0.85
+            ],
+            "inferredProb5": [
+                0.725,
+                0.725,
+                0.425,
+                0.825
+            ],
+            "character_thoughts": [
+                "They are pretty nice to share the stuff they made."
+            ],
+            "order": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    "AcceptTime": "2015-05-30T15:40:07Z",
+    "HITId": "3Y3CZJSZ9KT0E1ITUIR1CYAG6JG5RU",
+    "Assignment": "",
+    "AssignmentStatus": "Approved",
+    "SubmitTime": "2015-05-30T15:43:13Z"
+}

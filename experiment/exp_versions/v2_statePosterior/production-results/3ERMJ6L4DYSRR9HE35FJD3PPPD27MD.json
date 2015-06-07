@@ -1,0 +1,120 @@
+{
+    "ApprovalTime": "2015-06-01T22:36:47Z",
+    "AutoApprovalTime": "2015-06-01T22:33:07Z",
+    "AssignmentId": "3ERMJ6L4DYSRR9HE35FJD3PPPD27MD",
+    "WorkerId": "A2JUIW09ZP5KFS",
+    "answers": {
+        "data": {
+            "domain": [
+                "cake",
+                "cookies",
+                "poem",
+                "presentation"
+            ],
+            "expt_gen": [
+                "this needs to pay more"
+            ],
+            "inferredProb0": [
+                0.25,
+                0.575,
+                0.45,
+                0.725
+            ],
+            "inferredProb3": [
+                0.575,
+                0.8,
+                0.875,
+                0.825
+            ],
+            "inferredProb2": [
+                0.475,
+                0.75,
+                0.725,
+                0.95
+            ],
+            "cond": 3,
+            "inferredProb4": [
+                0.65,
+                0.725,
+                1,
+                0.55
+            ],
+            "inferredProb7": [
+                0.35,
+                0.325,
+                0.675,
+                0
+            ],
+            "inferredProb6": [
+                0.45,
+                0.45,
+                0.7,
+                0.225
+            ],
+            "inferredProb9": [
+                0,
+                0,
+                0.9,
+                0
+            ],
+            "inferredProb8": [
+                0.25,
+                0.125,
+                0.75,
+                0
+            ],
+            "numTrials": 4,
+            "polite": [
+                "baseline",
+                "baseline",
+                "baseline",
+                "baseline"
+            ],
+            "character_thoughts": [
+                "don't care"
+            ],
+            "inferredProb1": [
+                0.375,
+                0.675,
+                0.6,
+                0.825
+            ],
+            "language": [
+                "English"
+            ],
+            "expt_aim": [
+                "gender differences"
+            ],
+            "expt": "adj_statePos",
+            "context": [
+                null,
+                null,
+                null,
+                null
+            ],
+            "inferredProb5": [
+                0.625,
+                0.6,
+                0.85,
+                0.325
+            ],
+            "utterance": [
+                "not_bad",
+                "not_great",
+                "great",
+                "bad"
+            ],
+            "order": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    "AcceptTime": "2015-06-01T20:57:19Z",
+    "HITId": "3RKHNXPHGWWVCCVD5ZQCJYGIB9QUKM",
+    "Assignment": "",
+    "AssignmentStatus": "Approved",
+    "SubmitTime": "2015-06-01T21:33:07Z"
+}

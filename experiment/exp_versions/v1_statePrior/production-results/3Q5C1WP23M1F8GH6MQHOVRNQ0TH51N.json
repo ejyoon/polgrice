@@ -1,0 +1,101 @@
+{
+    "ApprovalTime": "2015-05-30T16:41:48Z",
+    "AutoApprovalTime": "2015-05-30T16:40:42Z",
+    "AssignmentId": "3Q5C1WP23M1F8GH6MQHOVRNQ0TH51N",
+    "WorkerId": "A70AS0KVKADBY",
+    "answers": {
+        "data": {
+            "inferredProb8": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "expt_gen": [
+                ""
+            ],
+            "domain": [
+                "cake",
+                "poem",
+                "cookies",
+                "presentation"
+            ],
+            "numTrials": 4,
+            "language": [
+                "English"
+            ],
+            "expt_aim": [
+                "Judging before knowing"
+            ],
+            "inferredProb1": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "inferredProb0": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "inferredProb3": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "inferredProb2": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "cond": 3,
+            "inferredProb4": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "inferredProb7": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "inferredProb6": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "inferredProb9": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "inferredProb5": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "character_thoughts": [
+                "I don't have enough information to form a thought on them."
+            ],
+            "order": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    "AcceptTime": "2015-05-30T15:38:58Z",
+    "HITId": "3Y3CZJSZ9KT0E1ITUIR1CYAG6JG5RU",
+    "Assignment": "",
+    "AssignmentStatus": "Approved",
+    "SubmitTime": "2015-05-30T15:40:42Z"
+}

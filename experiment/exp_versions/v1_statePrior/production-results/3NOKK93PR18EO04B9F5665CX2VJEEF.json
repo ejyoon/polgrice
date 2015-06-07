@@ -1,0 +1,101 @@
+{
+    "ApprovalTime": "2015-05-30T16:31:48Z",
+    "AutoApprovalTime": "2015-05-30T16:30:30Z",
+    "AssignmentId": "3NOKK93PR18EO04B9F5665CX2VJEEF",
+    "WorkerId": "A3ICWVGCEDRXS0",
+    "answers": {
+        "data": {
+            "inferredProb8": [
+                0.225,
+                0.25,
+                0.275,
+                0.3
+            ],
+            "expt_gen": [
+                "no"
+            ],
+            "domain": [
+                "cookies",
+                "cake",
+                "poem",
+                "presentation"
+            ],
+            "numTrials": 4,
+            "language": [
+                "English"
+            ],
+            "expt_aim": [
+                "what people's preconceptions are"
+            ],
+            "inferredProb1": [
+                0.325,
+                0.225,
+                0.15,
+                0.175
+            ],
+            "inferredProb0": [
+                0.275,
+                0.075,
+                0.025,
+                0.025
+            ],
+            "inferredProb3": [
+                0.45,
+                0.425,
+                0.375,
+                0.5
+            ],
+            "inferredProb2": [
+                0.375,
+                0.3,
+                0.225,
+                0.3
+            ],
+            "cond": 3,
+            "inferredProb4": [
+                0.55,
+                0.6,
+                0.625,
+                0.65
+            ],
+            "inferredProb7": [
+                0.4,
+                0.425,
+                0.4,
+                0.5
+            ],
+            "inferredProb6": [
+                0.575,
+                0.625,
+                0.575,
+                0.625
+            ],
+            "inferredProb9": [
+                0.125,
+                0.125,
+                0.125,
+                0.15
+            ],
+            "inferredProb5": [
+                0.8,
+                0.725,
+                0.775,
+                0.775
+            ],
+            "character_thoughts": [
+                "With no other information, I have to assume they were close to average"
+            ],
+            "order": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    "AcceptTime": "2015-05-30T15:27:47Z",
+    "HITId": "3Y3CZJSZ9KT0E1ITUIR1CYAG6JG5RU",
+    "Assignment": "",
+    "AssignmentStatus": "Approved",
+    "SubmitTime": "2015-05-30T15:30:30Z"
+}

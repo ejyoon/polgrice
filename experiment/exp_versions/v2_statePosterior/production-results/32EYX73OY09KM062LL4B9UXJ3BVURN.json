@@ -1,0 +1,120 @@
+{
+    "ApprovalTime": "2015-06-01T20:53:20Z",
+    "AutoApprovalTime": "2015-06-01T20:55:42Z",
+    "AssignmentId": "32EYX73OY09KM062LL4B9UXJ3BVURN",
+    "WorkerId": "A8ZUYKK47MVUQ",
+    "answers": {
+        "data": {
+            "domain": [
+                "poem",
+                "cake",
+                "presentation",
+                "cookies"
+            ],
+            "expt_gen": [
+                ""
+            ],
+            "inferredProb0": [
+                0.275,
+                0.075,
+                0.975,
+                0.025
+            ],
+            "inferredProb3": [
+                0.675,
+                0.3,
+                0.825,
+                0.5
+            ],
+            "inferredProb2": [
+                0.525,
+                0.2,
+                0.9,
+                0.375
+            ],
+            "cond": 1,
+            "inferredProb4": [
+                0.725,
+                0.5,
+                0.65,
+                0.55
+            ],
+            "inferredProb7": [
+                0.75,
+                0.6,
+                0.15,
+                0.675
+            ],
+            "inferredProb6": [
+                0.9,
+                0.875,
+                0.15,
+                0.95
+            ],
+            "inferredProb9": [
+                0.625,
+                0.5,
+                0,
+                0.125
+            ],
+            "inferredProb8": [
+                0.675,
+                0.5,
+                0.1,
+                0.2
+            ],
+            "numTrials": 4,
+            "polite": [
+                "polite",
+                "polite",
+                "polite",
+                "polite"
+            ],
+            "character_thoughts": [
+                "They do not have definite opinions on questions."
+            ],
+            "inferredProb1": [
+                0.425,
+                0.1,
+                0.95,
+                0.175
+            ],
+            "language": [
+                "english"
+            ],
+            "expt_aim": [
+                "How people rate opinions"
+            ],
+            "expt": "adj_statePos",
+            "context": [
+                null,
+                null,
+                null,
+                null
+            ],
+            "inferredProb5": [
+                0.875,
+                0.8,
+                0.175,
+                0.975
+            ],
+            "utterance": [
+                "bad",
+                "great",
+                "not_great",
+                "not_bad"
+            ],
+            "order": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    "AcceptTime": "2015-06-01T19:22:45Z",
+    "HITId": "3RKHNXPHGWWVCCVD5ZQCJYGIB9QUKM",
+    "Assignment": "",
+    "AssignmentStatus": "Approved",
+    "SubmitTime": "2015-06-01T19:55:42Z"
+}

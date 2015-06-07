@@ -1,0 +1,120 @@
+{
+    "ApprovalTime": "2015-06-01T20:21:48Z",
+    "AutoApprovalTime": "2015-06-01T20:19:50Z",
+    "AssignmentId": "3WMINLGALB3W1P3LXJXPKYM3W7ZCAM",
+    "WorkerId": "A3QJPB0NZU5PY1",
+    "answers": {
+        "data": {
+            "domain": [
+                "cake",
+                "presentation",
+                "cookies",
+                "poem"
+            ],
+            "expt_gen": [
+                "no"
+            ],
+            "inferredProb0": [
+                0.5,
+                0.5,
+                0.425,
+                0.5
+            ],
+            "inferredProb3": [
+                0.5,
+                0.5,
+                0.475,
+                0.5
+            ],
+            "inferredProb2": [
+                0.5,
+                0.5,
+                0.475,
+                0.5
+            ],
+            "cond": 2,
+            "inferredProb4": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "inferredProb7": [
+                0.45,
+                0.575,
+                0.5,
+                0.8
+            ],
+            "inferredProb6": [
+                0.45,
+                0.525,
+                0.5,
+                0.75
+            ],
+            "inferredProb9": [
+                0.425,
+                0.575,
+                0.525,
+                0.825
+            ],
+            "inferredProb8": [
+                0.425,
+                0.625,
+                0.525,
+                0.8
+            ],
+            "numTrials": 4,
+            "polite": [
+                "impolite",
+                "impolite",
+                "impolite",
+                "impolite"
+            ],
+            "character_thoughts": [
+                "Well, if they are real some of them were just telling their truths."
+            ],
+            "inferredProb1": [
+                0.5,
+                0.5,
+                0.45,
+                0.5
+            ],
+            "language": [
+                "English"
+            ],
+            "expt_aim": [
+                "I am not for sure actually"
+            ],
+            "expt": "adj_statePos",
+            "context": [
+                null,
+                null,
+                null,
+                null
+            ],
+            "inferredProb5": [
+                0.5,
+                0.5,
+                0.5,
+                0.625
+            ],
+            "utterance": [
+                "bad",
+                "not_bad",
+                "not_great",
+                "great"
+            ],
+            "order": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    "AcceptTime": "2015-06-01T19:09:47Z",
+    "HITId": "3RKHNXPHGWWVCCVD5ZQCJYGIB9QUKM",
+    "Assignment": "",
+    "AssignmentStatus": "Approved",
+    "SubmitTime": "2015-06-01T19:19:50Z"
+}

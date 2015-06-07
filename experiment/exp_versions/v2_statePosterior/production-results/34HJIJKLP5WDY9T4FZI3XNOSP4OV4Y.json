@@ -1,0 +1,120 @@
+{
+    "ApprovalTime": "2015-06-01T22:06:51Z",
+    "AutoApprovalTime": "2015-06-01T22:01:47Z",
+    "AssignmentId": "34HJIJKLP5WDY9T4FZI3XNOSP4OV4Y",
+    "WorkerId": "AGMSPB6VYCCFK",
+    "answers": {
+        "data": {
+            "domain": [
+                "poem",
+                "cake",
+                "cookies",
+                "presentation"
+            ],
+            "expt_gen": [
+                ""
+            ],
+            "inferredProb0": [
+                0.225,
+                0.05,
+                0.125,
+                0.125
+            ],
+            "inferredProb3": [
+                0.35,
+                0.3,
+                0.25,
+                0.25
+            ],
+            "inferredProb2": [
+                0.25,
+                0.3,
+                0.225,
+                0.15
+            ],
+            "cond": 1,
+            "inferredProb4": [
+                0.5,
+                0.275,
+                0.25,
+                0.325
+            ],
+            "inferredProb7": [
+                0.35,
+                0.725,
+                0.65,
+                0.125
+            ],
+            "inferredProb6": [
+                0.625,
+                0.5,
+                0.5,
+                0.35
+            ],
+            "inferredProb9": [
+                0,
+                0.6,
+                0.175,
+                0.05
+            ],
+            "inferredProb8": [
+                0.125,
+                0.75,
+                0.2,
+                0.075
+            ],
+            "numTrials": 4,
+            "polite": [
+                "polite",
+                "polite",
+                "polite",
+                "polite"
+            ],
+            "character_thoughts": [
+                "Not much, they seemed like normal people."
+            ],
+            "inferredProb1": [
+                0.225,
+                0.225,
+                0.2,
+                0.15
+            ],
+            "language": [
+                "English"
+            ],
+            "expt_aim": [
+                "To see how people judge others."
+            ],
+            "expt": "adj_statePos",
+            "context": [
+                null,
+                null,
+                null,
+                null
+            ],
+            "inferredProb5": [
+                0.675,
+                0.375,
+                0.475,
+                0.5
+            ],
+            "utterance": [
+                "bad",
+                "great",
+                "not_bad",
+                "not_great"
+            ],
+            "order": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    "AcceptTime": "2015-06-01T20:59:37Z",
+    "HITId": "3RKHNXPHGWWVCCVD5ZQCJYGIB9QUKM",
+    "Assignment": "",
+    "AssignmentStatus": "Approved",
+    "SubmitTime": "2015-06-01T21:01:47Z"
+}

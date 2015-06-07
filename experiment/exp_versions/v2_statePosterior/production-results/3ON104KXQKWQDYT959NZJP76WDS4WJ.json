@@ -1,0 +1,120 @@
+{
+    "ApprovalTime": "2015-06-01T22:46:51Z",
+    "AutoApprovalTime": "2015-06-01T22:42:48Z",
+    "AssignmentId": "3ON104KXQKWQDYT959NZJP76WDS4WJ",
+    "WorkerId": "A3JWQ3IS1O5VAH",
+    "answers": {
+        "data": {
+            "domain": [
+                "presentation",
+                "cake",
+                "poem",
+                "cookies"
+            ],
+            "expt_gen": [
+                "N/A"
+            ],
+            "inferredProb0": [
+                0,
+                0.725,
+                0,
+                0.5
+            ],
+            "inferredProb3": [
+                0,
+                0.5,
+                0,
+                0.6
+            ],
+            "inferredProb2": [
+                0,
+                0.725,
+                0,
+                0.5
+            ],
+            "cond": 2,
+            "inferredProb4": [
+                0,
+                0.5,
+                0,
+                0.725
+            ],
+            "inferredProb7": [
+                0.5,
+                0.225,
+                0.5,
+                0.5
+            ],
+            "inferredProb6": [
+                0,
+                0.5,
+                0,
+                0.6
+            ],
+            "inferredProb9": [
+                0.675,
+                0.225,
+                0.75,
+                0
+            ],
+            "inferredProb8": [
+                0.675,
+                0.225,
+                0.75,
+                0
+            ],
+            "numTrials": 4,
+            "polite": [
+                "impolite",
+                "impolite",
+                "impolite",
+                "impolite"
+            ],
+            "character_thoughts": [
+                "they are not polite but honest."
+            ],
+            "inferredProb1": [
+                0,
+                0.725,
+                0,
+                0.5
+            ],
+            "language": [
+                "English"
+            ],
+            "expt_aim": [
+                "what we think of impolite opinions."
+            ],
+            "expt": "adj_statePos",
+            "context": [
+                null,
+                null,
+                null,
+                null
+            ],
+            "inferredProb5": [
+                0,
+                0.5,
+                0,
+                0.725
+            ],
+            "utterance": [
+                "not_bad",
+                "bad",
+                "great",
+                "not_great"
+            ],
+            "order": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    "AcceptTime": "2015-06-01T21:37:35Z",
+    "HITId": "3RKHNXPHGWWVCCVD5ZQCJYGIB9QUKM",
+    "Assignment": "",
+    "AssignmentStatus": "Approved",
+    "SubmitTime": "2015-06-01T21:42:48Z"
+}

@@ -1,0 +1,101 @@
+{
+    "ApprovalTime": "2015-05-30T16:46:50Z",
+    "AutoApprovalTime": "2015-05-30T16:45:24Z",
+    "AssignmentId": "3YW4XOSQKQLWTV7LNRPW33F6ZA91U0",
+    "WorkerId": "A42HOWK7GR37J",
+    "answers": {
+        "data": {
+            "inferredProb8": [
+                0.375,
+                0.45,
+                0.45,
+                0.425
+            ],
+            "expt_gen": [
+                "Everything worked correctly."
+            ],
+            "domain": [
+                "poem",
+                "cake",
+                "cookies",
+                "presentation"
+            ],
+            "numTrials": 4,
+            "language": [
+                "ENglish"
+            ],
+            "expt_aim": [
+                "I'm not sure."
+            ],
+            "inferredProb1": [
+                0.25,
+                0.075,
+                0.1,
+                0.1
+            ],
+            "inferredProb0": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "inferredProb3": [
+                0.325,
+                0.2,
+                0.15,
+                0.225
+            ],
+            "inferredProb2": [
+                0.275,
+                0.125,
+                0.15,
+                0.175
+            ],
+            "cond": 3,
+            "inferredProb4": [
+                0.425,
+                0.275,
+                0.3,
+                0.35
+            ],
+            "inferredProb7": [
+                0.5,
+                0.475,
+                0.5,
+                0.45
+            ],
+            "inferredProb6": [
+                0.5,
+                0.45,
+                0.5,
+                0.5
+            ],
+            "inferredProb9": [
+                0.275,
+                0.4,
+                0.325,
+                0.375
+            ],
+            "inferredProb5": [
+                0.5,
+                0.45,
+                0.425,
+                0.425
+            ],
+            "character_thoughts": [
+                "I'm neutral towards them due to the small amount of information given."
+            ],
+            "order": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    "AcceptTime": "2015-05-30T15:42:49Z",
+    "HITId": "3Y3CZJSZ9KT0E1ITUIR1CYAG6JG5RU",
+    "Assignment": "",
+    "AssignmentStatus": "Approved",
+    "SubmitTime": "2015-05-30T15:45:24Z"
+}
