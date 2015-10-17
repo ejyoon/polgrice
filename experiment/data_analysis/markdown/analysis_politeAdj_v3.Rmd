@@ -11,15 +11,18 @@ Posterior
 Q: How did my cookie taste? A: Bad, not bad, great, not great
 polite vs. impolite vs. baseline
 
+Ver 3:
+same as ver 2 but with 'honest, blunt person'
+
 ```{r warning=FALSE, message=FALSE}
 rm(list = ls())
 library(jsonlite)
 library(ggplot2)
 library(tidyr)
 library(binom)
-source("/Users/ericang/Documents/Courses/Psych204/polite_probmods/experiment/data_analysis/helper/useful.R")
+source("/Users/ericang/Documents/Research/polite_probmods/experiment/data_analysis/helper/useful.R")
 
-raw.data.path <- "/Users/ericang/Documents/Courses/Psych204/polite_probmods/experiment/versions/v2_statePosterior/production-results/"
+raw.data.path <- "/Users/ericang/Documents/Research/polite_probmods/experiment/versions/v2and3/production-results/"
 
 ## LOOP TO READ IN FILES
 all.data <- data.frame()
@@ -51,7 +54,7 @@ d <- all.data %>%
   mutate(utterance = answers.data.utterance)
 ```
 
-```{r}
+```{r, fig.width = 10, fig.height = 6}
 d$prob <- as.numeric(d$prob)
 d$score <- as.numeric(d$score)
 
@@ -71,43 +74,29 @@ mss <- d %>%
 ms <- aggregate(prob ~ score + utterance + polite, mss, mean)
 ms$cih <- aggregate(prob ~ score + utterance + polite, mss, ci.high)$prob
 ms$cil <- aggregate(prob ~ score + utterance + polite, mss, ci.low)$prob
-
-qplot(score, prob, 
-      colour = polite,
-      data=subset(ms, prob!="NA")) + 
-  geom_line(aes(group=polite)) +
-  facet_grid(.~utterance) +
-  xlab("objective score") +
-  ylab("likelihood for the objective score") +
-  ggtitle("Score given utterance, based on politeness") +
-  geom_errorbar(aes(ymin=prob-cil,ymax=prob+cih,width=.1))
-
-# prob ~ score + utterance (only baseline)
-mss <- d %>%
-  group_by(score, subid, utterance, polite) %>%
-  summarize(
-            prob = mean(prob, na.rm=TRUE)
-          )
-ms <- aggregate(prob ~ score + utterance + polite, mss, mean)
-ms$cih <- aggregate(prob ~ score + utterance + polite, mss, ci.high)$prob
-ms$cil <- aggregate(prob ~ score + utterance + polite, mss, ci.low)$prob
-
-qplot(score, prob, 
-      colour = polite,
-      data=subset(ms, prob!="NA")) + 
-  geom_line(aes(group=polite)) +
-  facet_grid(.~utterance) +
-  xlab("objective score") +
-  ylab("likelihood for the objective score") +
-  ggtitle("Score given utterance, based on politeness") +
-  geom_errorbar(aes(ymin=prob-cil,ymax=prob+cih,width=.1))
 ```
 
-```{r}
+```{r, fig.width = 10, fig.height = 6}
 # model
 model <- read.csv("/Users/ericang/Documents/Research/polite_probmods/polite_adj/experiment/exp_versions/v2_statePosterior/posterior_model2.csv", stringsAsFactors=FALSE)
 
-model$polite <- ordered(model$polite, levels = c("baseline","polite","impolite"))
+model$polite <- as.factor(model$polite)
+levels(model$polite) <- c("baseline","honest", "polite")
+model$polite <- ordered(model$polite, levels = c("baseline","polite","honest"))
+```
+
+# observed vs. model: polite, baseline, honest
+
+```{r, fig.width = 10, fig.height = 6}
+qplot(score, prob, 
+      colour = polite,
+      data=subset(ms, prob!="NA" & polite != "impolite")) + 
+  geom_line(aes(group=polite)) +
+  facet_grid(.~utterance) +
+  xlab("objective score") +
+  ylab("likelihood for the objective score") +
+  ggtitle("Score given utterance, based on politeness") +
+  geom_errorbar(aes(ymin=prob-cil,ymax=prob+cih,width=.1))
 
 qplot(score, prob, 
       colour = polite,
@@ -119,8 +108,43 @@ qplot(score, prob,
   ggtitle("Model predictions: Score given utterance, based on politeness")
 ```
 
+# observed vs. model: polite, honest
 
-```{r}
-lmer <- lmer(prob ~ valence * utterance + (valence | subid), data=d)
-summary(lmer)
+```{r, fig.width = 10, fig.height = 6}
+qplot(score, prob, 
+      colour = polite,
+      data=subset(ms, prob!="NA" & (polite != "impolite" & polite != "baseline"))) + 
+  geom_line(aes(group=polite)) +
+  facet_grid(.~utterance) +
+  xlab("objective score") +
+  ylab("likelihood for the objective score") +
+  ggtitle("Score given utterance, based on politeness") +
+  geom_errorbar(aes(ymin=prob-cil,ymax=prob+cih,width=.1))
+
+qplot(score, prob, 
+      colour = polite,
+      data=subset(model, (prob!="NA" & polite != "baseline"))) + 
+  geom_line(aes(group=polite)) +
+  facet_grid(.~utterance) +
+  xlab("objective score") +
+  ylab("likelihood for the objective score") +
+  ggtitle("Model predictions: Score given utterance, based on politeness")
+```
+
+```{r, fig.width = 10, fig.height = 6}
+# model, with diff priors over goals?
+model <- read.csv("/Users/ericang/Documents/Research/polite_probmods/polite_adj/experiment/exp_versions/v2_statePosterior/posterior_model3_diffPriorsOverGoals.csv", stringsAsFactors=FALSE)
+
+model$polite <- as.factor(model$polite)
+levels(model$polite) <- c("baseline","honest", "polite")
+model$polite <- ordered(model$polite, levels = c("baseline","polite","honest"))
+
+qplot(score, prob, 
+      colour = polite,
+      data=subset(model, prob!="NA")) + 
+  geom_line(aes(group=polite)) +
+  facet_grid(.~utterance) +
+  xlab("objective score") +
+  ylab("likelihood for the objective score") +
+  ggtitle("Model predictions: Score given utterance, based on politeness")
 ```
