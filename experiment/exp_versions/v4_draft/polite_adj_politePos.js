@@ -2,7 +2,7 @@ var filename = "EJY_polimp11"
 var condCounts = "1,50;2,50;3,50;" //Example: "1,20;2,20;3,20"
 
 // ---------------- HELPER ------------------
-var NUM_SLIDERS = 4;
+var NUM_SLIDERS = 5;
 
 function showSlide(id) {
   $(".slide").hide();
@@ -477,7 +477,8 @@ var experiment = {
       var prob1 = parseInt(document.getElementById("hiddenSliderValue1").value) / 40.00;
       var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
       var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
-//      var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
+      var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
+//      var prob4 = parseInt(document.getElementById("hiddenhiddenSliderValue4").value) / 40.00;
 //      var prob5 = parseInt(document.getElementById("hiddenSliderValue5").value) / 40.00;
 //      var prob6 = parseInt(document.getElementById("hiddenSliderValue6").value) / 40.00;
 //      var prob7 = parseInt(document.getElementById("hiddenSliderValue7").value) / 40.00;
@@ -610,141 +611,20 @@ $("#slider3").slider({
                      "border-color": "#001F29" });
                }});
 
- $("#h_slider0").slider({
+ $("#slider4").slider({
                animate: true,
                max: 25 , min: 1, step: 1, value: 13,
                slide: function( event, ui ) {
-                   $("#h_slider0 .ui-slider-handle").css({
+                   $("#slider4 .ui-slider-handle").css({
                       "background":"#E0F5FF",
                       "border-color": "#001F29"
                    });
                },
                change: function( event, ui ) {
                    $('#hiddenSliderValue4').attr('value', ui.value);
-                   $("#h_slider0").css({"background":"#99D6EB"});
-                   $("#h_slider0 .ui-slider-handle").css({
+                   $("#slider4").css({"background":"#99D6EB"});
+                   $("#slider4 .ui-slider-handle").css({
                      "background":"#667D94",
                      "border-color": "#001F29" });
-                   displaySubmitButton();
                }});
 
-//$("#slider4").slider({
-//               animate: true,
-//               orientation: "vertical",
-//               max: 40 , min: 0, step: 1, value: 20,
-//               slide: function( event, ui ) {
-//                   $("#slider4 .ui-slider-handle").css({
-//                      "background":"#E0F5FF",
-//                      "border-color": "#001F29"
-//                   });
-//               },
-//               change: function( event, ui ) {
-//                   $('#hiddenSliderValue4').attr('value', ui.value);
-//                   $("#slider4").css({"background":"#99D6EB"});
-//                   $("#slider4 .ui-slider-handle").css({
-//                     "background":"#667D94",
-//                     "border-color": "#001F29" });
-//               }});
-//$("#slider5").slider({
-//               animate: true,
-//               orientation: "vertical",
-//               max: 40 , min: 0, step: 1, value: 20,
-//               slide: function( event, ui ) {
-//                   $("#slider5 .ui-slider-handle").css({
-//                      "background":"#E0F5FF",
-//                      "border-color": "#001F29"
-//                   });
-//               },
-//               change: function( event, ui ) {
-//                   $('#hiddenSliderValue5').attr('value', ui.value);
-//                   $("#slider5").css({"background":"#99D6EB"});
-//                   $("#slider5 .ui-slider-handle").css({
-//                     "background":"#667D94",
-//                     "border-color": "#001F29" });
-//               }});
-//               
-//$("#slider6").slider({
-//               animate: true,
-//               orientation: "vertical",
-//               max: 40 , min: 0, step: 1, value: 20,
-//               slide: function( event, ui ) {
-//                   $("#slider6 .ui-slider-handle").css({
-//                      "background":"#E0F5FF",
-//                      "border-color": "#001F29"
-//                   });
-//               },
-//               change: function( event, ui ) {
-//                   $('#hiddenSliderValue6').attr('value', ui.value);
-//                   $("#slider6").css({"background":"#99D6EB"});
-//                   $("#slider6 .ui-slider-handle").css({
-//                     "background":"#667D94",
-//                     "border-color": "#001F29" });
-//               }});
-//$("#slider7").slider({
-//               animate: true,
-//               orientation: "vertical",
-//               max: 40 , min: 0, step: 1, value: 20,
-//               slide: function( event, ui ) {
-//                   $("#slider7 .ui-slider-handle").css({
-//                      "background":"#E0F5FF",
-//                      "border-color": "#001F29"
-//                   });
-//               },
-//               change: function( event, ui ) {
-//                   $('#hiddenSliderValue7').attr('value', ui.value);
-//                   $("#slider7").css({"background":"#99D6EB"});
-//                   $("#slider7 .ui-slider-handle").css({
-//                     "background":"#667D94",
-//                     "border-color": "#001F29" });
-//               }});
-//$("#slider8").slider({
-//               animate: true,
-//               orientation: "vertical",
-//               max: 40 , min: 0, step: 1, value: 20,
-//               slide: function( event, ui ) {
-//                   $("#slider8 .ui-slider-handle").css({
-//                      "background":"#E0F5FF",
-//                      "border-color": "#001F29"
-//                   });
-//               },
-//               change: function( event, ui ) {
-//                   $('#hiddenSliderValue8').attr('value', ui.value);
-//                   $("#slider8").css({"background":"#99D6EB"});
-//                   $("#slider8 .ui-slider-handle").css({
-//                     "background":"#667D94",
-//                     "border-color": "#001F29" });
-//               }});
-//$("#slider9").slider({
-//               animate: true,
-//               orientation: "vertical",
-//               max: 40 , min: 0, step: 1, value: 20,
-//               slide: function( event, ui ) {
-//                   $("#slider9 .ui-slider-handle").css({
-//                      "background":"#E0F5FF",
-//                      "border-color": "#001F29"
-//                   });
-//               },
-//               change: function( event, ui ) {
-//                   $('#hiddenSliderValue9').attr('value', ui.value);
-//                   $("#slider9").css({"background":"#99D6EB"});
-//                   $("#slider9 .ui-slider-handle").css({
-//                     "background":"#667D94",
-//                     "border-color": "#001F29" });
-//               }});
-//$("#slider10").slider({
-//               animate: true,
-//               orientation: "vertical",
-//               max: 40 , min: 0, step: 1, value: 20,
-//               slide: function( event, ui ) {
-//                   $("#slider10 .ui-slider-handle").css({
-//                      "background":"#E0F5FF",
-//                      "border-color": "#001F29"
-//                   });
-//               },
-//               change: function( event, ui ) {
-//                   $('#hiddenSliderValue10').attr('value', ui.value);
-//                   $("#slider10").css({"background":"#99D6EB"});
-//                   $("#slider10 .ui-slider-handle").css({
-//                     "background":"#667D94",
-//                     "border-color": "#001F29" });
-//               }});
