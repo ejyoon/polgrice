@@ -171,14 +171,6 @@ function pressEnter(e) {
     <input type="hidden" name="hSlider2" id="hiddenSliderValue2" />
     <input type="hidden" name="hSlider3" id="hiddenSliderValue3" />
     <input type="hidden" name="hSlider4" id="hiddenSliderValue4" />
-<!--
-    <input type="hidden" name="hSlider4" id="hiddenSliderValue4" />
-    <input type="hidden" name="hSlider5" id="hiddenSliderValue5" />
-    <input type="hidden" name="hSlider6" id="hiddenSliderValue6" />
-    <input type="hidden" name="hSlider7" id="hiddenSliderValue7" />
-    <input type="hidden" name="hSlider8" id="hiddenSliderValue8" />
-    <input type="hidden" name="hSlider9" id="hiddenSliderValue9" />
--->
 
     <p id="context" class="block-text"></p>
     <p id="question" class="block-text"></p>
@@ -253,7 +245,7 @@ function pressEnter(e) {
     </span>
     
     </form>
-    <button type="button" id="next" onclick="this.blur(); if (ValidateSliderFormPart2(document.affcectForm)) {experiment.next();}">Next</button>
+    <button type="button" id="next" onclick="this.blur(); if (ValidateSliderFormPart1(document.affectForm)) {experiment.next();}">Next</button>
     </div>
 </div>
 

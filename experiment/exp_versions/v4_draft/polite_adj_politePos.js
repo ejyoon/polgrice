@@ -438,12 +438,7 @@ var experiment = {
     inferredProb1: [],
     inferredProb2: [],
     inferredProb3: [],
-//    inferredProb4: [],
-//    inferredProb5: [],
-//    inferredProb6: [],
-//    inferredProb7: [],
-//    inferredProb8: [],
-//    inferredProb9: [],
+    inferredProb4: [],
     language: [],
 	expt_aim: [],
 	character_thoughts: [],
@@ -478,12 +473,6 @@ var experiment = {
       var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
       var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
       var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
-//      var prob4 = parseInt(document.getElementById("hiddenhiddenSliderValue4").value) / 40.00;
-//      var prob5 = parseInt(document.getElementById("hiddenSliderValue5").value) / 40.00;
-//      var prob6 = parseInt(document.getElementById("hiddenSliderValue6").value) / 40.00;
-//      var prob7 = parseInt(document.getElementById("hiddenSliderValue7").value) / 40.00;
-//      var prob8 = parseInt(document.getElementById("hiddenSliderValue8").value) / 40.00;
-//      var prob9 = parseInt(document.getElementById("hiddenSliderValue9").value) / 40.00;
 
       experiment.data.order.push(numComplete);
       experiment.data.utterance.push(trial.utterance);
@@ -495,13 +484,8 @@ var experiment = {
       experiment.data.inferredProb1.push(prob1);
       experiment.data.inferredProb2.push(prob2);
       experiment.data.inferredProb3.push(prob3);
-//      experiment.data.inferredProb4.push(prob4);
-//      experiment.data.inferredProb5.push(prob5);
-//      experiment.data.inferredProb6.push(prob6);
-//      experiment.data.inferredProb7.push(prob7);
-//      experiment.data.inferredProb8.push(prob8);
-//      experiment.data.inferredProb9.push(prob9);
-    
+      experiment.data.inferredProb4.push(prob4);
+   
       clearForm(document.forms[0]);
       clearForm(document.forms[1]);
     }
@@ -613,7 +597,7 @@ $("#slider3").slider({
 
  $("#slider4").slider({
                animate: true,
-               max: 25 , min: 1, step: 1, value: 13,
+               max: 40 , min: 0, step: 1, value: 20,
                slide: function( event, ui ) {
                    $("#slider4 .ui-slider-handle").css({
                       "background":"#E0F5FF",
