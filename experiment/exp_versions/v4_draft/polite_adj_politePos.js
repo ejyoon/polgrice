@@ -609,6 +609,25 @@ $("#slider3").slider({
                      "background":"#667D94",
                      "border-color": "#001F29" });
                }});
+
+ $("#h_slider0").slider({
+               animate: true,
+               max: 25 , min: 1, step: 1, value: 13,
+               slide: function( event, ui ) {
+                   $("#h_slider0 .ui-slider-handle").css({
+                      "background":"#E0F5FF",
+                      "border-color": "#001F29"
+                   });
+               },
+               change: function( event, ui ) {
+                   $('#hiddenSliderValue4').attr('value', ui.value);
+                   $("#h_slider0").css({"background":"#99D6EB"});
+                   $("#h_slider0 .ui-slider-handle").css({
+                     "background":"#667D94",
+                     "border-color": "#001F29" });
+                   displaySubmitButton();
+               }});
+
 //$("#slider4").slider({
 //               animate: true,
 //               orientation: "vertical",

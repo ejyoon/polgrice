@@ -228,3 +228,10 @@ button[disabled] {
                margin: 5px; }
 #slider10 .ui-slider-handle {
                background: #FAFAFA; }
+
+#h_slider0 { width: 500px;
+               height: 12px;
+               position: relative;
+               margin: 5px; }
+#h_slider0 .ui-slider-handle {
+               background: #FAFAFA; }
