@@ -1,11 +1,13 @@
 <html>
 <head>
   <title>A quick study to rate simple likelihood</title>
-<script src="jquery-1.11.2.min.js"></script>
-<script src="mmturkey-0.6.js"></script>
-<link rel="stylesheet" href="style.css" />
-<link type="text/css" rel="stylesheet" href="sliders/jquery-ui.css" /></p>
-<script src="sliders/jquery.min.js"></script> <script src="sliders/jquery-ui.min.js"></script>
+    <script src="jquery-1.11.2.min.js"></script>
+    <script src="mmturkey-0.6.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <link type="text/css" rel="stylesheet" href="sliders/jquery-ui.css" />
+    </p>
+    <script src="sliders/jquery.min.js"></script> 
+    <script src="sliders/jquery-ui.min.js"></script>
 </head>
 <body>
 <!--
@@ -23,7 +25,14 @@
   <p id='logo-text'>Stanford Language and Cognition Lab</p>
   <p class="block-text">In this experiment, you will read hypothetical interactions between you and someone else. Your job is to judge what their actions or comments mean. You will see something they did or said, and a possible interpretation of that. Then you will be asked to indicate how likely it is that the interpretation is true.
   </p>
-  <button type="button" onclick="this.blur(); experiment.next()">Start</button>
+  <button type="button" 
+          onclick="this.blur(); 
+                   experiment.next();
+                   document.getElementById('form1').hidden=false;
+                   document.getElementById('form2').hidden=true;
+                   document.getElementById('next1').hidden=false;
+                   document.getElementById('next2').hidden=true;
+                                 ">Start</button>
   
   <p class="block-text"><br> <b> Note: you won't be able to preview this HIT before accepting it because it's so short. </b></p>
   
@@ -42,9 +51,10 @@
   to opt out. If you would like to opt out of this feature, you may follow instructions available 
   <a href="http://www.amazon.com/gp/help/customer/display.html?nodeId=16465241">here</a>.</p>
 </div>
+
 <script LANGUAGE="JavaScript">
-
-
+    
+//functions
 function ValidateSliderFormPart2(form){ 
     for (var i=0 ; i < NUM_SLIDERS-1; i++)
     {
@@ -56,6 +66,19 @@ function ValidateSliderFormPart2(form){
     }
     return true;
 }
+    
+function ValidateSliderFormPart3(form){ 
+    for (var i=0 ; i < NUM_SLIDERS-1; i++)
+    {
+      var sliderVar = "slider" + i;
+      if (document.getElementById(sliderVar).style.background == "") {
+        alert ( "Please answer all the questions." );
+        return false;
+      }
+    }
+    return true;
+}
+
 
 function ValidateSliderFormPart1(form){ 
     var i = NUM_SLIDERS-1;
@@ -165,15 +188,17 @@ function pressEnter(e) {
 
 <div class="slide" id="stage">
     <div id="form">
-    <form name= "affectForm">
+
+    <p id="context" class="block-text"></p>
+    <p id="question" class="block-text"></p>
+
+<span id= "form1">
+<form name= "affectForm1">
     <input type="hidden" name="hSlider0" id="hiddenSliderValue0" />
     <input type="hidden" name="hSlider1" id="hiddenSliderValue1" />
     <input type="hidden" name="hSlider2" id="hiddenSliderValue2" />
     <input type="hidden" name="hSlider3" id="hiddenSliderValue3" />
-    <input type="hidden" name="hSlider4" id="hiddenSliderValue4" />
-
-    <p id="context" class="block-text"></p>
-    <p id="question" class="block-text"></p>
+    
     <table cellspacing="0" cellpadding="0" border="0" align="center"><tbody>
     <tr>
       <td align="right" height="48">
@@ -223,9 +248,20 @@ function pressEnter(e) {
     </tr>
       
     </tbody></table>
-    <br><br>    
+    </form>
+</span>
+    <br><br> 
+    <button type="button" id="next1" onclick="this.blur(); if (ValidateSliderFormPart2(document.affectForm1)) {
+document.getElementById('next1').hidden=true;
+document.getElementById('next2').hidden=false;
+document.getElementById('form1').hidden=true;
+document.getElementById('form2').hidden=false;}">Next</button>
+
+<span id="form2">
+    <form id= "affectForm2">
     <p id="question2" class="block-text"></p>
-    
+     <input type="hidden" name="hSlider4" id="hiddenSliderValue4" />
+   
 <table width="600" cellspacing="0" cellpadding="0" border="0" align="center">
     <tbody>
         <tr>
@@ -245,7 +281,13 @@ function pressEnter(e) {
     </span>
     
     </form>
-    <button type="button" id="next" onclick="this.blur(); if (ValidateSliderFormPart1(document.affectForm)) {experiment.next();}">Next</button>
+
+    <button type="button" id="next2" onclick="this.blur(); if (ValidateSliderFormPart2(document.affectForm2)) {
+experiment.next();                                                       document.getElementById('form1').hidden=false;
+document.getElementById('form2').hidden=true;
+document.getElementById('next1').hidden=false;
+document.getElementById('next2').hidden=true;
+}">Next</button>
     </div>
 </div>
 
@@ -280,7 +322,7 @@ function pressEnter(e) {
 <div class="slide" id="finished">
   You're finished - thanks for participating! Submitting to Mechanical Turk...
 </div>
-<script src="polite_adj_politePos.js"></script>
+<script src="polite_adj_goals.js"></script>
 
 </body>
 </html>

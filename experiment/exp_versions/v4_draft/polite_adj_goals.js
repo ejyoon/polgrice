@@ -438,7 +438,7 @@ var experiment = {
     inferredProb1: [],
     inferredProb2: [],
     inferredProb3: [],
-    inferredProb4: [],
+    prob_ask: [],
     language: [],
 	expt_aim: [],
 	character_thoughts: [],
@@ -484,7 +484,7 @@ var experiment = {
       experiment.data.inferredProb1.push(prob1);
       experiment.data.inferredProb2.push(prob2);
       experiment.data.inferredProb3.push(prob3);
-      experiment.data.inferredProb4.push(prob4);
+      experiment.data.prob_ask.push(prob4);
    
       clearForm(document.forms[0]);
       clearForm(document.forms[1]);
