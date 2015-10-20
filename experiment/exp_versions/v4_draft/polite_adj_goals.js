@@ -139,15 +139,23 @@ var cond = 2;
 
 var score = shuffle(["polite", "honest", "kind", "informative"]);
 
-var domains = 
+var domains1 = 
     shuffle(["poem", "cake", "cookie", "presentation", "song"]);
+var domains2 = 
+    shuffle(["poem", "cake", "cookie", "presentation", "song"]);
+var domains = domains1.concat(domains2)
 
-var states = 
+var states1 = 
     shuffle(["terrible", "bad", "okay", "good", "amazing"]);
-
-var utterances = 
+var states2 = 
     shuffle(["terrible", "bad", "okay", "good", "amazing"]);
+var states = states1.concat(states2)
 
+var utterances1 = 
+    shuffle(["terrible", "bad", "okay", "good", "amazing"]);
+var utterances2 = 
+    shuffle(["terrible", "bad", "okay", "good", "amazing"]);
+var utterances = utterances1.concat(utterances2)
 
     var allConditions = // FIXME!!
         shuffle(
@@ -174,6 +182,26 @@ shuffle(
 {"domain": domains[4],
  "state": states[4],
  "utterance": utterances[4],
+},
+{"domain": domains[5],
+ "state": states[5],
+ "utterance": utterances[5],
+},
+{"domain": domains[6],
+ "state": states[6],
+ "utterance": utterances[6],
+},
+{"domain": domains[7],
+ "state": states[7],
+ "utterance": utterances[7],
+},
+{"domain": domains[8],
+ "state": states[8],
+ "utterance": utterances[8],
+},
+{"domain": domains[9],
+ "state": states[9],
+ "utterance": utterances[9],
 }
 ]),
 shuffle(
@@ -197,17 +225,42 @@ shuffle(
 {"domain": domains[4],
  "state": states[4],
  "utterance": utterances[4],
+},
+{"domain": domains[5],
+ "state": states[5],
+ "utterance": utterances[5],
+},
+{"domain": domains[6],
+ "state": states[6],
+ "utterance": utterances[6],
+},
+{"domain": domains[7],
+ "state": states[7],
+ "utterance": utterances[7],
+},
+{"domain": domains[8],
+ "state": states[8],
+ "utterance": utterances[8],
+},
+{"domain": domains[9],
+ "state": states[9],
+ "utterance": utterances[9],
 }
 ]),
 ]); 
 //}
 
-speakers = shuffle([["John","Bob",], ["Hailey", "Mika"], ["Karen", "Jenny"], ["Kyle", "James"], ["Sean", "Chris"]]);
+speakers = shuffle([["John","Bob",], ["Hailey", "Mika"], ["Karen", "Jenny"], ["Kyle", "James"], ["Sean", "Chris"],["John","Bob",], ["Hailey", "Mika"], ["Karen", "Jenny"], ["Kyle", "James"], ["Sean", "Chris"]]);
 speakers1 = shuffle(speakers[0]);
 speakers2 = shuffle(speakers[1]);
 speakers3 = shuffle(speakers[2]);
 speakers4 = shuffle(speakers[3]);
 speakers5 = shuffle(speakers[4]);
+speakers6 = shuffle(speakers[5]);
+speakers7 = shuffle(speakers[6]);
+speakers8 = shuffle(speakers[7]);
+speakers9 = shuffle(speakers[8]);
+speakers10 = shuffle(speakers[9]);
 
 var sents = {
     utterances: {
@@ -340,7 +393,7 @@ var experiment = {
     domain: [],
     state: [],
     utterance: [],
-    context: [],
+//    context: [],
     goal0: score[0],
     goal1: score[1],
     goal2: score[2],
@@ -390,7 +443,7 @@ var experiment = {
       experiment.data.domain.push(trial.domain);
 //      experiment.data.polite.push(trial.polite);
       experiment.data.state.push(trial.state);
-      experiment.data.context.push(trial.context);
+//      experiment.data.context.push(trial.context);
       experiment.data.inferredProb0.push(prob0);
       experiment.data.inferredProb1.push(prob1);
       experiment.data.inferredProb2.push(prob2);
