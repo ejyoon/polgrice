@@ -1,4 +1,4 @@
-var filename = "EJY_polimp11"
+var filename = "EJY_politeness_goals"
 var condCounts = "1,50;2,50;3,50;" //Example: "1,20;2,20;3,20"
 
 // ---------------- HELPER ------------------
@@ -398,7 +398,7 @@ var sents = {
             SP: speakers5[0],
             LS: speakers5[1],
             BB: "song",
-	}
+	},
     },
     states: {
         terrible: {
@@ -533,8 +533,6 @@ function doSentSubs (sents, polite, domain, utterance, people)
     BB = sents["domains"][domain]["BB"]; //Item 2
     SP = sents["people"][people]["SP"]; //speaker
     LS = sents["people"][people]["LS"]; //addressee
-//    SP = sents["domains"][domain]["SP"]; //speaker
-//    LS = sents["domains"][domain]["LS"]; //addressee
  
     utterance = utterance.replace("BB",BB).replace("SP",SP);
     context = context.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);
@@ -545,9 +543,6 @@ function doSentSubs (sents, polite, domain, utterance, people)
     
     return [utterance, context, state, precontext, question, question2];
 }
-
-
-// allConditions = shuffle(allConditions);
 
 var numConditions = allConditions.length;
 var chooseCondition = random(0, numConditions-1);
@@ -622,9 +617,7 @@ var experiment = {
       experiment.data.order.push(numComplete);
       experiment.data.utterance.push(trial.utterance);
       experiment.data.domain.push(trial.domain);
-//      experiment.data.polite.push(trial.polite);
       experiment.data.state.push(trial.state);
-//      experiment.data.context.push(trial.context);
       experiment.data.inferredProb0.push(prob0);
       experiment.data.inferredProb1.push(prob1);
       experiment.data.inferredProb2.push(prob2);
@@ -646,7 +639,6 @@ var experiment = {
     	currentTrialNum = numComplete;
     	trial = allTrialOrders[shuffledOrder[numComplete]];
         utterance = trial.utterance;
-//        polite = trial.polite;
         state = trial.state;
         domain = trial.domain;
         context = trial.context;
@@ -685,9 +677,6 @@ $("#slider0").slider({
                      "background":"#667D94",
                      "border-color": "#001F29" });
                }});
-
-
-
 $("#slider1").slider({
                animate: true,
                orientation: "vertical",
@@ -705,7 +694,6 @@ $("#slider1").slider({
                      "background":"#667D94",
                      "border-color": "#001F29" });
                }});
-
 $("#slider2").slider({
                animate: true,
                orientation: "vertical",
@@ -740,8 +728,7 @@ $("#slider3").slider({
                      "background":"#667D94",
                      "border-color": "#001F29" });
                }});
-
- $("#slider4").slider({
+$("#slider4").slider({
                animate: true,
                max: 40 , min: 0, step: 1, value: 20,
                slide: function( event, ui ) {
