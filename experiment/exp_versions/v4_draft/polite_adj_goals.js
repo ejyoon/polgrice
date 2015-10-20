@@ -230,53 +230,114 @@ var score = shuffle(["to be polite", "to be honest", "to be kind", "to be inform
 //])
 //    } else {
 //            
+//    var allConditions = // FIXME!!
+//        shuffle(
+//[
+//    
+//shuffle(
+//    [
+//{"domain":"poem",
+// "state": "okay",
+// "utterance":"terrible",
+//},
+//{"domain":"cake",
+// "state":"terrible",
+// "utterance":"amazing",
+//},
+//{"domain":"cookies",
+// "state":"amazing",
+// "utterance":"terrible",
+//},
+//{"domain":"presentation", 
+//"state":"good", 
+//"utterance":"bad"
+//}
+//]),
+//shuffle(
+//    [
+//{"domain":"poem",
+// "state":"amazing",
+// "utterance":"bad",
+//},
+//{"domain":"cake",
+// "state":"good",
+// "utterance":"terrible",
+//},
+//{"domain":"cookies",
+// "state":"okay",
+// "utterance":"amazing",
+//},
+//{"domain":"presentation", 
+//"state":"bad", 
+//"utterance":"amazing"
+//}
+//]),
+//
+//]); 
+////}
+  
+var domains = 
+    shuffle(["poem", "cake", "cookie", "presentation"]);
+
+var states = 
+    shuffle(["terrible", "bad", "okay", "good"]);
+
+var utterances = 
+    shuffle(["terrible", "bad", "okay", "good"]);
+
+
     var allConditions = // FIXME!!
         shuffle(
 [
     
 shuffle(
     [
-{"domain":"poem",
-// "polite":"baseline",
- "state": "okay",
- "utterance":"terrible",
+{"domain": domains[0],
+ "state": states[0],
+ "utterance": utterances[0],
 },
-{"domain":"cake",
- "state":"terrible",
- "utterance":"amazing",
+{"domain": domains[1],
+ "state": states[1],
+ "utterance": utterances[1],
 },
-{"domain":"cookies",
- "state":"amazing",
- "utterance":"terrible",
+{"domain": domains[2],
+ "state": states[2],
+ "utterance": utterances[2],
 },
-{"domain":"presentation", 
-"state":"good", 
-"utterance":"bad"
+{"domain": domains[3],
+ "state": states[3],
+ "utterance": utterances[3],
 }
+//{"domain": domains[4],
+// "state": states[4],
+// "utterance": utterances[4],
+//}
 ]),
 shuffle(
     [
-{"domain":"poem",
- "state":"amazing",
- "utterance":"bad",
+{"domain": domains[0],
+ "state": states[0],
+ "utterance": utterances[0],
 },
-{"domain":"cake",
- "state":"good",
- "utterance":"terrible",
+{"domain": domains[1],
+ "state": states[1],
+ "utterance": utterances[1],
 },
-{"domain":"cookies",
- "state":"okay",
- "utterance":"amazing",
+{"domain": domains[2],
+ "state": states[2],
+ "utterance": utterances[2],
 },
-{"domain":"presentation", 
-"state":"bad", 
-"utterance":"amazing"
+{"domain": domains[3],
+ "state": states[3],
+ "utterance": utterances[3],
 }
+//{"domain": domains[4],
+// "state": states[4],
+// "utterance": utterances[4],
+//}
 ]),
-
 ]); 
 //}
-        
 
 speakers = shuffle([["John","Bob",], ["Hailey", "Mika"], ["Karen", "Jenny"], ["Kyle", "James"]]);
 speakers1 = shuffle(speakers[0]);
@@ -322,7 +383,7 @@ var sents = {
             LS: speakers1[1],
             BB: "presentation",
 	},
-	   cookies: {
+	   cookie: {
             sent_precontext: "Imagine that LS baked some cookies, and", 
             sent_context: " LS approached SP who tasted LS's cookie, and asked: \"How did my cookie taste?\"", 
 
