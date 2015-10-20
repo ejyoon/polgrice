@@ -137,153 +137,16 @@ var cond = 2;
 //xmlHttp.send( null );
 //var cond = xmlHttp.responseText;
 
-var score = shuffle(["to be polite", "to be honest", "to be kind", "to be informative"]); // FIXME: randomize
-//             , "40", "50", "60", "70", "80", "90"];
+var score = shuffle(["polite", "honest", "kind", "informative"]);
 
-//if (cond === 1) {
-//    
-//    var allConditions = 
-//        shuffle(
-//[
-//shuffle(
-//    [
-//{"domain":"poem",
-// "polite":"polite",
-// "utterance":"bad",
-//},
-//{"domain":"cake",
-// "polite":"polite",
-// "utterance":"great",
-//},
-//{"domain":"cookies",
-// "polite":"polite",
-// "utterance":"not_bad",
-//},
-//{"domain":"presentation", 
-//"polite":"polite", 
-//"utterance":"not_great"
-//}
-//]),
-//shuffle(
-//    [
-//{"domain":"poem",
-// "polite":"polite",
-// "utterance":"not_great",
-//},
-//{"domain":"cake",
-// "polite":"polite",
-// "utterance":"not_bad",
-//},
-//{"domain":"cookies",
-// "polite":"polite",
-// "utterance":"great",
-//},
-//{"domain":"presentation", 
-//"polite":"polite", 
-//"utterance":"bad"
-//}
-//]),
-//])
-//    } else if (cond === 2) { 
-//    
-//    var allConditions = 
-//        shuffle(
-//[
-//shuffle(
-//    [
-//{"domain":"poem",
-// "polite":"honest",
-// "utterance":"great",
-//},
-//{"domain":"cake",
-// "polite":"honest",
-// "utterance":"bad",
-//},
-//{"domain":"presentation",
-// "polite":"honest",
-// "utterance":"not_bad"
-//},
-//{"domain":"cookies",
-// "polite":"honest", 
-// "utterance":"not_great"
-//}
-//]),
-//shuffle(
-//    [
-//{"domain":"poem",
-// "polite":"honest",
-// "utterance":"not_bad",
-//},
-//{"domain":"cake",
-// "polite":"honest",
-// "utterance":"not_great",
-//},
-//{"domain":"presentation",
-// "polite":"honest",
-// "utterance":"bad"
-//},
-//{"domain":"cookies",
-// "polite":"honest", 
-// "utterance":"great"
-//}
-//]),
-//])
-//    } else {
-//            
-//    var allConditions = // FIXME!!
-//        shuffle(
-//[
-//    
-//shuffle(
-//    [
-//{"domain":"poem",
-// "state": "okay",
-// "utterance":"terrible",
-//},
-//{"domain":"cake",
-// "state":"terrible",
-// "utterance":"amazing",
-//},
-//{"domain":"cookies",
-// "state":"amazing",
-// "utterance":"terrible",
-//},
-//{"domain":"presentation", 
-//"state":"good", 
-//"utterance":"bad"
-//}
-//]),
-//shuffle(
-//    [
-//{"domain":"poem",
-// "state":"amazing",
-// "utterance":"bad",
-//},
-//{"domain":"cake",
-// "state":"good",
-// "utterance":"terrible",
-//},
-//{"domain":"cookies",
-// "state":"okay",
-// "utterance":"amazing",
-//},
-//{"domain":"presentation", 
-//"state":"bad", 
-//"utterance":"amazing"
-//}
-//]),
-//
-//]); 
-////}
-  
 var domains = 
-    shuffle(["poem", "cake", "cookie", "presentation"]);
+    shuffle(["poem", "cake", "cookie", "presentation", "song"]);
 
 var states = 
-    shuffle(["terrible", "bad", "okay", "good"]);
+    shuffle(["terrible", "bad", "okay", "good", "amazing"]);
 
 var utterances = 
-    shuffle(["terrible", "bad", "okay", "good"]);
+    shuffle(["terrible", "bad", "okay", "good", "amazing"]);
 
 
     var allConditions = // FIXME!!
@@ -307,11 +170,11 @@ shuffle(
 {"domain": domains[3],
  "state": states[3],
  "utterance": utterances[3],
+},
+{"domain": domains[4],
+ "state": states[4],
+ "utterance": utterances[4],
 }
-//{"domain": domains[4],
-// "state": states[4],
-// "utterance": utterances[4],
-//}
 ]),
 shuffle(
     [
@@ -330,20 +193,21 @@ shuffle(
 {"domain": domains[3],
  "state": states[3],
  "utterance": utterances[3],
+},
+{"domain": domains[4],
+ "state": states[4],
+ "utterance": utterances[4],
 }
-//{"domain": domains[4],
-// "state": states[4],
-// "utterance": utterances[4],
-//}
 ]),
 ]); 
 //}
 
-speakers = shuffle([["John","Bob",], ["Hailey", "Mika"], ["Karen", "Jenny"], ["Kyle", "James"]]);
+speakers = shuffle([["John","Bob",], ["Hailey", "Mika"], ["Karen", "Jenny"], ["Kyle", "James"], ["Sean", "Chris"]]);
 speakers1 = shuffle(speakers[0]);
 speakers2 = shuffle(speakers[1]);
 speakers3 = shuffle(speakers[2]);
 speakers4 = shuffle(speakers[3]);
+speakers5 = shuffle(speakers[4]);
 
 var sents = {
     utterances: {
@@ -362,18 +226,6 @@ var sents = {
         amazing: {
             sent_utterance: " SP said, \"It was amazing!\"" 
         },
-//        not_bad: {
-//            sent_utterance: " SP said, \"Not bad.\""
-//        },        
-//        not_great: {
-//            sent_utterance: " SP said, \"Not great.\"" 
-//        },
-//        bad: {
-//            sent_utterance: " SP said, \"It was bad.\""
-//        },        
-//        great: {
-//            sent_utterance: " SP said, \"It was great.\"" 
-//        }
     },
     domains: {
         presentation: {
@@ -406,18 +258,17 @@ var sents = {
             SP: speakers4[0],
             LS: speakers4[1],
             BB: "cake",
-	}    },
-//    polites: {
-//        honest: {
-//            sent_polite: " SP is a very honest, blunt person."        
-//        },
-//        polite: {
-//            sent_polite: " SP is a very polite person."        
-//        },
-//        baseline: {
-//            sent_polite: ""                    
-//        }
-//    },
+	},
+	   song: {
+            sent_precontext: "Imagine that LS wrote a song, and", 
+            sent_context: " LS approached SP who heard LS's song, and asked: \"How was my song?\"", 
+
+            SP: speakers5[0],
+            LS: speakers5[1],
+            BB: "song",
+	}    
+
+    },
     states: {
         terrible: {
             state: " LS's BB was terrible."        
