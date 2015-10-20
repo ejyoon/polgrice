@@ -143,114 +143,178 @@ var domains1 =
     shuffle(["poem", "cake", "cookie", "presentation", "song"]);
 var domains2 = 
     shuffle(["poem", "cake", "cookie", "presentation", "song"]);
-var domains = domains1.concat(domains2)
+var domains3 = 
+    shuffle(["poem", "cake", "cookie", "presentation", "song"]);
+var domains4 = 
+    shuffle(["poem", "cake", "cookie", "presentation", "song"]);
+var domains5 = 
+    shuffle(["poem", "cake", "cookie", "presentation", "song"]);
+var domains = domains1.concat(domains2, domains3, domains4, domains5)
 
 var states1 = 
-    shuffle(["terrible", "bad", "okay", "good", "amazing"]);
+    ["terrible", "bad", "okay", "good", "amazing"];
 var states2 = 
-    shuffle(["terrible", "bad", "okay", "good", "amazing"]);
-var states = states1.concat(states2)
+    ["bad", "okay", "good", "amazing", "terrible"];
+var states3 = 
+    ["okay", "good", "amazing", "terrible", "bad"];
+var states4 = 
+    ["good", "amazing", "terrible", "bad", "okay"];
+var states5 = 
+    ["amazing", "terrible", "bad", "okay", "good"];
+var states = states1.concat(states2, states3, states4, states5)
 
 var utterances1 = 
-    shuffle(["terrible", "bad", "okay", "good", "amazing"]);
+    ["terrible", "bad", "okay", "good", "amazing"];
 var utterances2 = 
-    shuffle(["terrible", "bad", "okay", "good", "amazing"]);
-var utterances = utterances1.concat(utterances2)
+    ["terrible", "bad", "okay", "good", "amazing"];
+var utterances3 = 
+    ["terrible", "bad", "okay", "good", "amazing"];
+var utterances4 = 
+    ["terrible", "bad", "okay", "good", "amazing"];
+var utterances5 = 
+    ["terrible", "bad", "okay", "good", "amazing"];
+var utterances = utterances1.concat(utterances2, utterances3, utterances4, utterances5)
 
-    var allConditions = // FIXME!!
-        shuffle(
-[
+    var allConditions = 
+shuffle(
+    [
     
 shuffle(
     [
 {"domain": domains[0],
  "state": states[0],
  "utterance": utterances[0],
+ "people": "people1",
 },
 {"domain": domains[1],
  "state": states[1],
  "utterance": utterances[1],
+ "people": "people2",
 },
 {"domain": domains[2],
  "state": states[2],
  "utterance": utterances[2],
+ "people": "people3",
 },
 {"domain": domains[3],
  "state": states[3],
  "utterance": utterances[3],
+ "people": "people4",
 },
 {"domain": domains[4],
  "state": states[4],
  "utterance": utterances[4],
+ "people": "people5",
 },
 {"domain": domains[5],
  "state": states[5],
  "utterance": utterances[5],
+ "people": "people6",
 },
 {"domain": domains[6],
  "state": states[6],
  "utterance": utterances[6],
+ "people": "people7",
 },
 {"domain": domains[7],
  "state": states[7],
  "utterance": utterances[7],
+ "people": "people8",
 },
 {"domain": domains[8],
  "state": states[8],
  "utterance": utterances[8],
+ "people": "people9",
 },
 {"domain": domains[9],
  "state": states[9],
  "utterance": utterances[9],
+ "people": "people10",
+},
+{"domain": domains[10],
+ "state": states[10],
+ "utterance": utterances[10],
+ "people": "people11",
+},
+{"domain": domains[11],
+ "state": states[11],
+ "utterance": utterances[11],
+ "people": "people12",
+},
+{"domain": domains[12],
+ "state": states[12],
+ "utterance": utterances[12],
+ "people": "people13",
+},
+{"domain": domains[13],
+ "state": states[13],
+ "utterance": utterances[13],
+ "people": "people14",
+},
+{"domain": domains[14],
+ "state": states[14],
+ "utterance": utterances[14],
+ "people": "people15",
+},
+{"domain": domains[15],
+ "state": states[15],
+ "utterance": utterances[15],
+ "people": "people16",
+},
+{"domain": domains[16],
+ "state": states[16],
+ "utterance": utterances[16],
+ "people": "people17",
+},
+{"domain": domains[17],
+ "state": states[17],
+ "utterance": utterances[17],
+ "people": "people18",
+},
+{"domain": domains[18],
+ "state": states[18],
+ "utterance": utterances[18],
+ "people": "people19",
+},
+{"domain": domains[19],
+ "state": states[19],
+ "utterance": utterances[19],
+ "people": "people20",
+},
+{"domain": domains[20],
+ "state": states[20],
+ "utterance": utterances[20],
+ "people": "people21",
+},
+{"domain": domains[21],
+ "state": states[21],
+ "utterance": utterances[21],
+ "people": "people22",
+},
+{"domain": domains[22],
+ "state": states[22],
+ "utterance": utterances[22],
+ "people": "people23",
+},
+{"domain": domains[23],
+ "state": states[23],
+ "utterance": utterances[23],
+ "people": "people24",
+},
+{"domain": domains[24],
+ "state": states[24],
+ "utterance": utterances[24],
+ "people": "people25",
 }
-]),
-shuffle(
-    [
-{"domain": domains[0],
- "state": states[0],
- "utterance": utterances[0],
-},
-{"domain": domains[1],
- "state": states[1],
- "utterance": utterances[1],
-},
-{"domain": domains[2],
- "state": states[2],
- "utterance": utterances[2],
-},
-{"domain": domains[3],
- "state": states[3],
- "utterance": utterances[3],
-},
-{"domain": domains[4],
- "state": states[4],
- "utterance": utterances[4],
-},
-{"domain": domains[5],
- "state": states[5],
- "utterance": utterances[5],
-},
-{"domain": domains[6],
- "state": states[6],
- "utterance": utterances[6],
-},
-{"domain": domains[7],
- "state": states[7],
- "utterance": utterances[7],
-},
-{"domain": domains[8],
- "state": states[8],
- "utterance": utterances[8],
-},
-{"domain": domains[9],
- "state": states[9],
- "utterance": utterances[9],
-}
-]),
+    ])
 ]); 
 //}
 
-speakers = shuffle([["John","Bob",], ["Hailey", "Mika"], ["Karen", "Jenny"], ["Kyle", "James"], ["Sean", "Chris"],["John","Bob",], ["Hailey", "Mika"], ["Karen", "Jenny"], ["Kyle", "James"], ["Sean", "Chris"]]);
+speakers = shuffle([["John","Bob",], ["Hailey", "Mika"], ["Karen", "Jenny"], ["Kyle", "James"], ["Sean", "Chris"],
+                    ["Lucy", "Sarah"], ["Bill", "Tom"], ["Heather", "Grace"], ["Jake", "Kevin"], ["Ann", "Diana"],
+                    ["George", "Henry"], ["Nathan", "Patrick"], ["Wendy", "Emma"], ["Stephanie", "Barbara"], ["Oliver", "Robert"],
+                    ["Matt", "Larry"], ["Steven", "Zack"], ["Fiona", "Yvonne"], ["Rebecca", "Cheryl"], ["Victoria", "Jasmine"],
+                    ["Albert", "Frank"], ["Greg", "Colin"], ["Ed", "Peter"], ["Molly", "Kara"], ["Justine", "Kelly"]]);
 speakers1 = shuffle(speakers[0]);
 speakers2 = shuffle(speakers[1]);
 speakers3 = shuffle(speakers[2]);
@@ -261,6 +325,21 @@ speakers7 = shuffle(speakers[6]);
 speakers8 = shuffle(speakers[7]);
 speakers9 = shuffle(speakers[8]);
 speakers10 = shuffle(speakers[9]);
+speakers11 = shuffle(speakers[10]);
+speakers12 = shuffle(speakers[11]);
+speakers13 = shuffle(speakers[12]);
+speakers14 = shuffle(speakers[13]);
+speakers15 = shuffle(speakers[14]);
+speakers16 = shuffle(speakers[15]);
+speakers17 = shuffle(speakers[16]);
+speakers18 = shuffle(speakers[17]);
+speakers19 = shuffle(speakers[18]);
+speakers20 = shuffle(speakers[19]);
+speakers21 = shuffle(speakers[20]);
+speakers22 = shuffle(speakers[21]);
+speakers23 = shuffle(speakers[22]);
+speakers24 = shuffle(speakers[23]);
+speakers25 = shuffle(speakers[24]);
 
 var sents = {
     utterances: {
@@ -281,7 +360,7 @@ var sents = {
         },
     },
     domains: {
-        presentation: {
+       presentation: {
             sent_precontext: "Imagine that LS just gave a presentation, and", 
             sent_context: " LS approached SP who saw LS's presentation, and asked: \"How was my presentation?\"", 
             SP: speakers1[0],
@@ -319,8 +398,7 @@ var sents = {
             SP: speakers5[0],
             LS: speakers5[1],
             BB: "song",
-	}    
-
+	}
     },
     states: {
         terrible: {
@@ -338,27 +416,129 @@ var sents = {
         amazing: {
             state: " LS's BB was amazing."        
         },
+    },
+    people: {
+        people1: {
+            SP: speakers1[0],
+            LS: speakers1[1],
+        },
+        people2: {
+            SP: speakers2[0],
+            LS: speakers2[1],
+        },
+        people3: {
+            SP: speakers3[0],
+            LS: speakers3[1],
+        },
+        people4: {
+            SP: speakers4[0],
+            LS: speakers4[1],
+        },
+        people5: {
+            SP: speakers5[0],
+            LS: speakers5[1],
+        },
+        people6: {
+            SP: speakers6[0],
+            LS: speakers6[1],
+        },
+        people7: {
+            SP: speakers7[0],
+            LS: speakers7[1],
+        },
+        people8: {
+            SP: speakers8[0],
+            LS: speakers8[1],
+        },
+        people9: {
+            SP: speakers9[0],
+            LS: speakers9[1],
+        },
+        people10: {
+            SP: speakers10[0],
+            LS: speakers10[1],
+        },
+        people11: {
+            SP: speakers11[0],
+            LS: speakers11[1],
+        },
+        people12: {
+            SP: speakers12[0],
+            LS: speakers12[1],
+        },
+        people13: {
+            SP: speakers13[0],
+            LS: speakers13[1],
+        },
+        people14: {
+            SP: speakers14[0],
+            LS: speakers14[1],
+        },
+        people15: {
+            SP: speakers15[0],
+            LS: speakers15[1],
+        },
+        people16: {
+            SP: speakers16[0],
+            LS: speakers16[1],
+        },
+        people17: {
+            SP: speakers17[0],
+            LS: speakers17[1],
+        },
+        people18: {
+            SP: speakers18[0],
+            LS: speakers18[1],
+        },
+        people19: {
+            SP: speakers19[0],
+            LS: speakers19[1],
+        },
+        people20: {
+            SP: speakers20[0],
+            LS: speakers20[1],
+        },
+        people21: {
+            SP: speakers21[0],
+            LS: speakers21[1],
+        },
+        people22: {
+            SP: speakers22[0],
+            LS: speakers22[1],
+        },
+        people23: {
+            SP: speakers23[0],
+            LS: speakers23[1],
+        },
+        people24: {
+            SP: speakers24[0],
+            LS: speakers24[1],
+        },
+        people25: {
+            SP: speakers25[0],
+            LS: speakers25[1],
+        },
     }
-}
+};
 
-function doSentSubs (sents, polite, domain, utterance)
+function doSentSubs (sents, polite, domain, utterance, people)
 {
     utterance = sents["utterances"][utterance]["sent_utterance"];
     precontext = sents["domains"][domain]["sent_precontext"];
     context = sents["domains"][domain]["sent_context"];
-//    polite = sents["polites"][polite]["sent_polite"];
     state = sents["states"][state]["state"]
     question = "Based on what SP said, how likely do you think that <b>SP's goal</b> was to be:";
     question2 = "Based on what SP said, how likely is it for <b><i>you</i></b> to ask for SP's opinion on your own BB?";
  
     BB = sents["domains"][domain]["BB"]; //Item 2
-    SP = sents["domains"][domain]["SP"]; //speaker
-    LS = sents["domains"][domain]["LS"]; //addressee
+    SP = sents["people"][people]["SP"]; //speaker
+    LS = sents["people"][people]["LS"]; //addressee
+//    SP = sents["domains"][domain]["SP"]; //speaker
+//    LS = sents["domains"][domain]["LS"]; //addressee
  
     utterance = utterance.replace("BB",BB).replace("SP",SP);
     context = context.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);
     precontext = precontext.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);
-//    polite = polite.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP);
     state = state.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);
     question = question.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     question2 = question2.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
@@ -393,6 +573,7 @@ var experiment = {
     domain: [],
     state: [],
     utterance: [],
+    people: [],
 //    context: [],
     goal0: score[0],
     goal1: score[1],
@@ -469,7 +650,8 @@ var experiment = {
         state = trial.state;
         domain = trial.domain;
         context = trial.context;
-        sent_materials = doSentSubs(sents, state, domain, utterance);
+        people = trial.people;
+        sent_materials = doSentSubs(sents, state, domain, utterance, people);
       showSlide("stage");
       $("#context").html(sent_materials[3] + sent_materials[2] + sent_materials[1] + sent_materials[0]);  
       $("#question").html(sent_materials[4]);    
