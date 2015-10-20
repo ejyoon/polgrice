@@ -295,8 +295,8 @@ function doSentSubs (sents, polite, domain, utterance)
     context = sents["domains"][domain]["sent_context"];
 //    polite = sents["polites"][polite]["sent_polite"];
     state = sents["states"][state]["state"]
-    question = "Based on what SP said, how likely do you think each of the following was SP's goal?";
-    question2 = "Based on what SP said, how likely is it for YOU to ask for SP's opinion on your own BB?";
+    question = "Based on what SP said, how likely do you think that <b>SP's goal</b> was to be:";
+    question2 = "Based on what SP said, how likely is it for <b><i>you</i></b> to ask for SP's opinion on your own BB?";
  
     BB = sents["domains"][domain]["BB"]; //Item 2
     SP = sents["domains"][domain]["SP"]; //speaker
@@ -338,7 +338,6 @@ var experiment = {
     cond: cond,
     order: [],
     domain: [],
-//    polite: [],
     state: [],
     utterance: [],
     context: [],
