@@ -13,7 +13,7 @@ body {
 	display: none;
 	position: absolute;
 	margin: 0;
-	margin-left: 0.5%;
+	margin-left: 3%;
 	padding: 1% 2% 1% 2%;
 }
 
@@ -129,6 +129,7 @@ button[disabled] {
 }
 
 .progress{
+    
     text-align: center;
     margin-top:0.5em;
 }
@@ -151,9 +152,10 @@ button[disabled] {
     position:relative;
     height:100%;
     width:0px;
-    background-color:DarkRed;
+    background-color:green;
     text-align: center;
 }
+
 #slider0 { width: 12px;
                height: 200px;
                position: relative;

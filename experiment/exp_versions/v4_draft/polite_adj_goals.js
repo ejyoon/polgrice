@@ -338,19 +338,19 @@ speakers25 = shuffle(speakers[24]);
 var sents = {
     utterances: {
         terrible: {
-            sent_utterance: " SP said, \"It was terrible!\""
+            sent_utterance: " SP said, <b>\"It was terrible!\" </b>"
         },        
         bad: {
-            sent_utterance: " SP said, \"It was bad!\""
+            sent_utterance: " SP said, <b>\"It was bad!\"</b>"
         },        
         okay: {
-            sent_utterance: " SP said, \"It was okay!\"" 
+            sent_utterance: " SP said, <b>\"It was okay!\"</b>" 
         },
         good: {
-            sent_utterance: " SP said, \"It was good!\"" 
+            sent_utterance: " SP said, <b>\"It was good!\"</b>" 
         },
         amazing: {
-            sent_utterance: " SP said, \"It was amazing!\"" 
+            sent_utterance: " SP said, <b>\"It was amazing!\"</b>" 
         },
     },
     domains: {
@@ -665,7 +665,7 @@ var experiment = {
         people = trial.people;
         sent_materials = doSentSubs(sents, state, domain, utterance, people);
       showSlide("stage");
-      $("#context").html(sent_materials[3] + sent_materials[2] + sent_materials[1] + sent_materials[0]);  
+      $("#context").html(sent_materials[3] + "<b>" + sent_materials[2] + "</b><div><div>" + sent_materials[1] + sent_materials[0]);  
       $("#question").html(sent_materials[4]);    
       
       for (var i = 0; i <= 11; i++)
