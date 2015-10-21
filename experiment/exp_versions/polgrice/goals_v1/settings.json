@@ -1,0 +1,16 @@
+{
+    "title":               "Quick study to judge what sentences mean",
+    "description":         "A simple 2-minute task of judging what actions/sentences mean",
+    "keywords":            "Categorization, game, fun, short, sentences, conversation, meaning",
+    "url":                 "https://langcog.stanford.edu/expts/EJY/polite_adj/v3_2/polite_adj_statePos2.html",
+    "frame_height":         450,
+    "assignment_duration":  "1 hour",
+    "auto_approval_delay":  "1 hour",
+    "reward":               0.20,
+    "experimenter":         "Erica Yoon",
+    "server_log_path":      "http://langcog.stanford.edu/cgi-bin/cosub/location.php",    
+    "qualifications": {
+        "location": "US",
+        "approval_percentage": 85
+    }
+}
