@@ -128,7 +128,7 @@ function getRadioCheckedValue(formNum, radio_name)
 // var cond = random(3)+1;
 var expt = "adj_goalPos";
 //var cond = random(3)+1;
-var cond = 2;
+//var cond = 2;
 
 // call the maker getter to get the cond variable 
 //var xmlHttp = null;
@@ -140,16 +140,10 @@ var cond = 2;
 var score = shuffle(["polite", "honest", "kind", "informative"]);
 
 var domains1 = 
-    shuffle(["poem", "cake", "cookie", "presentation", "song"]);
+    shuffle(["poem", "cake", "cookie", "presentation", "song", "film", "solo", "monologue", "dance", "painting", "app", "review", "recital"]);
 var domains2 = 
-    shuffle(["poem", "cake", "cookie", "presentation", "song"]);
-var domains3 = 
-    shuffle(["poem", "cake", "cookie", "presentation", "song"]);
-var domains4 = 
-    shuffle(["poem", "cake", "cookie", "presentation", "song"]);
-var domains5 = 
-    shuffle(["poem", "cake", "cookie", "presentation", "song"]);
-var domains = domains1.concat(domains2, domains3, domains4, domains5)
+    shuffle(["poem", "cake", "cookie", "presentation", "song", "film", "solo", "monologue", "dance", "painting", "app", "review", "recital"]);
+var domains = domains1.concat(domains2)
 
 var states1 = 
     ["terrible", "bad", "okay", "good", "amazing"];
@@ -363,41 +357,67 @@ var sents = {
        presentation: {
             sent_precontext: "Imagine that LS just gave a presentation, and", 
             sent_context: " LS approached SP who saw LS's presentation, and asked: \"How was my presentation?\"", 
-            SP: speakers1[0],
-            LS: speakers1[1],
             BB: "presentation",
 	},
 	   cookie: {
             sent_precontext: "Imagine that LS baked some cookies, and", 
             sent_context: " LS approached SP who tasted LS's cookie, and asked: \"How did my cookie taste?\"", 
-
-            SP: speakers2[0],
-            LS: speakers2[1],
             BB: "cookie",
 	},
 	   poem: {
             sent_precontext: "Imagine that LS wrote a poem, and", 
             sent_context: " LS approached SP who read LS's poem, and asked: \"How was my poem?\"", 
-
-            SP: speakers3[0],
-            LS: speakers3[1],
             BB: "poem",
 	},        
 	   cake: {
             sent_precontext: "Imagine that LS baked a cake, and", 
             sent_context: " LS approached SP who tasted LS's cake, and asked: \"How did my cake taste?\"", 
-
-            SP: speakers4[0],
-            LS: speakers4[1],
             BB: "cake",
 	},
 	   song: {
-            sent_precontext: "Imagine that LS wrote a song, and", 
+            sent_precontext: "Imagine that LS composed a song, and", 
             sent_context: " LS approached SP who heard LS's song, and asked: \"How was my song?\"", 
-
-            SP: speakers5[0],
-            LS: speakers5[1],
             BB: "song",
+	},
+	   film: {
+            sent_precontext: "Imagine that LS filmed a movie, and", 
+            sent_context: " LS approached SP who saw LS's movie, and asked: \"How was my movie?\"", 
+            BB: "movie",
+	},
+	   solo: {
+            sent_precontext: "Imagine that LS played a cello solo part at a concert, and", 
+            sent_context: " LS approached SP who heard LS's solo, and asked: \"How was my solo?\"", 
+            BB: "solo",
+	},        
+	   dance: {
+            sent_precontext: "Imagine that LS gave a tap dance performance, and", 
+            sent_context: " LS approached SP who heard LS's solo, and asked: \"How was my dance?\"", 
+            BB: "dance",
+	},   
+	   painting: {
+            sent_precontext: "Imagine that LS drew a painting, and", 
+            sent_context: " LS approached SP who saw LS's painting, and asked: \"How was my painting?\"", 
+            BB: "painting",
+	}, 
+	   monologue: {
+            sent_precontext: "Imagine that LS gave a monologue during a school play, and", 
+            sent_context: " LS approached SP who heard LS's monologue, and asked: \"How was my monologue?\"", 
+            BB: "monologue",
+	},
+	   app: {
+            sent_precontext: "Imagine that LS designed a mobile app, and", 
+            sent_context: " LS approached SP who looked at LS's mobile app, and asked: \"How was my app?\"", 
+            BB: "app",
+	},
+	   review: {
+            sent_precontext: "Imagine that LS wrote a review for a book, and", 
+            sent_context: " LS approached SP who read LS's review, and asked: \"How was my review?\"", 
+            BB: "review",
+	},
+	   recital: {
+            sent_precontext: "Imagine that LS had a piano recital, and", 
+            sent_context: " LS approached SP who attended LS's recital, and asked: \"How was my recital performance?\"", 
+            BB: "recital performance",
 	},
     },
     states: {
@@ -563,7 +583,7 @@ var experiment = {
     
     data: {
     expt: expt,
-    cond: cond,
+//    cond: cond,
     order: [],
     domain: [],
     state: [],
