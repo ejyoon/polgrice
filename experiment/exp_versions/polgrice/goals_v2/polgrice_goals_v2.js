@@ -129,7 +129,7 @@ function getRadioCheckedValue(formNum, radio_name)
 // CONDITION ASSIGNMENT
 // var cond = random(3)+1;
 var expt = "adj_goalPos";
-//var cond = random(3)+1;
+var cond = random(2)+1;
 //var cond = 2;
 
 // call the maker getter to get the cond variable 
@@ -140,6 +140,13 @@ var expt = "adj_goalPos";
 //var cond = xmlHttp.responseText;
 
 var score = shuffle(["polite", "honest", "sarcastic"]);
+
+if (cond == 1) {
+    state_knowledge = "known";
+} else if (cond == 2) {
+    state_knowledge = "unknown";
+}
+
 
 var domains1 = 
     shuffle(["poem", "cake", "cookie", "presentation", "song", "film", "solo", "monologue", "dance", "painting", "app", "review", "recital"]);
@@ -424,19 +431,19 @@ var sents = {
     },
     states: {
         terrible: {
-            state: " LS's BB was terrible."        
+            state: " <b>LS's BB was terrible</b>,"        
         },
         bad: {
-            state: " LS's BB was bad."        
+            state: " <b>LS's BB was bad</b>,"        
         },
         okay: {
-            state: " LS's BB was just okay."        
+            state: " <b>LS's BB was just okay</b>,"        
         },
         good: {
-            state: " LS's BB was good."        
+            state: " <b>LS's BB was good</b>,"        
         },
         amazing: {
-            state: " LS's BB was amazing."        
+            state: " <b>LS's BB was amazing</b>,"        
         },
     },
     people: {
@@ -549,6 +556,11 @@ function doSentSubs (sents, polite, domain, utterance, people)
     precontext = sents["domains"][domain]["sent_precontext"];
     context = sents["domains"][domain]["sent_context"];
     state = sents["states"][state]["state"]
+    if (state_knowledge == "known") {
+        knowledge = " <b>and LS knew it</b>."
+    } else if (state_knowledge == "unknown") {
+        knowledge = " <b>but LS had no idea</b>."
+    }
     question = "Based on what SP said, how likely do you think that <b>SP's goal</b> was to be:";
     question2 = "Based on what SP said, how likely is it for <b><i>you</i></b> to <b>ask for SP's opinion on your own BB</b>?";
     question3 = "Based on what SP said, how likely is it for <b><i>you</i></b> to <b>like SP</b>?";
@@ -564,9 +576,10 @@ function doSentSubs (sents, polite, domain, utterance, people)
     question = question.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     question2 = question2.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     question3 = question3.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
+    knowledge = knowledge.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
 
     
-    return [utterance, context, state, precontext, question, question2, question3];
+    return [utterance, context, state, precontext, question, question2, question3, knowledge];
 }
 
 var numConditions = allConditions.length;
@@ -670,7 +683,7 @@ var experiment = {
         people = trial.people;
         sent_materials = doSentSubs(sents, state, domain, utterance, people);
       showSlide("stage");
-      $("#context").html(sent_materials[3] + "<b>" + sent_materials[2] + "</b><div><div>" + sent_materials[1] + sent_materials[0]);  
+      $("#context").html(sent_materials[3] + sent_materials[2] + sent_materials[7] + sent_materials[1] + sent_materials[0]);  
       $("#question").html(sent_materials[4]);    
       
       for (var i = 0; i <= 11; i++)
