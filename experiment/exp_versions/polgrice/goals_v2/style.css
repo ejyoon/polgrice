@@ -130,14 +130,16 @@ button[disabled] {
 
 .progress{
     
-    text-align: center;
+    text-align: right;
     margin-top:0.5em;
+    
 }
 
 .progress span{
     position:relative;
     top: -6px;
     text-align: center;
+    margin-right: 1em;    
 }
 
 .bar-wrapper{
@@ -145,7 +147,8 @@ button[disabled] {
     width:200px;
     border:1px solid #000000;
     display:inline-block;
-    text-align: center;
+    text-align: right;
+    
 }
 
 .bar{
@@ -153,7 +156,7 @@ button[disabled] {
     height:100%;
     width:0px;
     background-color:green;
-    text-align: center;
+    text-align: right;
 }
 
 #slider0 { width: 12px;
