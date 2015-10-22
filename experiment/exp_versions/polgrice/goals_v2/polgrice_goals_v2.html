@@ -55,8 +55,8 @@
 <script LANGUAGE="JavaScript">
     
 //functions
-function ValidateSliderFormPart2(form){ 
-    for (var i=0 ; i < NUM_SLIDERS-1; i++)
+function ValidateSliderFormPart1(form){ 
+    for (var i=0 ; i < NUM_SLIDERS1; i++)
     {
       var sliderVar = "slider" + i;
       if (document.getElementById(sliderVar).style.background == "") {
@@ -67,8 +67,8 @@ function ValidateSliderFormPart2(form){
     return true;
 }
     
-function ValidateSliderFormPart3(form){ 
-    for (var i=0 ; i < NUM_SLIDERS-1; i++)
+function ValidateSliderFormPart2(form){ 
+    for (var i=3 ; i < NUM_SLIDERS2+3; i++)
     {
       var sliderVar = "slider" + i;
       if (document.getElementById(sliderVar).style.background == "") {
@@ -80,15 +80,15 @@ function ValidateSliderFormPart3(form){
 }
 
 
-function ValidateSliderFormPart1(form){ 
-    var i = NUM_SLIDERS-1;
-    var sliderVar = "slider" + i;
-    if (document.getElementById(sliderVar).style.background == "") {
-      alert ( "Please answer all the questions." );
-      return false;
-    }
-    return true;
-}
+//function ValidateSliderFormPart1(form){ 
+//    var i = NUM_SLIDERS-1;
+//    var sliderVar = "slider" + i;
+//    if (document.getElementById(sliderVar).style.background == "") {
+//      alert ( "Please answer all the questions." );
+//      return false;
+//    }
+//    return true;
+//}
 
 
 function ValidateForm(form){
@@ -252,7 +252,7 @@ function pressEnter(e) {
     </form>
 </span>
     <br><br> 
-    <button type="button" id="next1" onclick="this.blur(); if (ValidateSliderFormPart2(document.affectForm1)) {
+    <button type="button" id="next1" onclick="this.blur(); if (ValidateSliderFormPart1(document.affectForm1)) {
 document.getElementById('next1').hidden=true;
 document.getElementById('next2').hidden=false;
 document.getElementById('form1').hidden=true;
@@ -261,13 +261,31 @@ document.getElementById('form2').hidden=false;}">Next</button>
 <span id="form2">
     <form id= "affectForm2">
     <p id="question2" class="block-text"></p>
-     <input type="hidden" name="hSlider4" id="hiddenSliderValue4" />
+     <input type="hidden" name="hSlider3" id="hiddenSliderValue3" />
    
 <table width="600" cellspacing="0" cellpadding="0" border="0" align="center">
     <tbody>
         <tr>
             <td align="center" colspan="7">
             <div id="slider3">&nbsp;</div>
+            </td>
+        </tr>
+        <tr>
+        <td width="5" valign="top" align="center"><br /></td>
+        <td width="100" valign="top" align="center">|<br />Impossible</td>
+        <td width="400" valign="top" align="center"><br /></td>
+        <td width="100" valign="top" align="center">|<br />Absolutely certain</td>
+        </tr>
+    </tbody>
+</table>
+    <p id="question3" class="block-text"></p>
+     <input type="hidden" name="hSlider4" id="hiddenSliderValue4" />
+   
+<table width="600" cellspacing="0" cellpadding="0" border="0" align="center">
+    <tbody>
+        <tr>
+            <td align="center" colspan="7">
+            <div id="slider4">&nbsp;</div>
             </td>
         </tr>
         <tr>

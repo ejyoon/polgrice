@@ -3,6 +3,8 @@ var condCounts = "1,50;2,50;3,50;" //Example: "1,20;2,20;3,20"
 
 // ---------------- HELPER ------------------
 var NUM_SLIDERS = 5;
+var NUM_SLIDERS1 = 3;
+var NUM_SLIDERS2 = 2;
 
 function showSlide(id) {
   $(".slide").hide();
@@ -548,7 +550,8 @@ function doSentSubs (sents, polite, domain, utterance, people)
     context = sents["domains"][domain]["sent_context"];
     state = sents["states"][state]["state"]
     question = "Based on what SP said, how likely do you think that <b>SP's goal</b> was to be:";
-    question2 = "Based on what SP said, how likely is it for <b><i>you</i></b> to ask for SP's opinion on your own BB?";
+    question2 = "Based on what SP said, how likely is it for <b><i>you</i></b> to <b>ask for SP's opinion on your own BB</b>?";
+    question3 = "Based on what SP said, how likely is it for <b><i>you</i></b> to <b>like SP</b>?";
  
     BB = sents["domains"][domain]["BB"]; //Item 2
     SP = sents["people"][people]["SP"]; //speaker
@@ -560,8 +563,10 @@ function doSentSubs (sents, polite, domain, utterance, people)
     state = state.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);
     question = question.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     question2 = question2.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
+    question3 = question3.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
+
     
-    return [utterance, context, state, precontext, question, question2];
+    return [utterance, context, state, precontext, question, question2, question3];
 }
 
 var numConditions = allConditions.length;
@@ -673,7 +678,7 @@ var experiment = {
         $("#score" + 10*i).html(score[i]);
       }
       $("#question2").html(sent_materials[5]);    
-
+      $("#question3").html(sent_materials[6]);    
       numComplete++;      
     }}
   }
@@ -761,6 +766,23 @@ $("#slider3").slider({
                    $('#hiddenSliderValue3').attr('value', ui.value);
                    $("#slider3").css({"background":"#99D6EB"});
                    $("#slider3 .ui-slider-handle").css({
+                     "background":"#667D94",
+                     "border-color": "#001F29" });
+               }});
+
+$("#slider4").slider({
+               animate: true,
+               max: 40 , min: 0, step: 1, value: 20,
+               slide: function( event, ui ) {
+                   $("#slider4 .ui-slider-handle").css({
+                      "background":"#E0F5FF",
+                      "border-color": "#001F29"
+                   });
+               },
+               change: function( event, ui ) {
+                   $('#hiddenSliderValue4').attr('value', ui.value);
+                   $("#slider4").css({"background":"#99D6EB"});
+                   $("#slider4 .ui-slider-handle").css({
                      "background":"#667D94",
                      "border-color": "#001F29" });
                }});
