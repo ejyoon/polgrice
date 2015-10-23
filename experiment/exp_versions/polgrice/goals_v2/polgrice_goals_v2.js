@@ -140,6 +140,7 @@ var cond = random(2)+1;
 //var cond = xmlHttp.responseText;
 
 var score = shuffle(["polite", "honest", "sarcastic", "mean"]);
+var prediction = shuffle(["ask", "like"])
 
 if (cond == 1) {
     state_knowledge = "known";
@@ -561,10 +562,16 @@ function doSentSubs (sents, polite, domain, utterance, people)
     } else if (state_knowledge == "unknown") {
         knowledge = " <b>but LS had no idea</b>."
     }
+    
     question = "Based on what SP said, how likely do you think that <b>SP's goal</b> was to be:";
+    
+    if (prediction[0] == "ask") {
     question2 = "Based on what SP said, how likely is it for you to <b>ask for SP's opinion on your own BB</b>?";
     question3 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
- 
+    } else if (prediction[0] == "like") {
+    question3 = "Based on what SP said, how likely is it for you to <b>ask for SP's opinion on your own BB</b>?";
+    question2 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
+    }    
     BB = sents["domains"][domain]["BB"]; //Item 2
     SP = sents["people"][people]["SP"]; //speaker
     LS = sents["people"][people]["LS"]; //addressee
@@ -603,6 +610,7 @@ var experiment = {
     expt: expt,
 //    cond: cond,
     order: [],
+    knowledge: state_knowledge,
     domain: [],
     state: [],
     utterance: [],
@@ -612,12 +620,14 @@ var experiment = {
     goal1: score[1],
     goal2: score[2],
     goal3: score[3],
+    prediction0: prediction[0],
+    prediction1: prediction[1],
     inferredProb0: [],
     inferredProb1: [],
     inferredProb2: [],
     inferredProb3: [],
-    prob_ask: [],
-    prob_like: [],
+    predictedProb0: [],
+    predictedProb1: [],
     language: [],
 	expt_aim: [],
 	character_thoughts: [],
@@ -662,8 +672,8 @@ var experiment = {
       experiment.data.inferredProb1.push(prob1);
       experiment.data.inferredProb2.push(prob2);
       experiment.data.inferredProb3.push(prob3);
-      experiment.data.prob_ask.push(prob4);
-      experiment.data.prob_like.push(prob5);
+      experiment.data.predictedProb0.push(prob4);
+      experiment.data.predictedProb1.push(prob5);
    
       clearForm(document.forms[0]);
       clearForm(document.forms[1]);
