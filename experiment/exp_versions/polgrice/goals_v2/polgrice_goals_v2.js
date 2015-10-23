@@ -400,7 +400,7 @@ var sents = {
 	},        
 	   dance: {
             sent_precontext: "Imagine that LS gave a tap dance performance, and", 
-            sent_context: " LS approached SP who heard LS's solo, and asked: \"How was my dance?\"", 
+            sent_context: " LS approached SP who saw LS's dance, and asked: \"How was my dance?\"", 
             BB: "dance",
 	},   
 	   painting: {
@@ -611,12 +611,13 @@ var experiment = {
     goal0: score[0],
     goal1: score[1],
     goal2: score[2],
-    goal3: score[3],
+//    goal3: score[3],
     inferredProb0: [],
     inferredProb1: [],
     inferredProb2: [],
 //    inferredProb3: [],
     prob_ask: [],
+    prob_like: [],
     language: [],
 	expt_aim: [],
 	character_thoughts: [],
@@ -651,6 +652,7 @@ var experiment = {
       var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
 //      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
       var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
+      var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
 
       experiment.data.order.push(numComplete);
       experiment.data.utterance.push(trial.utterance);
@@ -661,6 +663,7 @@ var experiment = {
       experiment.data.inferredProb2.push(prob2);
 //      experiment.data.inferredProb3.push(prob3);
       experiment.data.prob_ask.push(prob3);
+      experiment.data.prob_like.push(prob4);
    
       clearForm(document.forms[0]);
       clearForm(document.forms[1]);
