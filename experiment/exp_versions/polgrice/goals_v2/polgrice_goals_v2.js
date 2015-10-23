@@ -562,8 +562,8 @@ function doSentSubs (sents, polite, domain, utterance, people)
         knowledge = " <b>but LS had no idea</b>."
     }
     question = "Based on what SP said, how likely do you think that <b>SP's goal</b> was to be:";
-    question2 = "Based on what SP said, how likely is it for <b><i>you</i></b> to <b>ask for SP's opinion on your own BB</b>?";
-    question3 = "Based on what SP said, how likely is it for <b><i>you</i></b> to <b>like SP</b>?";
+    question2 = "Based on what SP said, how likely is it for you to <b>ask for SP's opinion on your own BB</b>?";
+    question3 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
  
     BB = sents["domains"][domain]["BB"]; //Item 2
     SP = sents["people"][people]["SP"]; //speaker
