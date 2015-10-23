@@ -2,8 +2,8 @@ var filename = "EJY_politeness_goals"
 var condCounts = "1,50;2,50;3,50;" //Example: "1,20;2,20;3,20"
 
 // ---------------- HELPER ------------------
-var NUM_SLIDERS = 5;
-var NUM_SLIDERS1 = 3;
+var NUM_SLIDERS = 6;
+var NUM_SLIDERS1 = 4;
 var NUM_SLIDERS2 = 2;
 
 function showSlide(id) {
@@ -139,7 +139,7 @@ var cond = random(2)+1;
 //xmlHttp.send( null );
 //var cond = xmlHttp.responseText;
 
-var score = shuffle(["polite", "honest", "sarcastic"]);
+var score = shuffle(["polite", "honest", "sarcastic", "mean"]);
 
 if (cond == 1) {
     state_knowledge = "known";
@@ -611,11 +611,11 @@ var experiment = {
     goal0: score[0],
     goal1: score[1],
     goal2: score[2],
-//    goal3: score[3],
+    goal3: score[3],
     inferredProb0: [],
     inferredProb1: [],
     inferredProb2: [],
-//    inferredProb3: [],
+    inferredProb3: [],
     prob_ask: [],
     prob_like: [],
     language: [],
@@ -650,9 +650,9 @@ var experiment = {
       var prob0 = parseInt(document.getElementById("hiddenSliderValue0").value) / 40.00;
       var prob1 = parseInt(document.getElementById("hiddenSliderValue1").value) / 40.00;
       var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
-//      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
       var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
       var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
+      var prob5 = parseInt(document.getElementById("hiddenSliderValue5").value) / 40.00;
 
       experiment.data.order.push(numComplete);
       experiment.data.utterance.push(trial.utterance);
@@ -661,9 +661,9 @@ var experiment = {
       experiment.data.inferredProb0.push(prob0);
       experiment.data.inferredProb1.push(prob1);
       experiment.data.inferredProb2.push(prob2);
-//      experiment.data.inferredProb3.push(prob3);
-      experiment.data.prob_ask.push(prob3);
-      experiment.data.prob_like.push(prob4);
+      experiment.data.inferredProb3.push(prob3);
+      experiment.data.prob_ask.push(prob4);
+      experiment.data.prob_like.push(prob5);
    
       clearForm(document.forms[0]);
       clearForm(document.forms[1]);
@@ -689,7 +689,7 @@ var experiment = {
       $("#context").html(sent_materials[3] + sent_materials[2] + sent_materials[7] + sent_materials[1] + sent_materials[0]);  
       $("#question").html(sent_materials[4]);    
       
-      for (var i = 0; i <= 11; i++)
+      for (var i = 0; i <= 4; i++)
       {         
         $("#score" + 10*i).html(score[i]);
       }
@@ -752,25 +752,9 @@ $("#slider2").slider({
                      "background":"#667D94",
                      "border-color": "#001F29" });
                }});
-//$("#slider3").slider({
-//               animate: true,
-//               orientation: "vertical",
-//               max: 40 , min: 0, step: 1, value: 20,
-//               slide: function( event, ui ) {
-//                   $("#slider3 .ui-slider-handle").css({
-//                      "background":"#E0F5FF",
-//                      "border-color": "#001F29"
-//                   });
-//               },
-//               change: function( event, ui ) {
-//                   $('#hiddenSliderValue3').attr('value', ui.value);
-//                   $("#slider3").css({"background":"#99D6EB"});
-//                   $("#slider3 .ui-slider-handle").css({
-//                     "background":"#667D94",
-//                     "border-color": "#001F29" });
-//               }});
 $("#slider3").slider({
                animate: true,
+               orientation: "vertical",
                max: 40 , min: 0, step: 1, value: 20,
                slide: function( event, ui ) {
                    $("#slider3 .ui-slider-handle").css({
@@ -799,6 +783,23 @@ $("#slider4").slider({
                    $('#hiddenSliderValue4').attr('value', ui.value);
                    $("#slider4").css({"background":"#99D6EB"});
                    $("#slider4 .ui-slider-handle").css({
+                     "background":"#667D94",
+                     "border-color": "#001F29" });
+               }});
+
+$("#slider5").slider({
+               animate: true,
+               max: 40 , min: 0, step: 1, value: 20,
+               slide: function( event, ui ) {
+                   $("#slider5 .ui-slider-handle").css({
+                      "background":"#E0F5FF",
+                      "border-color": "#001F29"
+                   });
+               },
+               change: function( event, ui ) {
+                   $('#hiddenSliderValue5').attr('value', ui.value);
+                   $("#slider5").css({"background":"#99D6EB"});
+                   $("#slider5 .ui-slider-handle").css({
                      "background":"#667D94",
                      "border-color": "#001F29" });
                }});
