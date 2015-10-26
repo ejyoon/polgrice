@@ -1,4 +1,4 @@
-var filename = "EJY_polgrice_goals"
+var filename = "EJY_polgrice_goals_v3" 
 var condCounts = "1,5;2,5;" //Example: "1,20;2,20;3,20"
 
 // ---------------- HELPER ------------------
@@ -432,19 +432,19 @@ var sents = {
     },
     states: {
         terrible: {
-            state: " <b>LS's BB was terrible</b>,"        
+            state: " <b>everyone thought LS's BB was terrible</b>,"        
         },
         bad: {
-            state: " <b>LS's BB was bad</b>,"        
+            state: " <b>everyone thought LS's BB was bad</b>,"        
         },
         okay: {
-            state: " <b>LS's BB was just okay</b>,"        
+            state: " <b>everyone thought LS's BB was just okay</b>,"        
         },
         good: {
-            state: " <b>LS's BB was good</b>,"        
+            state: " <b>everyone thought LS's BB was good</b>,"        
         },
         amazing: {
-            state: " <b>LS's BB was amazing</b>,"        
+            state: " <b>everyone thought LS's BB was amazing</b>,"        
         },
     },
     people: {
@@ -630,7 +630,7 @@ var experiment = {
     predictedProb1: [],
     language: [],
 	expt_aim: [],
-	character_thoughts: [],
+	goal_thoughts: [],
 	expt_gen: [],
     numTrials: numTrials
     },
@@ -638,7 +638,7 @@ var experiment = {
   end: function() {	
     experiment.data.language.push(document.getElementById("homelang").value);
 	experiment.data.expt_aim.push(document.getElementById("expthoughts").value);
-	experiment.data.character_thoughts.push(document.getElementById("character_thoughts").value);
+	experiment.data.goal_thoughts.push(document.getElementById("goal_thoughts").value);
 	experiment.data.expt_gen.push(document.getElementById("expcomments").value);
     showSlide("finished");
       
@@ -661,8 +661,8 @@ var experiment = {
       var prob1 = parseInt(document.getElementById("hiddenSliderValue1").value) / 40.00;
       var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
 //      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
-      var prob4 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
-      var prob5 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
+      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
+      var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
 
       experiment.data.order.push(numComplete);
       experiment.data.utterance.push(trial.utterance);
@@ -672,8 +672,8 @@ var experiment = {
       experiment.data.inferredProb1.push(prob1);
       experiment.data.inferredProb2.push(prob2);
 //      experiment.data.inferredProb3.push(prob3);
-      experiment.data.predictedProb0.push(prob4);
-      experiment.data.predictedProb1.push(prob5);
+      experiment.data.predictedProb0.push(prob3);
+      experiment.data.predictedProb1.push(prob4);
    
       clearForm(document.forms[0]);
       clearForm(document.forms[1]);
@@ -807,7 +807,7 @@ $("#slider4").slider({
                    });
                },
                change: function( event, ui ) {
-                   $('#hiddenSliderValue5').attr('value', ui.value);
+                   $('#hiddenSliderValue4').attr('value', ui.value);
                    $("#slider4").css({"background":"#99D6EB"});
                    $("#slider4 .ui-slider-handle").css({
                      "background":"#667D94",
