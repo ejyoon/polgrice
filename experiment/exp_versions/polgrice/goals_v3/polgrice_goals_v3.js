@@ -129,8 +129,8 @@ function getRadioCheckedValue(formNum, radio_name)
 // CONDITION ASSIGNMENT
 // var cond = random(3)+1;
 var expt = "adj_goalPos";
-//var cond = random(2)+1;
-var cond = 1;
+var cond = random(2)+1;
+//var cond = 1;
 
 // call the maker getter to get the cond variable 
 //var xmlHttp = null;
