@@ -1,0 +1,286 @@
+---
+title: "polgrice-goal v2 ana"
+author: "Erica Yoon"
+date: "October 24, 2015"
+output: html_document
+---
+
+```{r warning=FALSE, message=FALSE}
+rm(list = ls())
+library(jsonlite)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(binom)
+library(bootstrap)
+source("/Users/ericang/Documents/Research/polite_probmods/experiment/data_analysis/helper/useful.R")
+
+raw.data.path <- "/Users/ericang/Documents/Research/polite_probmods/polite_adj/experiment/exp_versions/polgrice/goals_v2/production-results/"
+
+## LOOP TO READ IN FILES
+all.data <- data.frame()
+files <- dir(raw.data.path,pattern="*.json")
+
+for (file.name in files) {
+  
+  ## these are the two functions that are most meaningful
+  json_file <- readLines(paste(raw.data.path,file.name,sep=""))
+  json_file_str = paste(json_file, collapse = "")
+  json_file_str = gsub(",}", "}", json_file_str)
+  jso = jsonlite::fromJSON(json_file_str)
+  jso$answers$data$people <- NULL
+  jso1 <- data.frame(jso)
+  jso1$subid <- substring(file.name, 1, 6)
+  
+  ## now here's where data get bound together
+  all.data <- rbind(all.data, jso1)
+}
+```
+
+Filter out participants and clean up.
+
+```{r}
+rearr <- all.data %>%
+  select(subid, num_range("answers.data.goal", 0:3)) %>%
+  distinct(subid) %>%
+  gather(goal_order, goal, num_range("answers.data.goal", 0:3)) %>%
+  mutate(goal_order = substr(goal_order, 18, 18))
+
+rearr2 <- all.data %>%
+  select(subid, num_range("answers.data.prediction", 0:1)) %>%
+  distinct(subid) %>%
+  gather(pred_order, prediction, num_range("answers.data.prediction", 0:1)) %>%
+  mutate(pred_order = substr(pred_order, 24, 24))
+
+d <- all.data %>%
+  select(subid, answers.data.order, answers.data.knowledge, answers.data.domain, answers.data.state, answers.data.utterance, num_range("answers.data.predictedProb", 0:1), num_range("answers.data.inferredProb", 0:3)) %>%
+  gather(pred_order, pred_prob, num_range("answers.data.predictedProb", 0:1)) %>%
+  mutate(pred_order = substr(pred_order, 27, 27)) %>%
+  gather(goal_order, goal_prob, num_range("answers.data.inferredProb", 0:3)) %>%
+  mutate(goal_order = substr(goal_order, 26, 26))
+
+
+detach(package:dplyr)
+library(plyr)
+d <- join(d, rearr)
+d <- join(d, rearr2)
+
+detach(package:plyr)
+library(dplyr)
+d <- d %>%
+  mutate(trial = answers.data.order) %>%
+  mutate(item = answers.data.domain) %>%
+  mutate(true_state = answers.data.state) %>%
+  mutate(utterance = answers.data.utterance) %>%
+  mutate(knowledge = answers.data.knowledge) %>%
+  select(subid, trial, knowledge, true_state, utterance, goal, goal_prob, prediction, pred_prob)
+
+d$subid <- as.factor(d$subid)
+d$trial <- as.numeric(d$trial)
+d$true_state <- as.factor(d$true_state) 
+d$knowledge <- as.factor(d$knowledge)
+d$utterance <- as.factor(d$utterance)
+d$goal <- as.factor(d$goal)
+d$prediction <- as.factor(d$prediction)
+d$goal_prob <- as.numeric(d$goal_prob)
+d$pred_prob <- as.numeric(d$pred_prob)
+
+d$true_state <- ordered(d$true_state, levels = c("terrible", "bad", "okay", "good", "amazing"))
+d$utterance <- ordered(d$utterance, levels = c("terrible", "bad", "okay", "good", "amazing"))
+```
+
+```{r, fig.width = 10, fig.height = 4}
+## for bootstrapping 95% confidence intervals
+theta <- function(x,xdata,na.rm=T) {mean(xdata[x],na.rm=na.rm)}
+ci.low <- function(x,na.rm=T) {
+  mean(x,na.rm=na.rm) - quantile(bootstrap(1:length(x),1000,theta,x,na.rm=na.rm)$thetastar,.025,na.rm=na.rm)}
+ci.high <- function(x,na.rm=T) {
+  quantile(bootstrap(1:length(x),1000,theta,x,na.rm=na.rm)$thetastar,.975,na.rm=na.rm) - mean(x,na.rm=na.rm)}
+
+# goal_prob ~ true_state + utterance + goal
+mss <- d %>%
+  group_by(true_state, utterance, goal, subid) %>%
+  summarize(
+            goal_prob = mean(goal_prob, na.rm=TRUE)
+          )
+ms <- aggregate(goal_prob ~ true_state + utterance + goal, mss, mean)
+ms$cih <- aggregate(goal_prob ~ true_state + utterance + goal, mss, ci.high)$goal_prob
+ms$cil <- aggregate(goal_prob ~ true_state + utterance + goal, mss, ci.low)$goal_prob
+```
+
+# goal_prob ~ true_state + utterance + goal
+
+```{r echo = FALSE, fig.width = 12, fig.height = 4}
+# honest, polite
+qplot(utterance, goal_prob, 
+      colour = goal,
+      data=subset(ms, goal == "honest" | goal == "polite")) + 
+  geom_line(aes(group=goal)) +
+  facet_grid(.~true_state) +
+  xlab("utterance") +
+  ylab("likelihood for goal") +
+  ggtitle("goals given true state and utterance") +
+  geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1))
+
+# honest, sarcastic
+qplot(utterance, goal_prob, 
+      colour = goal,
+      data=subset(ms, goal == "honest" | goal == "sarcastic")) + 
+  geom_line(aes(group=goal)) +
+  facet_grid(.~true_state) +
+  xlab("utterance") +
+  ylab("likelihood for goal") +
+  ggtitle("goals given true state and utterance") +
+  geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1))
+
+# polite, mean
+qplot(utterance, goal_prob, 
+      colour = goal,
+      data=subset(ms, goal == "polite" | goal == "mean")) + 
+  geom_line(aes(group=goal)) +
+  facet_grid(.~true_state) +
+  xlab("utterance") +
+  ylab("likelihood for goal") +
+  ggtitle("goals given true state and utterance") +
+  geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1))
+
+# honest, mean
+qplot(utterance, goal_prob, 
+      colour = goal,
+      data=subset(ms, goal == "honest" | goal == "mean")) + 
+  geom_line(aes(group=goal)) +
+  facet_grid(.~true_state) +
+  xlab("utterance") +
+  ylab("likelihood for goal") +
+  ggtitle("goals given true state and utterance") +
+  geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1))
+
+# polite, sarcastic
+qplot(utterance, goal_prob, 
+      colour = goal,
+      data=subset(ms, goal == "polite" | goal == "sarcastic")) + 
+  geom_line(aes(group=goal)) +
+  facet_grid(.~true_state) +
+  xlab("utterance") +
+  ylab("likelihood for goal") +
+  ggtitle("goals given true state and utterance") +
+  geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1))
+```
+
+# goal_prob ~ true_state + utterance + goal + knowledge
+
+```{r, fig.width = 10, fig.height = 4}
+# goal_prob ~ true_state + utterance + goal + knowledge
+mss <- d %>%
+  group_by(true_state, utterance, goal, knowledge, subid) %>%
+  summarize(
+            goal_prob = mean(goal_prob, na.rm=TRUE)
+          )
+ms <- aggregate(goal_prob ~ true_state + utterance + goal + knowledge, mss, mean)
+ms$cih <- aggregate(goal_prob ~ true_state + utterance + goal + knowledge, mss, ci.high)$goal_prob
+ms$cil <- aggregate(goal_prob ~ true_state + utterance + goal + knowledge, mss, ci.low)$goal_prob
+```
+
+# goal_prob ~ true_state + utterance + goal
+
+```{r echo = FALSE, fig.width = 12, fig.height = 4}
+# polite
+qplot(utterance, goal_prob, 
+      colour = knowledge,
+      data=subset(ms, goal == "polite")) + 
+  geom_line(aes(group=knowledge)) +
+  facet_grid(~true_state) +
+  xlab("utterance") +
+  ylab("likelihood for goal") +
+  ggtitle("goal to be polite") +
+  geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1))
+
+# honest
+qplot(utterance, goal_prob, 
+      colour = knowledge,
+      data=subset(ms, goal == "honest")) + 
+  geom_line(aes(group=knowledge)) +
+  facet_grid(~true_state) +
+  xlab("utterance") +
+  ylab("likelihood for goal") +
+  ggtitle("goal to be honest") +
+  geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1))
+
+# sarcastic
+qplot(utterance, goal_prob, 
+      colour = knowledge,
+      data=subset(ms, goal == "sarcastic")) + 
+  geom_line(aes(group=knowledge)) +
+  facet_grid(~true_state) +
+  xlab("utterance") +
+  ylab("likelihood for goal") +
+  ggtitle("goal to be sarcastic") +
+  geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1))
+
+# mean
+qplot(utterance, goal_prob, 
+      colour = knowledge,
+      data=subset(ms, goal == "mean")) + 
+  geom_line(aes(group=knowledge)) +
+  facet_grid(~true_state) +
+  xlab("utterance") +
+  ylab("likelihood for goal") +
+  ggtitle("goal to be mean") +
+  geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1))
+```
+
+# pred_prob ~ true_state + utterance + prediction
+
+```{r echo = FALSE, fig.width = 10, fig.height = 4}
+# prob_ask ~ true_state + utterance
+mss <- d %>%
+  group_by(true_state, utterance, prediction, subid) %>%
+  summarize(
+            pred_prob = mean(pred_prob, na.rm=TRUE)
+          )
+ms <- aggregate(pred_prob ~ true_state + utterance + prediction, mss, mean)
+ms$cih <- aggregate(pred_prob ~ true_state + utterance + prediction, mss, ci.high)$pred_prob
+ms$cil <- aggregate(pred_prob ~ true_state + utterance + prediction, mss, ci.low)$pred_prob
+
+# plot
+qplot(utterance, pred_prob, 
+      data=ms,
+      colour = prediction) + 
+  geom_line(aes(group=prediction)) +
+  facet_grid(.~true_state) +
+  xlab("utterance") +
+  ylab("likelihood") +
+  scale_y_continuous(limits = c(0, 1)) +
+  ggtitle("Likelihood of asking this person for feedback / liking this person") +
+  geom_errorbar(aes(ymin=pred_prob-cil,ymax=pred_prob+cih,width=.1))
+
+
+```
+
+# pred_prob ~ true_state + utterance + prediction + knowledge
+
+```{r echo = FALSE, fig.width = 10, fig.height = 4}
+# prob_ask ~ true_state + utterance
+mss <- d %>%
+  group_by(true_state, utterance, prediction, knowledge, subid) %>%
+  summarize(
+            pred_prob = mean(pred_prob, na.rm=TRUE)
+          )
+ms <- aggregate(pred_prob ~ true_state + utterance + prediction + knowledge, mss, mean)
+ms$cih <- aggregate(pred_prob ~ true_state + utterance + prediction + knowledge, mss, ci.high)$pred_prob
+ms$cil <- aggregate(pred_prob ~ true_state + utterance + prediction + knowledge, mss, ci.low)$pred_prob
+
+# plot
+qplot(utterance, pred_prob, 
+      data=ms,
+      colour = knowledge) + 
+  geom_line(aes(group=knowledge)) +
+  facet_grid(prediction~true_state) +
+  xlab("utterance") +
+  ylab("likelihood") +
+  scale_y_continuous(limits = c(0, 1)) +
+  ggtitle("Likelihood of asking this person for feedback / liking this person") +
+  geom_errorbar(aes(ymin=pred_prob-cil,ymax=pred_prob+cih,width=.1))
+
+
+```
