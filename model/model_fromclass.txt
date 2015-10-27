@@ -1,0 +1,189 @@
+(define (expectation dist)
+  (define vs (first dist))
+  (define ps (second dist))
+  (if (= (length ps) 0)
+      0      
+      (+ (* (first ps) (first vs))
+         (expectation (list (rest vs) (rest ps))))))
+
+;; Define evaluative states
+(define states
+  (list 0 1 2 3 4 5 6 7 8 9))
+
+
+;; Prior probability of each evaluative state (taken from human experiments)
+(define (state-prior) 
+  (multinomial states 
+               '(0.2532552 
+                 0.2764323 
+                 0.3281250 
+                 0.3605469 
+                 0.4139323 
+                 0.4968750 
+                 0.5419271 
+                 0.5907552 
+                 0.5768229 
+                 0.5354167))) 
+
+;; Prior on valence (desirability) associated with each state
+(define (valence-prior state)
+  (if (flip (second (assoc state
+                           (list (list 0 0.01) 
+                                 (list 1 0.1) 
+                                 (list 2 0.2)
+                                 (list 3 0.3)
+                                 (list 4 0.4)
+                                 (list 5 0.5)
+                                 (list 6 0.6)
+                                 (list 7 0.7)
+                                 (list 8 0.8)
+                                 (list 9 0.9)                                 
+                                 ))))
+      1
+      0))
+
+;; QUD function
+(define (qud-fn qud)
+  (second
+   (assoc qud
+          (list
+           (list 't (lambda (state politeness) state))
+           (list 'p (lambda (state politeness) politeness))
+           (list 'tp (lambda (state politeness) (list state politeness))
+                 )
+           ))))
+
+;; Uniform prior over QUDs 
+(define (qud-prior)
+  (multinomial (list 't 'p 'tp) '(0.25 0.25 0.50)))
+
+(define (polite-qud-prior)
+  (multinomial (list 'p 'tp) '(0.75 0.25)))
+
+(define (nonpolite-qud-prior)
+  (multinomial (list 't 'tp) '(0.75 0.25)))
+
+;; words and states associated with them
+(define (literal-interpretation words state)
+  (case words
+        (("great") (or (= state 8)(> state 8)))
+        (("not great") (< state 8))
+        (("bad") (or (= state 2)(< state 2)))
+;;         (("terrible") (or (= state 0)))
+        (("not bad") (> state 2))))
+
+
+;; define utterance
+(define utterances (list "great" "not great" "bad" "not bad"))
+;; (define utterances (list  "not great" "not bad"))
+
+
+(define (utterance-prior)
+  (multinomial utterances
+               '(1 1 1 1)))
+;;                '(1 1)))
+
+;; Literal listener, infers the qud value assuming the utterance is true of the state
+(define lit-listener
+  (mem
+   (lambda (utterance qud)
+     (enumeration-query
+      (define state (state-prior))
+      (define politeness (valence-prior state))
+      ((qud-fn qud) state politeness)
+      (literal-interpretation utterance state)))))
+
+;; Speaker, chooses an utterance to convey a particular value of the qud
+(define speaker
+  (mem
+   (lambda (val qud)
+     (enumeration-query
+      (define utterance (utterance-prior))
+      utterance
+      (equal? val (apply multinomial (lit-listener utterance qud)))
+      ))))
+
+;; Pragmatic listener, jointly infers the state, politeness, and QUD
+(define prag-listener
+  (mem
+   (lambda (utterance speaker-type)
+     (enumeration-query
+      (define state (state-prior))
+      (define how-good-is-the-state (valence-prior state))
+
+      (define speaker-type "polite-speaker")
+      (define qud (if (equal? speaker-type "polite-speaker")
+                      (polite-qud-prior)
+                      (if (equal? speaker-type "impolite-speaker")
+                          (nonpolite-qud-prior)
+                          (qud-prior))))
+      (define val ((qud-fn qud) state how-good-is-the-state)) 
+
+      ;(list state how-good-is-the-state)
+      state
+      ;(list state qud)
+      
+      (equal? utterance
+              (apply multinomial (speaker val qud)))
+      ))))
+
+;; define speaker2, based on prag-listener
+(define speaker2
+  (mem
+   (lambda (state speaker-type)
+     (enumeration-query
+      (define utterance (utterance-prior))
+      (define how-good-is-the-state (valence-prior state))
+
+      utterance
+
+      (equal? (list state how-good-is-the-state) 
+              (apply multinomial (prag-listener utterance speaker-type)))))))
+
+
+;; (barplot (lit-listener "not great" 'tp))
+;; (barplot (speaker '(2 0) 'tp 'listener))
+;; (define results-polite (prag-listener "not bad" "polite-speaker"))
+;; (define results-notpolite (prag-listener "not bad" "nonpolite-speaker"))
+
+;; (display "expected value of state for polite speaker" (expectation results-polite))
+;; (barplot results-polite "state given 'not bad' and polite")
+
+;; (display "expected value of state for nonpolite speaker" (expectation results-notpolite))
+;; (barplot results-notpolite "state given 'not bad' and not polite")
+
+;; results-polite
+
+(display (prag-listener "not great") "state given 'not great'")
+(display (prag-listener "not bad") "state given 'not bad'")
+(display (prag-listener "great") "state given 'great'")
+(display (prag-listener "bad") "state given 'bad'")
+
+
+;; (barplot (prag-listener "not great") "state given 'not great'")
+;; (barplot (prag-listener "not bad") "state given 'not bad'")
+;; (barplot (prag-listener "bad") "state given 'bad'")
+;; (barplot (prag-listener "great") "state given 'great'")
+
+;; (barplot (speaker2 3 "nonpolite-speaker") "state=1 and not polite")
+;; (barplot (speaker2 3 "polite-speaker") "state=1 and polite")
+
+;; (speaker2 1 0 "nonpolite-speaker") 
+
+;; (barplot (speaker2 5 0) "state=5 and not polite")
+;; (barplot (speaker2 5 1) "state=5 and polite")
+
+;; (barplot (speaker2 3 0) "state=3 and not polite")
+;; (barplot (speaker2 3 1) "state=3 and polite")
+
+;; (barplot (speaker2 4 0) "state=4 and not polite")
+;; (barplot (speaker2 4 1) "state=4 and polite")
+
+;; (barplot (speaker2 7 0) "state=7 and not polite")
+;; (barplot (speaker2 7 1) "state=7 and polite")
+
+;(barplot (speaker2 0))
+;(barplot (speaker2 1))
+;(display (speaker2 3))
+;(barplot (speaker2 4))
+
