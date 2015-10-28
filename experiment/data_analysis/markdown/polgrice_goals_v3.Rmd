@@ -15,7 +15,7 @@ library(binom)
 library(bootstrap)
 source("/Users/ericang/Documents/Research/polite_probmods/experiment/data_analysis/helper/useful.R")
 
-raw.data.path <- "/Users/ericang/Documents/Research/polite_probmods/polite_adj/experiment/exp_versions/polgrice/goals_v3/production-results/"
+raw.data.path <- "/Users/ericang/Documents/Research/polite_probmods/polite_adj/experiment/exp_versions/goals_v3/production-results/"
 
 ## LOOP TO READ IN FILES
 all.data <- data.frame()
@@ -151,7 +151,7 @@ qplot(utterance, goal_prob,
   facet_grid(.~true_state) +
   xlab("utterance") +
   ylab("likelihood for goal") +
-  ggtitle("What was the speaker's goal?") +
+  ggtitle("What was the speaker's goal? (listener not knowledgeable)") +
   geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1)) +
   theme(axis.text.x  = element_text(angle=45, vjust=0.5))
 
@@ -163,7 +163,7 @@ qplot(utterance, goal_prob,
   facet_grid(.~true_state) +
   xlab("utterance") +
   ylab("likelihood for goal") +
-  ggtitle("What was the speaker's goal?") +
+  ggtitle("What was the speaker's goal? (listener knowledgeable)") +
   geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1)) +
   theme(axis.text.x  = element_text(angle=45, vjust=0.5))
 
@@ -263,10 +263,21 @@ qplot(utterance, pred_prob,
   xlab("utterance") +
   ylab("likelihood") +
   scale_y_continuous(limits = c(0, 1)) +
-  ggtitle("How likely is it for you to ask this person for feedback? / like this person?") +
+  ggtitle("How likely is it for you to ask this person for feedback? / like this person? (listener not knowledgeable)") +
   geom_errorbar(aes(ymin=pred_prob-cil,ymax=pred_prob+cih,width=.1)) +
   theme(axis.text.x  = element_text(angle=45, vjust=0.5))
 
+qplot(utterance, pred_prob, 
+      data=subset(ms, knowledge == "unknown"),
+      colour = prediction) + 
+  geom_line(aes(group=prediction)) +
+  facet_grid(.~true_state) +
+  xlab("utterance") +
+  ylab("likelihood") +
+  scale_y_continuous(limits = c(0, 1)) +
+  ggtitle("How likely is it for you to ask this person for feedback? / like this person? (listener knowledgeable)") +
+  geom_errorbar(aes(ymin=pred_prob-cil,ymax=pred_prob+cih,width=.1)) +
+  theme(axis.text.x  = element_text(angle=45, vjust=0.5))
 
 
 ```
