@@ -6,10 +6,37 @@
       (+ (* (first ps) (first vs))
          (expectation (list (rest vs) (rest ps))))))
 
+
+(define (get-indices needle haystack)
+  (define (loop rest-of-haystack index)
+    (if (null? rest-of-haystack) '()
+        (let ((rest-of-indices (loop (rest rest-of-haystack) (+ index 1))))
+          (if (equal? (first rest-of-haystack) needle)
+              (pair index rest-of-indices)
+              rest-of-indices))))
+  (loop haystack 1))
+
+(define (marginalize output)
+  (let ([states (first output)])
+    (map (lambda (sub-output) 
+           (let* ([probs (second output)]
+                  [unique-states (unique sub-output)]
+                  [unique-state-indices 
+                   (map 
+                    (lambda (x) (list x (get-indices x sub-output))) 
+                    unique-states)])
+
+             (list (map first unique-state-indices)
+                   (map 
+                    (lambda (y) (sum (map 
+                                      (lambda (x) (list-elt probs x)) 
+                                      (second y)))) 
+                    unique-state-indices))))
+         (transpose states))))
+
 ;; Define evaluative states (also, the valence of each state)
 ;; terrible, bad, okay, good, great
 (define states (list "TERRIBLE" "BAD" "OKAY" "GOOD" "GREAT"))
-
 
 ;; mapping from state to p(feels good)
 (define state-to-valence (lambda (state)
@@ -32,16 +59,6 @@
       (if honest        
           (lambda (state valence) state)
           (lambda (state valence) valence)))))
-
-;; Uniform prior over QUDs 
-(define (qud-prior)
-  (multinomial (list 's 'v 'sv) '(0.25 0.25 0.50)))
-
-(define (polite-qud-prior)
-  (multinomial (list 'v 'sv) '(0.75 0.25)))
-
-(define (nonpolite-qud-prior)
-  (multinomial (list 's 'sv) '(0.75 0.25)))
 
 ;; words and states associated with them
 (define (meaning words state)
@@ -102,14 +119,18 @@
       (define speaker-goals (list speaker-honesty speaker-kindness))
 
       (define qud-val ((qud-fn speaker-goals) state valence))
-      
-      (second speaker-goals)
+
+      speaker-goals
 
       (and 
         (equal? utterance
               (apply multinomial (speaker state valence speaker-goals)))
         (equal? state "BAD"))))))
 
+
+(define posterior (pragmatic-listener "okay"))
+
+(zip (list "honesty" "politeness") (map expectation (marginalize posterior)))
 
 
 ; ;; define speaker2, based on pragmatic-listener
