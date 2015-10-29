@@ -35,8 +35,8 @@
          (transpose states))))
 
 ;; Define evaluative states (also, the valence of each state)
-;; terrible, bad, okay, good, great
-(define states (list "TERRIBLE" "BAD" "OKAY" "GOOD" "GREAT"))
+;; terrible, bad, okay, good, amazing
+(define states (list "TERRIBLE" "BAD" "OKAY" "GOOD" "AMAZING"))
 
 ;; mapping from state to p(feels good)
 (define state-to-valence (lambda (state)
@@ -45,10 +45,10 @@
     (("BAD") 0.25)
     (("OKAY") 0.5)
     (("GOOD") 0.75)
-    (("GREAT") 0.99))))
+    (("AMAZING") 0.99))))
 
 ;; Prior probability of each evaluative state
-(define (state-prior) (multinomial states '(1 1 1 1 1)))
+(define (state-prior) (multinomial states '(1 1 1 1 1))) ;; fixme: should be determined from expt?
 
 ;; QUD function
 (define (qud-fn speaker-goals)
@@ -67,10 +67,10 @@
         (("bad")  (equal? state "BAD"))
         (("okay") (equal? state "OKAY"))
         (("good") (equal? state "GOOD"))
-        (("great") (equal? state "GREAT"))))
+        (("amazing") (equal? state "AMAZING"))))
 
 ;; define utterance
-(define utterances (list "terrible" "bad" "okay" "good" "great"))
+(define utterances (list "terrible" "bad" "okay" "good" "amazing"))
 
 (define (utterance-prior) (multinomial utterances '(1 1 1 1 1)))
 
@@ -128,7 +128,7 @@
         (equal? state "BAD"))))))
 
 
-(define posterior (pragmatic-listener "okay"))
+(define posterior (pragmatic-listener "amazing"))
 
 (zip (list "honesty" "politeness") (map expectation (marginalize posterior)))
 
