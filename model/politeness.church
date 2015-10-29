@@ -1,0 +1,127 @@
+(define (expectation dist)
+  (define vs (first dist))
+  (define ps (second dist))
+  (if (= (length ps) 0)
+      0      
+      (+ (* (first ps) (first vs))
+         (expectation (list (rest vs) (rest ps))))))
+
+;; Define evaluative states (also, the valence of each state)
+;; terrible, bad, okay, good, great
+(define states (list "TERRIBLE" "BAD" "OKAY" "GOOD" "GREAT"))
+
+
+;; mapping from state to p(feels good)
+(define state-to-valence (lambda (state)
+  (case state
+    (("TERRIBLE") 0.01)
+    (("BAD") 0.25)
+    (("OKAY") 0.5)
+    (("GOOD") 0.75)
+    (("GREAT") 0.99))))
+
+;; Prior probability of each evaluative state
+(define (state-prior) (multinomial states '(1 1 1 1 1)))
+
+;; QUD function
+(define (qud-fn speaker-goals)
+  (let ((honest (flip (first speaker-goals)))
+        (kind (flip (second speaker-goals))))
+  (if (and honest kind) (lambda (state valence) (list state valence))
+      (if honest        (lambda (state valence) state)
+                        (lambda (state valence) valence)))))
+
+;; Uniform prior over QUDs 
+(define (qud-prior)
+  (multinomial (list 's 'v 'sv) '(0.25 0.25 0.50)))
+
+(define (polite-qud-prior)
+  (multinomial (list 'v 'sv) '(0.75 0.25)))
+
+(define (nonpolite-qud-prior)
+  (multinomial (list 's 'sv) '(0.75 0.25)))
+
+;; words and states associated with them
+(define (meaning words state)
+  (case words
+        (("terrible") (equal? state "TERRIBLE"))
+        (("bad")  (equal? state "BAD"))
+        (("okay") (equal? state "OKAY"))
+        (("good") (equal? state "GOOD"))
+        (("great") (equal? state "GREAT"))))
+
+;; define utterance
+(define utterances (list "terrible" "bad" "okay" "good" "great"))
+
+(define (utterance-prior) (multinomial utterances '(1 1 1 1 1)))
+
+
+;; Literal listener: 
+;; knows the qud value
+; (define literal-listener
+;   (mem
+;    (lambda (utterance qud)
+;      (enumeration-query
+;       (define state (state-prior))
+;       (define valence (flip (state-to-valence state)))
+      
+;       ((qud-fn qud) state valence)
+
+;       (meaning utterance state)))))
+
+
+; (define speaker
+;   (mem
+;    (lambda (val qud)
+;      (enumeration-query
+;       (define utterance (utterance-prior))
+      
+;       utterance
+
+;       (equal? val (apply multinomial (literal-listener utterance qud)))
+
+;       ))))
+
+; (speaker (list "BAD" true) "sv")
+
+
+(define pragmatic-listener
+  (mem
+   (lambda (utterance speaker-type)
+     (enumeration-query
+      (define state (state-prior))
+      (define valence (flip (state-to-valence state)))
+
+      (define speaker-honesty (uniform-draw '(0.1 0.3 0.5 0.7 0.9)))
+      (define speaker-kindness (uniform-draw '(0.1 0.3 0.5 0.7 0.9)))
+      (define speaker-goals (list speaker-honesty speaker-kindness))
+
+      (define qud-val ((qud-fn speaker-goals) state valence))
+
+      ;(list state how-good-is-the-state)
+      state
+      ;(list state qud)
+      
+      (equal? utterance
+              (apply multinomial (speaker val qud)))
+      ))))
+
+; ;; define speaker2, based on prag-listener
+; (define speaker2
+;   (mem
+;    (lambda (state speaker-type)
+;      (enumeration-query
+;       (define utterance (utterance-prior))
+;       (define how-good-is-the-state (valence-prior state))
+
+;       utterance
+
+;       (equal? (list state how-good-is-the-state) 
+;               (apply multinomial (prag-listener utterance speaker-type)))))))
+
+
+
+; (display (prag-listener "not great") "state given 'not great'")
+; (display (prag-listener "not bad") "state given 'not bad'")
+; (display (prag-listener "great") "state given 'great'")
+; (display (prag-listener "bad") "state given 'bad'")
