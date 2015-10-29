@@ -27,9 +27,11 @@
 (define (qud-fn speaker-goals)
   (let ((honest (flip (first speaker-goals)))
         (kind (flip (second speaker-goals))))
-  (if (and honest kind) (lambda (state valence) (list state valence))
-      (if honest        (lambda (state valence) state)
-                        (lambda (state valence) valence)))))
+  (if (and honest kind) 
+          (lambda (state valence) (list state valence))
+      (if honest        
+          (lambda (state valence) state)
+          (lambda (state valence) valence)))))
 
 ;; Uniform prior over QUDs 
 (define (qud-prior)
@@ -56,38 +58,41 @@
 (define (utterance-prior) (multinomial utterances '(1 1 1 1 1)))
 
 
-;; Literal listener: 
-;; knows the qud value
-; (define literal-listener
-;   (mem
-;    (lambda (utterance qud)
-;      (enumeration-query
-;       (define state (state-prior))
-;       (define valence (flip (state-to-valence state)))
+; Literal listener: 
+; knows the qud value
+(define literal-listener
+  (mem
+   (lambda (utterance qud)
+     (enumeration-query
+      (define state (state-prior))
+      (define valence (flip (state-to-valence state)))
       
-;       ((qud-fn qud) state valence)
+      ((qud-fn qud) state valence)
+      ; state
+      ; valence
 
-;       (meaning utterance state)))))
+      (meaning utterance state)))))
 
 
-; (define speaker
-;   (mem
-;    (lambda (val qud)
-;      (enumeration-query
-;       (define utterance (utterance-prior))
+; (literal-listener "good" (list 0.3 0.8))
+
+(define speaker
+  (mem
+   (lambda (state valence speaker-goals)
+     (enumeration-query
+      (define utterance (utterance-prior))
+      (define qud-val ((qud-fn speaker-goals) state valence))
       
-;       utterance
+      utterance
 
-;       (equal? val (apply multinomial (literal-listener utterance qud)))
+      (equal? qud-val (apply multinomial 
+        (literal-listener utterance speaker-goals)))))))
 
-;       ))))
-
-; (speaker (list "BAD" true) "sv")
-
+; (speaker "BAD" true (list 0.3 0.9))
 
 (define pragmatic-listener
   (mem
-   (lambda (utterance speaker-type)
+   (lambda (utterance)
      (enumeration-query
       (define state (state-prior))
       (define valence (flip (state-to-valence state)))
@@ -97,16 +102,17 @@
       (define speaker-goals (list speaker-honesty speaker-kindness))
 
       (define qud-val ((qud-fn speaker-goals) state valence))
-
-      ;(list state how-good-is-the-state)
-      state
-      ;(list state qud)
       
-      (equal? utterance
-              (apply multinomial (speaker val qud)))
-      ))))
+      (second speaker-goals)
 
-; ;; define speaker2, based on prag-listener
+      (and 
+        (equal? utterance
+              (apply multinomial (speaker state valence speaker-goals)))
+        (equal? state "BAD"))))))
+
+
+
+; ;; define speaker2, based on pragmatic-listener
 ; (define speaker2
 ;   (mem
 ;    (lambda (state speaker-type)
