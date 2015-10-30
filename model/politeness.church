@@ -57,13 +57,6 @@
   (if (equal? "honest" (multinomial (list "honest" "kind" "mean") speaker-goals))
       (lambda (state valence) state)
       (lambda (state valence) valence)))
-;;   (let ((honest (flip (first speaker-goals)))
-;;         (kind (flip (second speaker-goals))))
-;;   (if (and honest kind) 
-;;           (lambda (state valence) (list state valence))
-;;       (if honest        
-;;           (lambda (state valence) state)
-;;           (lambda (state valence) valence)))))
 
 ;; words and states associated with them
 (define (meaning words state)
@@ -74,6 +67,15 @@
         (("good") (equal? state "GOOD"))
         (("amazing") (equal? state "AMAZING"))))
 
+;; (define (meaning words state)
+;;   (case words
+;;         (("terrible") (equal? "TERRIBLE" (multinomial states '(5 4 3 2 1))))
+;;         (("bad")  (equal? "BAD" (multinomial states '(4 5 4 3 2))))
+;;         (("okay") (equal? "OKAY" (multinomial states '(3 4 5 4 3))))
+;;         (("good") (equal? "GOOD" (multinomial states '(2 3 4 5 4))))
+;;         (("amazing") (equal? "AMAZING" (multinomial states '(1 2 3 4 5))))))
+
+
 ;; define utterance
 (define utterances (list "terrible" "bad" "okay" "good" "amazing"))
 
@@ -81,9 +83,10 @@
 
 (define valence-to-be-communicated 
   (lambda (kindness meanness)
-    (equal? "kind" (multinomial (list "kind" "mean") (list kindness meanness)))
-    (multinomial state-value state-value)
-    (multinomial state-value (reverse state-value))))
+    (if 
+     (equal? "kind" (multinomial (list "kind" "mean") (list kindness meanness)))
+     (multinomial state-value state-value)
+     (multinomial state-value (reverse state-value)))))
 
 
 
@@ -103,7 +106,7 @@
       (meaning utterance state)))))
 
 
-;(literal-listener "amazing" (list 0.1 0.9))
+;; (literal-listener "amazing" (list 0.1 0.9))
 
 (define speaker
   (mem
@@ -118,7 +121,7 @@
       (equal? qud-val (apply multinomial 
                              (literal-listener utterance speaker-goals)))))))
 
-;; (define results (speaker "GOOD" (list 0.3 0.3 0.7)))
+;; (define results (speaker "BAD" (list 0.7 0.1 0.1)))
 ;; (display (first results))
 ;; (display (second results))
 
