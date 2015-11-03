@@ -126,6 +126,11 @@ qplot(utterance, goal_prob,
   geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1)) +
   theme(axis.text.x  = element_text(angle=45, vjust=0.5))
 
+# histogram
+qplot(goal_prob, data=subset(ms, knowledge == "unknown" & true_state == "terrible")) + 
+  geom_histogram(binwidth = 0.25) +
+  facet_wrap(~utterance, ncol=5)
+
 # known
 qplot(utterance, goal_prob, 
       colour = goal,
