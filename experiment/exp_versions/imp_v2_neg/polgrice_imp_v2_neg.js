@@ -128,9 +128,10 @@ function getRadioCheckedValue(formNum, radio_name)
 
 // CONDITION ASSIGNMENT
 // var cond = random(3)+1;
-var expt = "politeImp_stateGoalPos";
+var expt = "politeImp_statePos";
 //var cond = random(2)+1;
 //var cond = 1;
+var cond = "statePos"
 
 // call the maker getter to get the cond variable 
 //var xmlHttp = null;
@@ -148,7 +149,7 @@ var prediction = shuffle(["ask", "like"])
     var state_knowledge = "unknown";
 //}
 
-var domains = shuffle(["poem", "cake"]);
+var domains = shuffle(["poem", "cake", "cookie", "presentation", "painting", "review"]);
 
 //var domains1 = 
 //    shuffle(["poem", "cake", "cookie", "presentation", "song", "film", "solo", "monologue", "dance", "painting", "app", "review", "recital"]);
@@ -157,7 +158,7 @@ var domains = shuffle(["poem", "cake"]);
 //var domains = domains1.concat(domains2)
 
 var states = 
-    ["terrible", "bad"];
+    ["terrible", "bad", "terrible", "bad", "terrible", "bad"];
 //
 //var states1 = 
 //    ["terrible", "bad", "okay", "good", "amazing"];
@@ -172,7 +173,7 @@ var states =
 //var states = states1.concat(states2, states3, states4, states5)
 
 var utterances = 
-    shuffle(["not_amazing", "not_terrible"]);
+    ["not_amazing", "not_terrible", "not_amazing", "not_terrible", "not_amazing", "not_terrible"];
 
 //var utterances1 = 
 //    ["terrible", "bad", "okay", "good", "amazing"];
@@ -186,6 +187,9 @@ var utterances =
 //    ["terrible", "bad", "okay", "good", "amazing"];
 //var utterances = utterances1.concat(utterances2, utterances3, utterances4, utterances5)
 
+var goals = 
+    ["nice", "honest", "mean", "nice", "honest", "mean"];
+
     var allConditions = 
 shuffle(
     [
@@ -196,32 +200,38 @@ shuffle(
  "state": states[0],
  "utterance": utterances[0],
  "people": "people1",
+ "goal": goals[0],
 },
 {"domain": domains[1],
  "state": states[1],
  "utterance": utterances[1],
  "people": "people2",
+ "goal": goals[1],
 },
-//{"domain": domains[2],
-// "state": states[2],
-// "utterance": utterances[2],
-// "people": "people3",
-//},
-//{"domain": domains[3],
-// "state": states[3],
-// "utterance": utterances[3],
-// "people": "people4",
-//},
-//{"domain": domains[4],
-// "state": states[4],
-// "utterance": utterances[4],
-// "people": "people5",
-//},
-//{"domain": domains[5],
-// "state": states[5],
-// "utterance": utterances[5],
-// "people": "people6",
-//},
+{"domain": domains[2],
+ "state": states[2],
+ "utterance": utterances[2],
+ "people": "people3",
+ "goal": goals[2],
+},
+{"domain": domains[3],
+ "state": states[3],
+ "utterance": utterances[3],
+ "people": "people4",
+ "goal": goals[3],
+},
+{"domain": domains[4],
+ "state": states[4],
+ "utterance": utterances[4],
+ "people": "people5",
+ "goal": goals[4],
+},
+{"domain": domains[5],
+ "state": states[5],
+ "utterance": utterances[5],
+ "people": "people6",
+ "goal": goals[5],
+},
 //{"domain": domains[6],
 // "state": states[6],
 // "utterance": utterances[6],
@@ -355,7 +365,7 @@ speakers25 = shuffle(speakers[24]);
 var sents = {
     utterances: {
         not_terrible: {
-            sent_utterance: " SP said, <b>\"It wasn't terrible.\" </b>"
+            sent_utterance: " SP said, \"It wasn't terrible.\" </b>"
         },        
 //        bad: {
 //            sent_utterance: " SP said, <b>\"It was bad!\"</b>"
@@ -367,7 +377,7 @@ var sents = {
 //            sent_utterance: " SP said, <b>\"It was good!\"</b>" 
 //        },
         not_amazing: {
-            sent_utterance: " SP said, <b>\"It wasn't amazing.\"</b>" 
+            sent_utterance: " SP said, \"It wasn't amazing.\"</b>" 
         },
     },
     domains: {
@@ -453,6 +463,17 @@ var sents = {
         amazing: {
             state: " <b>everyone thought LS's BB was amazing</b>,"        
         },
+    },
+    goals: {
+        nice: {
+            goal: " <b>SP wanted to be nice, so "
+        },
+        honest: {
+            goal: " <b>SP wanted to be honest, so "            
+        },
+        mean: {
+            goal: " <b>SP wanted to be mean, so "            
+        }  
     },
     people: {
         people1: {
@@ -558,12 +579,13 @@ var sents = {
     }
 };
 
-function doSentSubs (sents, polite, domain, utterance, people)
+function doSentSubs (sents, polite, domain, utterance, people, goal)
 {
     utterance = sents["utterances"][utterance]["sent_utterance"];
     precontext = sents["domains"][domain]["sent_precontext"];
     context = sents["domains"][domain]["sent_context"];
     state = sents["states"][state]["state"]
+    goal = sents["goals"][goal]["goal"]
     if (state_knowledge == "known") {
         knowledge = " <b>and LS knew it</b>."
     } else if (state_knowledge == "unknown") {
@@ -591,9 +613,10 @@ function doSentSubs (sents, polite, domain, utterance, people)
     question2 = question2.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     question3 = question3.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     knowledge = knowledge.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
+    goal = goal.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
 
     
-    return [utterance, context, state, precontext, question, question2, question3, knowledge];
+    return [utterance, context, state, precontext, question, question2, question3, knowledge, goal];
 }
 
 var numConditions = allConditions.length;
@@ -622,16 +645,17 @@ var experiment = {
 //    state: [],
     utterance: [],
     people: [],
+    goal: [],
 //    context: [],
-    goal0: score[0],
-    goal1: score[1],
-    goal2: score[2],
+//    goal0: score[0],
+//    goal1: score[1],
+//    goal2: score[2],
 //    goal3: score[3],
 //    prediction0: prediction[0],
 //    prediction1: prediction[1],
-    goalProb0: [],
-    goalProb1: [],
-    goalProb2: [],
+//    goalProb0: [],
+//    goalProb1: [],
+//    goalProb2: [],
     stateProb: [],
 //    predictedProb0: [],
 //    predictedProb1: [],
@@ -678,13 +702,14 @@ var experiment = {
       experiment.data.utterance.push(trial.utterance);
       experiment.data.domain.push(trial.domain);
 //      experiment.data.state.push(trial.state);
-      experiment.data.goalProb0.push(prob0);
-      experiment.data.goalProb1.push(prob1);
-      experiment.data.goalProb2.push(prob2);
+//      experiment.data.goalProb0.push(prob0);
+//      experiment.data.goalProb1.push(prob1);
+//      experiment.data.goalProb2.push(prob2);
       experiment.data.stateProb.push(prob3);
 //      experiment.data.predictedProb0.push(prob3);
 //      experiment.data.predictedProb1.push(prob4);
-   
+      experiment.data.goal.push(goal);
+      
       clearForm(document.forms[0]);
       clearForm(document.forms[1]);
     }
@@ -704,9 +729,10 @@ var experiment = {
         domain = trial.domain;
         context = trial.context;
         people = trial.people;
-        sent_materials = doSentSubs(sents, state, domain, utterance, people);
+        goal = trial.goal;
+        sent_materials = doSentSubs(sents, state, domain, utterance, people, goal);
       showSlide("stage");
-      $("#context").html(sent_materials[3] + sent_materials[7] + sent_materials[1] + sent_materials[0]);  
+      $("#context").html(sent_materials[3] + sent_materials[7] + sent_materials[1] + sent_materials[8] + sent_materials[0]);  
       $("#question").html(sent_materials[4]);    
       
       for (var i = 0; i <= 4; i++)
@@ -823,4 +849,5 @@ $("#slider4").slider({
                      "background":"#667D94",
                      "border-color": "#001F29" });
                }});
+
 

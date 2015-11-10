@@ -131,6 +131,7 @@ function getRadioCheckedValue(formNum, radio_name)
 var expt = "politeImp_stateGoalPos";
 //var cond = random(2)+1;
 //var cond = 1;
+var cond = "stateGoalPos"
 
 // call the maker getter to get the cond variable 
 //var xmlHttp = null;

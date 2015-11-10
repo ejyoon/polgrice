@@ -254,7 +254,6 @@ function pressEnter(e) {
     <br> 
 
         <button type="button" id="next1" onclick="this.blur(); if (ValidateSliderFormPart1(document.affectForm1)) {
-experiment.next();                                                       
 document.getElementById('next1').hidden=true;
 document.getElementById('next2').hidden=false;
 document.getElementById('form1').hidden=true;
@@ -327,10 +326,7 @@ document.getElementById('form2').hidden=false;}">Next</button>
     
     <button type="button" id="next2" onclick="this.blur(); if
     (ValidateForm(document.stateForm)) {
-document.getElementById('form1').hidden=false;
-document.getElementById('form2').hidden=true;
-document.getElementById('next1').hidden=false;
-document.getElementById('next2').hidden=true;
+experiment.next();                                                       
 }">Next</button>
     </div>
 </div>
@@ -366,7 +362,7 @@ document.getElementById('next2').hidden=true;
 <div class="slide" id="finished">
   You're finished - thanks for participating! Submitting to Mechanical Turk...
 </div>
-<script src="polgrice_imp_v1.js"></script>
+<script src="polgrice_imp_v2_neg.js"></script>
 
 </body>
 </html>
