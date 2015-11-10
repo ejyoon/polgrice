@@ -1,4 +1,4 @@
-var filename = "EJY_polgrice_goals_v3" 
+var filename = "EJY_polgrice_goals_v4" 
 var condCounts = "1,5;2,5;" //Example: "1,20;2,20;3,20"
 
 // ---------------- HELPER ------------------
@@ -128,7 +128,7 @@ function getRadioCheckedValue(formNum, radio_name)
 
 // CONDITION ASSIGNMENT
 // var cond = random(3)+1;
-var expt = "adj_goalPos";
+var expt = "politeImp_stateGoalPos";
 //var cond = random(2)+1;
 //var cond = 1;
 
