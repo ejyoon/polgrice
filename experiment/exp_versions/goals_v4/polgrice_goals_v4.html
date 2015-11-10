@@ -259,7 +259,27 @@ document.getElementById('form1').hidden=true;
 document.getElementById('form2').hidden=false;}">Next</button>
 
 <span id="form2">
-    <form id= "affectForm2">
+    <form id= "affectForm2" name="stateForm">
+    <table width="500" cellspacing="0" cellpadding="0" border="0" align="center" class="text-center">
+    <tr>
+        <td><span id="opt">Terrible</span></td>
+        <td><span id="opt">Bad</span></td>
+        <td><span id="opt">Neutral</span></td>
+        <td><span id="opt">Good</span></td>
+        <td><span id="opt">Amazing</span></td>
+    </tr>
+    <tr>
+        <td><input type="radio" name="state" value="1" /></td>
+        <td><input type="radio" name="state" value="2" /></td>
+        <td><input type="radio" name="state" value="3" /></td>
+        <td><input type="radio" name="state" value="4" /></td>
+        <td><input type="radio" name="state" value="5" /></td>
+
+    </tr>
+</table>
+</form>
+    
+<!--
     <p id="question2" class="block-text"></p>
      <input type="hidden" name="hSlider3" id="hiddenSliderValue3" />
    
@@ -300,8 +320,10 @@ document.getElementById('form2').hidden=false;}">Next</button>
     </span>
     
     </form>
+-->
 
-    <button type="button" id="next2" onclick="this.blur(); if (ValidateSliderFormPart2(document.affectForm2)) {
+    <button type="button" id="next2" onclick="this.blur(); if
+    (ValidateForm(document.stateForm)) {
 experiment.next();                                                       document.getElementById('form1').hidden=false;
 document.getElementById('form2').hidden=true;
 document.getElementById('next1').hidden=false;

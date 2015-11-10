@@ -2,7 +2,7 @@ var filename = "EJY_polgrice_goals_v3"
 var condCounts = "1,5;2,5;" //Example: "1,20;2,20;3,20"
 
 // ---------------- HELPER ------------------
-var NUM_SLIDERS = 5;
+var NUM_SLIDERS = 3;
 var NUM_SLIDERS1 = 3;
 var NUM_SLIDERS2 = 2;
 
@@ -632,9 +632,9 @@ var experiment = {
     inferredProb0: [],
     inferredProb1: [],
     inferredProb2: [],
-//    inferredProb3: [],
-    predictedProb0: [],
-    predictedProb1: [],
+    stateProb: [],
+//    predictedProb0: [],
+//    predictedProb1: [],
     language: [],
 	expt_aim: [],
 	goal_thoughts: [],
@@ -668,8 +668,11 @@ var experiment = {
       var prob1 = parseInt(document.getElementById("hiddenSliderValue1").value) / 40.00;
       var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
 //      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
-      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
-      var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
+//      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
+//      var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
+
+      var prob3 = getRadioCheckedValue(1, "state");
+//      experiment.stateRatings[currentTrialNum] = getRadioCheckedValue(1, "state");
 
       experiment.data.order.push(numComplete);
       experiment.data.utterance.push(trial.utterance);
@@ -678,9 +681,9 @@ var experiment = {
       experiment.data.inferredProb0.push(prob0);
       experiment.data.inferredProb1.push(prob1);
       experiment.data.inferredProb2.push(prob2);
-//      experiment.data.inferredProb3.push(prob3);
-      experiment.data.predictedProb0.push(prob3);
-      experiment.data.predictedProb1.push(prob4);
+      experiment.data.stateProb.push(prob3);
+//      experiment.data.predictedProb0.push(prob3);
+//      experiment.data.predictedProb1.push(prob4);
    
       clearForm(document.forms[0]);
       clearForm(document.forms[1]);
