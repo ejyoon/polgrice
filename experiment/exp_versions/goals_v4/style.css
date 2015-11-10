@@ -159,6 +159,11 @@ button[disabled] {
     text-align: right;
 }
 
+.text-center {
+    text-align: center;
+}
+
+
 #slider0 { width: 12px;
                height: 200px;
                position: relative;

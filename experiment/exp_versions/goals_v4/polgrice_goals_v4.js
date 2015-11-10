@@ -572,13 +572,13 @@ function doSentSubs (sents, polite, domain, utterance, people)
     
     question = "Based on what SP said, how likely do you think that <b>SP's goal</b> was to be:";
     
-    if (prediction[0] == "ask") {
-    question2 = "Based on what SP said, how likely is it for you to <b>ask for SP's opinion on your own BB</b>?";
+//    if (prediction[0] == "ask") {
+    question2 = "How would SP actually rate LS's BB using the following scale?";
     question3 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
-    } else if (prediction[0] == "like") {
-    question3 = "Based on what SP said, how likely is it for you to <b>ask for SP's opinion on your own BB</b>?";
-    question2 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
-    }    
+//    } else if (prediction[0] == "like") {
+//    question3 = "Based on what SP said, how likely is it for you to <b>ask for SP's opinion on your own BB</b>?";
+//    question2 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
+//    }    
     BB = sents["domains"][domain]["BB"]; //Item 2
     SP = sents["people"][people]["SP"]; //speaker
     LS = sents["people"][people]["LS"]; //addressee
@@ -629,9 +629,9 @@ var experiment = {
 //    goal3: score[3],
     prediction0: prediction[0],
     prediction1: prediction[1],
-    inferredProb0: [],
-    inferredProb1: [],
-    inferredProb2: [],
+    goalProb0: [],
+    goalProb1: [],
+    goalProb2: [],
     stateProb: [],
 //    predictedProb0: [],
 //    predictedProb1: [],
@@ -678,9 +678,9 @@ var experiment = {
       experiment.data.utterance.push(trial.utterance);
       experiment.data.domain.push(trial.domain);
 //      experiment.data.state.push(trial.state);
-      experiment.data.inferredProb0.push(prob0);
-      experiment.data.inferredProb1.push(prob1);
-      experiment.data.inferredProb2.push(prob2);
+      experiment.data.goalProb0.push(prob0);
+      experiment.data.goalProb1.push(prob1);
+      experiment.data.goalProb2.push(prob2);
       experiment.data.stateProb.push(prob3);
 //      experiment.data.predictedProb0.push(prob3);
 //      experiment.data.predictedProb1.push(prob4);
