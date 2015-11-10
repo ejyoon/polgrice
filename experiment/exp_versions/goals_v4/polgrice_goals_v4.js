@@ -355,7 +355,7 @@ speakers25 = shuffle(speakers[24]);
 var sents = {
     utterances: {
         not_terrible: {
-            sent_utterance: " SP said, <b>\"It wasn't terrible...\" </b>"
+            sent_utterance: " SP said, <b>\"It wasn't terrible.\" </b>"
         },        
 //        bad: {
 //            sent_utterance: " SP said, <b>\"It was bad!\"</b>"
@@ -367,7 +367,7 @@ var sents = {
 //            sent_utterance: " SP said, <b>\"It was good!\"</b>" 
 //        },
         not_amazing: {
-            sent_utterance: " SP said, <b>\"It wasn't amazing...\"</b>" 
+            sent_utterance: " SP said, <b>\"It wasn't amazing.\"</b>" 
         },
     },
     domains: {
@@ -627,8 +627,8 @@ var experiment = {
     goal1: score[1],
     goal2: score[2],
 //    goal3: score[3],
-    prediction0: prediction[0],
-    prediction1: prediction[1],
+//    prediction0: prediction[0],
+//    prediction1: prediction[1],
     goalProb0: [],
     goalProb1: [],
     goalProb2: [],

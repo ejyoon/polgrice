@@ -28,10 +28,10 @@
   <button type="button" 
           onclick="this.blur(); 
                    experiment.next();
-                   document.getElementById('form1').hidden=false;
-                   document.getElementById('form2').hidden=true;
-                   document.getElementById('next1').hidden=false;
-                   document.getElementById('next2').hidden=true;
+                   document.getElementById('form1').hidden=true;
+                   document.getElementById('form2').hidden=false;
+                   document.getElementById('next1').hidden=true;
+                   document.getElementById('next2').hidden=false;
                                  ">Start</button>
   
   <p class="block-text"><br> <b> Note: you won't be able to preview this HIT before accepting it because it's so short. </b></p>
@@ -252,7 +252,9 @@ function pressEnter(e) {
     </form>
 </span>
     <br><br> 
-    <button type="button" id="next1" onclick="this.blur(); if (ValidateSliderFormPart1(document.affectForm1)) {
+
+        <button type="button" id="next1" onclick="this.blur(); if (ValidateSliderFormPart1(document.affectForm1)) {
+experiment.next();                                                       
 document.getElementById('next1').hidden=true;
 document.getElementById('next2').hidden=false;
 document.getElementById('form1').hidden=true;
@@ -322,10 +324,10 @@ document.getElementById('form2').hidden=false;}">Next</button>
     
     </form>
 -->
-
+    
     <button type="button" id="next2" onclick="this.blur(); if
     (ValidateForm(document.stateForm)) {
-experiment.next();                                                       document.getElementById('form1').hidden=false;
+document.getElementById('form1').hidden=false;
 document.getElementById('form2').hidden=true;
 document.getElementById('next1').hidden=false;
 document.getElementById('next2').hidden=true;
