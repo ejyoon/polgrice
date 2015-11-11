@@ -184,3 +184,18 @@ qplot(utterance, pred_prob,
 
 
 ```
+
+# correlations
+
+```{r}
+d1 <- d %>% filter(prediction == "like")
+cor(d1[d1$goal=="nice",]$pred_prob, d1[d1$goal=="nice",]$goal_prob)
+cor(d1[d1$goal=="mean",]$pred_prob, d1[d1$goal=="mean",]$goal_prob)
+cor(d1[d1$goal=="honest",]$pred_prob, d1[d1$goal=="honest",]$goal_prob)
+
+d1 <- d %>% filter(prediction == "ask")
+cor(d1[d1$goal=="nice",]$pred_prob, d1[d1$goal=="nice",]$goal_prob)
+cor(d1[d1$goal=="mean",]$pred_prob, d1[d1$goal=="mean",]$goal_prob)
+cor(d1[d1$goal=="honest",]$pred_prob, d1[d1$goal=="honest",]$goal_prob)
+
+```
