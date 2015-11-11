@@ -1,7 +1,5 @@
 // webppl politeness.wppl --require utils
 
-var speakerOptimality = 10
-
 // a world has both a state and a valence
 var worlds = [
 	{state: "terrible", valence: 0.01},
@@ -36,94 +34,134 @@ var beingNiceOrMean = function(nice){
 	return worldValues[discrete(weights)]
 }
 
-var meaning = function(words, state){
-	return words==state
-	// return words=="terrible" ? state == stateValues[discrete([10,1,0.1,0.01,0.001])] : 
-	// 		words=="bad" ? state == stateValues[discrete([1,10,1,0.1,0.01])] : 
-	// 		words=="okay" ? state == stateValues[discrete([0.1,1,10,1,0.1])] : 
-	// 		words=="good" ? state == stateValues[discrete([0.01,0.1,1,10,1])] : 
-	// 		words=="amazing" ? state == stateValues[discrete([0.001,0.01,0.1,1,10])] :
-	// 		true
+var politeRSA = function(experimentalCondition, opts, RSAparams, priorParams){
+
+	var stochasticWords = opts.stochasticWords
+	var stochasticValence = opts.stochasticValence
+
+	var speakerOptimality = RSAparams.speakerOptimality
+
+	var meaning = stochasticWords ? 
+		function(words, state){
+			return words=="terrible" ? state == stateValues[discrete([10,1,0.1,0.01,0.001])] : 
+					words=="bad" ? state == stateValues[discrete([1,10,1,0.1,0.01])] : 
+					words=="okay" ? state == stateValues[discrete([0.1,1,10,1,0.1])] : 
+					words=="good" ? state == stateValues[discrete([0.01,0.1,1,10,1])] : 
+					words=="amazing" ? state == stateValues[discrete([0.001,0.01,0.1,1,10])] :
+					true
+		} : 
+		function(words, state){
+			return words==state
+		}
+
+	// here, you get the joint goal (communicate state and valence)
+	// if both kind and honest
+	// if they're not kind, then the joint goal won't show up
+	// this will probably lead to the asymmetry, but it's sort of baked in
+	var qudFunction = function(speakerGoals){
+			// idF is function(x){return x}
+		return all(idF, _.values(speakerGoals)) ?
+				function(w){return w} :
+				speakerGoals.honest ? 
+					function(w){return w.state} :
+					function(w){return w.valence}
+	}
+
+
+	var listener0 = cache(function(utterance, goals, stochasticWords, stochasticValence) {
+	  Enumerate(function(){
+	    var world = statePrior()
+	    var valence = stochasticValence ? binaryValence(world) : world.valence
+
+	    var m = meaning(utterance, world.state)
+	    var binaryWorld = {state: world.state, valence: valence}
+	    
+	    condition(m) 
+	    
+	    return qudFunction(goals)(binaryWorld)
+	  })
+	})
+
+
+	var speaker1 = cache(function(world, speakerGoals, stochasticWords, stochasticValence) {
+	  Enumerate(function(){
+
+	  	var goals = {
+	  		honest: flip(speakerGoals.honesty),
+	  		kind: flip(speakerGoals.kindness)
+	  	}
+	    var utterance = utterancePrior()
+
+		// if goal is NOT honesty, then choose world in proportion to valence
+	    var valence = goals.honest ? 
+	    				world.valence :
+	    				beingNiceOrMean(goals.kind)
+
+	    var valenceVal = stochasticValence ? flip(valence) : valence
+
+	    // qud either returns true state, or valence, which may or may not be true
+	    var qudVal = qudFunction(goals)({"state":world.state, 
+		    							"valence":valenceVal})
+
+	    var L0 = listener0(utterance, goals)
+
+	    factor(L0.score([],qudVal))
+
+	    return utterance
+	  })
+	})
+
+
+	var listener1 = function(utterance, knowledge, stochasticWords, stochasticValence, priorParams) {
+	  Enumerate(function(){
+	    var world = statePrior()
+
+	    var speakerGoals = {
+	    	honesty: [0.1, 0.3, 0.5, 0.7, 0.9][discrete(discretizeBeta(priorParams.honestGamma, priorParams.honestDelta))],
+	    	// kindness: [0.1, 0.3, 0.5, 0.7, 0.9][discrete([1,2,3,4,5])]
+	    	kindness: [0.1, 0.3, 0.5, 0.7, 0.9][discrete(discretizeBeta(priorParams.kindGamma, priorParams.kindDelta))],
+	   	}
+
+	   	condition(knowledge ? knowledge == world.state : true)
+
+	    var S1 = speaker1(world, speakerGoals)
+
+	    factor(speakerOptimality*S1.score([],utterance))
+
+	    return speakerGoals
+	  })
+	}
+
+	return listener1(experimentalCondition.utterance, 
+						experimentalCondition.knowledge, 
+						stochasticWords, 
+						stochasticValence,
+						priorParams)
+	// return speaker1({state: "good", valence: 0.75}, {honesty: 0.7, kindness: 0.5}, false, false)
+	// return listener0("good", {honest:false, kind: true}, true, true)
+
 }
 
+// discretizeBeta(0.9, 2)
 
-// here, you get the joint goal (communicate state and valence)
-// if both kind and honest
-// if they're not kind, then the joint goal won't show up
-// this will probably lead to the asymmetry, but it's sort of baked in
-var qudFunction = function(speakerGoals){
-		// idF is function(x){return x}
-	return all(idF, _.values(speakerGoals)) ?
-			function(w){return w} :
-			speakerGoals.honest ? 
-				function(w){return w.state} :
-				function(w){return w.valence}
-}
-
-
-var listener0 = cache(function(utterance, goals) {
-  Enumerate(function(){
-    var world = statePrior()
-    var valence = binaryValence(world)
-    var m = meaning(utterance, world.state)
-    var binaryWorld = {state: world.state, valence: valence}
-    condition(m) 
-    return qudFunction(goals)(binaryWorld)
-  })
+var posterior = politeRSA(
+{
+	utterance: "amazing", 
+	knowledge: "amazing"
+},
+{
+	stochasticWords:false, 
+	stochasticValence:true
+}, 
+{
+	speakerOptimality:10
+},
+{
+	honestGamma: 0.5,
+	honestDelta:2,
+	kindGamma:0.5, 
+	kindDelta:2
 })
-
-
-var speaker1 = cache(function(world, speakerGoals) {
-  Enumerate(function(){
-
-  	var goals = {
-  		honest: flip(speakerGoals.honesty),
-  		kind: flip(speakerGoals.kindness)
-  	}
-
-    var utterance = utterancePrior()
-
-	// if goal is NOT honesty, then choose world in proportion to valence
-    var valence = goals.honest ? 
-    				world.valence :
-    				beingNiceOrMean(goals.kind)
-
-    // qud either returns true state, or valence, which may or may not be true
-    var qudVal = qudFunction(goals)({"state":world.state, 
-	    							"valence":flip(valence)})
-
-    var L0 = listener0(utterance, goals)
-
-    factor(L0.score([],qudVal))
-
-    return utterance
-  })
-})
-
-// speaker1({state: "okay", valence: 0.5}, {honesty: 0.7, kindness: 0.5})
-
-var listener1 = function(utterance, knowledge) {
-  Enumerate(function(){
-    var world = statePrior()
-    var valence = binaryValence(world)
-
-    var speakerGoals = {
-    	honesty: uniformDraw([0.1, 0.3, 0.5, 0.7, 0.9]),
-    	kindness: uniformDraw([0.1, 0.3, 0.5, 0.7, 0.9])
-   	}
-
-   	condition(knowledge ? knowledge == world.state : true)
-
-    var S1 = speaker1(world, speakerGoals)
-
-
-    factor(speakerOptimality*S1.score([],utterance))
-
-    return speakerGoals
-  })
-}
-
-var posterior = listener1("amazing", "amazing")
 
 console.log("expected honesty " + expectation(marginalizeERP(posterior, "honesty")))
 console.log("expected kindness " + expectation(marginalizeERP(posterior, "kindness")))
