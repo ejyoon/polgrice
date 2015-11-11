@@ -380,70 +380,71 @@ var sents = {
             sent_utterance: " SP said, \"It wasn't amazing.\"</b>" 
         },
     },
+    
     domains: {
        presentation: {
-            sent_precontext: "Imagine that LS just gave a presentation, and", 
-            sent_context: " LS approached SP who saw LS's presentation, and asked: \"How was my presentation?\"", 
+            sent_precontext: "Imagine that LS just gave a presentation, ", 
+            sent_context: " LS approached SP, who had just seen LS's presentation, and asked \"How was my presentation?\"",
             BB: "presentation",
 	},
 	   cookie: {
-            sent_precontext: "Imagine that LS baked some cookies, and", 
-            sent_context: " LS approached SP who tasted LS's cookie, and asked: \"How did my cookie taste?\"", 
+            sent_precontext: "Imagine that LS baked some cookies, ", 
+            sent_context: " LS approached SP, who had just tasted LS's cookie, and asked \"How did my cookie taste?\"", 
             BB: "cookie",
 	},
 	   poem: {
-            sent_precontext: "Imagine that LS wrote a poem, and", 
-            sent_context: " LS approached SP who read LS's poem, and asked: \"How was my poem?\"", 
+            sent_precontext: "Imagine that LS wrote a poem, ", 
+            sent_context: " LS approached SP, who had just read LS's poem, and asked \"How was my poem?\"", 
             BB: "poem",
 	},        
 	   cake: {
-            sent_precontext: "Imagine that LS baked a cake, and", 
-            sent_context: " LS approached SP who tasted LS's cake, and asked: \"How did my cake taste?\"", 
+            sent_precontext: "Imagine that LS baked a cake, ", 
+            sent_context: " LS approached SP, who had just tasted LS's cake, and asked \"How did my cake taste?\"", 
             BB: "cake",
 	},
 	   song: {
-            sent_precontext: "Imagine that LS composed a song, and", 
-            sent_context: " LS approached SP who heard LS's song, and asked: \"How was my song?\"", 
+            sent_precontext: "Imagine that LS composed a song, ", 
+            sent_context: " LS approached SP, who had just heard LS's song, and asked \"How was my song?\"", 
             BB: "song",
 	},
 	   film: {
-            sent_precontext: "Imagine that LS filmed a movie, and", 
-            sent_context: " LS approached SP who saw LS's movie, and asked: \"How was my movie?\"", 
+            sent_precontext: "Imagine that LS filmed a movie, ", 
+            sent_context: " LS approached SP, who had just seen LS's movie, and asked \"How was my movie?\"", 
             BB: "movie",
 	},
 	   solo: {
-            sent_precontext: "Imagine that LS played a cello solo part at a concert, and", 
-            sent_context: " LS approached SP who heard LS's solo, and asked: \"How was my solo?\"", 
+            sent_precontext: "Imagine that LS played a cello solo part at a concert, ", 
+            sent_context: " LS approached SP, who had just heard LS's solo, and asked \"How was my solo?\"", 
             BB: "solo",
 	},        
 	   dance: {
-            sent_precontext: "Imagine that LS gave a tap dance performance, and", 
-            sent_context: " LS approached SP who saw LS's dance, and asked: \"How was my dance?\"", 
+            sent_precontext: "Imagine that LS gave a tap dance performance, ", 
+            sent_context: " LS approached SP, who had just seen LS's dance, and asked \"How was my dance?\"", 
             BB: "dance",
 	},   
 	   painting: {
-            sent_precontext: "Imagine that LS drew a painting, and", 
-            sent_context: " LS approached SP who saw LS's painting, and asked: \"How was my painting?\"", 
+            sent_precontext: "Imagine that LS drew a painting, ", 
+            sent_context: " LS approached SP, who had just seen LS's painting, and asked \"How was my painting?\"", 
             BB: "painting",
 	}, 
 	   monologue: {
-            sent_precontext: "Imagine that LS gave a monologue during a school play, and", 
-            sent_context: " LS approached SP who heard LS's monologue, and asked: \"How was my monologue?\"", 
+            sent_precontext: "Imagine that LS gave a monologue during a school play, ", 
+            sent_context: " LS approached SP, who had just heard LS's monologue, and asked \"How was my monologue?\"", 
             BB: "monologue",
 	},
 	   app: {
-            sent_precontext: "Imagine that LS designed a mobile app, and", 
-            sent_context: " LS approached SP who looked at LS's mobile app, and asked: \"How was my app?\"", 
+            sent_precontext: "Imagine that LS designed a mobile app, ", 
+            sent_context: " LS approached SP, who looked at LS's mobile app, and asked \"How was my app?\"", 
             BB: "app",
 	},
 	   review: {
-            sent_precontext: "Imagine that LS wrote a review for a book, and", 
-            sent_context: " LS approached SP who read LS's review, and asked: \"How was my review?\"", 
+            sent_precontext: "Imagine that LS wrote a review for a book, ", 
+            sent_context: " LS approached SP, who had just read LS's review, and asked \"How was my review?\"", 
             BB: "review",
 	},
 	   recital: {
-            sent_precontext: "Imagine that LS had a piano recital, and", 
-            sent_context: " LS approached SP who attended LS's recital, and asked: \"How was my recital performance?\"", 
+            sent_precontext: "Imagine that LS had a piano recital, ", 
+            sent_context: " LS approached SP, who had just attended LS's recital, and asked \"How was my recital performance?\"", 
             BB: "recital performance",
 	},
     },
@@ -589,7 +590,7 @@ function doSentSubs (sents, polite, domain, utterance, people, goal)
     if (state_knowledge == "known") {
         knowledge = " <b>and LS knew it</b>."
     } else if (state_knowledge == "unknown") {
-        knowledge = " and LS had no idea what people thought of it."
+        knowledge = " but had no idea what people thought about it."
     }
     
     question = "Based on what SP said, how likely do you think that <b>SP's goal</b> was to be:";
