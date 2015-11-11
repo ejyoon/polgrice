@@ -1,0 +1,106 @@
+// webppl politeness.wppl --require utils
+
+var speakerOptimality = 10
+
+// a world has both a state and a valence
+var worlds = [
+	{state: "TERRIBLE", valence: 0.01},
+	{state: "BAD", valence: 0.25},
+	{state: "OKAY", valence: 0.5},
+	{state: "GOOD", valence: 0.75},
+	{state: "AMAZING", valence: 0.99}
+]
+
+// array of the valence values
+var worldValues = _.pluck(worlds, "valence")
+
+var statePrior = function(){
+	return uniformDraw(worlds)
+}
+
+// array of the state values (also the utterances)
+var utterances = _.pluck(worlds, "state")
+
+var utterancePrior = function(){
+	return uniformDraw(utterances)
+}
+
+var beingNiceOrMean = function(goal){
+	return goal == "kindness" ? 
+			worldValues[discrete(worldValues)] : 
+			worldValues[discrete(worldValues.reverse())]
+}
+
+var meaning = function(words, state){
+	return words==state
+}
+
+var qudFunction = function(speakerGoal){
+	return speakerGoal == "honesty" ? 
+		function(w){return w.state} :
+		function(w){return w.valence}
+}
+
+
+var listener0 = cache(function(utterance, qud) {
+  Enumerate(function(){
+    var world = statePrior()
+    var m = meaning(utterance, world.state)
+    condition(m) 
+    return qudFunction(qud)(world)
+  })
+})
+
+var speaker1 = cache(function(world, speakerGoals) {
+  Enumerate(function(){
+
+  	// unpack speaker goals into weights and goal-labels
+  	var goalWeights = _.values(speakerGoals)
+  	var goals = _.keys(speakerGoals)
+
+  	// speaker can have one goal
+  	var goal = goals[discrete(goalWeights)]
+
+    var utterance = utterancePrior()
+
+	// if goal is NOT honesty, then choose world in proportion to valence
+    var valence = (goal == "honesty") ? 
+    				world.valence :
+    				beingNiceOrMean(goal)
+
+    // qud either returns true state, or valence, which may or may not be true
+    var qudVal = qudFunction(goal)({"state":world.state, "valence":valence})
+
+    var L0 = listener0(utterance, goal)
+
+    factor(L0.score([],qudVal))
+
+    return utterance
+  })
+})
+
+// speaker1(worlds[1], [0.7, 0.3])
+
+var listener1 = function(utterance) {
+  Enumerate(function(){
+    var world = statePrior()
+
+    var speakerGoals = {
+    	honesty: uniformDraw([0.1, 0.3, 0.5, 0.7, 0.9]),
+    	kindness: uniformDraw([0.1, 0.3, 0.5, 0.7, 0.9])
+   	}
+
+    var S1 = speaker1(world, speakerGoals)
+
+    factor(speakerOptimality*S1.score([],utterance))
+
+    return speakerGoals
+  })
+}
+
+
+var posterior = listener1("TERRIBLE")
+
+console.log("expected honesty " + expectation(marginalizeERP(posterior, "honesty")))
+console.log("expected kindness " + expectation(marginalizeERP(posterior, "kindness")))
+
