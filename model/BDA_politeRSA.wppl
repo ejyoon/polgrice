@@ -1,0 +1,137 @@
+// time webppl BDA_politeRSA.wppl --require utils
+var fpath = "/Users/mht/Documents/research/polgrice/experiment/data_analysis/data/"
+
+var rawData = utils.readCSV(fpath+"goal_unknown_rounded.csv").data
+var df = dataFrame(rawData, ["roundval"])
+
+var allKnowledges = _.uniq(_.pluck(df,"knowledge"))
+var allUtterances = _.uniq(_.pluck(df,"utterance"))
+var allStates = _.uniq(_.pluck(df,"true_state"))
+var allGoals = ["nice","honest"] // _.uniq(_.pluck(df,"goal"))
+
+
+var RSAopts = {
+	stochasticWords:true, 
+	stochasticValence:true
+}
+
+
+var pre1 = RSAopts.stochasticWords ? 
+				"stochWords-" : ""
+var pre2 = RSAopts.stochasticValence ? 
+				"stochVal-" : ""
+
+var optPrefix = pre1 + pre2
+				
+console.log("running " + optPrefix)
+
+var goalDictionary = {
+	"nice": "kindness",
+	"honest" : "honesty"
+}
+
+var dataAnalysis = function(){
+
+	var RSAparams = {
+		speakerOptimality : uniform(0,20)
+	}
+
+	var priorParams = {
+		honestGamma : uniform(0,1),
+		honestDelta : uniform(0,20),
+		kindGamma : uniform(0,1),
+		kindDelta : uniform(0,20)
+	}
+
+	foreach(allStates, function(state){
+
+		var stateData = subset(df, "true_state", state)
+
+		foreach(allUtterances, function(utterance){
+
+			var utteranceData = subset(stateData, "utterance", utterance)
+
+			var predictiveERP = politeRSA(
+				{
+					utterance: utterance,
+					knowledge: state
+				},
+				RSAopts,
+				RSAparams,
+				priorParams)
+
+			foreach(allGoals, function(goal){
+
+				var dataPoints = _.pluck(subset(utteranceData, "goal", goal), "roundval")
+				var goalERP = marginalizeERP(predictiveERP, goalDictionary[goal])
+
+				var likelihoodOfData = sum(map(function(d){return goalERP.score([], d)}, dataPoints))
+
+				factor(likelihoodOfData)
+
+				query.add(["predictive" ,state, utterance, goal], expectation(goalERP))
+
+			})
+
+		})
+
+	})
+
+	query.add(["parameter","speakerOptimality", "NA", "NA"], RSAparams.speakerOptimality)
+	query.add(["parameter","honesty", "gamma", "NA"], priorParams.honestGamma)
+	query.add(["parameter","honesty", "delta", "NA"], priorParams.honestDelta)
+	query.add(["parameter","kindness", "gamma", "NA"], priorParams.kindGamma)
+	query.add(["parameter","kindness", "delta", "NA"], priorParams.kindDelta)
+
+	return query
+}
+
+
+var inference ='MH'
+var samples = 100
+var burn = 50
+var resultsERP = MCMC(dataAnalysis, {samples:samples, burn:burn, verbose:true})
+
+console.log('inference complete... printing')
+
+var outfile = "results/bda-politeRSA-"+optPrefix+"sopt-goalBetaPriors"+ 
+						inference + samples + "burn" + burn + ".csv"
+
+utils.erpWriter(resultsERP, outfile)
+
+console.log('output written to ' + outfile)
+
+
+// var RSAparams = {
+// 	speakerOptimality :5
+// }
+
+// var priorParams = {
+// 	honestGamma : 0.5,
+// 	honestDelta : 2,
+// 	kindGamma : 0.5,
+// 	kindDelta : 2
+// }
+
+
+
+// var utterance = "good"
+// var state = "good"
+
+// var predictiveERP = politeRSA(
+// 	{
+// 		utterance: utterance,
+// 		knowledge: state
+// 	},
+// 	RSAopts,
+// 	RSAparams,
+// 	priorParams)
+
+// var goal = "honest"
+// var goalERP = marginalizeERP(predictiveERP, goalDictionary[goal])
+
+// // goalERP
+
+// var responses = 
+
+// responses

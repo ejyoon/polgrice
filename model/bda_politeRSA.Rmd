@@ -1,0 +1,82 @@
+---
+title: "BDA of polite RSA"
+author: "mht"
+date: "November 11, 2015"
+output: html_document
+---
+
+```{r helders}
+library(coda)
+estimate_mode <- function(s) {
+  d <- density(s)
+  return(d$x[which.max(d$y)])
+}
+HPDhi<- function(s){
+  m <- HPDinterval(mcmc(s))
+  return(m["var1","upper"])
+}
+HPDlo<- function(s){
+  m <- HPDinterval(mcmc(s))
+  return(m["var1","lower"])
+}
+options("scipen"=10)   
+```
+
+
+# Model
+
+```{r model.load}
+fpath<- "~/Documents/research/polgrice/model/results/"
+prefix<- "bda-politeRSA-stochVal-sopt-goalBetaPriorsMH"
+
+samples = 100
+burn = 0#samples /2
+m<-read.csv(paste(fpath, prefix, samples, "burn", burn,".csv", sep=''))
+m.samples <- m[rep(row.names(m), m$Probability*samples), 1:5]
+```
+
+
+## Posterior over parameters
+
+```{r posterior.parameters}
+
+m.params <- m.samples %>%
+  filter(Parameter=='parameter') %>%
+  select(-Parameter, -Goal) %>%
+  rename(Goal = State,
+         Parameter = Utterance)
+
+ggplot(m.params, aes(x=Value))+
+  geom_histogram()+
+  facet_wrap(~Goal+Parameter, scales='free')
+
+m.params %>%
+  group_by(Goal,Parameter) %>%
+  summarize(MAP = estimate_mode(Value),
+            credLow = HPDlo(Value),
+            credHigh = HPDhi(Value))
+
+```
+
+## Posterior predictive
+
+```{r posterior.predictives}
+
+lvls = c("terrible", "bad", "okay", "good", "amazing")
+
+m.pp <- m.samples %>%
+  filter(Parameter == 'predictive') %>%
+  group_by(State, Utterance, Goal) %>%
+  summarize(MAP = estimate_mode(Value),
+            credHigh = HPDhi(Value),
+            credLow = HPDlo(Value)) %>%
+  ungroup() %>%
+  mutate(State = factor(State, levels = lvls),
+         Utterance = factor(Utterance, levels = lvls))
+
+ggplot(m.pp, aes(x=Utterance, y = MAP, color = Goal, group= Goal))+
+  geom_line()+
+  geom_errorbar(aes(ymin = credLow, ymax = credHigh), width=0.1)+
+  facet_grid(.~State)
+
+```
