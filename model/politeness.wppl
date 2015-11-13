@@ -16,6 +16,10 @@ var discretizeBeta = function(gamma, delta){
 	}
 	return map(betaPDF, [0.1,0.3,0.5,0.7,0.9])
 }
+
+var fillArray = function(n, val){
+	return repeat(n, function(x){return val})
+}
 ///
 
 
@@ -46,10 +50,20 @@ var stateValues = _.pluck(worlds, "state")
 
 
 
-var beingNiceOrMean = function(nice){
-	var weights = nice ? worldValues : meanWorldValues
-	// console.log(weights)
-	return worldValues[discrete(weights)]
+// var beingNiceOrMean = function(nice, valence){
+// 	worldValues.indexOf(valence)
+// 	var weights = nice ? worldValues : meanWorldValues
+// 	// console.log(weights)
+// 	return worldValues[discrete(weights)]
+// }
+
+var beingNiceOrMean = function(nice, valence){
+	var valenceValues = nice ? worldValues : meanWorldValues
+	var i = valenceValues.indexOf(valence)
+	var k = nice ? valenceValues.slice(i) : valenceValues.slice(i).reverse()
+	// anything of lower valence (for nice) gets low probability
+	var weights = append(fillArray(i, 0.0001), k)
+	return valenceValues[discrete(weights)]
 }
 
 // here, you get the joint goal (communicate state and valence)
@@ -125,7 +139,7 @@ var politeRSA = function(experimentalCondition, opts, RSAparams, priorParams){
 		// if goal is NOT honesty, then choose world in proportion to valence
 	    var valence = goals.honest ? 
 	    				world.valence :
-	    				beingNiceOrMean(goals.kind)
+	    				beingNiceOrMean(goals.kind, world.valence)
 
 	    var valenceVal = stochasticValence ? flip(valence) : valence
 
@@ -174,7 +188,7 @@ var politeRSA = function(experimentalCondition, opts, RSAparams, priorParams){
 var posterior = politeRSA(
 {
 	utterance: "amazing", 
-	knowledge: "amazing"
+	knowledge: "good"
 },
 {
 	stochasticWords:true, 

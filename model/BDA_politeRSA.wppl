@@ -9,12 +9,10 @@ var allUtterances = _.uniq(_.pluck(df,"utterance"))
 var allStates = _.uniq(_.pluck(df,"true_state"))
 var allGoals = ["nice","honest"] // _.uniq(_.pluck(df,"goal"))
 
-
 var RSAopts = {
-	stochasticWords:true, 
-	stochasticValence:true
+	stochasticWords:false, 
+	stochasticValence:false
 }
-
 
 var pre1 = RSAopts.stochasticWords ? 
 				"stochWords-" : ""
@@ -32,6 +30,7 @@ var goalDictionary = {
 
 var dataAnalysis = function(){
 
+	var t0 = utils.getTime()
 	var RSAparams = {
 		speakerOptimality : uniform(0,20)
 	}
@@ -82,19 +81,20 @@ var dataAnalysis = function(){
 	query.add(["parameter","honesty", "delta", "NA"], priorParams.honestDelta)
 	query.add(["parameter","kindness", "gamma", "NA"], priorParams.kindGamma)
 	query.add(["parameter","kindness", "delta", "NA"], priorParams.kindDelta)
-
+	var t1 = utils.getTime()
+	console.log((t1-t0)/1000)
 	return query
 }
 
 
 var inference ='MH'
-var samples = 100
-var burn = 50
+var samples = 200
+var burn = 100
 var resultsERP = MCMC(dataAnalysis, {samples:samples, burn:burn, verbose:true})
 
 console.log('inference complete... printing')
 
-var outfile = "results/bda-politeRSA-"+optPrefix+"sopt-goalBetaPriors"+ 
+var outfile = "results/bda-politeRSA-newNice-"+optPrefix+"sopt-goalBetaPriors"+ 
 						inference + samples + "burn" + burn + ".csv"
 
 utils.erpWriter(resultsERP, outfile)
