@@ -28,11 +28,7 @@
   <button type="button" 
           onclick="this.blur(); 
                    experiment.next();
-                   document.getElementById('form1').hidden=true;
-                   document.getElementById('form2').hidden=false;
-                   document.getElementById('next1').hidden=true;
-                   document.getElementById('next2').hidden=false;
-                                 ">Start</button>
+                                  ">Start</button>
   
   <p class="block-text"><br> <b> Note: you won't be able to preview this HIT before accepting it because it's so short. </b></p>
   
@@ -191,7 +187,7 @@ function pressEnter(e) {
 
     <p id="context" class="block-text"></p>
 
-<span id= "form1">
+<span class= "form">
 <form name= "affectForm1">
     <input type="hidden" name="hSlider0" id="hiddenSliderValue0" />
     <input type="hidden" name="hSlider1" id="hiddenSliderValue1" />
@@ -253,14 +249,14 @@ function pressEnter(e) {
 </span>
     <br> 
 
-        <button type="button" id="next1" onclick="this.blur(); if (ValidateSliderFormPart1(document.affectForm1)) {
+        <button type="button" id="next0" onclick="this.blur(); if (ValidateSliderFormPart1(document.affectForm1)) {
 experiment.next();                                                       
-document.getElementById('next1').hidden=true;
-document.getElementById('next2').hidden=false;
-document.getElementById('form1').hidden=true;
-document.getElementById('form2').hidden=false;}">Next</button>
+document.getElementById('next0').hidden=true;
+document.getElementById('next1').hidden=false;
+document.getElementById('form0').hidden=true;
+document.getElementById('form1').hidden=false;}">Next</button>
 
-<span id="form2">
+<span class="form">
         <p id="question2"></p>
     <form id= "affectForm2" name="stateForm">
     <table width="500" cellspacing="0" cellpadding="0" border="0" align="center" class="text-center">
@@ -325,15 +321,16 @@ document.getElementById('form2').hidden=false;}">Next</button>
     </form>
 -->
     
-    <button type="button" id="next2" onclick="this.blur(); if
+    <button type="button" id="next1" onclick="this.blur(); if
     (ValidateForm(document.stateForm)) {
-document.getElementById('form1').hidden=false;
-document.getElementById('form2').hidden=true;
-document.getElementById('next1').hidden=false;
-document.getElementById('next2').hidden=true;
+document.getElementById('form0').hidden=false;
+document.getElementById('form1').hidden=true;
+document.getElementById('next0').hidden=false;
+document.getElementById('next1').hidden=true;
 }">Next</button>
     </div>
 </div>
+
 
  <!-- The debriefing slide. -->
 

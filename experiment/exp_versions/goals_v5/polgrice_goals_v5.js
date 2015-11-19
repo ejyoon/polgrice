@@ -698,6 +698,15 @@ var experiment = {
     	$('.bar').css('width', (200.0 * numComplete/numTrials) + 'px');
     	$("#trial-num").html(numComplete);
     	$("#total-num").html(numTrials);
+        var formElements = document.querySelectorAll('.form');
+        // Set their ids
+        for (var i = 0; i < formElements.length; i++)
+        formElements[i].id = 'form' + i;
+        document.getElementById('form0').hidden=true;
+        document.getElementById('form1').hidden=false;
+        document.getElementById('next0').hidden=true;
+        document.getElementById('next1').hidden=false;
+        
     	currentTrialNum = numComplete;
     	trial = allTrialOrders[shuffledOrder[numComplete]];
         utterance = trial.utterance;
