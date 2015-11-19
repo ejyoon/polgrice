@@ -139,6 +139,7 @@ var cond = "stateGoalPos"
 //xmlHttp.open( "GET", "https://langcog.stanford.edu/cgi-bin/subject_equalizer/maker_getter.php?conds=" + condCounts +"&filename=" + filename, false );
 //xmlHttp.send( null );
 //var cond = xmlHttp.responseText;
+var formOrder = shuffle([['form0','next0'],['form1','next1']])
 
 var score = shuffle(["nice", "honest", "mean"]);
 var prediction = shuffle(["ask", "like"])
@@ -618,6 +619,8 @@ var experiment = {
     expt: expt,
 //    cond: cond,
     order: [],
+    formOrder: formOrder,
+//    buttonOrder: buttonOrder,
     knowledge: state_knowledge,
     domain: [],
 //    state: [],
@@ -698,10 +701,25 @@ var experiment = {
     	$('.bar').css('width', (200.0 * numComplete/numTrials) + 'px');
     	$("#trial-num").html(numComplete);
     	$("#total-num").html(numTrials);
+
+        // randomize question form order
         var formElements = document.querySelectorAll('.form');
         // Set their ids
-        for (var i = 0; i < formElements.length; i++)
-        formElements[i].id = 'form' + i;
+        formElements[0].id = formOrder[0][0];
+        formElements[1].id = formOrder[1][0];
+        var buttonElements = document.querySelectorAll('.next');
+        // Set their ids
+        buttonElements[0].id = formOrder[0][1];
+        buttonElements[1].id = formOrder[1][1];
+        
+//        var formA = document.getElementsByClassName('.formA');
+//        formA.id = 'form0';
+//        var formB = document.getElementsByClassName('.formB');
+//        formB.id = 'form1';
+//        var nextA = document.getElementsByClassName('.nextA');
+//        nextA.id = 'next0';
+//        var nextB = document.getElementsByClassName('.nextB');
+//        nextB.id = 'next1';        
         document.getElementById('form0').hidden=true;
         document.getElementById('form1').hidden=false;
         document.getElementById('next0').hidden=true;

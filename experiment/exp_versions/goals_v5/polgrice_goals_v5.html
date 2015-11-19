@@ -187,7 +187,7 @@ function pressEnter(e) {
 
     <p id="context" class="block-text"></p>
 
-<span class= "form">
+<span class= "form" name="goalForm">
 <form name= "affectForm1">
     <input type="hidden" name="hSlider0" id="hiddenSliderValue0" />
     <input type="hidden" name="hSlider1" id="hiddenSliderValue1" />
@@ -249,12 +249,12 @@ function pressEnter(e) {
 </span>
     <br> 
 
-        <button type="button" id="next0" onclick="this.blur(); if (ValidateSliderFormPart1(document.affectForm1)) {
+        <button type="button" class="next" name="goalButton" onclick="this.blur(); if (ValidateSliderFormPart1(document.affectForm1)) {
 experiment.next();                                                       
-document.getElementById('next0').hidden=true;
-document.getElementById('next1').hidden=false;
-document.getElementById('form0').hidden=true;
-document.getElementById('form1').hidden=false;}">Next</button>
+document.getElementsByName('goalButton').hidden=true;
+document.getElementsByName('stateButton').hidden=false;
+document.getElementsByName('goalForm').hidden=true;
+document.getElementsByName('stateForm').hidden=false;}">Next</button>
 
 <span class="form">
         <p id="question2"></p>
@@ -321,13 +321,12 @@ document.getElementById('form1').hidden=false;}">Next</button>
     </form>
 -->
     
-    <button type="button" id="next1" onclick="this.blur(); if
+    <button type="button" class="next" onclick="this.blur(); if
     (ValidateForm(document.stateForm)) {
-document.getElementById('form0').hidden=false;
-document.getElementById('form1').hidden=true;
-document.getElementById('next0').hidden=false;
-document.getElementById('next1').hidden=true;
-}">Next</button>
+document.getElementsByName('goalButton').hidden=false;
+document.getElementsByName('stateButton').hidden=true;
+document.getElementsByName('goalForm').hidden=false;
+document.getElementsByName('stateForm').hidden=true;}">Next</button>
     </div>
 </div>
 
