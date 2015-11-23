@@ -374,7 +374,7 @@ speakers25 = shuffle(speakers[24]);
 var sents = {
     utterances: {
         terrible: {
-            sent_utterance: " SP said, \"It wasn terrible!\" </b>"
+            sent_utterance: " SP said, \"It was terrible!\" </b>"
         },        
         bad: {
             sent_utterance: " SP said, <b>\"It was bad!\"</b>"
@@ -708,6 +708,7 @@ var experiment = {
       var prob3 = getRadioCheckedValue(1, "state");
 //      experiment.stateRatings[currentTrialNum] = getRadioCheckedValue(1, "state");
 
+        
       experiment.data.order.push(numComplete);
       experiment.data.utterance.push(trial.utterance);
       experiment.data.domain.push(trial.domain);
@@ -722,6 +723,10 @@ var experiment = {
       
       clearForm(document.forms[0]);
       clearForm(document.forms[1]);
+
+      //Clear stars
+      $(".rating-stars").attr({"style":"width: 0%"});
+        
     }
     if (numComplete >= numTrials) {
     	$('.bar').css('width', (200.0 * numComplete/numTrials) + 'px');
@@ -743,7 +748,12 @@ var experiment = {
         sent_materials = doSentSubs(sents, state, domain, utterance, people, goal);
       showSlide("stage");
       $("#context").html(sent_materials[3] + sent_materials[7] + sent_materials[1] + sent_materials[8] + sent_materials[0]);  
-      $("#question").html(sent_materials[4]);    
+      $("#question").html(sent_materials[4]); 
+      $("#rating-stars").on("click", 
+			    	function(event) {
+						var selection = $("#rating-stars").val();
+			});
+        
       
       for (var i = 0; i <= 4; i++)
       {         
