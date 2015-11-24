@@ -666,6 +666,7 @@ var experiment = {
 //    goalProb0: [],
 //    goalProb1: [],
 //    goalProb2: [],
+    judgment: [],
     stateProb: [],
 //    predictedProb0: [],
 //    predictedProb1: [],
@@ -706,7 +707,9 @@ var experiment = {
 //      var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
 
       var prob3 = getRadioCheckedValue(1, "state");
-//      experiment.stateRatings[currentTrialNum] = getRadioCheckedValue(1, "state");
+//      experiment.stateRatings[currentTrialNum] = getRadioCheckedValue(1, "state");    
+      var judgment = $(".rating-stars").attr("style");
+      judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
 
         
       experiment.data.order.push(numComplete);
@@ -720,6 +723,7 @@ var experiment = {
 //      experiment.data.predictedProb0.push(prob3);
 //      experiment.data.predictedProb1.push(prob4);
       experiment.data.goal.push(goal);
+      experiment.data.judgment.push(judgment);
       
       clearForm(document.forms[0]);
       clearForm(document.forms[1]);

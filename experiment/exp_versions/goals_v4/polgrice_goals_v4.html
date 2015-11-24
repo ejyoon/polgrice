@@ -94,9 +94,7 @@ function ValidateStar(form) {
 		//console.log("judgment: ", judgment); for debuggging
 		if (judgment == 0) {
 			//Else respondent didn't make a response
-		    $("#testMessage").html('<font color="red">' + 
-					   'Please make a response!' + 
-					   '</font>');
+            alert ( "Please answer this question." );
 		    judgment = $(".rating-stars").attr("style");
 		    judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
             return false;
