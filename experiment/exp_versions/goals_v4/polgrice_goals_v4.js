@@ -605,7 +605,7 @@ function doSentSubs (sents, polite, domain, utterance, people, goal)
     question = "Based on what SP said, how likely do you think that <b>SP's goal</b> was to be:";
     
 //    if (prediction[0] == "ask") {
-    question2 = "How would SP <b>actually</b> rate LS's BB using the following scale?";
+    question2 = "How would SP <b>actually</b> rate LS's BB? <br>Please select the number of stars you think SP would actually give:";
     question3 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
 //    } else if (prediction[0] == "like") {
 //    question3 = "Based on what SP said, how likely is it for you to <b>ask for SP's opinion on your own BB</b>?";
@@ -667,7 +667,7 @@ var experiment = {
 //    goalProb1: [],
 //    goalProb2: [],
     judgment: [],
-    stateProb: [],
+//    stateProb: [],
 //    predictedProb0: [],
 //    predictedProb1: [],
     language: [],
@@ -706,7 +706,7 @@ var experiment = {
 //      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
 //      var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
 
-      var prob3 = getRadioCheckedValue(1, "state");
+//      var prob3 = getRadioCheckedValue(1, "state");
 //      experiment.stateRatings[currentTrialNum] = getRadioCheckedValue(1, "state");    
       var judgment = $(".rating-stars").attr("style");
       judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
@@ -719,7 +719,7 @@ var experiment = {
 //      experiment.data.goalProb0.push(prob0);
 //      experiment.data.goalProb1.push(prob1);
 //      experiment.data.goalProb2.push(prob2);
-      experiment.data.stateProb.push(prob3);
+//      experiment.data.stateProb.push(prob3);
 //      experiment.data.predictedProb0.push(prob3);
 //      experiment.data.predictedProb1.push(prob4);
       experiment.data.goal.push(goal);

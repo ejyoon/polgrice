@@ -442,8 +442,8 @@
         readonly: false,
         rtl: false,
         size: 'md',
-        showClear: true,
-        showCaption: true,
+        showClear: false,
+        showCaption: false,
         defaultCaption: '{rating} Stars',
         starCaptions: {
             0.5: 'Half Star',
@@ -479,7 +479,7 @@
         captionElement: null,
         clearElement: null,
         containerClass: null,
-        hoverEnabled: true,
+        hoverEnabled: false,
         hoverChangeCaption: true,
         hoverChangeStars: true,
         hoverOnClear: true
