@@ -34,11 +34,11 @@
 
 .rating-gly-star {
     font-family: 'Glyphicons Halflings';
-    padding-left: 2px;
+    padding-left: 0px;
 }
 
 .rating-gly-star .rating-stars:before {
-    padding-left: 2px;
+    padding-left: 0px;
 }
 
 .rating-lg .rating-gly-star, .rating-lg .rating-gly-star .rating-stars:before {
@@ -46,7 +46,7 @@
 }
 
 .rating-xl .rating-gly-star, .rating-xl .rating-gly-star .rating-stars:before {
-    padding-left: 2px;
+    padding-left: 0px;
 }
 
 .rating-active {
@@ -80,7 +80,7 @@
     top: 0;
     white-space: nowrap;
     overflow: hidden;
-    color: #fde16d;
+    color: #d80000;
     /*transition: all 0.25s ease-out;
     -o-transition: all 0.25s ease-out;
     -moz-transition: all 0.25s ease-out;
@@ -97,7 +97,7 @@
     vertical-align: middle;
     display: inline-block;
     overflow: hidden;
-    color: #fde16d;
+    color: #d80000;
 }
 
 .rating-container-rtl:before {
