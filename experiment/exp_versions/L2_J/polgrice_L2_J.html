@@ -20,7 +20,7 @@
 
     
     
-<div class="progress">
+<div class="progress_white">
 	<div class="bar-wrapper">
 	  <div class="bar"></div>
 	</div>
@@ -32,7 +32,7 @@
   <br>
   <img src="images/stanford.png" alt="Stanford University">
   <p id='logo-text'>Stanford Language and Cognition Lab</p>
-  <p class="block-text">In this experiment, you will read hypothetical interactions between you and someone else. Your job is to judge what their actions or comments mean. You will see something they did or said, and a possible interpretation of that. Then you will be asked to indicate how likely it is that the interpretation is true.
+  <p class="block-text">In this experiment, you will read hypothetical interactions between people. Your job is to judge what their actions or comments mean. You will see something they did or said, and a possible interpretation of that. Then you will be asked to indicate how likely it is that the interpretation is true.
   </p>
   <button type="button" 
           onclick="this.blur(); 
@@ -213,7 +213,7 @@ function pressEnter(e) {
 <div class="slide" id="stage">
     <div id="form">
 
-    <p id="context" class="block-text"></p>
+    <p id="context"></p>
 
 <span id= "form1">
 <form name= "affectForm1">
@@ -222,7 +222,7 @@ function pressEnter(e) {
     <input type="hidden" name="hSlider2" id="hiddenSliderValue2" />
 <!--    <input type="hidden" name="hSlider3" id="hiddenSliderValue3" />-->
 
-    <p id="question" class="block-text"></p>
+    <p id="question"></p>
 
     <table cellspacing="0" cellpadding="0" border="0" align="center"><tbody>
     <tr>
@@ -287,6 +287,14 @@ document.getElementById('form2').hidden=false;}">Next</button>
     	min="0" max="5" step="1" 
     	data-showCaption="true" showClear="false" hoverEnabled="false">
   </div>
+<!--
+  <div align="center" class="star-rating rating-sm rating-active">
+    <div class="rating-container rating-gly-star" data-content="">
+      <div class="rating-stars" data-content="">
+      </div>
+    </div>
+  </div>
+-->
   <!--star-ratings
   ###############################################################
   -->    

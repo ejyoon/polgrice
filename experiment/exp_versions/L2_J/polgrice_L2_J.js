@@ -418,79 +418,79 @@ var sents = {
        presentation: {
             sent_precontext: "Imagine that LS just gave a presentation, ", 
             sent_context: " LS approached SP, who had just seen LS's presentation, and asked \"How was my presentation?\"",
-            sent_context2: " SP saw LS's presentation.",
+            sent_context2: " SP saw the presentation.",
             BB: "presentation",
 	},
 	   cookie: {
             sent_precontext: "Imagine that LS baked some cookies, ", 
             sent_context: " LS approached SP, who had just tasted LS's cookie, and asked \"How did my cookie taste?\"", 
-            sent_context2: " SP tasted LS's cookie.",
+            sent_context2: " SP tasted the cookie.",
             BB: "cookie",
 	},
 	   poem: {
             sent_precontext: "Imagine that LS wrote a poem, ", 
             sent_context: " LS approached SP, who had just read LS's poem, and asked \"How was my poem?\"", 
-            sent_context2: " SP read LS's poem.",
+            sent_context2: " SP read the poem.",
             BB: "poem",
 	},        
 	   cake: {
             sent_precontext: "Imagine that LS baked a cake, ", 
             sent_context: " LS approached SP, who had just tasted LS's cake, and asked \"How did my cake taste?\"", 
-            sent_context2: " SP tasted LS's cake.",
+            sent_context2: " SP tasted the cake.",
             BB: "cake",
 	},
 	   song: {
             sent_precontext: "Imagine that LS composed a song, ", 
             sent_context: " LS approached SP, who had just heard LS's song, and asked \"How was my song?\"", 
-            sent_context2: " SP heard LS's song.",
+            sent_context2: " SP heard the song.",
             BB: "song",
 	},
 	   film: {
             sent_precontext: "Imagine that LS filmed a movie, ", 
             sent_context: " LS approached SP, who had just seen LS's movie, and asked \"How was my movie?\"", 
-            sent_context2: " SP saw LS's movie.",
+            sent_context2: " SP saw the movie.",
             BB: "movie",
 	},
 	   solo: {
             sent_precontext: "Imagine that LS played a cello solo part at a concert, ", 
             sent_context: " LS approached SP, who had just heard LS's solo, and asked \"How was my solo?\"", 
-            sent_context2: " SP heard LS's solo.",
+            sent_context2: " SP heard the solo.",
             BB: "solo",
 	},        
 	   dance: {
             sent_precontext: "Imagine that LS gave a tap dance performance, ", 
             sent_context: " LS approached SP, who had just seen LS's dance, and asked \"How was my dance?\"", 
-            sent_context2: " SP saw LS's dance.",
+            sent_context2: " SP saw the dance.",
             BB: "dance",
 	},   
 	   painting: {
             sent_precontext: "Imagine that LS drew a painting, ", 
             sent_context: " LS approached SP, who had just seen LS's painting, and asked \"How was my painting?\"", 
-            sent_context2: " SP saw LS's painting.",
+            sent_context2: " SP saw the painting.",
             BB: "painting",
 	}, 
 	   monologue: {
             sent_precontext: "Imagine that LS gave a monologue during a school play, ", 
             sent_context: " LS approached SP, who had just heard LS's monologue, and asked \"How was my monologue?\"", 
-            sent_context2: " SP heard LS's monologue.",
+            sent_context2: " SP heard the monologue.",
             BB: "monologue",
 	},
 	   app: {
             sent_precontext: "Imagine that LS designed a mobile app, ", 
             sent_context: " LS approached SP, who looked at LS's mobile app, and asked \"How was my app?\"", 
-            sent_context2: " SP saw LS's app.",
+            sent_context2: " SP saw the app.",
             BB: "app",
 	},
 	   review: {
             sent_precontext: "Imagine that LS wrote a review for a book, ", 
             sent_context: " LS approached SP, who had just read LS's review, and asked \"How was my review?\"", 
-            sent_context2: " SP read LS's review.",
+            sent_context2: " SP read the review.",
             BB: "review",
 	},
 	   recital: {
             sent_precontext: "Imagine that LS had a piano recital, ", 
             sent_context: " LS approached SP, who had just attended LS's recital, and asked \"How was my recital performance?\"", 
-            sent_context2: " SP attended LS's recital.",
+            sent_context2: " SP attended the recital.",
             BB: "recital performance",
 	},
     },
@@ -688,7 +688,7 @@ var experiment = {
     state: [],
     utterance: [],
     people: [],
-    goal: [],
+//    goal: [],
 //    context: [],
 //    goal0: score[0],
 //    goal1: score[1],
@@ -757,7 +757,7 @@ var experiment = {
 //      experiment.data.stateProb.push(prob3);
 //      experiment.data.predictedProb0.push(prob3);
 //      experiment.data.predictedProb1.push(prob4);
-      experiment.data.goal.push(goal);
+//      experiment.data.goal.push(goal);
       experiment.data.judgment.push(judgment);
       
       clearForm(document.forms[0]);
