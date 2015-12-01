@@ -4,12 +4,21 @@
     <script src="jquery-1.11.2.min.js"></script>
     <script src="mmturkey-0.6.js"></script>
     <link rel="stylesheet" href="style.css" />
+    <!--Star-ratings-->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link href="star-rating.css" media="all" rel="stylesheet" type="text/css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="star-rating.js" type="text/javascript"></script>
+    <!--Star-ratings-->   
+    <!--Slider-ratings-->   
     <link type="text/css" rel="stylesheet" href="sliders/jquery-ui.css" />
-    </p>
     <script src="sliders/jquery.min.js"></script> 
     <script src="sliders/jquery-ui.min.js"></script>
-</head>
+    <!--Slider-ratings-->   
+    </head>
 <body>
+
+    
     
 <div class="progress">
 	<div class="bar-wrapper">
@@ -28,7 +37,11 @@
   <button type="button" 
           onclick="this.blur(); 
                    experiment.next();
-                                  ">Start</button>
+                   document.getElementById('form1').hidden=true;
+                   document.getElementById('form2').hidden=false;
+                   document.getElementById('next1').hidden=true;
+                   document.getElementById('next2').hidden=false;
+                                 ">Start</button>
   
   <p class="block-text"><br> <b> Note: you won't be able to preview this HIT before accepting it because it's so short. </b></p>
   
@@ -73,6 +86,21 @@ function ValidateSliderFormPart2(form){
       }
     }
     return true;
+}
+    
+function ValidateStar(form) {
+		var judgment = $(".rating-stars").attr("style");
+		judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
+		//console.log("judgment: ", judgment); for debuggging
+		if (judgment == 0) {
+			//Else respondent didn't make a response
+            alert ( "Please answer this question." );
+		    judgment = $(".rating-stars").attr("style");
+		    judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
+            return false;
+		} else {
+            return true;
+        }
 }
 
 
@@ -187,7 +215,7 @@ function pressEnter(e) {
 
     <p id="context" class="block-text"></p>
 
-<span class= "form" name="goalForm">
+<span id= "form1">
 <form name= "affectForm1">
     <input type="hidden" name="hSlider0" id="hiddenSliderValue0" />
     <input type="hidden" name="hSlider1" id="hiddenSliderValue1" />
@@ -249,15 +277,15 @@ function pressEnter(e) {
 </span>
     <br> 
 
-        <button type="button" class="next" name="goalButton" onclick="this.blur(); if (ValidateSliderFormPart1(document.affectForm1)) {
-experiment.next();                                                       
-document.getElementsByName('goalButton').hidden=true;
-document.getElementsByName('stateButton').hidden=false;
-document.getElementsByName('goalForm').hidden=true;
-document.getElementsByName('stateForm').hidden=false;}">Next</button>
+        <button type="button" id="next1" onclick="this.blur(); if (ValidateSliderFormPart1(document.affectForm1)) {
+document.getElementById('next1').hidden=true;
+document.getElementById('next2').hidden=false;
+document.getElementById('form1').hidden=true;
+document.getElementById('form2').hidden=false;}">Next</button>
 
-<span class="form">
+<span id="form2">
         <p id="question2"></p>
+<!--
     <form id= "affectForm2" name="stateForm">
     <table width="500" cellspacing="0" cellpadding="0" border="0" align="center" class="text-center">
     <tr>
@@ -277,6 +305,21 @@ document.getElementsByName('stateForm').hidden=false;}">Next</button>
     </tr>
 </table>
 </form>
+-->
+    
+ <!--
+  ###############################################################
+  Star-ratings
+  http://www.jqueryscript.net/other/Simple-jQuery-Star-Rating-System-For-Bootstrap-3.html
+  -->
+  <div id="test" name= "star" align="center">
+    <input id="rating-system" type="number" class="rating" 
+    	min="0" max="5" step="1" 
+    	data-showCaption="true" showClear="false" hoverEnabled="false">
+  </div>
+  <!--star-ratings
+  ###############################################################
+  -->    
     
 <!--
     <p id="question2" class="block-text"></p>
@@ -321,15 +364,12 @@ document.getElementsByName('stateForm').hidden=false;}">Next</button>
     </form>
 -->
     
-    <button type="button" class="next" onclick="this.blur(); if
-    (ValidateForm(document.stateForm)) {
-document.getElementsByName('goalButton').hidden=false;
-document.getElementsByName('stateButton').hidden=true;
-document.getElementsByName('goalForm').hidden=false;
-document.getElementsByName('stateForm').hidden=true;}">Next</button>
+    <button type="button" id="next2" onclick="this.blur(); if
+    (ValidateStar(document.star)) {
+experiment.next();                                                       
+}">Next</button>
     </div>
 </div>
-
 
  <!-- The debriefing slide. -->
 
@@ -362,7 +402,7 @@ document.getElementsByName('stateForm').hidden=true;}">Next</button>
 <div class="slide" id="finished">
   You're finished - thanks for participating! Submitting to Mechanical Turk...
 </div>
-<script src="polgrice_goals_v5.js"></script>
+<script src="polgrice_L2_J.js"></script>
 
 </body>
 </html>
