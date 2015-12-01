@@ -154,25 +154,22 @@ var prediction = shuffle(["ask", "like"])
 var domains1 = 
     shuffle(["poem", "cake", "cookie", "presentation", "song", "film", "solo", "monologue", "dance", "painting", "app", "review", "recital"]);
 var domains2 = 
-    shuffle(["poem", "cake"]);
-
-//var domains2 = 
-//    shuffle(["poem", "cake", "cookie", "presentation", "song", "film", "solo", "monologue", "dance", "painting", "app", "review", "recital"]);
+    shuffle(["poem", "cake", "cookie", "presentation", "song", "film", "solo", "monologue", "dance", "painting", "app", "review", "recital"]);
 var domains = domains1.concat(domains2)
 
 //var states = 
 //    ["terrible", "bad", "terrible", "bad", "terrible", "bad"];
 //
 var states1 = 
-    ["terrible", "bad", "okay", "good", "amazing"];
+    ["TERRIBLE", "BAD", "OKAY", "GOOD", "AMAZING"];
 var states2 = 
-    ["bad", "okay", "good", "amazing", "terrible"];
+    ["BAD", "OKAY", "GOOD", "AMAZING","TERRIBLE"];
 var states3 = 
-    ["okay", "good", "amazing", "terrible", "bad"];
+    ["OKAY", "GOOD", "AMAZING","TERRIBLE","BAD"];
 var states4 = 
-    ["good", "amazing", "terrible", "bad", "okay"];
+    ["GOOD", "AMAZING","TERRIBLE","BAD","OKAY"];
 var states5 = 
-    ["amazing", "terrible", "bad", "okay", "good"];
+    ["AMAZING","TERRIBLE","BAD","OKAY","GOOD"];
 var states = states1.concat(states2, states3, states4, states5)
 
 var utterances1 = 
@@ -181,11 +178,11 @@ var utterances2 =
     ["terrible", "bad", "okay", "good", "amazing"];
 var utterances3 = 
     ["terrible", "bad", "okay", "good", "amazing"];
-//var utterances4 = 
-//    ["terrible", "bad", "okay", "good", "amazing"];
-//var utterances5 = 
-//    ["terrible", "bad", "okay", "good", "amazing"];
-var utterances = utterances1.concat(utterances2, utterances3)
+var utterances4 = 
+    ["terrible", "bad", "okay", "good", "amazing"];
+var utterances5 = 
+    ["terrible", "bad", "okay", "good", "amazing"];
+var utterances = utterances1.concat(utterances2, utterances3,utterances4,utterances5)
 
 var goals = 
     ["nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean"];
@@ -372,6 +369,23 @@ speakers24 = shuffle(speakers[23]);
 speakers25 = shuffle(speakers[24]);
 
 var sents = {
+    states: {
+        TERRIBLE: {
+            state: "20"
+        },
+        BAD: {
+            state: "40"
+        },
+        OKAY: {
+            state: "60"
+        },
+        GOOD: {
+            state: "80"
+        },
+        AMAZING: {
+            state: "100"
+        }
+    },
     utterances: {
         terrible: {
             sent_utterance: " SP said, \"It was terrible!\" </b>"
@@ -457,23 +471,23 @@ var sents = {
             BB: "recital performance",
 	},
     },
-    states: {
-        terrible: {
-            state: " <b>everyone thought LS's BB was terrible</b>,"        
-        },
-        bad: {
-            state: " <b>everyone thought LS's BB was bad</b>,"        
-        },
-        okay: {
-            state: " <b>everyone thought LS's BB was just okay</b>,"        
-        },
-        good: {
-            state: " <b>everyone thought LS's BB was good</b>,"        
-        },
-        amazing: {
-            state: " <b>everyone thought LS's BB was amazing</b>,"        
-        },
-    },
+//    states: {
+//        terrible: {
+//            state: " <b>everyone thought LS's BB was terrible</b>,"        
+//        },
+//        bad: {
+//            state: " <b>everyone thought LS's BB was bad</b>,"        
+//        },
+//        okay: {
+//            state: " <b>everyone thought LS's BB was just okay</b>,"        
+//        },
+//        good: {
+//            state: " <b>everyone thought LS's BB was good</b>,"        
+//        },
+//        amazing: {
+//            state: " <b>everyone thought LS's BB was amazing</b>,"        
+//        },
+//    },
     goals: {
         nice: {
             goal: " <b>SP wanted to be nice, so "
@@ -652,7 +666,7 @@ var experiment = {
     order: [],
     knowledge: state_knowledge,
     domain: [],
-//    state: [],
+    state: [],
     utterance: [],
     people: [],
     goal: [],
@@ -699,9 +713,9 @@ var experiment = {
 
     if (numComplete > 0) {
 
-      var prob0 = parseInt(document.getElementById("hiddenSliderValue0").value) / 40.00;
-      var prob1 = parseInt(document.getElementById("hiddenSliderValue1").value) / 40.00;
-      var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
+//      var prob0 = parseInt(document.getElementById("hiddenSliderValue0").value) / 40.00;
+//      var prob1 = parseInt(document.getElementById("hiddenSliderValue1").value) / 40.00;
+//      var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
 //      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
 //      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
 //      var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
@@ -710,12 +724,14 @@ var experiment = {
 //      experiment.stateRatings[currentTrialNum] = getRadioCheckedValue(1, "state");    
 //      var judgment = $(".rating-stars").attr("style");
 //      judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
-      var judgment = getRadioCheckedValue(1, "judgment")
+//      var judgment = getRadioCheckedValue(0, "judgment");
+//      var judgment = document.getElementsByName("judgment");
+      var judgment = getRadioCheckedValue(1, "judgment");
         
       experiment.data.order.push(numComplete);
       experiment.data.utterance.push(trial.utterance);
       experiment.data.domain.push(trial.domain);
-//      experiment.data.state.push(trial.state);
+      experiment.data.state.push(trial.state);
 //      experiment.data.goalProb0.push(prob0);
 //      experiment.data.goalProb1.push(prob1);
 //      experiment.data.goalProb2.push(prob2);
@@ -753,10 +769,13 @@ var experiment = {
       showSlide("stage");
       $("#context").html(sent_materials[3] + sent_materials[7] + sent_materials[1] + sent_materials[8] + sent_materials[0]);  
       $("#question").html(sent_materials[4]); 
-      $("#rating-stars").on("click", 
-			    	function(event) {
-						var selection = $("#rating-stars").val();
-			});
+      $(".rating-stars").attr("style","width: " +
+							    state + "%");
+
+        //      $("#rating-stars").on("click", 
+//			    	function(event) {
+//						var selection = $("#rating-stars").val();
+//			});
         
       
       for (var i = 0; i <= 4; i++)
