@@ -363,9 +363,23 @@ document.getElementById('form2').hidden=false;}">Next</button>
     
     </form>
 -->
-    
+<br>
+<form name="judgment">
+<table align = "center"><tr>
+<td align="center">
+  <tr>
+  	<td>No</td>
+    <td>Yes</td>    
+  </tr>
+  	<td><input type="radio" name="judgment" value = "0"></td>
+    <td><input type="radio" name="judgment" value = "1"></td>
+  </tr>
+</table>
+</form>
+
+    <br>
     <button type="button" id="next2" onclick="this.blur(); if
-    (ValidateStar(document.star)) {
+    (ValidateForm(document.judgment)) {
 experiment.next();                                                       
 }">Next</button>
     </div>

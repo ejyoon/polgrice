@@ -110,6 +110,10 @@ button[disabled] {
     line-height:26px;
 }
 
+td {
+  text-align: center;
+  width: 60px;
+}
 
 #form {
     text-align: center;
