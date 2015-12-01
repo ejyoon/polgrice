@@ -160,16 +160,26 @@ var domains = domains1.concat(domains2)
 //var states = 
 //    ["terrible", "bad", "terrible", "bad", "terrible", "bad"];
 //
+//var states1 = 
+//    ["TERRIBLE", "BAD", "OKAY", "GOOD", "AMAZING"];
+//var states2 = 
+//    ["BAD", "OKAY", "GOOD", "AMAZING","TERRIBLE"];
+//var states3 = 
+//    ["OKAY", "GOOD", "AMAZING","TERRIBLE","BAD"];
+//var states4 = 
+//    ["GOOD", "AMAZING","TERRIBLE","BAD","OKAY"];
+//var states5 = 
+//    ["AMAZING","TERRIBLE","BAD","OKAY","GOOD"];
 var states1 = 
-    ["TERRIBLE", "BAD", "OKAY", "GOOD", "AMAZING"];
+    ["heart1", "heart2", "heart3", "heart4", "heart5"];
 var states2 = 
-    ["BAD", "OKAY", "GOOD", "AMAZING","TERRIBLE"];
+    ["heart2", "heart3", "heart4", "heart5","heart1"];
 var states3 = 
-    ["OKAY", "GOOD", "AMAZING","TERRIBLE","BAD"];
+    ["heart3", "heart4", "heart5","heart1", "heart2"];
 var states4 = 
-    ["GOOD", "AMAZING","TERRIBLE","BAD","OKAY"];
+    ["heart4", "heart5","heart1", "heart2", "heart3"];
 var states5 = 
-    ["AMAZING","TERRIBLE","BAD","OKAY","GOOD"];
+    ["heart5","heart1", "heart2", "heart3", "heart4"];
 var states = states1.concat(states2, states3, states4, states5)
 
 var utterances1 = 
@@ -370,37 +380,37 @@ speakers25 = shuffle(speakers[24]);
 
 var sents = {
     states: {
-        TERRIBLE: {
+        heart1: {
             state: "20"
         },
-        BAD: {
+        heart2: {
             state: "40"
         },
-        OKAY: {
+        heart3: {
             state: "60"
         },
-        GOOD: {
+        heart4: {
             state: "80"
         },
-        AMAZING: {
+        heart5: {
             state: "100"
         }
     },
     utterances: {
         terrible: {
-            sent_utterance: " SP said, \"It was terrible!\" </b>"
+            sent_utterance: " Do you think SP thought LS's BB was <b>terrible</b>?"
         },        
         bad: {
-            sent_utterance: " SP said, <b>\"It was bad!\"</b>"
+            sent_utterance: " Do you think SP thought LS's BB was <b>bad</b>?"
         },        
         okay: {
-            sent_utterance: " SP said, <b>\"It was okay!\"</b>" 
+            sent_utterance: " Do you think SP thought LS's BB was <b>okay</b>?" 
         },
         good: {
-            sent_utterance: " SP said, <b>\"It was good!\"</b>" 
+            sent_utterance: " Do you think SP thought LS's BB was <b>good</b>?" 
         },
         amazing: {
-            sent_utterance: " SP said, \"It was amazing!\"</b>" 
+            sent_utterance: " Do you think SP thought LS's BB was <b>amazing</b>?" 
         },
     },
     
@@ -408,66 +418,79 @@ var sents = {
        presentation: {
             sent_precontext: "Imagine that LS just gave a presentation, ", 
             sent_context: " LS approached SP, who had just seen LS's presentation, and asked \"How was my presentation?\"",
+            sent_context2: " SP saw LS's presentation.",
             BB: "presentation",
 	},
 	   cookie: {
             sent_precontext: "Imagine that LS baked some cookies, ", 
             sent_context: " LS approached SP, who had just tasted LS's cookie, and asked \"How did my cookie taste?\"", 
+            sent_context2: " SP tasted LS's cookie.",
             BB: "cookie",
 	},
 	   poem: {
             sent_precontext: "Imagine that LS wrote a poem, ", 
             sent_context: " LS approached SP, who had just read LS's poem, and asked \"How was my poem?\"", 
+            sent_context2: " SP read LS's poem.",
             BB: "poem",
 	},        
 	   cake: {
             sent_precontext: "Imagine that LS baked a cake, ", 
             sent_context: " LS approached SP, who had just tasted LS's cake, and asked \"How did my cake taste?\"", 
+            sent_context2: " SP tasted LS's cake.",
             BB: "cake",
 	},
 	   song: {
             sent_precontext: "Imagine that LS composed a song, ", 
             sent_context: " LS approached SP, who had just heard LS's song, and asked \"How was my song?\"", 
+            sent_context2: " SP heard LS's song.",
             BB: "song",
 	},
 	   film: {
             sent_precontext: "Imagine that LS filmed a movie, ", 
             sent_context: " LS approached SP, who had just seen LS's movie, and asked \"How was my movie?\"", 
+            sent_context2: " SP saw LS's movie.",
             BB: "movie",
 	},
 	   solo: {
             sent_precontext: "Imagine that LS played a cello solo part at a concert, ", 
             sent_context: " LS approached SP, who had just heard LS's solo, and asked \"How was my solo?\"", 
+            sent_context2: " SP heard LS's solo.",
             BB: "solo",
 	},        
 	   dance: {
             sent_precontext: "Imagine that LS gave a tap dance performance, ", 
             sent_context: " LS approached SP, who had just seen LS's dance, and asked \"How was my dance?\"", 
+            sent_context2: " SP saw LS's dance.",
             BB: "dance",
 	},   
 	   painting: {
             sent_precontext: "Imagine that LS drew a painting, ", 
             sent_context: " LS approached SP, who had just seen LS's painting, and asked \"How was my painting?\"", 
+            sent_context2: " SP saw LS's painting.",
             BB: "painting",
 	}, 
 	   monologue: {
             sent_precontext: "Imagine that LS gave a monologue during a school play, ", 
             sent_context: " LS approached SP, who had just heard LS's monologue, and asked \"How was my monologue?\"", 
+            sent_context2: " SP heard LS's monologue.",
             BB: "monologue",
 	},
 	   app: {
             sent_precontext: "Imagine that LS designed a mobile app, ", 
             sent_context: " LS approached SP, who looked at LS's mobile app, and asked \"How was my app?\"", 
+            sent_context2: " SP saw LS's app.",
             BB: "app",
 	},
 	   review: {
             sent_precontext: "Imagine that LS wrote a review for a book, ", 
             sent_context: " LS approached SP, who had just read LS's review, and asked \"How was my review?\"", 
+            sent_context2: " SP read LS's review.",
             BB: "review",
 	},
 	   recital: {
             sent_precontext: "Imagine that LS had a piano recital, ", 
             sent_context: " LS approached SP, who had just attended LS's recital, and asked \"How was my recital performance?\"", 
+            sent_context2: " SP attended LS's recital.",
             BB: "recital performance",
 	},
     },
@@ -607,7 +630,7 @@ function doSentSubs (sents, polite, domain, utterance, people, goal)
 {
     utterance = sents["utterances"][utterance]["sent_utterance"];
     precontext = sents["domains"][domain]["sent_precontext"];
-    context = sents["domains"][domain]["sent_context"];
+    context = sents["domains"][domain]["sent_context2"];
     state = sents["states"][state]["state"]
     goal = sents["goals"][goal]["goal"]
     if (state_knowledge == "known") {
@@ -615,21 +638,16 @@ function doSentSubs (sents, polite, domain, utterance, people, goal)
     } else if (state_knowledge == "unknown") {
         knowledge = " but had no idea what people thought about it."
     }
-    
-    question = "Based on what SP said, how likely do you think that <b>SP's goal</b> was to be:";
-    
-//    if (prediction[0] == "ask") {
+
+    feeling = "Here's how SP felt about LS's BB:"
+    question = "Based on what SP said, how likely do you think that <b>SP's goal</b> was to be:"     
     question2 = "How would SP <b>actually</b> rate LS's BB? <br>Please select the number of stars you think SP would actually give:";
     question3 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
-//    } else if (prediction[0] == "like") {
-//    question3 = "Based on what SP said, how likely is it for you to <b>ask for SP's opinion on your own BB</b>?";
-//    question2 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
-//    }    
     BB = sents["domains"][domain]["BB"]; //Item 2
     SP = sents["people"][people]["SP"]; //speaker
     LS = sents["people"][people]["LS"]; //addressee
  
-    utterance = utterance.replace("BB",BB).replace("SP",SP);
+    utterance = utterance.replace("BB",BB).replace("SP",SP).replace("LS",LS);
     context = context.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);
     precontext = precontext.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);
     state = state.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);
@@ -638,9 +656,10 @@ function doSentSubs (sents, polite, domain, utterance, people, goal)
     question3 = question3.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     knowledge = knowledge.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     goal = goal.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
+    feeling = feeling.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
 
     
-    return [utterance, context, state, precontext, question, question2, question3, knowledge, goal];
+    return [utterance, context, state, precontext, question, question2, question3, knowledge, goal, feeling];
 }
 
 var numConditions = allConditions.length;
@@ -767,8 +786,8 @@ var experiment = {
         goal = trial.goal;
         sent_materials = doSentSubs(sents, state, domain, utterance, people, goal);
       showSlide("stage");
-      $("#context").html(sent_materials[3] + sent_materials[7] + sent_materials[1] + sent_materials[8] + sent_materials[0]);  
-      $("#question").html(sent_materials[4]); 
+      $("#context").html(sent_materials[3] + " and" + sent_materials[1]);  
+      $("#question").html(sent_materials[9]); 
       $(".rating-stars").attr("style","width: " +
 							    state + "%");
 
@@ -782,8 +801,8 @@ var experiment = {
       {         
         $("#score" + 10*i).html(score[i]);
       }
-      $("#question2").html(sent_materials[5]);    
-      $("#question3").html(sent_materials[6]);    
+      $("#question2").html(sent_materials[9]);    
+      $("#question3").html(sent_materials[0]);    
       numComplete++;      
     }}
   }
