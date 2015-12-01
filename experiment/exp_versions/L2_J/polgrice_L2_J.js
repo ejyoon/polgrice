@@ -708,9 +708,9 @@ var experiment = {
 
 //      var prob3 = getRadioCheckedValue(1, "state");
 //      experiment.stateRatings[currentTrialNum] = getRadioCheckedValue(1, "state");    
-      var judgment = $(".rating-stars").attr("style");
-      judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
-
+//      var judgment = $(".rating-stars").attr("style");
+//      judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
+      var judgment = getRadioCheckedValue(1, "judgment")
         
       experiment.data.order.push(numComplete);
       experiment.data.utterance.push(trial.utterance);
