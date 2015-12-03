@@ -1,0 +1,95 @@
+---
+title: "polgrice- utterance judgment ana"
+author: "Erica Yoon"
+date: "Dec 1, 2015"
+output: html_document
+---
+
+Expt 4: given true state (represented by heart ratings), did SP think the presentation was 'terrible/bad/okay/good/amazing'?
+
+```{r warning=FALSE, message=FALSE}
+rm(list = ls())
+library(jsonlite)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(binom)
+library(bootstrap)
+source("/Users/ericang/Documents/Research/polite_probmods/experiment/data_analysis/helper/useful.R")
+
+raw.data.path <- "/Users/ericang/Documents/Research/polite_probmods/polite_adj/experiment/exp_versions/4_L2_J/production-results/"
+
+## LOOP TO READ IN FILES
+all.data <- data.frame()
+files <- dir(raw.data.path,pattern="*.json")
+
+for (file.name in files) {
+  
+  ## these are the two functions that are most meaningful
+  json_file <- readLines(paste(raw.data.path,file.name,sep=""))
+  json_file_str = paste(json_file, collapse = "")
+  json_file_str = gsub(",}", "}", json_file_str)
+  jso = jsonlite::fromJSON(json_file_str)
+  jso$answers$data$people <- NULL
+  jso1 <- data.frame(jso)
+  jso1$subid <- substring(file.name, 1, 6)
+  
+  ## now here's where data get bound together
+  all.data <- rbind(all.data, jso1)
+}
+```
+
+Filter out participants and clean up.
+
+```{r}
+d <- all.data %>%
+  select(subid, answers.data.order, answers.data.domain, answers.data.state, answers.data.utterance, answers.data.judgment) %>%
+  mutate(trial = answers.data.order) %>%
+  mutate(item = answers.data.domain) %>%
+  mutate(state = substr(answers.data.state, 6, 6)) %>%
+  mutate(utterance = answers.data.utterance) %>%
+  mutate(judgment = answers.data.judgment) %>%
+  select(subid, trial, item, state, utterance, judgment)
+
+d$subid <- as.factor(d$subid)
+d$trial <- as.numeric(d$trial)
+d$state <- as.factor(d$state) 
+d$utterance <- as.factor(d$utterance)
+d$judgment <- as.numeric(as.character(d$judgment))
+
+d$utterance <- ordered(d$utterance, levels = c("terrible", "bad", "okay", "good", "amazing"))
+```
+
+```{r, fig.width = 10, fig.height = 4}
+## for bootstrapping 95% confidence intervals
+theta <- function(x,xdata,na.rm=T) {mean(xdata[x],na.rm=na.rm)}
+ci.low <- function(x,na.rm=T) {
+  mean(x,na.rm=na.rm) - quantile(bootstrap(1:length(x),1000,theta,x,na.rm=na.rm)$thetastar,.025,na.rm=na.rm)}
+ci.high <- function(x,na.rm=T) {
+  quantile(bootstrap(1:length(x),1000,theta,x,na.rm=na.rm)$thetastar,.975,na.rm=na.rm) - mean(x,na.rm=na.rm)}
+
+# goal_prob ~ true_state + utterance + goal
+mss <- d %>%
+  group_by(state, utterance, subid) %>%
+  summarize(
+            judgment = mean(judgment, na.rm=TRUE)
+          )
+ms <- aggregate(judgment ~ state + utterance, mss, mean)
+ms$cih <- aggregate(judgment ~ state + utterance, mss, ci.high)$judgment
+ms$cil <- aggregate(judgment ~ state + utterance, mss, ci.low)$judgment
+```
+
+# judgment ~ state + utterance
+
+```{r echo = FALSE, fig.width = 12, fig.height = 4}
+qplot(state, judgment, 
+      colour = utterance,
+      data=ms) + 
+  geom_line(aes(group=utterance)) +
+  facet_grid(.~utterance) +
+  xlab("state") +
+  ylab("judgment") +
+  ggtitle("Semantic distribution of words (state of 1 = worst, 1-heart rating)") +
+  geom_errorbar(aes(ymin=judgment-cil,ymax=judgment+cih,width=.1))
+```
+

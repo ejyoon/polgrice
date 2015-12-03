@@ -128,10 +128,10 @@ function getRadioCheckedValue(formNum, radio_name)
 
 // CONDITION ASSIGNMENT
 // var cond = random(3)+1;
-var expt = "politeImp_statePos";
+var expt = "polgrice_uttJudg";
 //var cond = random(2)+1;
 //var cond = 1;
-var cond = "statePos"
+var cond = "uttJudg"
 
 // call the maker getter to get the cond variable 
 //var xmlHttp = null;
@@ -195,7 +195,7 @@ var utterances5 =
 var utterances = utterances1.concat(utterances2, utterances3,utterances4,utterances5)
 
 var goals = 
-    ["nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean"];
+    ["nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean","nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean"];
 
     var allConditions = 
 shuffle(
@@ -293,56 +293,66 @@ shuffle(
  "people": "people15",
  "goal": goals[14],
 },
-//{"domain": domains[15],
-// "state": states[15],
-// "utterance": utterances[15],
-// "people": "people16",
-//},
-//{"domain": domains[16],
-// "state": states[16],
-// "utterance": utterances[16],
-// "people": "people17",
-//},
-//{"domain": domains[17],
-// "state": states[17],
-// "utterance": utterances[17],
-// "people": "people18",
-//},
-//{"domain": domains[18],
-// "state": states[18],
-// "utterance": utterances[18],
-// "people": "people19",
-//},
-//{"domain": domains[19],
-// "state": states[19],
-// "utterance": utterances[19],
-// "people": "people20",
-//},
-//{"domain": domains[20],
-// "state": states[20],
-// "utterance": utterances[20],
-// "people": "people21",
-//},
-//{"domain": domains[21],
-// "state": states[21],
-// "utterance": utterances[21],
-// "people": "people22",
-//},
-//{"domain": domains[22],
-// "state": states[22],
-// "utterance": utterances[22],
-// "people": "people23",
-//},
-//{"domain": domains[23],
-// "state": states[23],
-// "utterance": utterances[23],
-// "people": "people24",
-//},
-//{"domain": domains[24],
-// "state": states[24],
-// "utterance": utterances[24],
-// "people": "people25",
-//}
+{"domain": domains[15],
+ "state": states[15],
+ "utterance": utterances[15],
+ "people": "people16",
+ "goal": goals[15],
+},
+{"domain": domains[16],
+ "state": states[16],
+ "utterance": utterances[16],
+ "people": "people17",
+ "goal": goals[16],
+},
+{"domain": domains[17],
+ "state": states[17],
+ "utterance": utterances[17],
+ "people": "people18",
+ "goal": goals[17],
+},
+{"domain": domains[18],
+ "state": states[18],
+ "utterance": utterances[18],
+ "people": "people19",
+ "goal": goals[18],
+},
+{"domain": domains[19],
+ "state": states[19],
+ "utterance": utterances[19],
+ "people": "people20",
+ "goal": goals[19],
+},
+{"domain": domains[20],
+ "state": states[20],
+ "utterance": utterances[20],
+ "people": "people21",
+ "goal": goals[20],
+},
+{"domain": domains[21],
+ "state": states[21],
+ "utterance": utterances[21],
+ "people": "people22",
+ "goal": goals[21],
+},
+{"domain": domains[22],
+ "state": states[22],
+ "utterance": utterances[22],
+ "people": "people23",
+ "goal": goals[22],
+},
+{"domain": domains[23],
+ "state": states[23],
+ "utterance": utterances[23],
+ "people": "people24",
+ "goal": goals[23],
+},
+{"domain": domains[24],
+ "state": states[24],
+ "utterance": utterances[24],
+ "people": "people25",
+ "goal": goals[24],
+}
     ])
 ]); 
 //}
@@ -683,7 +693,7 @@ var experiment = {
     expt: expt,
 //    cond: cond,
     order: [],
-    knowledge: state_knowledge,
+//    knowledge: state_knowledge,
     domain: [],
     state: [],
     utterance: [],
