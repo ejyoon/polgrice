@@ -605,7 +605,7 @@ function doSentSubs (sents, polite, domain, utterance, people, goal)
     question = "Based on what SP said, how likely do you think that <b>SP's goal</b> was to be:";
     
 //    if (prediction[0] == "ask") {
-    question2 = "How would SP <b>actually</b> rate LS's BB? <br>Please select the number of stars you think SP would actually give:";
+    question2 = "How do you think SP <b>actually</b> felt about LS's BB?";
     question3 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
 //    } else if (prediction[0] == "like") {
 //    question3 = "Based on what SP said, how likely is it for you to <b>ask for SP's opinion on your own BB</b>?";

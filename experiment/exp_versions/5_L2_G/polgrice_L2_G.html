@@ -209,8 +209,37 @@ function pressEnter(e) {
 <div class="slide" id="stage">
     <div id="form">
 
-    <p id="context"></p>
+    <p id="context" class="block-text"></p>
 
+<span id="form2">
+<p id="question2"></p>   
+ <!--
+  ###############################################################
+  Star-ratings
+  http://www.jqueryscript.net/other/Simple-jQuery-Star-Rating-System-For-Bootstrap-3.html
+  -->
+  <div id="test" name= "star" align="center">
+    <input id="rating-system" type="number" class="rating" 
+    	min="0" max="5" step="1" 
+    	data-showCaption="true" showClear="false" hoverEnabled="false">
+  </div>
+<!--
+  <div align="center" class="star-rating rating-sm rating-active">
+    <div class="rating-container rating-gly-star" data-content="">
+      <div class="rating-stars" data-content="">
+      </div>
+    </div>
+  </div>
+-->
+  <!--star-ratings
+  ###############################################################
+  -->  
+<br>
+<p id="context2"></p>
+
+<br>
+<p id="question"></p>
+        
 <span id= "form1">
 <form name= "affectForm1">
     <input type="hidden" name="hSlider0" id="hiddenSliderValue0" />
@@ -218,9 +247,9 @@ function pressEnter(e) {
     <input type="hidden" name="hSlider2" id="hiddenSliderValue2" />
 <!--    <input type="hidden" name="hSlider3" id="hiddenSliderValue3" />-->
 
-    <p id="question"></p>
+<!--    <p id="question"></p>-->
 
-    <table cellspacing="0" cellpadding="0" border="0" align="center"><tbody>
+    <table width= "500" cellspacing="0" cellpadding="0" border="0" align="center"><tbody>
     <tr>
       <td align="right" height="48">
         Extremely likely &#8210;<br>
@@ -269,33 +298,8 @@ function pressEnter(e) {
 }">Next</button>
 -->
 
-<span id="form2">
-        <p id="question2"></p>
     
- <!--
-  ###############################################################
-  Star-ratings
-  http://www.jqueryscript.net/other/Simple-jQuery-Star-Rating-System-For-Bootstrap-3.html
-  -->
-  <div id="test" name= "star" align="center">
-    <input id="rating-system" type="number" class="rating" 
-    	min="0" max="5" step="1" 
-    	data-showCaption="true" showClear="false" hoverEnabled="false">
-  </div>
 <!--
-  <div align="center" class="star-rating rating-sm rating-active">
-    <div class="rating-container rating-gly-star" data-content="">
-      <div class="rating-stars" data-content="">
-      </div>
-    </div>
-  </div>
--->
-  <!--star-ratings
-  ###############################################################
-  -->    
-<br>
-    
-    <p id="question3"></p>
 <br>
 <form name="judgment">
 <table align = "center"><tr>
@@ -309,10 +313,10 @@ function pressEnter(e) {
   </tr>
 </table>
 </form>
+-->
 
-    <br>
     <button type="button" id="next2" onclick="this.blur(); if
-    (ValidateForm(document.judgment) && ValidateSliderFormPart1(document.affectForm1)) {
+    (ValidateSliderFormPart1(document.affectForm1)) {
 experiment.next();                                                       
 }">Next</button>
     </div>

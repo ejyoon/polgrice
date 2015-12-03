@@ -113,8 +113,10 @@ button[disabled] {
 }
 
 td {
+  align
   text-align: center;
   width: 60px;
+  font-size: 14px;
 }
 
 #form {
