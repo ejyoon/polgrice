@@ -10,7 +10,7 @@ var allStates = _.uniq(_.pluck(df,"true_state"))
 var allGoals = ["nice","honest"] // _.uniq(_.pluck(df,"goal"))
 
 var RSAopts = {
-	stochasticWords:false, 
+	stochasticWords:"experimental", 
 	stochasticValence:false
 }
 
@@ -35,12 +35,20 @@ var dataAnalysis = function(){
 		speakerOptimality : uniform(0,20)
 	}
 
+	// var priorParams = {
+	// 	honestGamma : uniform(0,1),
+	// 	honestDelta : uniform(0,20),
+	// 	kindGamma : uniform(0,1),
+	// 	kindDelta : uniform(0,20)
+	// }
+
 	var priorParams = {
-		honestGamma : uniform(0,1),
-		honestDelta : uniform(0,20),
-		kindGamma : uniform(0,1),
-		kindDelta : uniform(0,20)
+		honestGamma : 0.5,
+		honestDelta : 2,
+		kindGamma : 0.5,
+		kindDelta : 2
 	}
+
 
 	foreach(allStates, function(state){
 
@@ -77,10 +85,10 @@ var dataAnalysis = function(){
 	})
 
 	query.add(["parameter","speakerOptimality", "NA", "NA"], RSAparams.speakerOptimality)
-	query.add(["parameter","honesty", "gamma", "NA"], priorParams.honestGamma)
-	query.add(["parameter","honesty", "delta", "NA"], priorParams.honestDelta)
-	query.add(["parameter","kindness", "gamma", "NA"], priorParams.kindGamma)
-	query.add(["parameter","kindness", "delta", "NA"], priorParams.kindDelta)
+	// query.add(["parameter","honesty", "gamma", "NA"], priorParams.honestGamma)
+	// query.add(["parameter","honesty", "delta", "NA"], priorParams.honestDelta)
+	// query.add(["parameter","kindness", "gamma", "NA"], priorParams.kindGamma)
+	// query.add(["parameter","kindness", "delta", "NA"], priorParams.kindDelta)
 	var t1 = utils.getTime()
 	console.log((t1-t0)/1000)
 	return query
@@ -88,13 +96,13 @@ var dataAnalysis = function(){
 
 
 var inference ='MH'
-var samples = 200
-var burn = 100
+var samples = 1000
+var burn = 500
 var resultsERP = MCMC(dataAnalysis, {samples:samples, burn:burn, verbose:true})
 
 console.log('inference complete... printing')
 
-var outfile = "results/bda-politeRSA-newNice-"+optPrefix+"sopt-goalBetaPriors"+ 
+var outfile = "results/bda-politeRSA-jointUtility-"+optPrefix+"sopt-"+ 
 						inference + samples + "burn" + burn + ".csv"
 
 utils.erpWriter(resultsERP, outfile)

@@ -1,0 +1,95 @@
+// webppl politeUtility.wppl
+
+var speakerOptimality = 5
+
+var meaning = function(words, state){
+		return words=="terrible" ? state == stateValues[discrete([95,30,2,2,2])] : 
+				words=="bad" ? state == stateValues[discrete([85,85,2,2,2])] : 
+				words=="okay" ? state == stateValues[discrete([1,25,100,65,35])] : 
+				words=="good" ? state == stateValues[discrete([2,5,55,95,93])] : 
+				words=="amazing" ? state == stateValues[discrete([2,2,2,65,100])] :
+				words=="mu" ? true :
+				true
+} 
+
+var marginalize = function(myERP, label){
+	Enumerate(function(){
+		var x = sample(myERP)
+		return x[label]
+	})
+}
+
+var worlds = [
+	{state: "terrible", valence: 1},
+	{state: "bad", valence: 2},
+	{state: "okay", valence: 3},
+	{state: "good", valence: 4},
+	{state: "amazing", valence: 5}
+]
+var stateValues = _.pluck(worlds, "state")
+
+var utterancePrior = function(){
+	return uniformDraw(stateValues)
+}
+
+var statePrior = function(){
+	return uniformDraw(worlds)
+}
+
+var listener0 = cache(function(utterance) {
+  Enumerate(function(){
+    var world = statePrior()
+    var m = meaning(utterance, world.state)
+    condition(m) 
+    
+    return world
+  })
+})
+
+
+var speaker1 = cache(function(world, speakerGoals) {
+  Enumerate(function(){
+
+    var utterance = utterancePrior()
+
+    var L0 = listener0(utterance)
+
+    var epistemicUtility = marginalize(L0, "state").score([],world.state)
+
+    var niceUtility = expectation(marginalize(L0, "valence"))
+
+    var jointUtility = speakerGoals.honesty*epistemicUtility + 
+    					speakerGoals.kindness*niceUtility
+
+    // console.log(niceUtility)
+    factor(jointUtility)
+
+    return utterance
+  })
+})
+
+// speaker1({state: "amazing", valence: 3}, {honesty: 0.5, kindness: 0.5})
+
+var listener1 = function(utterance, knowledge) {
+  Enumerate(function(){
+    var world = statePrior()
+
+    var speakerGoals = {
+    	honesty: [0.1, 0.3, 0.5, 0.7, 0.9][discrete([1,1,1,1,1])],
+    	kindness: [0.1, 0.3, 0.5, 0.7, 0.9][discrete([1,1,1,1,1])]
+   	}
+
+   	condition(knowledge ? knowledge == world.state : true)
+
+    var S1 = speaker1(world, speakerGoals)
+
+    factor(speakerOptimality*S1.score([],utterance))
+
+    return speakerGoals
+  })
+}
+
+var results = listener1("good", "amazing")
+
+console.log(expectation(marginalize(results, "honesty")))
+console.log(expectation(marginalize(results, "kindness")))
