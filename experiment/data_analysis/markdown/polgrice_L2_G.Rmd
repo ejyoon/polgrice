@@ -1,0 +1,417 @@
+---
+title: "Summary of expts so far"
+author: "Erica Yoon"
+date: "Dec 3, 2015"
+output: html_document
+---
+
+# Three expts
+(1) infer goals given utterance and word-scale state
+(2) infer goals given utterance and heart-scale state 
+(3) accept word (feeling) given heart-scale state
+
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+rm(list = ls())
+library(jsonlite)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(binom)
+library(bootstrap)
+source("/Users/ericang/Documents/Research/polite_probmods/experiment/data_analysis/helper/useful.R")
+
+raw.data.path <- "/Users/ericang/Documents/Research/polite_probmods/polite_adj/experiment/exp_versions/5_L2_G/production-results/"
+
+## LOOP TO READ IN FILES
+all.data <- data.frame()
+files <- dir(raw.data.path,pattern="*.json")
+
+for (file.name in files) {
+  
+  ## these are the two functions that are most meaningful
+  json_file <- readLines(paste(raw.data.path,file.name,sep=""))
+  json_file_str = paste(json_file, collapse = "")
+  json_file_str = gsub(",}", "}", json_file_str)
+  jso = jsonlite::fromJSON(json_file_str)
+  jso$answers$data$people <- NULL
+  jso1 <- data.frame(jso)
+  jso1$subid <- substring(file.name, 1, 6)
+  
+  ## now here's where data get bound together
+  all.data <- rbind(all.data, jso1)
+}
+```
+
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+rearr <- all.data %>%
+  select(subid, num_range("answers.data.goal", 0:2)) %>%
+  distinct(subid) %>%
+  gather(goal_order, goal, num_range("answers.data.goal", 0:2)) %>%
+  mutate(goal_order = substr(goal_order, 18, 18))
+
+d <- all.data %>%
+  select(subid, answers.data.order, answers.data.knowledge, answers.data.domain, answers.data.state, answers.data.utterance, num_range("answers.data.goalProb", 0:2)) %>%
+  gather(goal_order, goal_prob, num_range("answers.data.goalProb", 0:2)) %>%
+  mutate(goal_order = substr(goal_order, 22, 22))
+
+detach(package:dplyr)
+library(plyr)
+d <- join(d, rearr)
+
+detach(package:plyr)
+library(dplyr)
+d <- d %>%
+  mutate(trial = answers.data.order) %>%
+  mutate(item = answers.data.domain) %>%
+  mutate(true_state = substr(answers.data.state, 6, 6)) %>%
+  mutate(utterance = answers.data.utterance) %>%
+  mutate(knowledge = answers.data.knowledge) %>%
+  select(subid, trial, knowledge, true_state, utterance, goal, goal_prob)
+
+d$subid <- as.factor(d$subid)
+d$trial <- as.numeric(d$trial)
+d$true_state <- as.factor(d$true_state) 
+d$knowledge <- as.factor(d$knowledge)
+d$utterance <- as.factor(d$utterance)
+d$goal <- as.factor(d$goal)
+d$goal_prob <- as.numeric(d$goal_prob)
+
+d$utterance <- ordered(d$utterance, levels = c("terrible", "bad", "okay", "good", "amazing"))
+```
+
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+## for bootstrapping 95% confidence intervals
+theta <- function(x,xdata,na.rm=T) {mean(xdata[x],na.rm=na.rm)}
+ci.low <- function(x,na.rm=T) {
+  mean(x,na.rm=na.rm) - quantile(bootstrap(1:length(x),1000,theta,x,na.rm=na.rm)$thetastar,.025,na.rm=na.rm)}
+ci.high <- function(x,na.rm=T) {
+  quantile(bootstrap(1:length(x),1000,theta,x,na.rm=na.rm)$thetastar,.975,na.rm=na.rm) - mean(x,na.rm=na.rm)}
+
+# goal_prob ~ true_state + utterance + goal
+mss <- d %>%
+  group_by(true_state, utterance, goal, subid) %>%
+  summarize(
+            goal_prob = mean(goal_prob, na.rm=TRUE)
+          )
+ms <- aggregate(goal_prob ~ true_state + utterance + goal, mss, mean)
+ms$cih <- aggregate(goal_prob ~ true_state + utterance + goal, mss, ci.high)$goal_prob
+ms$cil <- aggregate(goal_prob ~ true_state + utterance + goal, mss, ci.low)$goal_prob
+```
+
+## Expt 1 (most recent): goal attribution given utterance and heart-scale state
+
+```{r warning=FALSE, message=FALSE, echo=FALSE, fig.width = 10, fig.height = 2.5}
+ms$goal <- ordered(ms$goal, levels = c("honest", "nice", "mean"))
+
+qplot(true_state, goal_prob, 
+      colour = goal,
+      data=ms) + 
+  geom_line(aes(group=goal)) +
+  facet_grid(.~utterance) +
+  xlab("state") +
+  ylab("likelihood for goal") +
+  ggtitle("goals given true state and utterance (heart-scale)") +
+  geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1))
+# 
+# # only honesty goal
+# qplot(true_state, goal_prob, 
+#       colour = utterance,
+#       data=subset(ms, goal=="honest")) + 
+#   geom_line(aes(group=goal)) +
+#   facet_grid(.~utterance) +
+#   xlab("state (1=worst, 5=best)") +
+#   ylab("likelihood for goal") +
+#   ggtitle("honesty goal attribution given state and utterance (heart-scale)") +
+#   geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1))
+
+d3 <- d
+ms3 <- ms
+```
+
+
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+# expt (1)
+source("/Users/ericang/Documents/Research/polite_probmods/experiment/data_analysis/helper/useful.R")
+
+raw.data.path <- "/Users/ericang/Documents/Research/polite_probmods/polite_adj/experiment/exp_versions/3_goals_v3/production-results/"
+
+## LOOP TO READ IN FILES
+all.data <- data.frame()
+files <- dir(raw.data.path,pattern="*.json")
+
+for (file.name in files) {
+  
+  ## these are the two functions that are most meaningful
+  json_file <- readLines(paste(raw.data.path,file.name,sep=""))
+  json_file_str = paste(json_file, collapse = "")
+  json_file_str = gsub(",}", "}", json_file_str)
+  jso = jsonlite::fromJSON(json_file_str)
+  jso$answers$data$people <- NULL
+  jso1 <- data.frame(jso)
+  jso1$subid <- substring(file.name, 1, 6)
+  
+  ## now here's where data get bound together
+  all.data <- rbind(all.data, jso1)
+}
+```
+
+## Expt 2: goal attribution given utterance and word-scale state
+
+```{r warning=FALSE, message=FALSE, echo=FALSE, fig.width = 10, fig.height = 2.5}
+rearr <- all.data %>%
+  select(subid, num_range("answers.data.goal", 0:2)) %>%
+  distinct(subid) %>%
+  gather(goal_order, goal, num_range("answers.data.goal", 0:2)) %>%
+  mutate(goal_order = substr(goal_order, 18, 18))
+
+rearr2 <- all.data %>%
+  select(subid, num_range("answers.data.prediction", 0:1)) %>%
+  distinct(subid) %>%
+  gather(pred_order, prediction, num_range("answers.data.prediction", 0:1)) %>%
+  mutate(pred_order = substr(pred_order, 24, 24))
+
+d <- all.data %>%
+  select(subid, answers.data.order, answers.data.knowledge, answers.data.domain, answers.data.state, answers.data.utterance, num_range("answers.data.predictedProb", 0:1), num_range("answers.data.inferredProb", 0:2)) %>%
+  gather(pred_order, pred_prob, num_range("answers.data.predictedProb", 0:1)) %>%
+  mutate(pred_order = substr(pred_order, 27, 27)) %>%
+  gather(goal_order, goal_prob, num_range("answers.data.inferredProb", 0:2)) %>%
+  mutate(goal_order = substr(goal_order, 26, 26))
+
+
+detach(package:dplyr)
+library(plyr)
+d <- join(d, rearr)
+d <- join(d, rearr2)
+
+detach(package:plyr)
+library(dplyr)
+d <- d %>%
+  mutate(trial = answers.data.order) %>%
+  mutate(item = answers.data.domain) %>%
+  mutate(true_state = answers.data.state) %>%
+  mutate(utterance = answers.data.utterance) %>%
+  mutate(knowledge = answers.data.knowledge) %>%
+  select(subid, trial, knowledge, true_state, utterance, goal, goal_prob, prediction, pred_prob)
+
+d$subid <- as.factor(d$subid)
+d$trial <- as.numeric(d$trial)
+d$true_state <- as.factor(d$true_state) 
+d$knowledge <- as.factor(d$knowledge)
+d$utterance <- as.factor(d$utterance)
+d$goal <- as.factor(d$goal)
+d$prediction <- as.factor(d$prediction)
+d$goal_prob <- as.numeric(d$goal_prob)
+d$pred_prob <- as.numeric(d$pred_prob)
+
+d$true_state <- ordered(d$true_state, levels = c("terrible", "bad", "okay", "good", "amazing"))
+d$utterance <- ordered(d$utterance, levels = c("terrible", "bad", "okay", "good", "amazing"))
+
+# goal_prob ~ true_state + utterance + goal + knowledge
+mss <- d %>%
+  group_by(true_state, utterance, goal, knowledge, subid) %>%
+  summarize(
+            goal_prob = mean(goal_prob, na.rm=TRUE)
+          )
+ms <- aggregate(goal_prob ~ true_state + utterance + goal + knowledge, mss, mean)
+ms$cih <- aggregate(goal_prob ~ true_state + utterance + goal + knowledge, mss, ci.high)$goal_prob
+ms$cil <- aggregate(goal_prob ~ true_state + utterance + goal + knowledge, mss, ci.low)$goal_prob
+
+ms$goal <- ordered(ms$goal, levels = c("honest", "nice", "mean"))
+# levels(ms$true_state) <- c("state: terrible", "state: bad", "state: okay", "state: good", "state: amazing")
+levels(ms$utterance) <- c("utterance: terrible", "utterance: bad", "utterance: okay", "utterance: good", "utterance: amazing")
+
+# unknown
+qplot(true_state, goal_prob, 
+      colour = goal,
+      data=subset(ms, knowledge == "unknown")) + 
+  geom_line(aes(group=goal)) +
+  facet_grid(.~utterance) +
+  xlab("state") +
+  ylab("likelihood for goal") +
+  ggtitle("What was the speaker's goal? (with state-utt match)") +
+  geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1)) +
+  theme(axis.text.x  = element_text(angle=45, vjust=0.5))
+
+d1 <-d
+ms1 <- subset(ms, knowledge == "unknown")
+```
+
+
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+# expt (2)
+source("/Users/ericang/Documents/Research/polite_probmods/experiment/data_analysis/helper/useful.R")
+
+raw.data.path <- "/Users/ericang/Documents/Research/polite_probmods/polite_adj/experiment/exp_versions/4_L2_J/production-results/"
+
+## LOOP TO READ IN FILES
+all.data <- data.frame()
+files <- dir(raw.data.path,pattern="*.json")
+
+for (file.name in files) {
+  
+  ## these are the two functions that are most meaningful
+  json_file <- readLines(paste(raw.data.path,file.name,sep=""))
+  json_file_str = paste(json_file, collapse = "")
+  json_file_str = gsub(",}", "}", json_file_str)
+  jso = jsonlite::fromJSON(json_file_str)
+  jso$answers$data$people <- NULL
+  jso1 <- data.frame(jso)
+  jso1$subid <- substring(file.name, 1, 6)
+  
+  ## now here's where data get bound together
+  all.data <- rbind(all.data, jso1)
+}
+```
+
+
+## Expt 3: word (feeling) acceptance given heart-scale state
+
+```{r warning=FALSE, message=FALSE, echo=FALSE, fig.width = 10, fig.height = 2.5}
+d <- all.data %>%
+  select(subid, answers.data.order, answers.data.domain, answers.data.state, answers.data.utterance, answers.data.judgment) %>%
+  mutate(trial = answers.data.order) %>%
+  mutate(item = answers.data.domain) %>%
+  mutate(state = substr(answers.data.state, 6, 6)) %>%
+  mutate(utterance = answers.data.utterance) %>%
+  mutate(judgment = answers.data.judgment) %>%
+  select(subid, trial, item, state, utterance, judgment)
+
+d$subid <- as.factor(d$subid)
+d$trial <- as.numeric(d$trial)
+d$state <- as.factor(d$state) 
+d$utterance <- as.factor(d$utterance)
+d$judgment <- as.numeric(as.character(d$judgment))
+
+d$utterance <- ordered(d$utterance, levels = c("terrible", "bad", "okay", "good", "amazing"))
+
+# goal_prob ~ true_state + utterance + goal
+mss <- d %>%
+  group_by(state, utterance, subid) %>%
+  summarize(
+            judgment = mean(judgment, na.rm=TRUE)
+          )
+ms <- aggregate(judgment ~ state + utterance, mss, mean)
+ms$cih <- aggregate(judgment ~ state + utterance, mss, ci.high)$judgment
+ms$cil <- aggregate(judgment ~ state + utterance, mss, ci.low)$judgment
+
+qplot(state, judgment, 
+      colour = utterance,
+      data=ms) + 
+  geom_line(aes(group=utterance)) +
+  facet_grid(.~utterance) +
+  xlab("state") +
+  ylab("judgment") +
+  ggtitle("Semantic distribution of words (state of 1 = worst, 1-heart rating)") +
+  geom_errorbar(aes(ymin=judgment-cil,ymax=judgment+cih,width=.1))
+
+d2 <- d
+ms2 <- ms
+```
+
+# Original vs. replication
+
+Exclude expt3, which is about semantic distribution (should proximate honesty)
+
+```{r warning=FALSE, message=FALSE, echo=FALSE, fig.width = 10, fig.height = 6}
+ms1 <- ms1 %>%
+  mutate(state = true_state) %>%
+  mutate(judgment = goal_prob) %>%
+  select(state, utterance, goal, judgment, cih, cil)
+ms1$expt <- "word-state"
+levels(ms1$state) <- c("1", "2", "3", "4", "5")
+levels(ms1$utterance) <- c("terrible", "bad", "okay", "good", "amazing")
+
+ms3 <- ms3 %>%
+  mutate(state = true_state) %>%
+  mutate(judgment = goal_prob) %>%
+  select(state, utterance, goal, judgment, cih, cil)
+ms3$expt <- "heart-state"
+
+ms <- rbind(ms1, ms3)
+
+qplot(utterance, judgment, 
+      colour = expt,
+      data=ms) + 
+  geom_line(aes(group=expt)) +
+  facet_grid(goal~state) +
+  xlab("utterance") +
+  ylab("judgment") +
+  ggtitle("goals given state and utterance, facet by state") +
+  geom_errorbar(aes(ymin=judgment-cil,ymax=judgment+cih,width=.1)) +
+  theme(axis.text.x  = element_text(angle=45, vjust=0.5))
+
+```
+
+Differences:
+1. people don't think it's less nice or more mean to say "good"" for 5-heart state compared to 4-heart state
+2. saying "okay" is perceived to be less nice and more mean given state of 3, compared to an "okay" true state
+
+
+# Comparing expts: honesty
+
+```{r warning=FALSE, message=FALSE, echo=FALSE, fig.width = 10, fig.height = 2.5}
+# rbind all three
+ms1 <- ms1 %>%
+  filter(goal =="honest") %>%
+  select(state, utterance, judgment, cih, cil)
+ms1$expt <- "honesty given word-state"
+
+ms3 <- ms3 %>%
+  filter(goal =="honest") %>%
+  select(state, utterance, judgment, cih, cil)
+ms3$expt <- "honesty given heart-state"
+
+ms2$expt <- "word acceptance given heart-state"
+
+ms <- rbind(ms1, ms2, ms3)
+```
+
+
+```{r warning=FALSE, message=FALSE, echo=FALSE, fig.width = 10, fig.height = 2.5}
+# separately showing the three expts
+# honesty given heart state
+qplot(state, judgment, 
+      colour = utterance,
+      data=ms3) + 
+  geom_line(aes(group=utterance)) +
+  facet_grid(.~utterance) +
+  xlab("state (1=worst, 5=best)") +
+  ylab("judgment") +
+  ggtitle("honesty given heart state") +
+  geom_errorbar(aes(ymin=judgment-cil,ymax=judgment+cih,width=.1))
+
+# honesty given word state
+qplot(state, judgment, 
+      colour = utterance,
+      data=ms1) + 
+  geom_line(aes(group=utterance)) +
+  facet_grid(.~utterance) +
+  xlab("state (1=worst, 5=best)") +
+  ylab("judgment") +
+  ggtitle("honesty given word state") +
+  geom_errorbar(aes(ymin=judgment-cil,ymax=judgment+cih,width=.1))
+
+# word acceptance given heart state
+qplot(state, judgment, 
+      colour = utterance,
+      data=ms2) + 
+  geom_line(aes(group=utterance)) +
+  facet_grid(.~utterance) +
+  xlab("state (1=worst, 5=best)") +
+  ylab("judgment") +
+  ggtitle("word acceptance given heart state") +
+  geom_errorbar(aes(ymin=judgment-cil,ymax=judgment+cih,width=.1))
+
+# just expts using heart state
+qplot(state, judgment, 
+      colour = expt,
+      data=subset(ms, expt!="honesty given word-state")) + 
+  geom_line(aes(group=expt)) +
+  facet_grid(.~utterance) +
+  xlab("state (1=worst, 5=best)") +
+  ylab("judgment") +
+  ggtitle("acceptance/honesty rating given HEART-state and utterance") +
+  geom_errorbar(aes(ymin=judgment-cil,ymax=judgment+cih,width=.1))
+```
+
+Honesty attribution with word-state looks more comparable to semantic distribution data?

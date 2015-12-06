@@ -15,7 +15,7 @@ library(binom)
 library(bootstrap)
 source("/Users/ericang/Documents/Research/polite_probmods/experiment/data_analysis/helper/useful.R")
 
-raw.data.path <- "/Users/ericang/Documents/Research/polite_probmods/polite_adj/experiment/exp_versions/goals_v3/production-results/"
+raw.data.path <- "/Users/ericang/Documents/Research/polite_probmods/polite_adj/experiment/exp_versions/3_goals_v3/production-results/"
 
 ## LOOP TO READ IN FILES
 all.data <- data.frame()
@@ -113,6 +113,7 @@ ms$cil <- aggregate(goal_prob ~ true_state + utterance + goal + knowledge, mss, 
 
 ```{r echo = FALSE, fig.width = 12, fig.height = 4}
 ms$goal <- ordered(ms$goal, levels = c("honest", "nice", "mean"))
+levels(ms$true_state) <- c("state: terrible", "state: bad", "state: okay", "state: good", "state: amazing")
 
 # unknown
 qplot(utterance, goal_prob, 
@@ -122,7 +123,20 @@ qplot(utterance, goal_prob,
   facet_grid(.~true_state) +
   xlab("utterance") +
   ylab("likelihood for goal") +
-  ggtitle("What was the speaker's goal? (listener not knowledgeable)") +
+  ggtitle("What was the speaker's goal? (with state-utt match)") +
+  geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1)) +
+  theme(axis.text.x  = element_text(angle=45, vjust=0.5))
+
+# unknown
+levels(ms$true_state) <- c("terrible", "bad", "okay", "good", "amazing")
+qplot(true_state, goal_prob, 
+      colour = utterance,
+      data=subset(ms, knowledge == "unknown" & goal=="honest")) + 
+  geom_line(aes(group=goal)) +
+  facet_grid(.~utterance) +
+  xlab("state") +
+  ylab("likelihood for goal") +
+  ggtitle("honesty goal given state and utterance") +
   geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1)) +
   theme(axis.text.x  = element_text(angle=45, vjust=0.5))
 
@@ -188,6 +202,17 @@ qplot(utterance, pred_prob,
 # correlations
 
 ```{r}
+d1 <- d
+d1$true_state <- as.numeric(d1$true_state)
+d1$utterance <- as.numeric(d1$utterance)
+d1 <- d1 %>% 
+  mutate(distance = true_state-utterance)
+
+summary(lmer(goal_prob ~ abs(distance) + (1 | subid), data=subset(d1,knowledge == "unknown" & goal == "honest")))
+summary(lmer(goal_prob ~ true_state * utterance + (1 | subid), data=subset(d1,knowledge == "unknown" & goal == "nice")))
+summary(lmer(goal_prob ~ true_state * utterance + (1 | subid), data=subset(d1,knowledge == "unknown" & goal == "mean")))
+    
+
 d1 <- d %>% filter(prediction == "like")
 cor(d1[d1$goal=="nice",]$pred_prob, d1[d1$goal=="nice",]$goal_prob)
 cor(d1[d1$goal=="mean",]$pred_prob, d1[d1$goal=="mean",]$goal_prob)
@@ -199,3 +224,65 @@ cor(d1[d1$goal=="mean",]$pred_prob, d1[d1$goal=="mean",]$goal_prob)
 cor(d1[d1$goal=="honest",]$pred_prob, d1[d1$goal=="honest",]$goal_prob)
 
 ```
+
+
+```{r}
+# model
+model <- read.csv("Documents/Research/polite_probmods/polite_adj/model/results/goals-sopt5-uniformGoals.csv")
+model$State <- factor(model$State, levels = c("terrible", "bad", "okay", "good", "amazing"))
+levels(model$State) <- c("state: terrible", "state: bad", "state: okay", "state: good", "state: amazing")
+model$Utterance <- factor(model$Utterance, levels = c("terrible", "bad", "okay", "good", "amazing"))
+model$Goal <- factor(model$Goal, levels = c("honest", "nice", "mean"))
+
+model <- model %>%
+  mutate(true_state = State) %>%
+  mutate(utterance = Utterance) %>%
+  mutate(goal = Goal) %>%
+  mutate(goal_prob = MAP) 
+model$State <- NULL
+model$Utterance <- NULL
+model$Goal <- NULL
+model$MAP <- NULL
+
+model$cih <- NA
+model$cil <- NA
+model$knowledge <- NA
+model$cat <- "model"
+
+qplot(utterance, goal_prob, 
+      colour = goal,
+      data=model) + 
+  geom_line(aes(group=goal)) +
+  facet_grid(.~true_state) +
+  xlab("utterance") +
+  ylab("likelihood for goal") +
+  ggtitle("Model predictions") +
+  theme(axis.text.x  = element_text(angle=45, vjust=0.5))
+
+# goal_prob ~ true_state + utterance + goal + knowledge
+mss <- d %>%
+  group_by(true_state, utterance, goal, knowledge, subid) %>%
+  summarize(
+            goal_prob = mean(goal_prob, na.rm=TRUE)
+          )
+ms <- aggregate(goal_prob ~ true_state + utterance + goal + knowledge, mss, mean)
+ms$cih <- aggregate(goal_prob ~ true_state + utterance + goal + knowledge, mss, ci.high)$goal_prob
+ms$cil <- aggregate(goal_prob ~ true_state + utterance + goal + knowledge, mss, ci.low)$goal_prob
+levels(ms$true_state) <- c("state: terrible", "state: bad", "state: okay", "state: good", "state: amazing")
+
+ms$cat <- "experiment"
+
+
+modeld <- rbind(subset(ms, knowledge == "unknown"), model)
+modeld$cat <- as.factor(modeld$cat)
+modeld$cat <- relevel(modeld$cat, "model")
+qplot(utterance, goal_prob, 
+      colour = goal,
+      data=modeld) + 
+  geom_line(aes(group=goal), position=position_dodge()) +
+  facet_grid(cat~true_state) +
+  xlab("utterance") +
+  ylab("likelihood for goal") +
+  ggtitle("What was the speaker's goal?") +
+  geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1)) +
+  theme(axis.text.x  = element_text(angle=45, vjust=0.5))
