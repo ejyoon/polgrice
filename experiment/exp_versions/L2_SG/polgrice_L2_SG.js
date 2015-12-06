@@ -575,7 +575,7 @@ function doSentSubs (sents, polite, domain, utterance, people)
     question = "Based on what SP said, how likely do you think that <b>SP's goal</b> was to be:";
     
 //    if (prediction[0] == "ask") {
-    question2 = "How would SP <b>actually</b> rate LS's BB using the following scale?";
+    question2 = "How would SP <b>actually</b> rate LS's BB? <br>Please select the number of stars you think SP would actually give:";
     question3 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
 //    } else if (prediction[0] == "like") {
 //    question3 = "Based on what SP said, how likely is it for you to <b>ask for SP's opinion on your own BB</b>?";
@@ -636,7 +636,8 @@ var experiment = {
     goalProb0: [],
     goalProb1: [],
     goalProb2: [],
-    stateProb: [],
+//    stateProb: [],
+    judgment: [],
 //    predictedProb0: [],
 //    predictedProb1: [],
     language: [],
@@ -675,8 +676,10 @@ var experiment = {
 //      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
 //      var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
 
-      var prob3 = getRadioCheckedValue(1, "state");
+//      var prob3 = getRadioCheckedValue(1, "state");
 //      experiment.stateRatings[currentTrialNum] = getRadioCheckedValue(1, "state");
+      var judgment = $(".rating-stars").attr("style");
+      judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
 
       experiment.data.order.push(numComplete);
       experiment.data.utterance.push(trial.utterance);
@@ -685,13 +688,20 @@ var experiment = {
       experiment.data.goalProb0.push(prob0);
       experiment.data.goalProb1.push(prob1);
       experiment.data.goalProb2.push(prob2);
-      experiment.data.stateProb.push(prob3);
+//      experiment.data.stateProb.push(prob3);
 //      experiment.data.predictedProb0.push(prob3);
 //      experiment.data.predictedProb1.push(prob4);
+      experiment.data.judgment.push(judgment);
    
       clearForm(document.forms[0]);
       clearForm(document.forms[1]);
     }
+        
+        
+      //Clear stars
+      $(".rating-stars").attr({"style":"width: 0%"});
+        
+
     if (numComplete >= numTrials) {
     	$('.bar').css('width', (200.0 * numComplete/numTrials) + 'px');
     	$("#trial-num").html(numComplete);
@@ -703,14 +713,14 @@ var experiment = {
     	$("#total-num").html(numTrials);
 
         // randomize question form order
-        var formElements = document.querySelectorAll('.form');
-        // Set their ids
-        formElements[0].id = formOrder[0][0];
-        formElements[1].id = formOrder[1][0];
-        var buttonElements = document.querySelectorAll('.next');
-        // Set their ids
-        buttonElements[0].id = formOrder[0][1];
-        buttonElements[1].id = formOrder[1][1];
+//        var formAElements = document.querySelectorAll('.formA');
+//        formAElements[0].id = formOrder[0][0];
+//        var formBElements = document.querySelectorAll('.formB');
+//        formBElements[0].id = formOrder[1][0];
+//        var buttonAElements = document.querySelectorAll('.nextA');
+//        buttonAElements[0].id = formOrder[0][1];
+//        var buttonBElements = document.querySelectorAll('.nextB');
+//        buttonBElements[0].id = formOrder[1][1];
         
 //        var formA = document.getElementsByClassName('.formA');
 //        formA.id = 'form0';
@@ -720,10 +730,10 @@ var experiment = {
 //        nextA.id = 'next0';
 //        var nextB = document.getElementsByClassName('.nextB');
 //        nextB.id = 'next1';        
-        document.getElementById('form0').hidden=true;
-        document.getElementById('form1').hidden=false;
-        document.getElementById('next0').hidden=true;
-        document.getElementById('next1').hidden=false;
+//        document.getElementById('form0').hidden=true;
+//        document.getElementById('form1').hidden=false;
+////        document.getElementById('next0').hidden=true;
+//        document.getElementById('next1').hidden=false;
         
     	currentTrialNum = numComplete;
     	trial = allTrialOrders[shuffledOrder[numComplete]];
@@ -743,6 +753,12 @@ var experiment = {
       }
       $("#question2").html(sent_materials[5]);    
       $("#question3").html(sent_materials[6]);    
+      $("#rating-stars").on("click", 
+			    	function(event) {
+						var selection = $("#rating-stars").val();
+			});
+        
+
       numComplete++;      
     }}
   }

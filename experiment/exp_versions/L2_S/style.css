@@ -58,6 +58,10 @@ button[disabled] {
   line-height:1.2em;
 }
 
+#scenario {
+    text-align: center;
+}
+
 #legal {
   margin: 0 auto;
   margin-top: 1.5em;
@@ -128,18 +132,19 @@ button[disabled] {
     line-height: 26px;
 }
 
-.progress{
+.progress_white{
     
     text-align: right;
     margin-top:0.5em;
     
 }
 
-.progress span{
+.progress_white span{
     position:relative;
     top: -6px;
     text-align: center;
     margin-right: 1em;    
+    color: transparent;
 }
 
 .bar-wrapper{
