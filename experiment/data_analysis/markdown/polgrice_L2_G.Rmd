@@ -105,12 +105,12 @@ ms$goal <- ordered(ms$goal, levels = c("honest", "nice", "mean"))
 
 qplot(true_state, goal_prob, 
       colour = goal,
-      data=ms) + 
+      data=subset(ms, goal!="mean")) + 
   geom_line(aes(group=goal)) +
   facet_grid(.~utterance) +
   xlab("state") +
   ylab("likelihood for goal") +
-  ggtitle("goals given true state and utterance (heart-scale)") +
+  ggtitle("Experiment: goals given heart-state and utterance") +
   geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1))
 # 
 # # only honesty goal

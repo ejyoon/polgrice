@@ -87,9 +87,9 @@ qplot(state, judgment,
       data=ms) + 
   geom_line(aes(group=utterance)) +
   facet_grid(.~utterance) +
-  xlab("state") +
+  xlab("state (1=worst)") +
   ylab("judgment") +
-  ggtitle("Semantic distribution of words (state of 1 = worst, 1-heart rating)") +
+  ggtitle("Literal semantics") +
   geom_errorbar(aes(ymin=judgment-cil,ymax=judgment+cih,width=.1))
 ```
 
