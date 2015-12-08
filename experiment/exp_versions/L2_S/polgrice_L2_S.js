@@ -128,7 +128,7 @@ function getRadioCheckedValue(formNum, radio_name)
 
 // CONDITION ASSIGNMENT
 // var cond = random(3)+1;
-var expt = "politeImp_statePos";
+var expt = "polgrice_statePos";
 //var cond = random(2)+1;
 //var cond = 1;
 var cond = "statePos"
@@ -374,19 +374,19 @@ speakers25 = shuffle(speakers[24]);
 var sents = {
     utterances: {
         terrible: {
-            sent_utterance: " SP said, \"It was terrible!\" </b>"
+            sent_utterance: " <b>\"Your BB was terrible,\"</b> SP said to LS."
         },        
         bad: {
-            sent_utterance: " SP said, <b>\"It was bad!\"</b>"
+            sent_utterance: " <b>\"Your BB was bad,\"</b> SP said to LS."
         },        
         okay: {
-            sent_utterance: " SP said, <b>\"It was okay!\"</b>" 
+            sent_utterance: " <b>\"Your BB was okay,\"</b> SP said to LS."
         },
         good: {
-            sent_utterance: " SP said, <b>\"It was good!\"</b>" 
+            sent_utterance: " <b>\"Your BB was good,\"</b> SP said to LS."
         },
         amazing: {
-            sent_utterance: " SP said, \"It was amazing!\"</b>" 
+            sent_utterance: " <b>\"Your BB was amazing,\"</b> SP said to LS."
         },
     },
     
@@ -476,13 +476,13 @@ var sents = {
     },
     goals: {
         nice: {
-            goal: " <b>SP wanted to be nice, so "
+            goal: " <b>SP wanted to be nice: "
         },
         honest: {
-            goal: " <b>SP wanted to be honest, so "            
+            goal: " <b>SP wanted to be honest: "            
         },
         mean: {
-            goal: " <b>SP wanted to be mean, so "            
+            goal: " <b>SP wanted to be mean: "            
         }  
     },
     people: {
@@ -615,7 +615,7 @@ function doSentSubs (sents, polite, domain, utterance, people, goal)
     SP = sents["people"][people]["SP"]; //speaker
     LS = sents["people"][people]["LS"]; //addressee
  
-    utterance = utterance.replace("BB",BB).replace("SP",SP);
+    utterance = utterance.replace("BB",BB).replace("SP",SP).replace("LS",LS);
     context = context.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);
     precontext = precontext.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);
     state = state.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);
