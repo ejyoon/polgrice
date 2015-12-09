@@ -1,7 +1,7 @@
-// time webppl literalSemantics.wppl --require mht --require utils
+// time webppl literalSemantics.wppl --require mht
 var fpath = "/Users/mht/Documents/research/polgrice/experiment/data_analysis/data/"
 
-var semData = mht.readCSV(fpath+"literalSemanatics_raw.csv").data
+var semData = mht.readCSV(fpath+"literalSemantics.csv").data
 var df_semantics = dataFrame(semData, ["state, judgment"])
 
 var allStates = _.uniq(_.pluck(df_semantics,"state"))
@@ -13,7 +13,7 @@ var semanticsBDA = function(){
 
 		foreach(allStates, function(state){
 			var theta = uniform(0,1)
-			var response1 = _.pluck(subset(utteranceData, "state", state), "judgment")
+			var responses = _.pluck(subset(utteranceData, "state", state), "judgment")
 
 			var scr = sum(map(function(d){return bernoulliERP.score([theta],d==1)}, responses))
 
@@ -28,14 +28,14 @@ var semanticsBDA = function(){
 }
 
 
-var mhiter = 100
+var mhiter = 100000
 var burn = mhiter/2
 var incrOpts = {burn:burn, verbose: true, verboseLag: mhiter/100}
 var posterior = IncrementalMH(semanticsBDA, mhiter, incrOpts)
 
 console.log("inference complete --- writing to file")
 
-var outFile = "results/semantics/bda-semantics-thetaBernoulli-IncrMH" + mhiter/1000 + "k-b" + burn/1000 + "k" + "csv"
+var outFile = "results/semantics/bda-semantics-thetaBernoulli-IncrMH" + mhiter/1000 + "k-b" + burn/1000 + "k" + ".csv"
 var header = "Utterance,State,Theta"
 
 mht.erpWriter(posterior, outFile, header)

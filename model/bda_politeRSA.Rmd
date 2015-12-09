@@ -22,15 +22,20 @@ HPDlo<- function(s){
 options("scipen"=10)   
 ```
 
-
 # Model
 
 ```{r model.load}
 fpath<- "~/Documents/research/polgrice/model/results/"
 prefix<- "bda-politeRSA-stochVal-sopt-goalBetaPriorsMH"
-
-samples = 100
-burn = 0#samples /2
+prefix<- "bda-politeRSA-stochWords-stochVal-sopt-goalBetaPriorsMH"
+prefix<- "bda-politeRSA-stochWords-sopt-goalBetaPriorsMH"
+prefix <- "bda-politeRSA-sopt-goalBetaPriorsMH"
+prefix<- "bda-politeRSA-newNice-sopt-goalBetaPriorsMH"
+prefix<-"bda-politeRSA-newNice-stochWords-sopt5-highKindPriorMH"
+prefix<-"bda-politeRSA-newNice-stochWords-sopt5-uniformGoalsMH"
+prefix<-"bda-politeRSA-jointUtility-stochWords-sopt-MH"
+samples = 2000
+burn =  samples /2
 m<-read.csv(paste(fpath, prefix, samples, "burn", burn,".csv", sep=''))
 m.samples <- m[rep(row.names(m), m$Probability*samples), 1:5]
 ```
@@ -71,12 +76,66 @@ m.pp <- m.samples %>%
             credHigh = HPDhi(Value),
             credLow = HPDlo(Value)) %>%
   ungroup() %>%
-  mutate(State = factor(State, levels = lvls),
+  mutate(State = factor(State, levels = lvls, labels =c(1,2,3,4,5)),
          Utterance = factor(Utterance, levels = lvls))
 
-ggplot(m.pp, aes(x=Utterance, y = MAP, color = Goal, group= Goal))+
-  geom_line()+
-  geom_errorbar(aes(ymin = credLow, ymax = credHigh), width=0.1)+
+ggplot(m.pp, aes(x=State, y = MAP, color = Goal, group= Goal))+
+  geom_point(size=4)+
+  geom_line(position=position_dodge(0.3))+
+  #geom_errorbar(aes(ymin = credLow, ymax = credHigh), width=0.1, size =)+
+  facet_grid(.~Utterance)
+
+# To create model predictions for "mean" (for CUNY abstract)
+m.pp.3<-bind_rows(m.pp %>%
+            select(-credLow, -credHigh),
+  
+  m.pp %>% filter(Goal=='nice') %>%
+  mutate(meanness = 1-MAP) %>%
+  select(-credHigh, -credLow, -MAP, -Goal) %>%
+  mutate(Goal = factor("mean")) %>%
+  rename(MAP = meanness))
+
+
+ggplot(m.pp.3, aes(x=Utterance, y = MAP, color = Goal, group= Goal))+
+  geom_line(position=position_dodge(0.3))+
+  geom_point(size=4)+
+  #geom_errorbar(aes(ymin = credLow, ymax = credHigh), width=0.1)+
   facet_grid(.~State)
 
+write.csv(m.pp.3, file = "~/Documents/research/polgrice/model/results/goals-sopt5-uniformGoals.csv", row.names=F)
+
+```
+
+
+# Literal semantics data
+
+```{r literal.sem.load}
+fpath<- "~/Documents/research/polgrice/model/results/semantics/"
+prefix<-"bda-semantics-thetaBernoulli-IncrMH"
+samples = 100000
+burn =  samples /2
+m<-read.csv(paste(fpath, prefix, samples/1000, "k-b", burn/1000,"k.csv", sep=''))
+m.samples <- m[rep(row.names(m), m$Probability*samples), 1:3]
+```
+
+
+```{r semantics.bda}
+
+s.tidy <- m.samples %>%
+  group_by(Utterance,State) %>%
+  summarise(MAP = estimate_mode(Theta),
+            credHigh = HPDhi(Theta),
+            credLow = HPDlo(Theta)) %>%
+  ungroup() %>%
+  mutate(Utterance = factor(Utterance, levels=c("terrible", "bad",
+                                                "okay", "good",
+                                                "amazing")))
+
+ggplot(s.tidy, aes(x=State, y = MAP, color=Utterance))+
+  geom_point()+
+  geom_errorbar(aes(ymin=credLow, ymax=credHigh), width=0.1)+
+  geom_line()+
+  facet_grid(.~Utterance)
+
+ggsave("~/Documents/research/polgrice/model/results/literalSemantics-bda-bernoulli_incrmh100k-b50k.pdf")
 ```
