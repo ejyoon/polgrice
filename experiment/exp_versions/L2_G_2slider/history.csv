@@ -1,0 +1,5 @@
+Time,Action,Data
+2015/12/03 14:26:07,Create,"{u'description': u'A simple task of judging goals behind what someone says (takes ~8 minutes)', u'title': u""Quick study to judge someone's goals"", u'url': u'https://langcog.stanford.edu/expts/EJY/polgrice/L2_G/polgrice_L2_G.html', u'assignment_duration': u'1 hour', u'qualifications': {u'location': u'US', u'approval_percentage': 85}, u'frame_height': 450, u'experimenter': u'Erica Yoon', u'keywords': u'Game, fun, sentences, conversation, meaning, goals', u'auto_approval_delay': u'1 hour', u'reward': 0.9, u'server_log_path': u'http://langcog.stanford.edu/cgi-bin/cosub/location.php'}"
+2015/12/03 17:29:30,Add,15 assignments
+2015/12/03 19:16:47,Add,25 assignments
+2015/12/03 19:51:46,Expire,
