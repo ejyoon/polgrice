@@ -1,0 +1,99 @@
+---
+title: "polgrice L2 S"
+author: "Erica Yoon"
+date: "Dec 3, 2015"
+output: html_document
+---
+
+# expt
+
+Given speaker goal and utterance, infer state
+
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+rm(list = ls())
+library(jsonlite)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(binom)
+library(bootstrap)
+source("/Users/ericang/Documents/Research/polgrice_GIT/experiment/data_analysis/helper/useful.R")
+
+raw.data.path <- "/Users/ericang/Documents/Research/polgrice_GIT/experiment/exp_versions/6_L2_S/production-results/"
+
+## LOOP TO READ IN FILES
+all.data <- data.frame()
+files <- dir(raw.data.path,pattern="*.json")
+
+for (file.name in files) {
+  
+  ## these are the two functions that are most meaningful
+  json_file <- readLines(paste(raw.data.path,file.name,sep=""))
+  json_file_str = paste(json_file, collapse = "")
+  json_file_str = gsub(",}", "}", json_file_str)
+  jso = jsonlite::fromJSON(json_file_str)
+  jso$answers$data$people <- NULL
+  jso1 <- data.frame(jso)
+  jso1$subid <- substring(file.name, 1, 6)
+  
+  ## now here's where data get bound together
+  all.data <- rbind(all.data, jso1)
+}
+```
+
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+d <- all.data %>%
+  select(subid, answers.data.order, answers.data.knowledge, answers.data.domain, answers.data.goal, answers.data.utterance, answers.data.judgment)
+
+d <- d %>%
+  mutate(trial = answers.data.order) %>%
+  mutate(item = answers.data.domain) %>%
+  mutate(utterance = answers.data.utterance) %>%
+  mutate(knowledge = answers.data.knowledge) %>%
+  mutate(goal = answers.data.goal) %>%
+  mutate(state = answers.data.judgment) %>%
+  select(subid, trial, knowledge, utterance, goal, state)
+
+d$subid <- as.factor(d$subid)
+d$trial <- as.numeric(d$trial)
+d$state <- as.factor(d$state) 
+d$knowledge <- as.factor(d$knowledge)
+d$utterance <- as.factor(d$utterance)
+d$goal <- as.factor(d$goal)
+
+d$utterance <- ordered(d$utterance, levels = c("terrible", "bad", "okay", "good", "amazing"))
+d$goal <- ordered(d$goal, levels = c("honest", "nice", "mean"))
+```
+
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+## for bootstrapping 95% confidence intervals
+theta <- function(x,xdata,na.rm=T) {mean(xdata[x],na.rm=na.rm)}
+ci.low <- function(x,na.rm=T) {
+  mean(x,na.rm=na.rm) - quantile(bootstrap(1:length(x),1000,theta,x,na.rm=na.rm)$thetastar,.025,na.rm=na.rm)}
+ci.high <- function(x,na.rm=T) {
+  quantile(bootstrap(1:length(x),1000,theta,x,na.rm=na.rm)$thetastar,.975,na.rm=na.rm) - mean(x,na.rm=na.rm)}
+
+# goal_prob ~ true_state + utterance + goal
+mss <- d %>%
+  group_by(utterance, goal, subid) %>%
+  summarize(
+            state = mean(state, na.rm=TRUE)
+          )
+ms <- aggregate(state ~ utterance + goal, mss, mean)
+ms$cih <- aggregate(state ~ utterance + goal, mss, ci.high)$state
+ms$cil <- aggregate(state ~ utterance + goal, mss, ci.low)$state
+```
+
+## plot
+
+```{r warning=FALSE, message=FALSE, echo=FALSE, fig.width = 10, fig.height = 2.5}
+qplot(utterance, state, 
+      colour = goal,
+      data=ms) + 
+  geom_line(aes(group=goal)) +
+#  facet_grid(.~utterance) +
+  xlab("utterance") +
+  ylab("inferred state") +
+  ggtitle("Inferred state given utterance and goal") +
+  geom_errorbar(aes(ymin=state-cil,ymax=state+cih,width=.1))
+```
