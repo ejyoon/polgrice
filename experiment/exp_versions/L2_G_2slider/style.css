@@ -173,14 +173,14 @@ td {
 }
 
 
-#slider0 { width: 400px;
+#slider0 { width: 440px;
                height: 12px;
                position: relative;
                margin: 10px; }
 #slider0 .ui-slider-handle {
                background: #FAFAFA; }
 
-#slider1 { width: 400px;
+#slider1 { width: 440px;
                height: 12px;
                position: relative;
                margin: 10px; }
