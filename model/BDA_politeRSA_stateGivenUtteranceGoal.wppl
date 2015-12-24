@@ -1,13 +1,18 @@
-// time webppl BDA_politeRSA.wppl --require mht --require utils
+// time webppl BDA_politeRSA_stateGivenUtteranceGoal.wppl --require mht --require utils
 var fpath = "/Users/mht/Documents/research/polgrice/experiment/data_analysis/data/"
 
-var rawData = utils.readCSV(fpath+"goal_unknown_rounded.csv").data
-var df = dataFrame(rawData, ["roundval"])
+var stateData = utils.readCSV(fpath+"state.csv").data
+var df_state = dataFrame(stateData, ["state"])	
 
-var allKnowledges = _.uniq(_.pluck(df,"knowledge"))
-var allUtterances = _.uniq(_.pluck(df,"utterance"))
-var allStates = _.uniq(_.pluck(df,"true_state"))
-var allGoals = ["nice","honest","mean"] // _.uniq(_.pluck(df,"goal"))
+// df_state
+var allGoals = _.uniq(_.pluck(df_state,"goal"))
+var allUtterances = _.uniq(_.pluck(df_state,"utterance"))
+
+var goalDictionary = {
+	"nice": "kindness",
+	"honest" : "honesty",
+	"mean" : "meanness"
+}
 
 var RSAopts = {
 	stochasticWords:false,//"experimental", 
@@ -19,24 +24,8 @@ var pre1 = RSAopts.stochasticWords ?
 var pre2 = RSAopts.stochasticValence ? 
 				"stochVal-" : ""
 
-var optPrefix = pre1 + pre2
-				
-console.log("running " + optPrefix)
 
-var goalDictionary = {
-	"nice": "kindness",
-	"honest" : "honesty",
-	"mean" : "meanness"
-}
-
-var stateDictionary = {
-	"terrible":1,
-	"bad":2,
-	"okay":3,
-	"good":4,
-	"amazing":5
-}
-// run BDA on literal semantics data
+// // run BDA on literal semantics data
 var sem_mhiter = 50000
 var sem_burn = sem_mhiter/2
 var incrOpts = {burn:sem_burn, verbose: true, verboseLag: sem_mhiter/10}
@@ -54,7 +43,6 @@ var semanticsERP = IncrementalMH(semanticsBDA, sem_mhiter, incrOpts)
 
 var dataAnalysis = function(){
 
-	// var t0 = utils.getTime()
 	var RSAparams = {
 		speakerOptimality : uniform(0,20)
 	}
@@ -70,45 +58,48 @@ var dataAnalysis = function(){
 
 	// var priorParams = {
 	// 	honestGamma : 0.5,
-	// 	honestDelta : 2,
+	// 	honestDelta :2,
 	// 	kindGamma : 0.5,
 	// 	kindDelta : 2
 	// }
 
+	var threshold = uniformDraw([0.2,0.4,0.6,0.8])
+
 	var semantics = sample(semanticsERP)
 
 
-	foreach(allStates, function(state){
+	foreach(allGoals, function(goal){
 
-		var stateData = subset(df, "true_state", state)
+		var stateData = subset(df_state, "goal", goal)
 
 		foreach(allUtterances, function(utterance){
 
 			var utteranceData = subset(stateData, "utterance", utterance)
 
-			var predictiveERP = politeRSA(
-				{
+			var condParams = {
 					utterance: utterance,
-					state: stateDictionary[state]
-				},
+					goal: _.object([[goalDictionary[goal], threshold]])
+				}
+
+			var predictiveERP = politeRSA(
+				condParams,
 				RSAopts,
 				RSAparams,
 				priorParams,
 				semantics,
-				"goals")
+				"state")
 
-			foreach(allGoals, function(goal){
+			// foreach(allGoals, function(goal){
+			var dataPoints = _.pluck(utteranceData, "state")
 
-				var dataPoints = _.pluck(subset(utteranceData, "goal", goal), "roundval")
-				var goalERP = marginalize(predictiveERP, goalDictionary[goal])
+			var likelihoodOfData = sum(map(function(d){return predictiveERP.score([], d)}, dataPoints))
+			// console.log(goal + " " + utterance + " " + likelihoodOfData)
 
-				var likelihoodOfData = sum(map(function(d){return goalERP.score([], d)}, dataPoints))
+			factor(likelihoodOfData)
 
-				factor(likelihoodOfData)
+			query.add(["predictive", goal, utterance, "NA"], expectation(predictiveERP))
 
-				query.add(["predictive" ,stateDictionary[state], utterance, goal], expectation(goalERP))
-
-			})
+			// })
 
 		})
 
@@ -121,6 +112,7 @@ var dataAnalysis = function(){
 	query.add(["parameter","kindness", "delta", "NA"], priorParams.kindDelta)
 	query.add(["parameter","meanness", "gamma", "NA"], priorParams.meanGamma)
 	query.add(["parameter","meanness", "delta", "NA"], priorParams.meanDelta)
+	query.add(["parameter","threshold", "NA", "NA"], threshold)
 		// var t1 = utils.getTime()
 	// console.log((t1-t0)/1000)
 	return query
@@ -129,12 +121,12 @@ var dataAnalysis = function(){
 
 var inference ='MH'
 var samples = 100
-var burn =  samples/2
+var burn = samples/2
 var resultsERP = MCMC(dataAnalysis, {samples:samples, burn:burn, verbose:true})
 
 console.log('inference complete... printing')
 
-var outfile = "results/bda-politeRSA-jointUtilityProbScale-goalPrior-"+optPrefix+"sopt-"+ 
+var outfile = "results/bda-politeRSA-stateGivenUttGoal-3goalPrior-sopt-"+ 
 						inference + samples + "burn" + burn + 
 						"semantics-bern-" + sem_mhiter/1000 + "k-b" + sem_burn/1000 +"k.csv"
 
