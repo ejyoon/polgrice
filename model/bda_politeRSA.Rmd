@@ -20,12 +20,13 @@ HPDlo<- function(s){
   return(m["var1","lower"])
 }
 options("scipen"=10)   
+
+fpath<- "~/Documents/research/polgrice/model/results/bda-politeRSA-jointUtilityProbScale-oneKindMean-goalPrior-sopt-MH100burn50semantics-bern-50k-b25k.csv"
 ```
 
 # Model
 
 ```{r model.load}
-fpath<- "~/Documents/research/polgrice/model/results/"
 prefix<- "bda-politeRSA-stochVal-sopt-goalBetaPriorsMH"
 prefix<- "bda-politeRSA-stochWords-stochVal-sopt-goalBetaPriorsMH"
 prefix<- "bda-politeRSA-stochWords-sopt-goalBetaPriorsMH"
@@ -33,10 +34,20 @@ prefix <- "bda-politeRSA-sopt-goalBetaPriorsMH"
 prefix<- "bda-politeRSA-newNice-sopt-goalBetaPriorsMH"
 prefix<-"bda-politeRSA-newNice-stochWords-sopt5-highKindPriorMH"
 prefix<-"bda-politeRSA-newNice-stochWords-sopt5-uniformGoalsMH"
-prefix<-"bda-politeRSA-jointUtility-stochWords-sopt-MH"
-samples = 2000
+prefix<-"bda-politeRSA-jointUtilityProbScale-oneKindMean-goalPrior-sopt-MH"
+prefix<-"bda-politeRSA-jointUtilityLogProbScale-sopt-MH"
+prefix<-"bda-politeRSA-jointUtilityLogProbScale-sopt-MH"
+# prefix<-"bda-politeRSA-jointUtilityMatchWeight-wMeanness-goalPrior-sopt-MH"
+# prefix<-"bda-politeRSA-jointUtilityMatchWeight-wMeanness-goalPrior-sopt-MH"
+samples = 100
 burn =  samples /2
-m<-read.csv(paste(fpath, prefix, samples, "burn", burn,".csv", sep=''))
+semsamp = 50000
+semburn =semsamp/2
+m<-read.csv(paste(fpath, prefix, samples, "burn", burn,
+                  "semantics-bern-",semsamp/1000,
+#                  "semantics-S1-negAlt-",semsamp/1000,
+#                  "semantics-S1-nullAlt-",semsamp/1000,
+                  "k-b",semburn/1000,"k.csv", sep=''))
 m.samples <- m[rep(row.names(m), m$Probability*samples), 1:5]
 ```
 
@@ -53,7 +64,7 @@ m.params <- m.samples %>%
 
 ggplot(m.params, aes(x=Value))+
   geom_histogram()+
-  facet_wrap(~Goal+Parameter, scales='free')
+  facet_grid(.~Goal+Parameter, scales='free')
 
 m.params %>%
   group_by(Goal,Parameter) %>%
@@ -61,6 +72,10 @@ m.params %>%
             credLow = HPDlo(Value),
             credHigh = HPDhi(Value))
 
+ggsave(paste("~/Documents/research/polgrice/model/results/params",
+             prefix, samples, "burn", burn,
+                  "semantics-S1-nullAlt-",semsamp/1000,
+                  "k-b",semburn/1000,"k.pdf", sep=''))
 ```
 
 ## Posterior predictive
@@ -76,15 +91,23 @@ m.pp <- m.samples %>%
             credHigh = HPDhi(Value),
             credLow = HPDlo(Value)) %>%
   ungroup() %>%
-  mutate(State = factor(State, levels = lvls, labels =c(1,2,3,4,5)),
+  mutate(#State = factor(State, levels = lvls, labels =c(1,2,3,4,5)),
          Utterance = factor(Utterance, levels = lvls))
 
 ggplot(m.pp, aes(x=State, y = MAP, color = Goal, group= Goal))+
-  geom_point(size=4)+
+  geom_point(size=2, position=position_dodge(0.3))+
   geom_line(position=position_dodge(0.3))+
-  #geom_errorbar(aes(ymin = credLow, ymax = credHigh), width=0.1, size =)+
+  geom_errorbar(aes(ymin = credLow, ymax = credHigh),
+                position=position_dodge(0.3), width=0.2)+
   facet_grid(.~Utterance)
 
+ggsave(paste("~/Documents/research/polgrice/model/results/goals",
+             prefix, samples, "burn", burn,
+                  "semantics-bern-",semsamp/1000,
+                  "k-b",semburn/1000,"k.pdf", sep='') )
+```
+
+```{r}
 # To create model predictions for "mean" (for CUNY abstract)
 m.pp.3<-bind_rows(m.pp %>%
             select(-credLow, -credHigh),
@@ -112,6 +135,7 @@ write.csv(m.pp.3, file = "~/Documents/research/polgrice/model/results/goals-sopt
 ```{r literal.sem.load}
 fpath<- "~/Documents/research/polgrice/model/results/semantics/"
 prefix<-"bda-semantics-thetaBernoulli-IncrMH"
+prefix<- "bda-semantics-s1-nullAlt-IncrMH"
 samples = 100000
 burn =  samples /2
 m<-read.csv(paste(fpath, prefix, samples/1000, "k-b", burn/1000,"k.csv", sep=''))
@@ -137,5 +161,81 @@ ggplot(s.tidy, aes(x=State, y = MAP, color=Utterance))+
   geom_line()+
   facet_grid(.~Utterance)
 
-ggsave("~/Documents/research/polgrice/model/results/literalSemantics-bda-bernoulli_incrmh100k-b50k.pdf")
+ggsave("~/Documents/research/polgrice/model/results/literalSemantics-bda-s1-negationAlt_incrmh100k-b50k.pdf")
+```
+
+
+# State given utterance and goal
+
+
+```{r model.load}
+prefix<- "bda-politeRSA-stateGivenUttGoal-goalPrior-sopt-MH"
+samples = 100
+burn =  samples /2
+semsamp = 50000
+semburn =semsamp/2
+m<-read.csv(paste(fpath, prefix, samples, "burn", burn,
+                  "semantics-bern-",semsamp/1000,
+#                  "semantics-S1-negAlt-",semsamp/1000,
+#                  "semantics-S1-nullAlt-",semsamp/1000,
+                  "k-b",semburn/1000,"k.csv", sep=''))
+m.samples <- m[rep(row.names(m), m$Probability*samples), 1:5]
+```
+
+
+## Posterior over parameters
+
+```{r posterior.parameters}
+
+m.params <- m.samples %>%
+  filter(Parameter=='parameter') %>%
+  select(-Parameter, -Goal) %>%
+  rename(Goal = State,
+         Parameter = Utterance)
+
+ggplot(m.params, aes(x=Value))+
+  geom_histogram()+
+  facet_grid(.~Goal+Parameter, scales='free')
+
+m.params %>%
+  group_by(Goal,Parameter) %>%
+  summarize(MAP = estimate_mode(Value),
+            credLow = HPDlo(Value),
+            credHigh = HPDhi(Value))
+
+ggsave(paste("~/Documents/research/polgrice/model/results/params",
+             prefix, samples, "burn", burn,
+                  "semantics-S1-nullAlt-",semsamp/1000,
+                  "k-b",semburn/1000,"k.pdf", sep=''))
+```
+
+## Posterior predictive
+
+```{r posterior.predictives}
+
+lvls = c("terrible", "bad", "okay", "good", "amazing")
+
+m.pp <- m.samples %>%
+  filter(Parameter == 'predictive') %>%
+  select(-Goal) %>%
+  rename(Goal = State) %>%
+  group_by(Utterance, Goal) %>%
+  summarize(MAP = estimate_mode(Value),
+            credHigh = HPDhi(Value),
+            credLow = HPDlo(Value)) %>%
+  ungroup() %>%
+  mutate(#State = factor(State, levels = lvls, labels =c(1,2,3,4,5)),
+         Utterance = factor(Utterance, levels = lvls),
+         Goal = factor(Goal, levels =c("honest", "nice", "mean")))
+
+ggplot(m.pp, aes(x=Utterance, y = MAP, color = Goal, group= Goal))+
+  geom_point(size=2, position=position_dodge(0.3))+
+  geom_line(position=position_dodge(0.3))+
+  geom_errorbar(aes(ymin = credLow, ymax = credHigh),
+                position=position_dodge(0.3), width=0.2)
+
+ggsave(paste("~/Documents/research/polgrice/model/results/goals",
+             prefix, samples, "burn", burn,
+                  "semantics-bern-",semsamp/1000,
+                  "k-b",semburn/1000,"k.pdf", sep='') )
 ```
