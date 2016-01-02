@@ -60,6 +60,7 @@ d$state <- as.factor(d$state)
 d$knowledge <- as.factor(d$knowledge)
 d$utterance <- as.factor(d$utterance)
 d$goal <- as.factor(d$goal)
+d$state <- as.numeric(d$state)
 
 d$utterance <- ordered(d$utterance, levels = c("terrible", "bad", "okay", "good", "amazing"))
 d$goal <- ordered(d$goal, levels = c("honest", "nice", "mean"))
@@ -94,6 +95,6 @@ qplot(utterance, state,
 #  facet_grid(.~utterance) +
   xlab("utterance") +
   ylab("inferred state") +
-  ggtitle("Inferred state given utterance and goal") +
+#  ggtitle("Inferred state given utterance and goal") +
   geom_errorbar(aes(ymin=state-cil,ymax=state+cih,width=.1))
 ```

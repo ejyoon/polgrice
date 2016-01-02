@@ -15,9 +15,9 @@ library(tidyr)
 library(dplyr)
 library(binom)
 library(bootstrap)
-source("/Users/ericang/Documents/Research/polite_probmods/experiment/data_analysis/helper/useful.R")
+source("/Users/ericang/Documents/Research/polgrice_GIT/experiment/data_analysis/helper/useful.R")
 
-raw.data.path <- "/Users/ericang/Documents/Research/polite_probmods/polite_adj/experiment/exp_versions/4_L2_J/production-results/"
+raw.data.path <- "/Users/ericang/Documents/Research/polgrice_GIT/experiment/exp_versions/4_L2_J/production-results/"
 
 ## LOOP TO READ IN FILES
 all.data <- data.frame()
@@ -88,8 +88,8 @@ qplot(state, judgment,
   geom_line(aes(group=utterance)) +
   facet_grid(.~utterance) +
   xlab("state (1=worst)") +
-  ylab("judgment") +
-  ggtitle("Literal semantics") +
+  ylab("proportion of acceptances") +
+#  ggtitle("Literal semantics") +
   geom_errorbar(aes(ymin=judgment-cil,ymax=judgment+cih,width=.1))
 ```
 
