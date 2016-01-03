@@ -21,7 +21,7 @@ HPDlo<- function(s){
 }
 options("scipen"=10)   
 
-fpath<- "~/Documents/research/polgrice/model/results/bda-politeRSA-jointUtilityProbScale-oneKindMean-goalPrior-sopt-MH100burn50semantics-bern-50k-b25k.csv"
+fpath<- "~/Documents/research/polgrice/model/results/"
 ```
 
 # Model
@@ -37,9 +37,11 @@ prefix<-"bda-politeRSA-newNice-stochWords-sopt5-uniformGoalsMH"
 prefix<-"bda-politeRSA-jointUtilityProbScale-oneKindMean-goalPrior-sopt-MH"
 prefix<-"bda-politeRSA-jointUtilityLogProbScale-sopt-MH"
 prefix<-"bda-politeRSA-jointUtilityLogProbScale-sopt-MH"
+prefix<-"bda-politeRSA-jointUtilityProbScale-OneSocialsopt-MH"
+prefix<-"bda-politeRSA-jointUtilityProbScale-goalPrior-sopt-MH"
 # prefix<-"bda-politeRSA-jointUtilityMatchWeight-wMeanness-goalPrior-sopt-MH"
 # prefix<-"bda-politeRSA-jointUtilityMatchWeight-wMeanness-goalPrior-sopt-MH"
-samples = 100
+samples = 1000
 burn =  samples /2
 semsamp = 50000
 semburn =semsamp/2
@@ -47,7 +49,9 @@ m<-read.csv(paste(fpath, prefix, samples, "burn", burn,
                   "semantics-bern-",semsamp/1000,
 #                  "semantics-S1-negAlt-",semsamp/1000,
 #                  "semantics-S1-nullAlt-",semsamp/1000,
-                  "k-b",semburn/1000,"k.csv", sep=''))
+                  "k-b",semburn/1000,"ka.csv", sep=''))
+
+
 m.samples <- m[rep(row.names(m), m$Probability*samples), 1:5]
 ```
 
@@ -81,30 +85,60 @@ ggsave(paste("~/Documents/research/polgrice/model/results/params",
 ## Posterior predictive
 
 ```{r posterior.predictives}
-
-lvls = c("terrible", "bad", "okay", "good", "amazing")
-
-m.pp <- m.samples %>%
-  filter(Parameter == 'predictive') %>%
-  group_by(State, Utterance, Goal) %>%
-  summarize(MAP = estimate_mode(Value),
-            credHigh = HPDhi(Value),
-            credLow = HPDlo(Value)) %>%
-  ungroup() %>%
-  mutate(#State = factor(State, levels = lvls, labels =c(1,2,3,4,5)),
-         Utterance = factor(Utterance, levels = lvls))
-
-ggplot(m.pp, aes(x=State, y = MAP, color = Goal, group= Goal))+
-  geom_point(size=2, position=position_dodge(0.3))+
-  geom_line(position=position_dodge(0.3))+
-  geom_errorbar(aes(ymin = credLow, ymax = credHigh),
-                position=position_dodge(0.3), width=0.2)+
-  facet_grid(.~Utterance)
+  
+  lvls = c("terrible", "bad", "okay", "good", "amazing")
+  
+  m.pp <- m.samples %>%
+    filter(Parameter == 'predictive') %>%
+    group_by(State, Utterance, Goal) %>%
+    summarize(MAP = estimate_mode(Value),
+              credHigh = HPDhi(Value),
+              credLow = HPDlo(Value)) %>%
+    ungroup() %>%
+    mutate(#State = factor(State, levels = lvls, labels =c(1,2,3,4,5)),
+           Utterance = factor(Utterance, levels = lvls))
+  
+  ggplot(m.pp, aes(x=State, y = MAP, color = Goal, group= Goal))+
+    geom_point(size=2, position=position_dodge(0.3))+
+    geom_line(position=position_dodge(0.3))+
+    geom_errorbar(aes(ymin = credLow, ymax = credHigh),
+                  position=position_dodge(0.3), width=0.2)+
+    facet_grid(.~Utterance)
 
 ggsave(paste("~/Documents/research/polgrice/model/results/goals",
              prefix, samples, "burn", burn,
                   "semantics-bern-",semsamp/1000,
                   "k-b",semburn/1000,"k.pdf", sep='') )
+```
+
+
+### Compare to behavioral data
+
+```{r}
+d<-read.csv("~/Documents/research/polgrice/experiment/data_analysis/data/goal_unknown_rounded.csv")
+
+d.tidy <- d %>%
+  mutate(State = true_state,
+         Utterance = utterance,
+         Goal = goal) %>%
+  mutate(State = factor(State, levels = lvls, labels =c(1,2,3,4,5))) %>%
+  group_by(State, Utterance, Goal) %>%
+  multi_boot_standard(column= "goal_prob")
+
+md.tidy<- left_join(m.pp, d.tidy)
+
+ggplot(md.tidy, aes(x=MAP, y = mean, color = Goal))+
+  geom_point()+
+  geom_abline(intercept = 0, slope = 1, lty=2)+
+  geom_errorbar(aes(ymin=ci_lower, ymax=ci_upper))+
+  geom_errorbarh(aes(xmin=credLow, xmax = credHigh))+
+  theme_paper()+
+  xlim(-0.05,1.05)+
+  ylim(-0.05,1.05)+
+  coord_fixed()
+
+with(md.tidy, cor(MAP, mean))^2
+
 ```
 
 ```{r}
@@ -169,7 +203,7 @@ ggsave("~/Documents/research/polgrice/model/results/literalSemantics-bda-s1-nega
 
 
 ```{r model.load}
-prefix<- "bda-politeRSA-stateGivenUttGoal-goalPrior-sopt-MH"
+prefix<- "bda-politeRSA-stateGivenUttGoal-3goalPrior-sopt-MH"
 samples = 100
 burn =  samples /2
 semsamp = 50000
