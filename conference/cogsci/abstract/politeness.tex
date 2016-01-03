@@ -6,7 +6,12 @@
 \usepackage{cogsci}
 \usepackage{pslatex}
 \usepackage{apacite}
+\usepackage{color}
 
+
+ \newcommand{\denote}[1]{\mbox{ $[\![ #1 ]\!]$}}
+\definecolor{Red}{RGB}{255,0,0}
+\newcommand{\red}[1]{\textcolor{Red}{#1}}  
 
 \title{politeness}
  
@@ -38,15 +43,49 @@
 
 \section{Computational Model}
 
-Politeness poses a challenge for Gricean models of pragmatic language understanding, which assume that speakers? goals are to communicate informatively about some aspect of the world \cite{Frank2012, Goodman2013}. 
+Politeness poses a challenge for Gricean models of pragmatic language understanding, which assume that speakers' goals are to communicate informatively about some aspect of the world \cite{Frank2012, Goodman2013}. 
 Why ever would you say \emph{please} or \emph{thank you} if they only add cost to the speaker and carry no information content?
 Similarly, what incentive is there to ever ``sugar coat'' utterances if the only currency of communication is information transfer? 
 We propose that information transfer captures just one component of a speaker's utility, \emph{epistemic utility}.
-Politeness, then, takes shape as an independent component of a speaker's utility, \emph{social utility}. 
+Politeness, then, takes shape as an independent component of a speaker's utility, what we will call \emph{social utility}. 
 
 \citeA{Goodman2013} define speaker utility by the amount of information a \emph{literal listener} would still not know after know about world state $s$ after hearing a speaker's utterance $w$: 
-$U(w; s) = \ln(P_{literal}(s \mid w)) $.
-We simply extend this by adding a component related to the value of the state.
+$U_{epistemic}(w; s) = \ln(P_{literal}(s \mid w)) $.
+We simply extend this by adding a component related to the intrinsic value of the state in the eye's of the listener\footnote{At this point, we do not differentiate value of the state to the listener from value of the state to the speaker, though it is conceivable that these could be different.}.
+We consider states which have utility values 1 - 5, corresponding to the subjective utility of the state, and roughly corresponding to the scalar value terms \{\emph{good}, \emph{bad}, \emph{terrible}, \emph{amazing}, and \emph{okay}\}. 
+The precise mapping from utterance to subjective utility value is measured in Expt.~1.
+
+We define the social utility of an utterance to be the expected utility of the state the listener would infer given the utterance $w$: 
+%
+$$
+U_{social}(w; s) = E_{V}[[P_{literal}(s \mid w)]]
+$$
+%
+where $V$ is the value function that maps states to subjective utility values. 
+
+Experiment 2 explores the relative contributions of these two utility components under a variety of scenarios. 
+In order to consider the relative contributions of the two utility components, we transform both components to probability space (values between 0 - 1): $U_{epistemic}$ by exponentiating; $U_{social}$ by normalizing. Thus, the speaker's joint utility function is
+%
+$$
+U(w;s; \beta) = \beta_{e}\cdot e^{U_{epistemic}} + \beta_{s} \cdot \frac{U_{social}}{\max_{s} V(s)}
+$$
+%
+We follow the treatment of RSA using lifted-variables \cite{GoodmanLassiter2015, Kao2014, Degen2015}; here, the variables lifted to the pragmatic level are the weights in the speaker's utility function ($\beta$'s) .
+
+%
+\begin{eqnarray}
+&&P_{L_1}(s, \beta \mid w)\propto P_{S_1}(w \mid s, \beta)\cdot P(s) \cdot P(\beta) \label{eq:L1}\\
+&&P_{S_1}(w \mid s, \beta) \propto \mathrm{exp}(\lambda \cdot E[[U(w; s; \beta)]])\label{eq:S1}\\
+&&P_{L_0}(s \mid w, \beta)\propto \denote{w}(s) \cdot P(s) \label{eq:L0}
+\end{eqnarray}
+%
+For simplicity, we assume the following:
+\begin{enumerate}
+\item The set of states of the world $S = \{s_{1}, ...,  s_{5}\}$ have subjective numerical values $V(s_{i}) = i$. 
+\item The set of utterances is \{\emph{amazing, bad, okay, good, amazing}\},
+% $\{w_{amazing}, w_{bad}, w_{okay}, w_{good}, w_{amazing}\}$
+  \red{used in relevant empirical studies \cite{Bonnefon} (?).}\end{enumerate}
+The literal meaning of these utterances $W$ with respect to states $S$ we measure in Expt.~1. 
 
 
 
