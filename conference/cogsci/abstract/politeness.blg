@@ -1,0 +1,57 @@
+This is BibTeX, Version 0.99d (TeX Live 2013)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: politeness.aux
+The style file: apacite.bst
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=20001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
+Database file #1: politeness.bib
+Warning--I didn't find a database entry for "Bonnefon"
+apacite.bst [2012/02/25 v6.01 APA bibliography style]
+You've used 6 entries,
+            6735 wiz_defined-function locations,
+            1281 strings with 11508 characters,
+and the built_in function-call counts, 12479 in all, are:
+= -- 1630
+> -- 101
+< -- 527
++ -- 614
+- -- 12
+* -- 756
+:= -- 2166
+add.period$ -- 28
+call.type$ -- 6
+change.case$ -- 104
+chr.to.int$ -- 0
+cite$ -- 12
+duplicate$ -- 356
+empty$ -- 484
+format.name$ -- 183
+if$ -- 2412
+int.to.chr$ -- 0
+int.to.str$ -- 12
+missing$ -- 0
+newline$ -- 159
+num.names$ -- 50
+pop$ -- 253
+preamble$ -- 1
+purify$ -- 24
+quote$ -- 0
+skip$ -- 803
+stack$ -- 0
+substring$ -- 699
+swap$ -- 195
+text.length$ -- 14
+text.prefix$ -- 0
+top$ -- 1
+type$ -- 608
+warning$ -- 0
+while$ -- 67
+width$ -- 0
+write$ -- 202
+(There was 1 warning)
