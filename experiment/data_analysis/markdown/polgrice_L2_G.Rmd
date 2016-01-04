@@ -18,9 +18,9 @@ library(tidyr)
 library(dplyr)
 library(binom)
 library(bootstrap)
-source("/Users/ericang/Documents/Research/polite_probmods/experiment/data_analysis/helper/useful.R")
+source("/Users/ericang/Documents/Research/polgrice_GIT/experiment/data_analysis/helper/useful.R")
 
-raw.data.path <- "/Users/ericang/Documents/Research/polite_probmods/polite_adj/experiment/exp_versions/5_L2_G/production-results/"
+raw.data.path <- "/Users/ericang/Documents/Research/polgrice_GIT/experiment/exp_versions/5_L2_G/production-results/"
 
 ## LOOP TO READ IN FILES
 all.data <- data.frame()
@@ -102,17 +102,18 @@ ms$cil <- aggregate(goal_prob ~ true_state + utterance + goal, mss, ci.low)$goal
 
 ```{r warning=FALSE, message=FALSE, echo=FALSE, fig.width = 10, fig.height = 2.5}
 ms$goal <- ordered(ms$goal, levels = c("honest", "nice", "mean"))
+levels(ms$utterance) <- c("utterance: terrible", "utterance: bad","utterance: okay","utterance: good","utterance: amazing")
 
 qplot(true_state, goal_prob, 
       colour = goal,
-      data=subset(ms, goal!="mean")) + 
+      data=ms) + 
   geom_line(aes(group=goal)) +
   facet_grid(.~utterance) +
   xlab("state") +
   ylab("likelihood for goal") +
-  ggtitle("Experiment: goals given heart-state and utterance") +
+ # ggtitle("Experiment: goals given heart-state and utterance") +
   geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1))
-# 
+
 # # only honesty goal
 # qplot(true_state, goal_prob, 
 #       colour = utterance,
