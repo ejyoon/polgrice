@@ -47,15 +47,6 @@ var dataAnalysis = function(){
 		speakerOptimality : uniform(0,20)
 	}
 
-	var priorParams = {
-		honestGamma : uniform(0,1),
-		honestDelta : uniform(0,20),
-		kindGamma : uniform(0,1),
-		kindDelta : uniform(0,20),
-		meanGamma : uniform(0,1),
-		meanDelta : uniform(0,20)
-	}
-
 	// var priorParams = {
 	// 	honestGamma : 0.5,
 	// 	honestDelta :2,
@@ -63,7 +54,7 @@ var dataAnalysis = function(){
 	// 	kindDelta : 2
 	// }
 
-	var threshold = uniformDraw([0.2,0.4,0.6,0.8])
+	// var threshold = uniformDraw([0.2,0.4,0.6,0.8])
 
 	var semantics = sample(semanticsERP)
 
@@ -72,13 +63,33 @@ var dataAnalysis = function(){
 
 		var stateData = subset(df_state, "goal", goal)
 
+		// var priorParams = {
+		// 	honestGamma : goal=="honest" ? uniform(0,1) : 0.5,
+		// 	honestDelta : goal=="honest" ? uniform(0,20) : 2,
+		// 	kindGamma : goal=="nice" ? uniform(0,1) : 0.5,
+		// 	kindDelta : goal=="nice" ? uniform(0,20) : 2,
+		// 	meanGamma : goal=="mean" ? uniform(0,1) : 0.5,
+		// 	meanDelta : goal=="mean" ? uniform(0,20) : 2
+		// }
+		var priorParams = {
+			honestGamma : uniform(0,1),
+			honestDelta : uniform(0,20),
+			kindGamma : uniform(0,1),
+			kindDelta : uniform(0,20),
+			meanGamma : uniform(0,1),
+			meanDelta : uniform(0,20)
+		}
+
+
+
 		foreach(allUtterances, function(utterance){
 
 			var utteranceData = subset(stateData, "utterance", utterance)
 
 			var condParams = {
-					utterance: utterance,
-					goal: _.object([[goalDictionary[goal], threshold]])
+					utterance: utterance
+					// goal: _.object([[goalDictionary[goal], threshold]])
+					// goal:  _.object([[goalDictionary[goal], threshold]])
 				}
 
 			var predictiveERP = politeRSA(
@@ -89,8 +100,10 @@ var dataAnalysis = function(){
 				semantics,
 				"state")
 
+			// console.log(map(function(s){return [s, Math.exp(predictiveERP.score([],s))]},predictiveERP.support()))
 			// foreach(allGoals, function(goal){
 			var dataPoints = _.pluck(utteranceData, "state")
+			// console.log(dataPoints)
 
 			var likelihoodOfData = sum(map(function(d){return predictiveERP.score([], d)}, dataPoints))
 			// console.log(goal + " " + utterance + " " + likelihoodOfData)
@@ -103,16 +116,19 @@ var dataAnalysis = function(){
 
 		})
 
+
+		query.add(["parameter",goal, "honesty", "gamma"], priorParams.honestGamma)
+		query.add(["parameter",goal, "honesty", "delta"], priorParams.honestDelta)
+		query.add(["parameter",goal, "kindness", "gamma"], priorParams.kindGamma)
+		query.add(["parameter",goal, "kindness", "delta"], priorParams.kindDelta)
+		query.add(["parameter",goal, "meanness", "gamma"], priorParams.meanGamma)
+		query.add(["parameter",goal, "meanness", "delta"], priorParams.meanDelta)
+
 	})
 
 	query.add(["parameter","speakerOptimality", "NA", "NA"], RSAparams.speakerOptimality)
-	query.add(["parameter","honesty", "gamma", "NA"], priorParams.honestGamma)
-	query.add(["parameter","honesty", "delta", "NA"], priorParams.honestDelta)
-	query.add(["parameter","kindness", "gamma", "NA"], priorParams.kindGamma)
-	query.add(["parameter","kindness", "delta", "NA"], priorParams.kindDelta)
-	query.add(["parameter","meanness", "gamma", "NA"], priorParams.meanGamma)
-	query.add(["parameter","meanness", "delta", "NA"], priorParams.meanDelta)
-	query.add(["parameter","threshold", "NA", "NA"], threshold)
+
+	// query.add(["parameter","threshold", "NA", "NA"], threshold)
 		// var t1 = utils.getTime()
 	// console.log((t1-t0)/1000)
 	return query
@@ -120,15 +136,15 @@ var dataAnalysis = function(){
 
 
 var inference ='MH'
-var samples = 100
+var samples = 1000
 var burn = samples/2
-var resultsERP = MCMC(dataAnalysis, {samples:samples, burn:burn, verbose:true})
+var resultsERP = MCMC(dataAnalysis, {samples:samples/2, burn:burn, verbose:true})
 
 console.log('inference complete... printing')
 
-var outfile = "results/bda-politeRSA-stateGivenUttGoal-3goalPrior-sopt-"+ 
+var outfile = "results/bda-politeRSA-stateGivenUttGoal-goalSpecPriorsAll3-sopt-"+ 
 						inference + samples + "burn" + burn + 
-						"semantics-bern-" + sem_mhiter/1000 + "k-b" + sem_burn/1000 +"k.csv"
+						"semantics-bern-" + sem_mhiter/1000 + "k-b" + sem_burn/1000 +"kb.csv"
 
 utils.erpWriter(resultsERP, outfile)
 

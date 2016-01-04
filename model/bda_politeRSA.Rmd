@@ -38,21 +38,22 @@ prefix<-"bda-politeRSA-jointUtilityProbScale-oneKindMean-goalPrior-sopt-MH"
 prefix<-"bda-politeRSA-jointUtilityLogProbScale-sopt-MH"
 prefix<-"bda-politeRSA-jointUtilityLogProbScale-sopt-MH"
 prefix<-"bda-politeRSA-jointUtilityProbScale-OneSocialsopt-MH"
-prefix<-"bda-politeRSA-jointUtilityProbScale-goalPrior-sopt-MH"
+prefix<-"bda-politeRSA-jointUtilityProbScale-goalPriorFixed-sopt-MH"
 # prefix<-"bda-politeRSA-jointUtilityMatchWeight-wMeanness-goalPrior-sopt-MH"
 # prefix<-"bda-politeRSA-jointUtilityMatchWeight-wMeanness-goalPrior-sopt-MH"
-samples = 1000
+samples = 10000
 burn =  samples /2
 semsamp = 50000
 semburn =semsamp/2
+m.samples<- data.frame()
+for (i in c("a","b","c")){
 m<-read.csv(paste(fpath, prefix, samples, "burn", burn,
                   "semantics-bern-",semsamp/1000,
-#                  "semantics-S1-negAlt-",semsamp/1000,
-#                  "semantics-S1-nullAlt-",semsamp/1000,
-                  "k-b",semburn/1000,"ka.csv", sep=''))
-
-
-m.samples <- m[rep(row.names(m), m$Probability*samples), 1:5]
+                  "k-b",semburn/1000,"k",i,".csv", sep=''))
+  m.samp <- m[rep(row.names(m), m$Probability*(samples-burn)), 1:5]
+  m.samples<- bind_rows(m.samples, m.samp)
+  print(i)
+}
 ```
 
 
@@ -78,17 +79,17 @@ m.params %>%
 
 ggsave(paste("~/Documents/research/polgrice/model/results/params",
              prefix, samples, "burn", burn,
-                  "semantics-S1-nullAlt-",semsamp/1000,
-                  "k-b",semburn/1000,"k.pdf", sep=''))
+                  "semantics-bern-",semsamp/1000,
+                  "k-b",semburn/1000,"kx3.pdf", sep=''))
 ```
 
 ## Posterior predictive
 
 ```{r posterior.predictives}
   
-  lvls = c("terrible", "bad", "okay", "good", "amazing")
+lvls = c("terrible", "bad", "okay", "good", "amazing")
   
-  m.pp <- m.samples %>%
+m.pp <- m.samples %>%
     filter(Parameter == 'predictive') %>%
     group_by(State, Utterance, Goal) %>%
     summarize(MAP = estimate_mode(Value),
@@ -98,7 +99,15 @@ ggsave(paste("~/Documents/research/polgrice/model/results/params",
     mutate(#State = factor(State, levels = lvls, labels =c(1,2,3,4,5)),
            Utterance = factor(Utterance, levels = lvls))
   
-  ggplot(m.pp, aes(x=State, y = MAP, color = Goal, group= Goal))+
+  
+write.csv(m.pp, 
+          file =paste("~/Documents/research/polgrice/model/results/goals",
+                      prefix, samples, "burn", burn,
+                  "semantics-bern-",semsamp/1000,
+                  "k-b",semburn/1000,"k.csv", sep=""), row.names=F)
+
+  
+ggplot(m.pp, aes(x=State, y = MAP, color = Goal, group= Goal))+
     geom_point(size=2, position=position_dodge(0.3))+
     geom_line(position=position_dodge(0.3))+
     geom_errorbar(aes(ymin = credLow, ymax = credHigh),
@@ -202,18 +211,31 @@ ggsave("~/Documents/research/polgrice/model/results/literalSemantics-bda-s1-nega
 # State given utterance and goal
 
 
-```{r model.load}
-prefix<- "bda-politeRSA-stateGivenUttGoal-3goalPrior-sopt-MH"
-samples = 100
+```{r stateGivenUtt.model.load}
+#prefix<- "bda-politeRSA-stateGivenUttGoal-3goalPrior-sopt-MH"
+prefix<- "bda-politeRSA-stateGivenUttGoal-goalSpecPriorsAll3-sopt-MH"
+#prefix<- "bda-politeRSA-stateGivenUttGoal-goalSpecPriors-sopt-MH"
+samples = 1000
 burn =  samples /2
 semsamp = 50000
 semburn =semsamp/2
+# m<-read.csv(paste(fpath, prefix, samples, "burn", burn,
+#                   "semantics-bern-",semsamp/1000,
+# #                  "semantics-S1-negAlt-",semsamp/1000,
+# #                  "semantics-S1-nullAlt-",semsamp/1000,
+#                   "k-b",semburn/1000,"kb.csv", sep=''))
+# m.samples <- m[rep(row.names(m), m$Probability*samples), 1:5]
+# 
+
+m.samples<- data.frame()
+for (i in c("a", "b")){
 m<-read.csv(paste(fpath, prefix, samples, "burn", burn,
                   "semantics-bern-",semsamp/1000,
-#                  "semantics-S1-negAlt-",semsamp/1000,
-#                  "semantics-S1-nullAlt-",semsamp/1000,
-                  "k-b",semburn/1000,"k.csv", sep=''))
-m.samples <- m[rep(row.names(m), m$Probability*samples), 1:5]
+                  "k-b",semburn/1000,"k",i,".csv", sep=''))
+  m.samp <- m[rep(row.names(m), m$Probability*(samples-burn)), 1:5]
+  m.samples<- bind_rows(m.samples, m.samp)
+  print(i)
+}
 ```
 
 
@@ -223,24 +245,27 @@ m.samples <- m[rep(row.names(m), m$Probability*samples), 1:5]
 
 m.params <- m.samples %>%
   filter(Parameter=='parameter') %>%
-  select(-Parameter, -Goal) %>%
-  rename(Goal = State,
-         Parameter = Utterance)
+  #select(-Parameter, -Goal) %>%
+  select(-Parameter) %>%
+  rename(Cndition = State,
+           #Goal = State,
+         Goal = Utterance,
+         Parameter = Goal)
 
-ggplot(m.params, aes(x=Value))+
-  geom_histogram()+
-  facet_grid(.~Goal+Parameter, scales='free')
+ggplot(m.params, aes(x=Value, fill = Goal))+
+  geom_histogram(position=position_dodge())+
+  facet_grid(Cndition~Parameter, scales='free')
 
 m.params %>%
-  group_by(Goal,Parameter) %>%
+  group_by(Cndition, Goal,Parameter) %>%
   summarize(MAP = estimate_mode(Value),
             credLow = HPDlo(Value),
             credHigh = HPDhi(Value))
 
 ggsave(paste("~/Documents/research/polgrice/model/results/params",
              prefix, samples, "burn", burn,
-                  "semantics-S1-nullAlt-",semsamp/1000,
-                  "k-b",semburn/1000,"k.pdf", sep=''))
+                  "semantics-bern-",semsamp/1000,
+                  "k-b",semburn/1000,"k.pdf", sep=''), width =12, height = 8)
 ```
 
 ## Posterior predictive
@@ -271,5 +296,5 @@ ggplot(m.pp, aes(x=Utterance, y = MAP, color = Goal, group= Goal))+
 ggsave(paste("~/Documents/research/polgrice/model/results/goals",
              prefix, samples, "burn", burn,
                   "semantics-bern-",semsamp/1000,
-                  "k-b",semburn/1000,"k.pdf", sep='') )
+                  "k-b",semburn/1000,"k.pdf", sep=''), width = 8, height = 5 )
 ```
