@@ -17,6 +17,21 @@ var marginalizeERP = function(myERP, label){
   })
 }
 
+var logNormalPDF = function(x, mu, sigma){
+  var coef = (1 / (x*sigma*Math.sqrt(2*Math.PI)))
+  var fe = Math.exp(-(Math.pow(Math.log(x)-mu,2))/(2*Math.pow(sigma,2)))
+  return coef*fe
+}
+
+var discretizedLogNormal = function(mu, sigma, bins){
+  return Enumerate(function(){
+    var probs = map(function(b){return logNormalPDF(b, mu, sigma)}, bins)
+    return bins[discrete(probs)]
+  })
+}
+
+
+var alpha = 10
 var states = [1,2,3,4,5]
 var utterances = ["terrible","bad","okay","good","amazing"]
 
@@ -29,10 +44,19 @@ var utterancePrior = function(){
   return uniformDraw(utterances)
 }
 
-var speakerOptimality = 10
 
-var honestyWeights = [1,1,1,1,1]
-var kindnessWeights = [1,1,1,1,1]
+
+var speakerOptimality = 10
+var bins = [0.1, 1, 5, 10, 20, 50, 100]
+// var honestyPrior = discretizedLogNormal(2,1,bins)
+// var kindnessPrior = discretizedLogNormal(2,1,bins)
+// var meannessPrior = discretizedLogNormal(2,1,bins)
+
+var honestyPrior = Enumerate(function(){return uniformDraw(bins)})
+// var kindnessPrior = Enumerate(function(){return uniformDraw(bins)})
+var kindnessPrior = Enumerate(function(){return uniformDraw([-100,-50,-20,-10,-5,-1,-0.1,0.1, 1, 5, 10,20, 50, 100])})
+// var meannessPrior = Enumerate(function(){return uniformDraw(bins)})
+
 // var kindnessWeights = [1,1,1,1,1,
                         // 1,1,1,1,1]
 
@@ -68,8 +92,8 @@ var speaker1 = cache(function(state, speakerGoals) {
 
     var L0 = listener0(utterance)
 
-    var epistemicUtility = Math.exp(L0.score([],state))
-    var socialUtility = expectation(L0)/5
+    var epistemicUtility = L0.score([],state)
+    var socialUtility = expectation(L0, function(s){return alpha*s})
 
     // var epistemicWeight = speakerGoals.honesty
     // var niceWeight =  speakerGoals.kindness 
@@ -77,14 +101,15 @@ var speaker1 = cache(function(state, speakerGoals) {
 
     var eUtility = speakerGoals.honesty*epistemicUtility 
     var sUtility = speakerGoals.kindness*socialUtility
-    var mUtility = speakerGoals.meanness*socialUtility
+    // var mUtility = speakerGoals.meanness*socialUtility
 
     // console.log(utterance)
     // console.log(speakerGoals.meanness)
-    factor(eUtility+sUtility-mUtility)
+    // factor(eUtility+sUtility-mUtility)
+    factor(eUtility+sUtility)
 
-    return utterance
-
+    return [utterance, eUtility, sUtility, eUtility+sUtility]
+    // return utterance
   })
 })
 
@@ -97,34 +122,22 @@ var listener1 = function(exptCondition, queryStatement) {
     var knownGoals = exptCondition.goal
     var state = statePrior()
 
-    // var alpha = uniformDraw([-100, -50, -25, -10, -5, -1, -0.1,
-                // 0, 0.1, 1, 5, 10, 25, 50, 100])
-
     var speakerGoals = {
-      honesty: [0.1,0.3,0.5,0.7,0.9][discrete(honestyWeights)],
-      // kindness: [-0.9, -0.7, -0.5, -0.3, -0.1, 0.1,0.3,0.5,0.7,0.9][discrete(kindnessWeights)]
-      kindness: [0.1,0.3,0.5,0.7,0.9][discrete(kindnessWeights)],
-      meanness: [0.1,0.3,0.5,0.7,0.9][discrete(kindnessWeights)]
+      honesty: sample(honestyPrior),
+      kindness: sample(kindnessPrior)
+      // meanness: sample(meannessPrior)
      }
-
-     // console.log(speakerGoals)
 
     condition(trueState ? trueState == state : true)
 
-      foreach(_.keys(knownGoals), function(g){
-        condition(speakerGoals[g] > knownGoals[g])
-      })
-
-
-    // console.log(state)
+      // foreach(_.keys(knownGoals), function(g){
+      //   condition(speakerGoals[g] > knownGoals[g])
+      // })
 
     var S1 = speaker1(state, speakerGoals)
 
     factor(speakerOptimality*S1.score([],utterance))
 
-    // var returnGoals =   {honesty: speakerGoals.honesty,
-    //         kindness: speakerGoals.kindness > 0 ? speakerGoals.kindness : 0,
-    //         meanness: speakerGoals.kindness > 0 ? 0 : -speakerGoals.kindness}
     var returnStatement = {
       state: state,
       goals: speakerGoals
@@ -134,86 +147,74 @@ var listener1 = function(exptCondition, queryStatement) {
   })
 }
 
-// var utt = "terrible"
-
-// var r1 = listener1(
+// var rs1 = listener1(
 // {
-//   utterance: utt,
-//   goal: {honesty: 5},
-// }, "state")
+//   utterance: "amazing",
+//   state: 1
+// }, "goals")
 
-// var r2 = listener1(
+
+// var allRes =  map(function(x){
+//   var rs1 =  listener1(
 // {
-//   utterance: utt,
-//   goal: {kindness: 5},
-// }, "state")
+//   utterance: "amazing",
+//   state: x
+// }, "goals")
+//   return rs1
+// },[1,2,3,4,5])
 
-// console.log(utt + "  when honest " + expectation(r1))
-// console.log(utt + "  when kind " + expectation(r1))
-
-// console.log(Math.exp(speaker1(1, {honesty: 0.1, kindness:0.9}).score([], "amazing")))
-// console.log(Math.exp(speaker1(3, {honesty: 0.1, kindness:0.9}).score([], "amazing")))
-// speaker1(3, {
-// honesty:0.9,
-// kindness:0.1,
-// meanness:0.1})
-
-// var state = 5
-// sum(map(function(utterance){
-//   var L0 = listener0(utterance)
-//   var epistemicUtility = L0.score([],state)
-//   var socialUtility = Math.log(expectation(L0)/5)
-//   console.log(epistemicUtility)
-//   return epistemicUtility
-// },utterances))
-
-
-// expectation(speaker1(5, {honesty: 0.3, kindness:0.3}))
-
-// listener0("amazing")
-
-// var l0 = listener0("terrible")
-// Enumerate(function(){
-//   var x = sample(l0)
-//   return {5:1,:4:2:,3:3:,2:4,1:5}[x]
+// foreach(["honesty", "kindness"], function(g){
+//   console.log(g+" goal")
+//   foreach(allRes, function(rs){
+//     console.log("s=1 ==> " + expectation(marginalizeERP(rs,g)))
+//   })
 // })
 
-var condition1 = {
-  utterance : "terrible",
-  // state: 1
-  // ,
-  goal: {
-    kindness: 0.8
-  }
-}
+speaker1(1, {honesty:20, kindness:35, meanness:1})
 
-var condition2 = {
-  utterance : "terrible",
-  // state: 3
-  // ,
-  goal: {
-    honesty: 0.8
-  }
-}
 
-// // // marginalizeERP(listener1(condition1, "goals"), "honesty")
 
-var results1 = listener1(condition1, "state")
-// // results1
-var results2 = listener1(condition2, "state")
-// // console.log(expectation(results1))
+// console.log("honesty when s=" + x + " ==> " + expectation(marginalizeERP(rs1, "honesty")))
+// console.log("kindness when s=" + x + " ==> " +expectation(marginalizeERP(rs1, "kindness")))
+// console.log("meanness when s=" + x + " ==> " +expectation(marginalizeERP(rs1, "meanness")))
 
-results1
-// console.log(expectation(results1))
-// console.log(expectation(results2))
-// console.log("kindness = " + expectation(marginalizeERP(results1, "kindness")))
-// console.log("honesty = " + expectation(marginalizeERP(results1, "honesty")))
-// console.log("meanness = " + expectation(marginalizeERP(results1, "meanness")))
 
-// // // var results2 = listener1(condition2, "state")
-// // // console.log(expectation(results2))
-// console.log("kindness = " + expectation(marginalizeERP(results2, "kindness")))
-// console.log("honesty = " + expectation(marginalizeERP(results2, "honesty")))
-// console.log("meanness = " + expectation(marginalizeERP(results2, "meanness")))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
