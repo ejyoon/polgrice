@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  4 JAN 2016 21:01
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  5 JAN 2016 08:10
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -323,18 +323,18 @@ Missing character: There is no Ä in font ptmr7t!
 Missing character: There is no ô in font ptmr7t!
 Missing character: There is no ô in font ptmr7t!
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 79.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 77.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 79.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 77.
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/pzccm/m/n' tried instead on input line 80.
+(Font)              Font shape `OMS/pzccm/m/n' tried instead on input line 78.
 
-Underfull \hbox (badness 1838) in paragraph at lines 96--99
+Underfull \hbox (badness 1838) in paragraph at lines 94--97
 \OT1/ptm/m/n/10 We fol-low the treat-ment of RSA us-ing lifted-variables
  []
 
 
-LaTeX Warning: Citation `Bonnefon' undefined on input line 112.
+LaTeX Warning: Citation `Bonnefon' undefined on input line 110.
 
 [1{/usr/local/texlive/2013/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
@@ -360,16 +360,16 @@ Missing character: There is no ò in font ptmr7t!
 <figures/exp1.pdf, id=14, 725.88843pt x 161.1353pt>
 File: figures/exp1.pdf Graphic file (type pdf)
  <use figures/exp1.pdf>
-Package pdftex.def Info: figures/exp1.pdf used on input line 135.
+Package pdftex.def Info: figures/exp1.pdf used on input line 133.
 (pdftex.def)             Requested size: 455.2979pt x 101.06827pt.
 
-<figures/exp2.pdf, id=15, 715.2604pt x 173.98329pt>
+<figures/exp2.pdf, id=15, 715.2604pt x 268.20201pt>
 File: figures/exp2.pdf Graphic file (type pdf)
  <use figures/exp2.pdf>
-Package pdftex.def Info: figures/exp2.pdf used on input line 148.
-(pdftex.def)             Requested size: 455.2979pt x 110.74895pt.
+Package pdftex.def Info: figures/exp2.pdf used on input line 146.
+(pdftex.def)             Requested size: 455.2979pt x 170.7238pt.
 
-Underfull \hbox (badness 1400) in paragraph at lines 157--158
+Underfull \hbox (badness 1400) in paragraph at lines 154--155
  \OT1/ptm/b/n/10 Re-sults \OT1/ptm/m/n/10 Par-tic-i-pants at-tributed like-li-h
 oods for speaker's
  []
@@ -394,18 +394,25 @@ Missing character: There is no Ä in font ptmr7t!
 Missing character: There is no ô in font ptmr7t!
 Missing character: There is no Ä in font ptmr7t!
 Missing character: There is no ô in font ptmr7t!
-Missing character: There is no Ä in font ptmr7t!
-Missing character: There is no ô in font ptmr7t!
 
 Underfull \vbox (badness 1199) has occurred while \output is active []
 
  [2]
+Missing character: There is no Ä in font ptmr7t!
+Missing character: There is no ô in font ptmr7t!
 Missing character: There is no ‚ in font ptmr7t!
 Missing character: There is no Ä in font ptmr7t!
 Missing character: There is no ú in font ptmr7t!
 Missing character: There is no ‚ in font ptmr7t!
 Missing character: There is no Ä in font ptmr7t!
 Missing character: There is no ù in font ptmr7t!
+Missing character: There is no Ä in font ptmr7t!
+Missing character: There is no ô in font ptmr7t!
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Missing character: There is no Ä in font ptmr7t!
+Missing character: There is no ô in font ptmr7t!
 Missing character: There is no Ä in font ptmr7t!
 Missing character: There is no ô in font ptmr7t!
 Missing character: There is no Ä in font ptmr7t!
@@ -421,18 +428,14 @@ Missing character: There is no ô in font ptmr7t!
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Missing character: There is no Ä in font ptmr7t!
-Missing character: There is no ô in font ptmr7t!
-Missing character: There is no Ä in font ptmr7t!
-Missing character: There is no ô in font ptmr7t!
-
-<figures/exp3.pdf, id=19, 396.42223pt x 239.29399pt>
+ [3 <./figures/exp1.pdf> <./figures/exp2.pdf>]
+<figures/exp3.pdf, id=410, 396.42223pt x 239.29399pt>
 File: figures/exp3.pdf Graphic file (type pdf)
  <use figures/exp3.pdf>
-Package pdftex.def Info: figures/exp3.pdf used on input line 183.
+Package pdftex.def Info: figures/exp3.pdf used on input line 180.
 (pdftex.def)             Requested size: 231.26378pt x 139.6012pt.
 
-(./politeness.bbl [3 <./figures/exp1.pdf> <./figures/exp2.pdf>]) [4
+(./politeness.bbl) [4
 
  <./figures/exp3.pdf>] (./politeness.aux)
 
@@ -446,7 +449,7 @@ Here is how much of TeX's memory you used:
  6950 multiletter control sequences out of 15000+600000
  42810 words of font info for 83 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 38i,10n,23p,839b,271s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,10n,23p,987b,271s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/te
 xlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texl
@@ -456,10 +459,10 @@ texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/local/texlive/2013/texmf-dist/
 fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type
 1/urw/times/utmr8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/time
 s/utmri8a.pfb>
-Output written on politeness.pdf (4 pages, 709143 bytes).
+Output written on politeness.pdf (4 pages, 762754 bytes).
 PDF statistics:
- 489 PDF objects out of 1000 (max. 8388607)
- 365 compressed objects within 4 object streams
+ 517 PDF objects out of 1000 (max. 8388607)
+ 386 compressed objects within 4 object streams
  0 named destinations out of 1000 (max. 500000)
  16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
