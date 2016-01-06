@@ -30,8 +30,16 @@ var discretizedLogNormal = function(mu, sigma, bins){
   })
 }
 
+var discretizeBeta = function(gamma, delta, bins){
+  var shape_alpha =  gamma * delta
+  var shape_beta = (1-gamma) * delta
+  var betaPDF = function(x){
+    return Math.pow(x,shape_alpha-1)*Math.pow((1-x),shape_beta-1)
+  }
+  return map(betaPDF, bins)
+}
 
-var alpha = 0.2
+var alpha = 1.25
 var states = [1,2,3,4,5]
 var utterances = ["terrible","bad","okay","good","amazing"]
 
@@ -53,11 +61,6 @@ var bins = [0.1,0.3,0.5,0.7,0.9]
 // var kindnessPrior = discretizedLogNormal(2,1,bins)
 // var meannessPrior = discretizedLogNormal(2,1,bins)
 
-var honestyPrior = Enumerate(function(){return uniformDraw(bins)})
-// var kindnessPrior = Enumerate(function(){return uniformDraw(bins)})
-// var kindnessPrior = Enumerate(function(){return uniformDraw([-100,-50,-20,-10,-5,-1,-0.1,0.1, 1, 5, 10,20, 50, 100])})
-var kindnessPrior = Enumerate(function(){return uniformDraw([0.1,0.3,0.5,0.7,0.9,-0.1,-0.3,-0.5,-0.7,-0.9])})
-// var meannessPrior = Enumerate(function(){return uniformDraw(bins)})
 
 // var kindnessWeights = [1,1,1,1,1,
                         // 1,1,1,1,1]
@@ -112,12 +115,12 @@ var speaker1 = cache(function(state, speakerGoals) {
 
     var eUtility = speakerGoals.honesty*epistemicUtility 
     var sUtility = speakerGoals.kindness*socialUtility
-    // var mUtility = speakerGoals.meanness*socialUtility
+    var mUtility = speakerGoals.meanness*socialUtility
 
     // console.log(utterance)
     // console.log(speakerGoals.meanness)
-    // factor(eUtility+sUtility-mUtility)
-    factor(eUtility+sUtility)
+    factor(eUtility+sUtility-mUtility)
+    // factor(eUtility+sUtility)
 
     // return [utterance, eUtility, sUtility, eUtility+sUtility]
     return utterance
@@ -126,17 +129,22 @@ var speaker1 = cache(function(state, speakerGoals) {
 
 
 
-var listener1 = function(exptCondition, queryStatement) {
+var listener1 = function(exptCondition, goalPriors, queryStatement) {
   Enumerate(function(){
     var utterance = exptCondition.utterance
     var trueState = exptCondition.state
     var knownGoals = exptCondition.goal
+
+    var honestyPrior = goalPriors.honesty
+    var kindnessPrior = goalPriors.kindness
+    var meannessPrior = goalPriors.meanness
+
     var state = statePrior()
 
     var speakerGoals = {
       honesty: sample(honestyPrior),
-      kindness: sample(kindnessPrior)
-      // meanness: sample(meannessPrior)
+      kindness: sample(kindnessPrior),
+      meanness: sample(meannessPrior)
      }
 
     condition(trueState ? trueState == state : true)
@@ -158,39 +166,70 @@ var listener1 = function(exptCondition, queryStatement) {
   })
 }
 
+// var hprior = [1,1,1,1,1]
+var hprior = discretizeBeta(0.5, 2, bins)
+// var nprior = [1,1,1,1,100]
+var nprior = discretizeBeta(0.5, 2, bins)
+// var mprior = [1,1,1,1,1]
+var mprior = discretizeBeta(0.9, 10, bins)
 
-
-
-var rs1 = listener1(
+var rs2 = listener1(
 {
-  utterance: "amazing",
-  state: 1
-}, "goals")
+  utterance: "terrible"
+  // ,
+  // state: 1
+}, {
+  honesty: Enumerate(function(){return bins[discrete(hprior)]}),
+  kindness: Enumerate(function(){return bins[discrete(nprior)]}),
+  meanness: Enumerate(function(){return bins[discrete(mprior)]})
+}, "state")
+
+expectation(rs2)
 
 
-var allRes =  map(function(x){
-  var rs1 =  listener1(
-{
-  utterance: "amazing",
-  state: x
-}, "goals")
-  return [x, rs1]
-},[1,2,3,4,5])
-
-
-var logistic = function(x0, midpoint,k){
-  return 1 / (1 + Math.exp(-k*(midpoint - x0)))
-}
+// var goalPriors = {
+//   honesty: Enumerate(function(){return uniformDraw(bins)}),
+//   kindness: Enumerate(function(){return uniformDraw(bins)}),
+//   meanness: Enumerate(function(){return uniformDraw(bins)})
+// }
 
 
 
-foreach(["honesty", "kindness"], function(g){
-  console.log(g+" goal")
-  foreach(allRes, function(rs){
-    // console.log("s=1 ==> " + logistic(expectation(marginalizeERP(rs,g)), 10, 1))
-    console.log("s="+rs[0]+" ==> " + expectation(marginalizeERP(rs[1],g)))
-  })
-})
+
+// var rs1 = listener1(
+// {
+//   utterance: "amazing",
+//   state: 1
+// }, "goals")
+
+
+// var allRes =  map(function(x){
+//   var rs1 =  listener1(
+// {
+//   utterance: "amazing",
+//   state: x
+// }, "goals")
+//   return [x, rs1]
+// },[1,2,3,4,5])
+
+
+// var logistic = function(x0, midpoint,k){
+//   return 1 / (1 + Math.exp(-k*(midpoint - x0)))
+// }
+
+
+
+// foreach(["honesty", "kindness"], function(g){
+//   console.log(g+" goal")
+//   foreach(allRes, function(rs){
+//     // console.log("s=1 ==> " + logistic(expectation(marginalizeERP(rs,g)), 10, 1))
+//     console.log("s="+rs[0]+" ==> " + expectation(marginalizeERP(rs[1],g)))
+//   })
+// })
+
+
+
+
 
 
 // roundToBin(0.3)

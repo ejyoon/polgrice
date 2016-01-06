@@ -43,6 +43,23 @@ var incrOpts = {burn:sem_burn, verbose: true, verboseLag: sem_mhiter/10}
 // semanticsBDA()
 var semanticsERP = IncrementalMH(semanticsBDA, sem_mhiter, incrOpts)
 
+
+var logistic = function(x0, midpoint,k){
+  return 1 / (1 + Math.exp(-k*(midpoint - x0)))
+}
+var roundToBin = function(x){
+  var roundFive = x < 0.2 ? 0.1 :
+                  x < 0.4 ? 0.3 :
+                  x < 0.6 ? 0.5 :
+                  x < 0.8 ? 0.7 :
+                  0.9
+  return roundFive
+}
+
+
+var linkingFunction = function(erp, k, x0){
+
+}
 // var semanticsERPobject = _.object(
 // 	map(function(s){
 // 		return [s, _.object(map(function(u){
@@ -56,24 +73,30 @@ var dataAnalysis = function(){
 
 	// var t0 = utils.getTime()
 	var RSAparams = {
-		speakerOptimality : uniform(0,20)
-	}
-
-	var priorParams = {
-		honestGamma : uniform(0,1),
-		honestDelta : uniform(0,20),
-		kindGamma : uniform(0,1),
-		kindDelta : uniform(0,20),
-		meanGamma : uniform(0,1),
-		meanDelta : uniform(0,20)
+		speakerOptimality : uniform(0,20),
+		alpha: uniform(0, 10)
 	}
 
 	// var priorParams = {
-	// 	honestGamma : 0.5,
-	// 	honestDelta : 2,
-	// 	kindGamma : 0.5,
-	// 	kindDelta : 2
+	// 	honestGamma : uniform(0,1),
+	// 	honestDelta : uniform(0,20),
+	// 	kindGamma : uniform(0,1),
+	// 	kindDelta : uniform(0,20),
+	// 	meanGamma : 0.5,
+	// 	meanDelta : 2
+	// 	// meanGamma : uniform(0,1),
+	// 	// meanDelta : uniform(0,20)
 	// }
+
+
+	var priorParams = {
+		honestGamma : 0.5,
+		honestDelta : 2,
+		kindGamma : 0.5,
+		kindDelta : 2,
+		meanGamma : 0.5,
+		meanDelta : 2
+	}
 
 	var semantics = sample(semanticsERP)
 
@@ -102,6 +125,8 @@ var dataAnalysis = function(){
 				var dataPoints = _.pluck(subset(utteranceData, "goal", goal), "roundval")
 				var goalERP = marginalize(predictiveERP, goalDictionary[goal])
 
+				// var linkedGoalERP = linkingFunction(goalERP, midpoint, k)
+
 				var likelihoodOfData = sum(map(function(d){return goalERP.score([], d)}, dataPoints))
 
 				factor(likelihoodOfData)
@@ -115,12 +140,13 @@ var dataAnalysis = function(){
 	})
 
 	query.add(["parameter","speakerOptimality", "NA", "NA"], RSAparams.speakerOptimality)
-	query.add(["parameter","honesty", "gamma", "NA"], priorParams.honestGamma)
-	query.add(["parameter","honesty", "delta", "NA"], priorParams.honestDelta)
-	query.add(["parameter","kindness", "gamma", "NA"], priorParams.kindGamma)
-	query.add(["parameter","kindness", "delta", "NA"], priorParams.kindDelta)
-	query.add(["parameter","meanness", "gamma", "NA"], priorParams.meanGamma)
-	query.add(["parameter","meanness", "delta", "NA"], priorParams.meanDelta)
+	query.add(["parameter","alpha", "NA", "NA"], RSAparams.alpha)
+	// query.add(["parameter","honesty", "gamma", "NA"], priorParams.honestGamma)
+	// query.add(["parameter","honesty", "delta", "NA"], priorParams.honestDelta)
+	// query.add(["parameter","kindness", "gamma", "NA"], priorParams.kindGamma)
+	// query.add(["parameter","kindness", "delta", "NA"], priorParams.kindDelta)
+	// query.add(["parameter","meanness", "gamma", "NA"], priorParams.meanGamma)
+	// query.add(["parameter","meanness", "delta", "NA"], priorParams.meanDelta)
 		// var t1 = utils.getTime()
 	// console.log((t1-t0)/1000)
 	return query
@@ -128,15 +154,15 @@ var dataAnalysis = function(){
 
 
 var inference ='MH'
-var samples = 100
+var samples = 5000
 var burn =  samples/2
-var resultsERP = MCMC(dataAnalysis, {samples:samples, burn:burn, verbose:true})
+var resultsERP = MCMC(dataAnalysis, {samples:samples/2, burn:burn, verbose:true})
 
 console.log('inference complete... printing')
 
-var outfile = "results/bda-politeRSA-jointUtilityProbScale-goalPrior-"+optPrefix+"sopt-"+ 
+var outfile = "results/bda-politeRSA-informativity-expectation-goalPrior-"+optPrefix+"sopt-"+ 
 						inference + samples + "burn" + burn + 
-						"semantics-bern-" + sem_mhiter/1000 + "k-b" + sem_burn/1000 +"k.csv"
+						"semantics-bern-" + sem_mhiter/1000 + "k-b" + sem_burn/1000 +"ka.csv"
 
 utils.erpWriter(resultsERP, outfile)
 

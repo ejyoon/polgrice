@@ -44,7 +44,8 @@ var semanticsERP = IncrementalMH(semanticsBDA, sem_mhiter, incrOpts)
 var dataAnalysis = function(){
 
 	var RSAparams = {
-		speakerOptimality : uniform(0,20)
+		speakerOptimality : uniform(0,20),
+		alpha: uniform(0,10)
 	}
 
 	// var priorParams = {
@@ -63,24 +64,33 @@ var dataAnalysis = function(){
 
 		var stateData = subset(df_state, "goal", goal)
 
-		// var priorParams = {
-		// 	honestGamma : goal=="honest" ? uniform(0,1) : 0.5,
-		// 	honestDelta : goal=="honest" ? uniform(0,20) : 2,
-		// 	kindGamma : goal=="nice" ? uniform(0,1) : 0.5,
-		// 	kindDelta : goal=="nice" ? uniform(0,20) : 2,
-		// 	meanGamma : goal=="mean" ? uniform(0,1) : 0.5,
-		// 	meanDelta : goal=="mean" ? uniform(0,20) : 2
-		// }
 		var priorParams = {
-			honestGamma : uniform(0,1),
-			honestDelta : uniform(0,20),
-			kindGamma : uniform(0,1),
-			kindDelta : uniform(0,20),
-			meanGamma : uniform(0,1),
-			meanDelta : uniform(0,20)
+			honestGamma : goal=="honest" ? uniform(0,1) : 0.5,
+			honestDelta : goal=="honest" ? uniform(0,10) : 2,
+			kindGamma : goal=="nice" ? uniform(0,1) : 0.5,
+			kindDelta : goal=="nice" ? uniform(0,10) : 2,
+			meanGamma : goal=="mean" ? uniform(0,1) : 0.5,
+			meanDelta : goal=="mean" ? uniform(0,10) : 2
 		}
+		// var priorParams = {
+		// 	honestGamma : uniform(0,1),
+		// 	honestDelta : uniform(0,20),
+		// 	kindGamma : uniform(0,1),
+		// 	kindDelta : uniform(0,20),
+		// 	meanGamma : uniform(0,1),
+		// 	meanDelta : uniform(0,20)
+		// }
 
 
+		// truncated Gaussian on (0, 1)
+		// var priorParams = {
+		// 	honestMu : uniform(0,1),
+		// 	honestSigma : uniform(0,20),
+		// 	kindMu : uniform(0,1),
+		// 	kindSigma : uniform(0,20),
+		// 	meanMu : uniform(0,1),
+		// 	meanSigma : uniform(0,20)
+		// }
 
 		foreach(allUtterances, function(utterance){
 
@@ -124,9 +134,18 @@ var dataAnalysis = function(){
 		query.add(["parameter",goal, "meanness", "gamma"], priorParams.meanGamma)
 		query.add(["parameter",goal, "meanness", "delta"], priorParams.meanDelta)
 
+
+		// query.add(["parameter",goal, "honesty", "mu"], priorParams.honestMu)
+		// query.add(["parameter",goal, "honesty", "sigma"], priorParams.honestSigma)
+		// query.add(["parameter",goal, "kindness", "mu"], priorParams.kindMu)
+		// query.add(["parameter",goal, "kindness", "sigma"], priorParams.kindSigma)
+		// query.add(["parameter",goal, "meanness", "mu"], priorParams.meanMu)
+		// query.add(["parameter",goal, "meanness", "sigma"], priorParams.meanSigma)
+
 	})
 
 	query.add(["parameter","speakerOptimality", "NA", "NA"], RSAparams.speakerOptimality)
+	query.add(["parameter","alpha", "NA", "NA"], RSAparams.alpha)
 
 	// query.add(["parameter","threshold", "NA", "NA"], threshold)
 		// var t1 = utils.getTime()
@@ -142,7 +161,7 @@ var resultsERP = MCMC(dataAnalysis, {samples:samples/2, burn:burn, verbose:true}
 
 console.log('inference complete... printing')
 
-var outfile = "results/bda-politeRSA-stateGivenUttGoal-goalSpecPriorsAll3-sopt-"+ 
+var outfile = "results/bda-politeRSA-stateGivenUttGoal-informativity-expectation-goalPrior1Beta-sopt-"+ 
 						inference + samples + "burn" + burn + 
 						"semantics-bern-" + sem_mhiter/1000 + "k-b" + sem_burn/1000 +"kb.csv"
 

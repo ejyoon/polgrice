@@ -39,9 +39,10 @@ prefix<-"bda-politeRSA-jointUtilityLogProbScale-sopt-MH"
 prefix<-"bda-politeRSA-jointUtilityLogProbScale-sopt-MH"
 prefix<-"bda-politeRSA-jointUtilityProbScale-OneSocialsopt-MH"
 prefix<-"bda-politeRSA-jointUtilityProbScale-goalPriorFixed-sopt-MH"
+prefix<-"bda-politeRSA-informativity-expectation-goalPrior-sopt-MH"
 # prefix<-"bda-politeRSA-jointUtilityMatchWeight-wMeanness-goalPrior-sopt-MH"
 # prefix<-"bda-politeRSA-jointUtilityMatchWeight-wMeanness-goalPrior-sopt-MH"
-samples = 10000
+samples = 5000
 burn =  samples /2
 semsamp = 50000
 semburn =semsamp/2
@@ -215,9 +216,10 @@ ggsave("~/Documents/research/polgrice/model/results/literalSemantics-bda-s1-nega
 #prefix<- "bda-politeRSA-stateGivenUttGoal-3goalPrior-sopt-MH"
 prefix<- "bda-politeRSA-stateGivenUttGoal-goalSpecPriorsAll3-sopt-MH"
 #prefix<- "bda-politeRSA-stateGivenUttGoal-goalSpecPriors-sopt-MH"
-samples = 1000
+prefix<-"bda-politeRSA-stateGivenUttGoal-informativity-expectation-goalPrior3Gaussian-sopt-MH"
+samples = 100
 burn =  samples /2
-semsamp = 50000
+semsamp = 10000
 semburn =semsamp/2
 # m<-read.csv(paste(fpath, prefix, samples, "burn", burn,
 #                   "semantics-bern-",semsamp/1000,
