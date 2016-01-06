@@ -31,7 +31,7 @@ var discretizedLogNormal = function(mu, sigma, bins){
 }
 
 
-var alpha = 10
+var alpha = 0.2
 var states = [1,2,3,4,5]
 var utterances = ["terrible","bad","okay","good","amazing"]
 
@@ -47,14 +47,16 @@ var utterancePrior = function(){
 
 
 var speakerOptimality = 10
-var bins = [0.1, 1, 5, 10, 20, 50, 100]
+// var bins = [0.1, 1, 5, 10, 20, 50, 100]
+var bins = [0.1,0.3,0.5,0.7,0.9]
 // var honestyPrior = discretizedLogNormal(2,1,bins)
 // var kindnessPrior = discretizedLogNormal(2,1,bins)
 // var meannessPrior = discretizedLogNormal(2,1,bins)
 
 var honestyPrior = Enumerate(function(){return uniformDraw(bins)})
 // var kindnessPrior = Enumerate(function(){return uniformDraw(bins)})
-var kindnessPrior = Enumerate(function(){return uniformDraw([-100,-50,-20,-10,-5,-1,-0.1,0.1, 1, 5, 10,20, 50, 100])})
+// var kindnessPrior = Enumerate(function(){return uniformDraw([-100,-50,-20,-10,-5,-1,-0.1,0.1, 1, 5, 10,20, 50, 100])})
+var kindnessPrior = Enumerate(function(){return uniformDraw([0.1,0.3,0.5,0.7,0.9,-0.1,-0.3,-0.5,-0.7,-0.9])})
 // var meannessPrior = Enumerate(function(){return uniformDraw(bins)})
 
 // var kindnessWeights = [1,1,1,1,1,
@@ -74,6 +76,15 @@ var meaning = function(words, state){
 
 var roundTen = function(n){
   return Math.round(n*100)/100
+}
+
+var roundToBin = function(x){
+  var roundFive = x < 0.2 ? 0.1 :
+                  x < 0.4 ? 0.3 :
+                  x < 0.6 ? 0.5 :
+                  x < 0.8 ? 0.7 :
+                  0.9
+  return roundFive
 }
 
 var listener0 = cache(function(utterance) {
@@ -108,8 +119,8 @@ var speaker1 = cache(function(state, speakerGoals) {
     // factor(eUtility+sUtility-mUtility)
     factor(eUtility+sUtility)
 
-    return [utterance, eUtility, sUtility, eUtility+sUtility]
-    // return utterance
+    // return [utterance, eUtility, sUtility, eUtility+sUtility]
+    return utterance
   })
 })
 
@@ -147,30 +158,43 @@ var listener1 = function(exptCondition, queryStatement) {
   })
 }
 
-// var rs1 = listener1(
-// {
-//   utterance: "amazing",
-//   state: 1
-// }, "goals")
 
 
-// var allRes =  map(function(x){
-//   var rs1 =  listener1(
-// {
-//   utterance: "amazing",
-//   state: x
-// }, "goals")
-//   return rs1
-// },[1,2,3,4,5])
 
-// foreach(["honesty", "kindness"], function(g){
-//   console.log(g+" goal")
-//   foreach(allRes, function(rs){
-//     console.log("s=1 ==> " + expectation(marginalizeERP(rs,g)))
-//   })
-// })
+var rs1 = listener1(
+{
+  utterance: "amazing",
+  state: 1
+}, "goals")
 
-speaker1(1, {honesty:20, kindness:35, meanness:1})
+
+var allRes =  map(function(x){
+  var rs1 =  listener1(
+{
+  utterance: "amazing",
+  state: x
+}, "goals")
+  return [x, rs1]
+},[1,2,3,4,5])
+
+
+var logistic = function(x0, midpoint,k){
+  return 1 / (1 + Math.exp(-k*(midpoint - x0)))
+}
+
+
+
+foreach(["honesty", "kindness"], function(g){
+  console.log(g+" goal")
+  foreach(allRes, function(rs){
+    // console.log("s=1 ==> " + logistic(expectation(marginalizeERP(rs,g)), 10, 1))
+    console.log("s="+rs[0]+" ==> " + expectation(marginalizeERP(rs[1],g)))
+  })
+})
+
+
+// roundToBin(0.3)
+// speaker1(1, {honesty:20, kindness:35, meanness:1})
 
 
 
