@@ -176,11 +176,11 @@ var states2 =
     ["heart2", "heart3", "heart4", "heart5","heart1"];
 var states3 = 
     ["heart3", "heart4", "heart5","heart1", "heart2"];
-var states4 = 
-    ["heart4", "heart5","heart1", "heart2", "heart3"];
-var states5 = 
-    ["heart5","heart1", "heart2", "heart3", "heart4"];
-var states = states1.concat(states2, states3, states4, states5)
+//var states4 = 
+//    ["heart4", "heart5","heart1", "heart2", "heart3"];
+//var states5 = 
+//    ["heart5","heart1", "heart2", "heart3", "heart4"];
+var states = states1.concat(states2, states3)
 
 var utterances1 = 
     ["terrible", "bad", "okay", "good", "amazing"];
@@ -195,7 +195,7 @@ var utterances5 =
 var utterances = utterances1.concat(utterances2, utterances3,utterances4,utterances5)
 
 var goals = 
-    ["nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean","nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean"];
+    ["nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean"];
 
     var allConditions = 
 shuffle(
@@ -293,66 +293,66 @@ shuffle(
  "people": "people15",
  "goal": goals[14],
 },
-{"domain": domains[15],
- "state": states[15],
- "utterance": utterances[15],
- "people": "people16",
- "goal": goals[15],
-},
-{"domain": domains[16],
- "state": states[16],
- "utterance": utterances[16],
- "people": "people17",
- "goal": goals[16],
-},
-{"domain": domains[17],
- "state": states[17],
- "utterance": utterances[17],
- "people": "people18",
- "goal": goals[17],
-},
-{"domain": domains[18],
- "state": states[18],
- "utterance": utterances[18],
- "people": "people19",
- "goal": goals[18],
-},
-{"domain": domains[19],
- "state": states[19],
- "utterance": utterances[19],
- "people": "people20",
- "goal": goals[19],
-},
-{"domain": domains[20],
- "state": states[20],
- "utterance": utterances[20],
- "people": "people21",
- "goal": goals[20],
-},
-{"domain": domains[21],
- "state": states[21],
- "utterance": utterances[21],
- "people": "people22",
- "goal": goals[21],
-},
-{"domain": domains[22],
- "state": states[22],
- "utterance": utterances[22],
- "people": "people23",
- "goal": goals[22],
-},
-{"domain": domains[23],
- "state": states[23],
- "utterance": utterances[23],
- "people": "people24",
- "goal": goals[23],
-},
-{"domain": domains[24],
- "state": states[24],
- "utterance": utterances[24],
- "people": "people25",
- "goal": goals[24],
-}
+//{"domain": domains[15],
+// "state": states[15],
+// "utterance": utterances[15],
+// "people": "people16",
+// "goal": goals[15],
+//},
+//{"domain": domains[16],
+// "state": states[16],
+// "utterance": utterances[16],
+// "people": "people17",
+// "goal": goals[16],
+//},
+//{"domain": domains[17],
+// "state": states[17],
+// "utterance": utterances[17],
+// "people": "people18",
+// "goal": goals[17],
+//},
+//{"domain": domains[18],
+// "state": states[18],
+// "utterance": utterances[18],
+// "people": "people19",
+// "goal": goals[18],
+//},
+//{"domain": domains[19],
+// "state": states[19],
+// "utterance": utterances[19],
+// "people": "people20",
+// "goal": goals[19],
+//},
+//{"domain": domains[20],
+// "state": states[20],
+// "utterance": utterances[20],
+// "people": "people21",
+// "goal": goals[20],
+//},
+//{"domain": domains[21],
+// "state": states[21],
+// "utterance": utterances[21],
+// "people": "people22",
+// "goal": goals[21],
+//},
+//{"domain": domains[22],
+// "state": states[22],
+// "utterance": utterances[22],
+// "people": "people23",
+// "goal": goals[22],
+//},
+//{"domain": domains[23],
+// "state": states[23],
+// "utterance": utterances[23],
+// "people": "people24",
+// "goal": goals[23],
+//},
+//{"domain": domains[24],
+// "state": states[24],
+// "utterance": utterances[24],
+// "people": "people25",
+// "goal": goals[24],
+//}
     ])
 ]); 
 //}
@@ -522,13 +522,13 @@ var sents = {
 //    },
     goals: {
         nice: {
-            goal: " <b>SP wanted to be nice, so "
+            goal: " If SP wanted to be <b>nice</b>, "
         },
         honest: {
-            goal: " <b>SP wanted to be honest, so "            
+            goal: " If SP wanted to be <b>honest</b>, "            
         },
         mean: {
-            goal: " <b>SP wanted to be mean, so "            
+            goal: " If SP wanted to be <b>mean</b>, "            
         }  
     },
     people: {
@@ -656,6 +656,7 @@ function doSentSubs (sents, polite, domain, utterance, people, goal)
     BB = sents["domains"][domain]["BB"]; //Item 2
     SP = sents["people"][people]["SP"]; //speaker
     LS = sents["people"][people]["LS"]; //addressee
+    eval = "what do you think SP said to LS, out of the following options? <br><br><b>SP: \"Your BB was ...\"</b>";
  
     utterance = utterance.replace("BB",BB).replace("SP",SP).replace("LS",LS);
     context = context.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);
@@ -668,9 +669,11 @@ function doSentSubs (sents, polite, domain, utterance, people, goal)
     knowledge = knowledge.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     goal = goal.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     feeling = feeling.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
+    eval = 
+eval.replace("BB", BB).replace("BB", BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS); 
 
     
-    return [utterance, context, state, precontext, question, question2, question3, knowledge, goal, feeling, context2];
+    return [utterance, context, state, precontext, question, question2, question3, knowledge, goal, feeling, context2, eval];
 }
 
 var numConditions = allConditions.length;
@@ -697,12 +700,12 @@ var experiment = {
     knowledge: state_knowledge,
     domain: [],
     state: [],
-    utterance: [],
+//    utterance: [],
     people: [],
-//    goal: [],
+    goal: [],
 //    context: [],
-    slider_goal0: slider_goal[0][1],
-    slider_goal1: slider_goal[1][1],
+//    slider_goal0: slider_goal[0][1],
+//    slider_goal1: slider_goal[1][1],
 //    goal2: score[2],
 //    goal3: score[3],
 //    prediction0: prediction[0],
@@ -711,7 +714,7 @@ var experiment = {
 //    goalProb1: [],
 //    goalProb2: [],
 //    judgment: [],
-    uttProb: [],
+    utterance: [],
 //    predictedProb0: [],
 //    predictedProb1: [],
     language: [],
@@ -761,17 +764,17 @@ var experiment = {
 //      var judgment = getRadioCheckedValue(1, "judgment");
         
       experiment.data.order.push(numComplete);
-      experiment.data.utterance.push(trial.utterance);
+//      experiment.data.utterance.push(trial.utterance);
       experiment.data.domain.push(trial.domain);
       experiment.data.state.push(trial.state);
-      experiment.data.uttProb.push(uttProb);
+      experiment.data.utterance.push(uttProb);
 //      experiment.data.goalProb0.push(prob0);
 //      experiment.data.goalProb1.push(prob1);
 //      experiment.data.goalProb2.push(prob2);
 //      experiment.data.stateProb.push(prob3);
 //      experiment.data.predictedProb0.push(prob3);
 //      experiment.data.predictedProb1.push(prob4);
-//      experiment.data.goal.push(goal);
+      experiment.data.goal.push(goal);
 //      experiment.data.judgment.push(judgment);
       
       clearForm(document.forms[0]);
@@ -801,10 +804,17 @@ var experiment = {
         sent_materials = doSentSubs(sents, state, domain, utterance, people, goal);
       showSlide("stage");
       $("#context").html(sent_materials[3] + sent_materials[7] + sent_materials[1]);  
-      $("#context2").html(sent_materials[0]);  
-      $("#question").html(sent_materials[4]); 
+//      $("#context2").html(sent_materials[0]);  
+      $("#question").html(sent_materials[8] + sent_materials[11]); 
       $("#question2").html(sent_materials[9]); 
-      $(".rating-stars").attr("style","width: " +
+
+      $("#opt1").html("<b>\"terrible\""); 
+      $("#opt2").html("<b>\"bad\""); 
+      $("#opt3").html("<b>\"okay\""); 
+      $("#opt4").html("<b>\"good\""); 
+      $("#opt5").html("<b>\"amazing\""); 
+
+        $(".rating-stars").attr("style","width: " +
 							    state + "%");
 
         //      $("#rating-stars").on("click", 
@@ -813,14 +823,14 @@ var experiment = {
 //			});
         
       
-      for (var i = 0; i <= 2; i++)
-      {         
-        $("#goal0" + i).html(slider_goal[0][i]);
-      }
-      for (var i = 0; i <= 2; i++)
-      {         
-        $("#goal1" + i).html(slider_goal[1][i]);
-      }
+//      for (var i = 0; i <= 2; i++)
+//      {         
+//        $("#goal0" + i).html(slider_goal[0][i]);
+//      }
+//      for (var i = 0; i <= 2; i++)
+//      {         
+//        $("#goal1" + i).html(slider_goal[1][i]);
+//      }
         
       $("#question2").html(sent_materials[9]);    
       $("#question3").html(sent_materials[0]);    
