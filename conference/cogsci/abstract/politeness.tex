@@ -124,6 +124,7 @@ For simplicity, we assume the following:
    \ejy{these were used in Kao \& Goodman (2015), should we cite it as being relevant though?}
 \end{enumerate}
 
+We implemented this model using the probabilisitic programming language WebPPL \cite{dippl} and a fully-specified implementation can be found at \url{http://forestdb.org/models/politeness.html}.
 
 
 \section{Behavioral Experiments}
@@ -205,17 +206,25 @@ We compare these predictions to the experimental data from Expt.~2 \& 3, respect
 \subsection{Model details and priors}
 
 We use the experimental data from Expt.~1 as the literal meaning of utterances $W$ with respect to states $S$ --- \denote{w}(s).
-We assume a uniform prior distribution over possible states of the world $P(s)$. 
+We assume a uniform prior distribution over possible states of the world $s\sim \text{UniformDraw} \{1, 2, 3, 4, 5\}$. 
 
 \subsection{Goal inference}
 
 In Experiment 2, participants were supplied with the ``true state'' $s$ as well as the speaker's utterance $w$, and were asked to rate the likely goals of the speaker. 
-Here, we assume a uniform prior over the likely goals of the speaker, which is operationalized in the computational model as weights $\beta$ over the utilities.
+Here, we assume a uniform prior over the likely goals of the speaker, which is operationalized in the computational model as weights over the utilities: $\beta \sim \text{Uniform}(0,1)$ .
 For ease of comparison to the experimental data, we separate $\beta_{social}$ into a positive component ($\beta_{nice}$) and a negative component ($\beta_{mean}$), writing the utility function now as
 $$
 U(w;s; \beta) = \beta_{e}\cdot U_{epistemic} + (\beta_{nice} - \beta_{mean}) \cdot U_{social}
 $$
 
+The computational model then has 2 parameters: the speaker optimality parameter $\lambda$ in Eq.~\ref{eq:S1} and the value scale parameter $\alpha$ in the utility function. 
+We put uninformative priors on these and infer their credible values using Bayesian data analytic techniques \cite{LW2014}.
+\begin{eqnarray}
+\lambda \sim \text{Uniform}(0,20)\\
+\alpha \sim \text{Uniform}(0, 5)
+\end{eqnarray}
+We ran X chains for Y iterations, discarding the first Z for burnin.
+The 95\% Highest Probability Density Interval (HDI) for $\lambda$ is \red{[ ,]} and for $\alpha$ is \red{[, ]}.
 
 \bibliographystyle{apacite}
 
