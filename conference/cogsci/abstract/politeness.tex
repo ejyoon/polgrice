@@ -7,8 +7,6 @@
 \usepackage{pslatex}
 \usepackage{color}
  \newcommand{\denote}[1]{\mbox{ $[\![ #1 ]\!]$}}
-\definecolor{Red}{RGB}{255,0,0}
-\newcommand{\red}[1]{\textcolor{Red}{#1}}  
 \usepackage[nodoi]{apacite}
 \usepackage{graphicx}
 \usepackage[american]{babel}
@@ -16,6 +14,15 @@
 \usepackage[section]{placeins}
 \usepackage{enumitem}
 \usepackage{apacite}
+
+ \definecolor{Red}{RGB}{255,0,0}
+\newcommand{\red}[1]{\textcolor{Red}{#1}}
+\definecolor{Green}{RGB}{10,200,100}
+\definecolor{Blue}{RGB}{10,100,200}
+\definecolor{DarkOrange}{RGB}{255,100,50}
+\newcommand{\ndg}[1]{\textcolor{Green}{[ndg: #1]}}  
+\newcommand{\mht}[1]{\textcolor{DarkOrange}{[mht: #1]}}  
+\newcommand{\ejy}[1]{\textcolor{Blue}{[ejy: #1]}}  
 
 
 \title{An integrative account of politeness: 
@@ -96,7 +103,7 @@ Experiment 2 explores the relative contributions of these two utility components
 In order to consider the relative contributions of the two utility components, we transform both components to probability space (values between 0 - 1): $U_{epistemic}$ by exponentiating; $U_{social}$ by normalizing. Thus, the speaker's joint utility function is
 %
 $$
-U(w;s; \beta) = \beta_{e}\cdot e^{U_{epistemic}} + \beta_{s} \cdot \frac{U_{social}}{\max_{s} V(s)}
+U(w;s; \beta) = \beta_{epistemic}\cdot U_{epistemic} + \beta_{social} \cdot U_{social}
 $$
 %
 We follow the treatment of RSA using lifted-variables \cite{GoodmanLassiter2015, Kao2014, Degen2015}; here, the variables lifted to the pragmatic level are the weights in the speaker's utility function ($\beta$'s) .
@@ -110,12 +117,12 @@ We follow the treatment of RSA using lifted-variables \cite{GoodmanLassiter2015,
 %
 For simplicity, we assume the following:
 \begin{enumerate}
-\item The set of states of the world $S = \{s_{1}, ...,  s_{5}\}$ have subjective numerical values $V(s_{i}) = i$. 
+\item The set of states of the world $S = \{s_{1}, ...,  s_{5}\}$ have subjective numerical values $V(s_{i}) = \alpha \cdot i$ \mht{or is it $i^\alpha$}. 
 \item The set of utterances is \{\emph{amazing, bad, okay, good, amazing}\},
 % $\{w_{amazing}, w_{bad}, w_{okay}, w_{good}, w_{amazing}\}$
-  \red{used in relevant empirical studies \cite{Bonnefon} (?).}\end{enumerate}
- % these were used in Kao & Goodman (2015), should we cite it as being relevant though?
-The literal meaning of these utterances $W$ with respect to states $S$ we measure in Expt.~1. 
+  \mht{used in relevant empirical studies (Bonnefon ?).}
+   \ejy{these were used in Kao \& Goodman (2015), should we cite it as being relevant though?}
+\end{enumerate}
 
 
 
@@ -188,6 +195,26 @@ Finally, given the speaker's goal to be mean, participants inferred that the tru
 \caption{\label{fig:exp3} Results from Experiment 3. Average states inferred based on speaker's goal and utterance.}
 \end{centering} 
 \end{figure}
+
+\section{Model assessment}
+
+We now turn to the predictions of the computational model.
+The model in Eq.~\ref{eq:L1} specifies a joint-belief distribution over the speaker's goals $\beta$ and possible states of the world $s$.
+We compare these predictions to the experimental data from Expt.~2 \& 3, respectively.
+
+\subsection{Model details and priors}
+
+We use the experimental data from Expt.~1 as the literal meaning of utterances $W$ with respect to states $S$ --- \denote{w}(s).
+We assume a uniform prior distribution over possible states of the world $P(s)$. 
+
+\subsection{Goal inference}
+
+In Experiment 2, participants were supplied with the ``true state'' $s$ as well as the speaker's utterance $w$, and were asked to rate the likely goals of the speaker. 
+Here, we assume a uniform prior over the likely goals of the speaker, which is operationalized in the computational model as weights $\beta$ over the utilities.
+For ease of comparison to the experimental data, we separate $\beta_{social}$ into a positive component ($\beta_{nice}$) and a negative component ($\beta_{mean}$), writing the utility function now as
+$$
+U(w;s; \beta) = \beta_{e}\cdot U_{epistemic} + (\beta_{nice} - \beta_{mean}) \cdot U_{social}
+$$
 
 
 \bibliographystyle{apacite}
