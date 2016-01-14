@@ -87,7 +87,7 @@ Politeness, then, takes shape as an independent component of a speaker's utility
 
 \citeA{Goodman2013} define speaker utility by the amount of information a \emph{literal listener} would still not know after know about world state $s$ after hearing a speaker's utterance $w$: 
 $U_{epistemic}(w; s) = \ln(P_{literal}(s \mid w)) $.
-We simply extend this by adding a component related to the intrinsic value of the state in the eye's of the listener\footnote{At this point, we do not differentiate value of the state to the listener from value of the state to the speaker, though it is conceivable that these could be different.}.
+We simply extend this by adding a component related to the intrinsic value of the state in the eyes of the listener\footnote{At this point, we do not differentiate value of the state to the listener from value of the state to the speaker, though it is conceivable that these could be different.}.
 We consider states which have utility values 1 - 5, corresponding to the subjective utility of the state, and roughly corresponding to the scalar value terms \{\emph{good}, \emph{bad}, \emph{terrible}, \emph{amazing}, and \emph{okay}\}. 
 The precise mapping from utterance to subjective utility value is measured in Expt.~1.
 
@@ -197,7 +197,7 @@ Finally, given the speaker's goal to be mean, participants inferred that the tru
 \end{centering} 
 \end{figure}
 
-\section{Model assessment}
+\section{Model behavior}
 
 We now turn to the predictions of the computational model.
 The model in Eq.~\ref{eq:L1} specifies a joint-belief distribution over the speaker's goals $\beta$ and possible states of the world $s$.
@@ -206,7 +206,12 @@ We compare these predictions to the experimental data from Expt.~2 \& 3, respect
 \subsection{Model details and priors}
 
 We use the experimental data from Expt.~1 as the literal meaning of utterances $W$ with respect to states $S$ --- \denote{w}(s).
-We assume a uniform prior distribution over possible states of the world $s\sim \text{UniformDraw} \{1, 2, 3, 4, 5\}$. 
+We assume a uniform prior distribution over possible states of the world $s\sim \text{DiscreteUniform} \{1, 2, 3, 4, 5\}$. 
+
+In addition, in each model, we include an explicit submodel of random guessing behavior, and model the behavioral data as mixture of this noise and the predictions of the pragmatic listener model $L_1$ (Eq.~\ref{eq:L1}).
+Including such a contamination parameter is important for getting reliable estimates of the parameters of the RSA model, which would otherwise be corrupted by this noise \cite{LW2014}. 
+We put a uniform prior over this mixture parameter $\phi \sim \text{Uniform}(0,1)$. 
+This mixture parameter provides an additional measure of goodness of fit: It shows the proportion of the data that is better explained by the cognitive model than by a model of random guessing. 
 
 \subsection{Goal inference}
 
@@ -218,13 +223,27 @@ U(w;s; \beta) = \beta_{e}\cdot U_{epistemic} + (\beta_{nice} - \beta_{mean}) \cd
 $$
 
 The computational model then has 2 parameters: the speaker optimality parameter $\lambda$ in Eq.~\ref{eq:S1} and the value scale parameter $\alpha$ in the utility function. 
-We put uninformative priors on these and infer their credible values using Bayesian data analytic techniques \cite{LW2014}.
+We put uninformative priors on these and infer their credible values using Bayesian inference.
 \begin{eqnarray}
 \lambda \sim \text{Uniform}(0,20)\\
 \alpha \sim \text{Uniform}(0, 5)
 \end{eqnarray}
-We ran X chains for Y iterations, discarding the first Z for burnin.
-The 95\% Highest Probability Density Interval (HDI) for $\lambda$ is \red{[ ,]} and for $\alpha$ is \red{[, ]}.
+We ran 3 MCMC chains for 40,000 iterations, discarding the first 20,000 for burnin.
+The Maximum A-Posteriori (MAP) estimate and 95\% Highest Probability Density Interval (HDI) for $\lambda$ is 6.8 [5.7, 7.8]; for $\alpha$ is 1.03 [0.91, 1.19]; for $\phi$ is 0.09 [0.06, 0.13].
+This is a relatively low value for $\phi$: The model explains about 90\% of the data set better than a model of random guessing.
+
+%               Goal Parameter        MAP    credLow  credHigh
+%             (fctr)    (fctr)      (dbl)      (dbl)     (dbl)
+%1             alpha        NA 1.02553704 0.91319156 1.1865188
+%2               phi        NA 0.08983868 0.05699245 0.1284084
+%3 speakerOptimality        NA 6.81149016 5.76426562 7.8453595
+
+
+
+
+
+
+
 
 \bibliographystyle{apacite}
 
