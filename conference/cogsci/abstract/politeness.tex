@@ -208,6 +208,11 @@ We compare these predictions to the experimental data from Expt.~2 \& 3, respect
 We use the experimental data from Expt.~1 as the literal meaning of utterances $W$ with respect to states $S$ --- \denote{w}(s).
 We assume a uniform prior distribution over possible states of the world $s\sim \text{DiscreteUniform} \{1, 2, 3, 4, 5\}$. 
 
+For ease of comparison to the experimental data, we separate $\beta_{social}$ into a positive component ($\beta_{nice}$) and a negative component ($\beta_{mean}$), writing the utility function now as
+$$
+U(w;s; \beta) = \beta_{e}\cdot U_{epistemic} + (\beta_{nice} - \beta_{mean}) \cdot U_{social}
+$$
+
 In addition, in each model, we include an explicit submodel of random guessing behavior, and model the behavioral data as mixture of this noise and the predictions of the pragmatic listener model $L_1$ (Eq.~\ref{eq:L1}).
 Including such a contamination parameter is important for getting reliable estimates of the parameters of the RSA model, which would otherwise be corrupted by this noise \cite{LW2014}. 
 We put a uniform prior over this mixture parameter $\phi \sim \text{Uniform}(0,1)$. 
@@ -217,17 +222,14 @@ This mixture parameter provides an additional measure of goodness of fit: It sho
 
 In Experiment 2, participants were supplied with the ``true state'' $s$ as well as the speaker's utterance $w$, and were asked to rate the likely goals of the speaker. 
 Here, we assume a uniform prior over the likely goals of the speaker, which is operationalized in the computational model as weights over the utilities: $\beta \sim \text{Uniform}(0,1)$ .
-For ease of comparison to the experimental data, we separate $\beta_{social}$ into a positive component ($\beta_{nice}$) and a negative component ($\beta_{mean}$), writing the utility function now as
-$$
-U(w;s; \beta) = \beta_{e}\cdot U_{epistemic} + (\beta_{nice} - \beta_{mean}) \cdot U_{social}
-$$
+
 
 The computational model then has 2 parameters: the speaker optimality parameter $\lambda$ in Eq.~\ref{eq:S1} and the value scale parameter $\alpha$ in the utility function. 
 We put uninformative priors on these and infer their credible values using Bayesian inference.
-\begin{eqnarray}
-\lambda \sim \text{Uniform}(0,20)\\
-\alpha \sim \text{Uniform}(0, 5)
-\end{eqnarray}
+\begin{eqnarray*}
+& \lambda \sim \text{Uniform}(0,20)\\
+& \alpha \sim \text{Uniform}(0, 5)
+\end{eqnarray*}
 We ran 3 MCMC chains for 40,000 iterations, discarding the first 20,000 for burnin.
 The Maximum A-Posteriori (MAP) estimate and 95\% Highest Probability Density Interval (HDI) for $\lambda$ is 6.8 [5.7, 7.8]; for $\alpha$ is 1.03 [0.91, 1.19]; for $\phi$ is 0.09 [0.06, 0.13].
 This is a relatively low value for $\phi$: The model explains about 90\% of the data set better than a model of random guessing.
@@ -238,12 +240,46 @@ This is a relatively low value for $\phi$: The model explains about 90\% of the 
 %2               phi        NA 0.08983868 0.05699245 0.1284084
 %3 speakerOptimality        NA 6.81149016 5.76426562 7.8453595
 
+To test what data the model actually predicts, we examine the posterior predictive distribution by marginalizing out the likely parameter values and generating predictions for what the data should look like, given our cognitive model and the inferred parameters.
+The predictions of the model are shown in Figure \ref{fig:exp2}.
+\mht{Describe model predictions.}
+Overall, the model explains a lot of the variance in the goal inference data $r^2(75) = 0.87$.
 
+\subsection{State inference}
 
+In Experiment 3, participants were told what the speaker said $w$ as well as described what the speakers intentions were (e.g. \emph{Bob wanted to be nice}). 
+To model this, we assume that the intentions (e.g. \emph{wanted to be nice}) modified the listener's prior distribution over goal-weights for the relevant goal. For example, if a speaker was trying to be nice, we interpret that to mean the speaker has a non-uniform prior distribution over $\beta_{nice}$ (in particular, $\beta_{nice}$ should be skewed toward higher-values). 
+We assume $\beta \sim \text{Beta}(\gamma, \delta)$, and for each goal condition (trying to be \emph{nice, mean, honest}), we put uninformative hyperpriors over the associated goal prior\footnote{For ease of interpretation, we are parametrizing the $\beta$ distribution by its mean and concentration. To recover the canonical shape parametrization, use $\gamma \delta$ and $(1-\gamma)\delta$.}.
+For the unassociated goal priors (e.g. $\beta_{mean}$ and $\beta_{honest}$ when \emph{trying to be nice}), we use the same uniform priors we used to model the goal inference data.
+%
+\begin{eqnarray*}
+& \gamma \sim  \text{Uniform}(0,1)\\
+& \delta  \sim  \text{Uniform}(0, 20)
+\end{eqnarray*}
 
+\begin{table}[]
+\centering
+\label{my-table}
+\begin{tabular}{lll}
+\hline
+Experimental Condition (Goal) & Mean & Concentration \\ \hline
+(trying to be) Honest                        &      &               \\
+(trying to be) Nice                          &      &               \\
+(trying to be) Mean                          &      &               \\ \hline
+\end{tabular}
+\caption{Inferred hyper-parameter values for Goal Priors in State Inference task.
+For each experimental condition (trying to be X), we inferred the likely priors on the goal weights for the associated goal.
+Values shown are MAP estimates and 95\% HDI for the parameter values.}
+\end{table}
+We ran 3 MCMC chains for 20,000 iterations, discarding the first 10,000 for burnin.
+The MAP and 95\% HDI for $\lambda$ is \red{6.8 [5.7, 7.8]}; for $\alpha$ is \red{1.03 [0.91, 1.19]}; for $\phi$ is \red{0.09 [0.06, 0.13]}.
+Inferred parameter values for the goal priors are shown in Table 1.
 
+The predictions of the model are shown in Figure \ref{fig:exp3}.
+\mht{Describe model predictions.}
+\mht{Model-data correlation}. 
 
-
+\section{Discussion}
 
 \bibliographystyle{apacite}
 
