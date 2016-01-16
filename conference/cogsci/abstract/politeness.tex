@@ -27,6 +27,7 @@
 
 \title{An integrative account of linguistic politeness: \\
 Reasoning about informativity and kindness}
+% Other idea: "Kindness and informativity in understanding polite language"
  
 \author{{\large \bf Erica J. Yoon} \\
   \texttt{ejyoon@stanford.edu} \\
@@ -62,19 +63,30 @@ Politeness; computational modeling; communicative goals; pragmatics
 
 \section{Introduction}
 
-Imagine that Alice just gave a presentation, and asks Bob for his opinion, who thought the presentation was terrible. Bob decides to say to Alice: ``Your talk was okay.'' Why did Bob decide to say something differs from and is misinforming about the truth? Intuitively, Bob was being ``polite,'' giving information indirectly or even falsely in consideration of what the listener wants to hear.
+You witness your friend give a terrible presentation, and he asks for your opinion. 
+Does rational communication compel you to say: ``Your talk was terrible.''?
+Is it ever reasonable to say: ``Your talk was okay.''?
+The goals in conveying the latter differ from merely being informative about what you know. 
+%Why did Bob decide to say something differs from and is misinforming about the truth? 
+It would give potentially false information, in consideration of what the listener wants to hear.
+In other words, it would be polite.
 
-But this politeness phenomenon violates one important principle of communication: exchanging communication efficiently and accurately \cite{Grice1975}. An indirect or false utterance that misrepresents the true state will disable a full information transfer from the speaker to the listener. Thus, a cooperative speaker would want to produce utterances in a maximally truthful and informative way possible, and the listener who is aware of this will interpret the speaker's utterances with this assumption of a cooperative speaker in mind.
+Politeness violates one important principle of communication: exchanging information efficiently and accurately \cite{Grice1975}. An indirect or false utterance that misrepresents the true state will fail to transfer information from speaker to hearer. Thus, a cooperative speaker would want to produce utterances in a maximally truthful and informative way, a the listener who is aware of this will interpret the speaker's utterances with this assumption of a cooperative speaker in mind.
+If, however, this was is the only goal to be accomplished in a conversation, how ever would a speaker choose to say anything that misrepresents the true state of affairs?
 
-If, however, this was the only goal to be accomplished in a conversation, why would a speaker choose to say anything that misrepresents the true state of affairs at all? For example, why would a speaker choose to be ``polite,'' as Bob did in the scenario above?
+\citeA{Brown1987} suggested this mystery be resolved by extending the idea of a cooperative speaker to one who does not only have an epistemic goal (i.e., to improve the listener's epistemic state), but also has a social goal: to save the listener's or the speaker's own \emph{face}, or their positive self-image and right to avoid imposition from others. If the speaker's intended meaning does not contain threatening information to the speaker's or listener's face (face-threatening act), then the speaker will choose to convey the meaning in an efficient manner, putting it on record. As the degree of face-threatening becomes more severe, however, the speaker will choose to produce more indirect utterances, keeping the intended meaning off the record.
 
-Brown and Levinson (1987) sought to resolve this mystery by extending the idea of a cooperative speaker who does not only have an epistemic goal (i.e., to improve the listener's epistemic state), but also has a social goal: to save the listener's or the speaker's own \emph{face}, or their positive self-image and right to avoid imposition from others. If the speaker's intended meaning does not contain what may threaten the speaker's or listener's face (face-threatening act or FTA), then the speaker will choose to convey the meaning in an efficient manner, putting it on record. As the degree of FTA becomes more severe, however, the speaker will choose to produce more indirect utterances, keeping the intended meaning off record.
+Empirical data on both production and comprehension confirm Brown and Levinson's predictions that speakers try to accommodate listeners' face-saving needs, and that people infer speakers' intentions to do so. Adults and even young children spontaneously produce requests in polite forms \cite{clark1980, axia1985}. Speakers show politeness strategies even while arguing, preventing unnecessary face threats to their interactants \cite{holtgraves1997}. Interpretation of utterances also reflects listeners' sensitivity to politeness: The same words are interpreted differently depending on the contexts, in a direction that allows charitable attribution of speaker's intention to save the listener's face (e.g., \cite{bonnefon2009}). Neuroimaging research has recently shown that brain responses to the same sentences differ depending on whether or not the context involves face-saving needs \cite{bavsnakova2014}.
 
-Empirical data on both production and comprehension confirm Brown and Levinson's predictions that speakers try to accommodate listeners' face-saving needs, and that people infer speakers' intention to do so. Adults and even young children spontaneously produce requests in polite forms \cite{clark1980, axia1985} Speakers also show politeness strategies even while arguing, preventing unnecessary face threats to their interactants \cite{holtgraves1997}. Interpretation of utterances also reflects people's sensitivity to politeness situations: same words are interpreted differently depending on the contexts, in a direction that allows charitable attribution of speaker's intention to save the listener's face (e.g., \cite{bonnefon2009}). Neuroimaging research has recently shown that brain responses to the same sentence differs depending on whether the context involves face-saving needs \cite{bavsnakova2014}.
+The previous findings of polite utterance production and comprehension have been qualitatively consistent with Brown and Levinson's theory, that as the pressure on the speaker for face-saving increases, the level of politeness of speaker's utterances increases. 
+To our knowledge, there have not been empirical tests of the quantitative degree of truthfulness vs. misinformativity as tradeoffs in speaker's strategies to be informative vs. to save the listener's face. 
+Further, formal models of language understanding currently have no mechanism by which to understand polite language.
+In this paper, we formalize the understanding of polite language by generalizing the Rational Speech-Acts theory to include speaker utility that is not dependent on the transfer of information about the world to the listener \cite{Frank2012, Goodman2013}.
+We validate this model with empirical data of listeners' inferences about speakers' intentions and about inferences about the world given a speaker with a transparent communicative intent. 
 
-The previous findings of polite utterance production and comprehension have been consistent with Brown and Levinson's theory, that as the pressure on the speaker for face-saving increases, the level of politeness of speaker's utterances increases. But there has not been, to our knowledge, an empirical test that looks at the degree of truthfulness vs. misinformativity as tradeoffs in speaker's strategies to be informative vs. to save the listener's face. Also, there has not been any test of inferences about speaker's goals and utterances and the true state of the world the speaker may want to convey, by varying each of these parameters. 
-
-In the current paper we examine people's inferences about a speaker who speaks with varying degrees of politeness or bluntness and about a listener who hears the speaker's utterances; we also propose a computational model that can predict the inference patterns. We quantitatively vary (1) the speaker's communicative goal (e.g., to be honest or to be nice); (2) the true state of the world (e.g., the actual rating that a listener's performance actually deserved); (3) the speaker's utterance. Then we test how given parameters act on people's inferences about other parameters, and compare the empirical data against computational model predictions.
+%Also, there has not been any test of inferences about speaker's goals and utterances and the true state of the world the speaker may want to convey, by varying each of these parameters. 
+%
+%In the current paper we examine people's inferences about a speaker who speaks with varying degrees of politeness or bluntness and about a listener who hears the speaker's utterances; we also propose a computational model that can predict the inference patterns. We quantitatively vary (1) the speaker's communicative goal (e.g., to be honest or to be nice); (2) the true state of the world (e.g., the actual rating that a listener's performance actually deserved); (3) the speaker's utterance. Then we test how given parameters act on people's inferences about other parameters, and compare the empirical data against computational model predictions.
 
 % note about van roij's hypothesis about polite utterances as costly
 % lee and pinker 2010: indirectness coming from cooperation AND conflict; but we argue for stronger bias toward thinking that people are cooperative (maximally informative and kind, as much as they can be)
@@ -329,7 +341,7 @@ For the unassociated goal priors (e.g. $\beta_{mean}$ and $\beta_{honest}$ when 
 \label{my-table}
 \begin{tabular}{lll}
 \hline
-Experimental Condition  & Mean & Concentration \\ \hline
+Expt. Condition  & Goal weight Mean & Concentration \\ \hline
 (trying to be) Honest                        &   0.98 [0.86, 0.99]   & 18.8 [6.2, 19.9] \\
 (trying to be) Nice                          & 0.99 [0.84, 1.0] & 19.0 [7.6, 20] \\
 (trying to be) Mean                          &0.37 [0.01, 0.85] & 0.1[0.03, 2.1] \\ \hline
@@ -356,7 +368,10 @@ Among the other 2 goal conditions, the model explains almost all of the variance
 
 In the current paper, we examined people's inferential judgments on utterances addressing evaluation of someone's performance that can boost or hurt that person's self-image. Specifically, we found that people attribute goals to speakers differentially based on how much the literal utterance meaning matches the actual rating the performance deserves (higher attribution for goal to be honest) and how much positive bias (goal to be nice) or negative bias (goal to be mean) the utterance meaning carries. Also, we found that people expect the actual deserved rating to be different depending on what the speaker said and whether the speaker's intended goal was to be honest, nice or mean. 
 
-Our computational model successfully captured key patterns in the data by looking at politeness as arising from integration of epistemic utility (i.e., information transfer) and social utility (i.e., face-saving). Thus, information transfer is not the only goal in a conversation; social function of making the listener feel good, and thereby establishing a favorable social relationship is another important goal, that politeness helps accomplish.
+Communication is often looked at from the perspective successful transfer of information from speaker to hearer. 
+Yet in the social realm, communication also can serve the social function of making the listener feel good, and thereby establishing a favorable social relationship between speaker and hearer.
+Our computational model successfully captured key patterns in the data by formalizing politeness as the integration of epistemic utility (i.e., information transfer) and social utility (i.e., face-saving). This is the first work to generalize the Rational Speech-Act theory to include utility parameters not based on the successful transfer of information. 
+
 
 % next step: 
 % interaction with implicatures
