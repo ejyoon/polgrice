@@ -25,8 +25,8 @@
 \newcommand{\ejy}[1]{\textcolor{Blue}{[ejy: #1]}}  
 
 
-\title{An integrative account of politeness: 
-Reasoning about communicative informativity and kindness}
+\title{An integrative account of linguistic politeness: \\
+Reasoning about informativity and kindness}
  
 \author{{\large \bf Erica J. Yoon} \\
   \texttt{ejyoon@stanford.edu} \\
@@ -64,17 +64,17 @@ Politeness; computational modeling; communicative goals; pragmatics
 
 Imagine that Alice just gave a presentation, and asks Bob for his opinion, who thought the presentation was terrible. Bob decides to say to Alice: ``Your talk was okay.'' Why did Bob decide to say something differs from and is misinforming about the truth? Intuitively, Bob was being ``polite,'' giving information indirectly or even falsely in consideration of what the listener wants to hear.
 
-But this politeness phenomenon violates one important principle of communication: exchanging communication efficiently and accurately (Grice, 1970). An indirect or false utterance that misrepresents the true state will disable a full information transfer from the speaker to the listener. Thus, a cooperative speaker would want to produce utterances in a maximally truthful and informative way possible, and the listener who is aware of this will interpret the speaker's utterances with this assumption of a cooperative speaker in mind.
+But this politeness phenomenon violates one important principle of communication: exchanging communication efficiently and accurately \cite{Grice1975}. An indirect or false utterance that misrepresents the true state will disable a full information transfer from the speaker to the listener. Thus, a cooperative speaker would want to produce utterances in a maximally truthful and informative way possible, and the listener who is aware of this will interpret the speaker's utterances with this assumption of a cooperative speaker in mind.
 
 If, however, this was the only goal to be accomplished in a conversation, why would a speaker choose to say anything that misrepresents the true state of affairs at all? For example, why would a speaker choose to be ``polite,'' as Bob did in the scenario above?
 
 Brown and Levinson (1987) sought to resolve this mystery by extending the idea of a cooperative speaker who does not only have an epistemic goal (i.e., to improve the listener's epistemic state), but also has a social goal: to save the listener's or the speaker's own \emph{face}, or their positive self-image and right to avoid imposition from others. If the speaker's intended meaning does not contain what may threaten the speaker's or listener's face (face-threatening act or FTA), then the speaker will choose to convey the meaning in an efficient manner, putting it on record. As the degree of FTA becomes more severe, however, the speaker will choose to produce more indirect utterances, keeping the intended meaning off record.
 
-Empirical data on both production and comprehension confirm Brown and Levinson's predictions that speakers try to accommodate listeners' face-saving needs, and that people infer speakers' intention to do so. Adults and even young children spontaneously produce requests in polite forms (Clark and Schunk, 1980; Axia and Baroni, 1985). They also increase the degree of politeness when the requests incur more costs on the speaker's part (CITE?). Interpretation of utterances also reflects people's sensitivity to politeness situations: same words are interpreted differently depending on the contexts, in a direction that allows charitable attribution of speaker's intention to save the listener's face (Bonnefon CITE). Neuroimaging research has recently shown that brain responses to the same sentence differs depending on whether the context involves face-saving needs (CITE).
+Empirical data on both production and comprehension confirm Brown and Levinson's predictions that speakers try to accommodate listeners' face-saving needs, and that people infer speakers' intention to do so. Adults and even young children spontaneously produce requests in polite forms \cite{clark1980, axia1985} Speakers also show politeness strategies even while arguing, preventing unnecessary face threats to their interactants \cite{holtgraves1997}. Interpretation of utterances also reflects people's sensitivity to politeness situations: same words are interpreted differently depending on the contexts, in a direction that allows charitable attribution of speaker's intention to save the listener's face (e.g., \cite{bonnefon2009}). Neuroimaging research has recently shown that brain responses to the same sentence differs depending on whether the context involves face-saving needs \cite{bavsnakova2014}.
 
 The previous findings of polite utterance production and comprehension have been consistent with Brown and Levinson's theory, that as the pressure on the speaker for face-saving increases, the level of politeness of speaker's utterances increases. But there has not been, to our knowledge, an empirical test that looks at the degree of truthfulness vs. misinformativity as tradeoffs in speaker's strategies to be informative vs. to save the listener's face. Also, there has not been any test of inferences about speaker's goals and utterances and the true state of the world the speaker may want to convey, by varying each of these parameters. 
 
-In the current paper we examine people's inferences about a speaker who speaks with varying degrees of politeness or bluntness and about a listener who hears the speaker's utterances; we also propose a computational model that can predict the inference patterns. We quantitatively vary (1) the speaker's communicative goal (e.g., to be honest or to be nice); (2) the true state of the world (e.g., how the speaker actually felt about some performance by the listener); (3) the speaker's utterance. Then we test how given parameters act on people's inferences about other parameters, and compare the empirical data against computational model predictions.
+In the current paper we examine people's inferences about a speaker who speaks with varying degrees of politeness or bluntness and about a listener who hears the speaker's utterances; we also propose a computational model that can predict the inference patterns. We quantitatively vary (1) the speaker's communicative goal (e.g., to be honest or to be nice); (2) the true state of the world (e.g., the actual rating that a listener's performance actually deserved); (3) the speaker's utterance. Then we test how given parameters act on people's inferences about other parameters, and compare the empirical data against computational model predictions.
 
 % note about van roij's hypothesis about polite utterances as costly
 % lee and pinker 2010: indirectness coming from cooperation AND conflict; but we argue for stronger bias toward thinking that people are cooperative (maximally informative and kind, as much as they can be)
@@ -131,7 +131,7 @@ We implemented this model using the probabilisitic programming language WebPPL \
 
 \section{Behavioral Experiments}
 
-We conducted three experiments to probe human data to look at: (1) literal semantics judgment: what utterance in its literal sense is perceived to aptly describe the true state of the world (i.e., speaker's true feelings toward the listener's performance; referred to as `true state' from here on); (2) goal inference: given the true state and the speaker's actual utterance to the listener, what goals are attributed to the speaker; (3) state inference: given the speaker's goal and utterance to the listener, what is the true state?
+We conducted three experiments to probe human data to look at: (1) literal semantics judgment: what utterance in its literal sense is perceived to aptly describe the true state of the world (i.e., speaker's actual rating of the listener's performance; referred to as `true state' from here on); (2) goal inference: given the true state and the speaker's actual utterance to the listener, what were likely goals for the speaker; (3) true state inference: given the speaker's goal and utterance to the listener, what is the true state inferred?
 
 \subsection{Experiment 1: Literal semantics}
 
@@ -196,7 +196,7 @@ True state $\times$ Utterance & -.04 (.003) & -12.2 \\
 \end{center} 
 \end{table}
 
-Participants attributed likelihoods for speaker's goals differentially depending on the true state and utterance. We fit linear mixed-effects models to measure the effects of true state and utterance (as numeric variables, ordered from the worst to the best) on the attribution of each goal (Table \ref{tab:lmer1}) and we found significant main effects and interactions of true state and utterance on each of all three goal attributions, though with varying effect sizes. Below we lay out some primary patterns shown in the data. % model: goal_prob ~ true_state * utterance + (utterance | subid)
+Participants attributed likelihoods for speaker's goals differentially depending on the true state and utterance. We fit linear mixed-effects models to measure the effects of true state and utterance (as numeric variables, ordered from the worst to the best) on the attribution of each goal (Table \ref{tab:lmer1}) and we found significant main effects and interactions of true state and utterance on each of all three goal attributions, though with varying effect sizes. Below we lay out some primary patterns shown in the data. % maximally converging model: goal_prob ~ true_state * utterance + (utterance | subid)
 
 Participants' attribution of goal to be honest (``honesty goal'') varied depending on the combination of state and utterance, as evidenced by the high effect size of the interaction. The peak in the likelihood of honesty goal attribution occurred when the literal meaning of the utterance was close to the true state, based on the literal semantics distribution shown in Experiment 1. The honesty goal attribution was highly correlated with the literal semantics distribution given the state and utterance (r = 0.86).
 
@@ -204,7 +204,7 @@ Attribution of goal to be nice (``niceness goal'') generally showed slightly dec
 
 There was an interesting asymmetry between the niceness versus meanness goal attribution, in that positive utterances were associated with niceness goal regardless of the state, whereas negative utterances were only perceived to be mean given a positive (thus mismatching) true state. For example the utterance ``amazing'' is linked to the niceness goal with high likelihoods across all states; the utterance ``terrible'' is linked to meanness goal only for positive states but not negative states (the attribution is only at chance level of 50\% for state of 1). This perhaps reflects participants' lay notion of an optimal speaker who tries to be kind and honest; speaker's critical remark (e.g., ``bad'') is perceived to be out of a good will to be maximally truthful to the listener, rather than intention to damage the listener's reputation.
 
-\subsection{Experiment 3: State inference}
+\subsection{Experiment 3: True state inference}
 
 \subsubsection{Method}
 
