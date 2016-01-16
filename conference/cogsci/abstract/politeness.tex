@@ -265,10 +265,10 @@ $$
 U(w;s; \beta) = \beta_{e}\cdot U_{epistemic} + (\beta_{nice} - \beta_{mean}) \cdot U_{social}
 $$
 
-In addition, in each model, we include an explicit submodel of random guessing behavior, and model the behavioral data as mixture of this noise and the predictions of the pragmatic listener model $L_1$ (Eq.~\ref{eq:L1}).
-Including such a contamination parameter is important for getting reliable estimates of the parameters of the RSA model, which would otherwise be corrupted by this noise \cite{LW2014}. 
-We put a uniform prior over this mixture parameter $\phi \sim \text{Uniform}(0,1)$. 
-This mixture parameter provides an additional measure of goodness of fit: It shows the proportion of the data that is better explained by the cognitive model than by a model of random guessing. 
+%In addition, in each model, we include an explicit submodel of random guessing behavior, and model the behavioral data as mixture of this noise and the predictions of the pragmatic listener model $L_1$ (Eq.~\ref{eq:L1}).
+%Including such a contamination parameter is important for getting reliable estimates of the parameters of the RSA model, which would otherwise be corrupted by this noise \cite{LW2014}. 
+%We put a uniform prior over this mixture parameter $\phi \sim \text{Uniform}(0,1)$. 
+%This mixture parameter provides an additional measure of goodness of fit: It shows the proportion of the data that is better explained by the cognitive model than by a model of random guessing. 
 
 \subsection{Goal inference}
 
@@ -282,15 +282,23 @@ We put uninformative priors on these and infer their credible values using Bayes
 & \lambda \sim \text{Uniform}(0,20)\\
 & \alpha \sim \text{Uniform}(0, 5)
 \end{eqnarray*}
-We ran 3 MCMC chains for 40,000 iterations, discarding the first 20,000 for burnin.
-The Maximum A-Posteriori (MAP) estimate and 95\% Highest Probability Density Interval (HDI) for $\lambda$ is 6.8 [5.7, 7.8]; for $\alpha$ is 1.03 [0.91, 1.19]; for $\phi$ is 0.09 [0.06, 0.13].
-This is a relatively low value for $\phi$: The model explains about 90\% of the data set better than a model of random guessing.
+We ran 2 MCMC chains for 40,000 iterations, discarding the first 20,000 for burnin.
+The Maximum A-Posteriori (MAP) estimate and 95\% Highest Probability Density Interval (HDI) for $\lambda$ is 4.6 [4.0, 4.9]; for $\alpha$ is 1.17 [1.04, 1.31].%; for $\phi$ is 0.09 [0.06, 0.13].
+%This is a relatively low value for $\phi$: The model explains about 90\% of the data set better than a model of random guessing.
 
 %               Goal Parameter        MAP    credLow  credHigh
 %             (fctr)    (fctr)      (dbl)      (dbl)     (dbl)
 %1             alpha        NA 1.02553704 0.91319156 1.1865188
 %2               phi        NA 0.08983868 0.05699245 0.1284084
 %3 speakerOptimality        NA 6.81149016 5.76426562 7.8453595
+
+%% sans guessing
+%               Goal Parameter           MAP  credLow credHigh
+%             (fctr)    (fctr)         (dbl)    (dbl)    (dbl)
+%1             alpha        NA  1.1707125822 1.042176 1.311626
+%2               phi        NA -0.0006369482 0.000000 0.000000
+%3 speakerOptimality        NA  4.6635325286 4.033799 4.945555
+
 
 To test what data the model actually predicts, we examine the posterior predictive distribution by marginalizing out the likely parameter values and generating predictions for what the data should look like, given our cognitive model and the inferred parameters.
 The predictions of the model are shown in Figure \ref{fig:exp2}.
@@ -310,26 +318,28 @@ For the unassociated goal priors (e.g. $\beta_{mean}$ and $\beta_{honest}$ when 
 \end{eqnarray*}
 
 \begin{table}[]
-\centering
+%\centering
 \label{my-table}
 \begin{tabular}{lll}
 \hline
-Experimental Condition (Goal) & Mean & Concentration \\ \hline
-(trying to be) Honest                        &      &               \\
-(trying to be) Nice                          &      &               \\
-(trying to be) Mean                          &      &               \\ \hline
+Experimental Condition  & Mean & Concentration \\ \hline
+(trying to be) Honest                        &   0.98 [0.86, 0.99]   & 18.8 [6.2, 19.9] \\
+(trying to be) Nice                          & 0.99 [0.84, 1.0] & 19.0 [7.6, 20] \\
+(trying to be) Mean                          &0.37 [0.01, 0.85] & 0.1[0.03, 2.1] \\ \hline
 \end{tabular}
 \caption{Inferred hyper-parameter values for Goal Priors in State Inference task.
 For each experimental condition (trying to be X), we inferred the likely priors on the goal weights for the associated goal.
 Values shown are MAP estimates and 95\% HDI for the parameter values.}
 \end{table}
-We ran 3 MCMC chains for 20,000 iterations, discarding the first 10,000 for burnin.
-The MAP and 95\% HDI for $\lambda$ is \red{6.8 [5.7, 7.8]}; for $\alpha$ is \red{1.03 [0.91, 1.19]}; for $\phi$ is \red{0.09 [0.06, 0.13]}.
+We ran 2 MCMC chains for 20,000 iterations, discarding the first 10,000 for burnin.
+The MAP and 95\% HDI for $\lambda$ is 1.5 [1.2, 1.9]; for $\alpha$ is 2.4 [1.9, 3.0].%; for $\phi$ is \red{0.09 [0.06, 0.13]}.
 Inferred parameter values for the goal priors are shown in Table 1.
 
 The predictions of the model are shown in Figure \ref{fig:exp3}.
 \mht{Describe model predictions.}
-\mht{Model-data correlation}. 
+Overall, the model explains a lot the variance in the data $r^2(15) = 0.73$. 
+The main discrepancies are with the goal ``trying to be mean'', as noted above. 
+Among the other 2 goal conditions, the model explains almost all of the variance $r^2(10) = 0.94$. 
 
 \section{Discussion}
 
