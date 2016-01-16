@@ -43,7 +43,15 @@ Reasoning about informativity and kindness}
 
 \begin{abstract}
 
-...
+Information transfer is an important goal in conversation
+and is assumed to be upheld by a cooperative speaker,
+but politeness, or conveying information in a false or indirect manner in consideration of listener's wants,
+seemingly contradicts the cooperative nature of an optimal speaker. 
+We propose that a cooperative speaker considers both
+\emph{epistemic utility}, or utility of improving the epistemic state of a listener, 
+and \emph{social utility}, or utility of maintaining or boosting the listener's self-image (being polite). 
+Findings from two inferential judgment experiments 
+and their comparison against predictions by our computational model corroborate this argument.
 
 \textbf{Keywords:} 
 Politeness; computational modeling; communicative goals; pragmatics
@@ -61,12 +69,12 @@ The goals in conveying the latter differ from merely being informative about wha
 It would give potentially false information, in consideration of what the listener wants to hear.
 In other words, it would be polite.
 
-Politeness violates one important principle of communication: exchanging information efficiently and accurately \cite{Grice1975}. An indirect or false utterance that misrepresents the true state will fail to transfer information from speaker to hearer. Thus, a cooperative speaker would want to produce utterances in a maximally truthful and informative way, a the listener who is aware of this will interpret the speaker's utterances with this assumption of a cooperative speaker in mind.
+Politeness violates one important principle of communication: exchanging information efficiently and accurately \cite{Grice1975}. An indirect or false utterance that misrepresents the true state will fail to transfer information from speaker to hearer. Thus, a cooperative speaker would want to produce utterances in a maximally truthful and informative way, and the listener who is aware of this will interpret the speaker's utterances with this assumption of a cooperative speaker in mind.
 If, however, this was is the only goal to be accomplished in a conversation, how ever would a speaker choose to say anything that misrepresents the true state of affairs?
 
-\citeA{Brown1987} suggested this mystery be resolved by extending the idea of a cooperative speaker to one who does not only have an epistemic goal (i.e., to improve the listener's epistemic state), but also has a social goal: to save the listener's or the speaker's own \emph{face}, or their positive self-image and right to avoid imposition from others. If the speaker's intended meaning does not contain threatening information to the speaker's or listener's face (face-threatening act), then the speaker will choose to convey the meaning in an efficient manner, putting it on record. As the degree of face-threatening becomes more severe, however, the speaker will choose to produce more indirect utterances, keeping the intended meaning off the record.
+\citeA{Brown1987} suggested this mystery be resolved by extending the idea of a cooperative speaker to one who does not only have an epistemic goal (i.e., to improve the listener's epistemic state), but also has a social goal: to save the listener's or the speaker's own \emph{face}, or their positive self-image and right to avoid imposition from others. If the speaker's intended meaning does not contain threatening information to the speaker's or listener's face, then the speaker will choose to convey the meaning in an efficient manner, putting it on record. As the degree of face-threat becomes more severe, however, the speaker will choose to produce more indirect utterances, keeping the intended meaning off the record.
 
-Empirical data on both production and comprehension confirm Brown and Levinson's predictions that speakers try to accommodate listeners' face-saving needs, and that people infer speakers' intentions to do so. Adults and even young children spontaneously produce requests in polite forms \cite{clark1980, axia1985}. Speakers show politeness strategies even while arguing, preventing unnecessary face threats to their interactants \cite{holtgraves1997}. Interpretation of utterances also reflects listeners' sensitivity to politeness: The same words are interpreted differently depending on the contexts, in a direction that allows charitable attribution of speaker's intention to save the listener's face (e.g., \cite{bonnefon2009}). Neuroimaging research has recently shown that brain responses to the same sentences differ depending on whether or not the context involves face-saving needs \cite{bavsnakova2014}.
+Empirical data on both production and comprehension confirm Brown and Levinson's predictions that speakers try to accommodate listeners' face-saving needs, and that people infer speakers' intentions to do so. Adults and even young children spontaneously produce requests in polite forms \cite{clark1980, axia1985}. Speakers show politeness strategies even while arguing, preventing unnecessary face threats to their interactants \cite{holtgraves1997}. Interpretation of utterances also reflects listeners' sensitivity to politeness: the same words are interpreted differently depending on the contexts, in a direction that allows charitable attribution of speaker's intention to save the listener's face (e.g., \cite{bonnefon2009}). Neuroimaging research has recently shown that brain responses to the same sentences differ depending on whether or not the context involves face-saving needs that are likely considered by the speaker \cite{bavsnakova2014}.
 
 The previous findings of polite utterance production and comprehension have been qualitatively consistent with Brown and Levinson's theory, that as the pressure on the speaker for face-saving increases, the level of politeness of speaker's utterances increases. 
 To our knowledge, there have not been empirical tests of the quantitative degree of truthfulness vs. misinformativity as tradeoffs in speaker's strategies to be informative vs. to save the listener's face. 
@@ -92,7 +100,7 @@ Politeness, then, takes shape as an independent component of a speaker's utility
 \citeA{Goodman2013} define speaker utility by the amount of information a \emph{literal listener} would still not know after know about world state $s$ after hearing a speaker's utterance $w$: 
 $U_{epistemic}(w; s) = \ln(P_{literal}(s \mid w)) $.
 We simply extend this by adding a component related to the intrinsic value of the state in the eyes of the listener\footnote{At this point, we do not differentiate value of the state to the listener from value of the state to the speaker, though it is conceivable that these could be different.}.
-We consider states which have utility values 1 - 5, corresponding to the subjective utility of the state, and roughly corresponding to the scalar value terms \{\emph{good}, \emph{bad}, \emph{terrible}, \emph{amazing}, and \emph{okay}\}. 
+We consider states which have utility values 1 - 5, corresponding to the subjective utility of the state, and roughly corresponding to the scalar value terms \{\emph{good}, \emph{bad}, \emph{terrible}, \emph{amazing}, and \emph{okay}\}. \ejy{should the order of words be kept consistent? terrible-bad-okay-good-amazing? (matching utility 1-5)} 
 The precise mapping from utterance to subjective utility value is measured in \textbf{Experiment 1}.
 
 We define the social utility of an utterance to be the expected utility of the state the listener would infer given the utterance $w$: 
@@ -138,9 +146,10 @@ For simplicity, we assume the following:
 % $\{w_{amazing}, w_{bad}, w_{okay}, w_{good}, w_{amazing}\}$
   \mht{used in relevant empirical studies (Bonnefon ?).}
    \ejy{these were used in Kao \& Goodman (2015), should we cite it as being relevant though?}
+   \ejy{also, same comment as above about word ordering}
 \end{enumerate}
 
-\textbf{Experiment 3} measures' listeners inferences about the likely state of the world $s$, given an utterance and a speaker's goal. 
+\textbf{Experiment 3} measures listeners' inferences about the likely state of the world $s$, given an utterance and a speaker's goal. 
 We assume a uniform prior distribution over possible states of the world $s\sim \text{DiscreteUniform} \{1, 2, 3, 4, 5\}$. 
 We implemented this model using the probabilisitic programming language WebPPL \cite{dippl} and a fully-specified implementation can be found at \url{http://forestdb.org/models/politeness.html}.
 
@@ -162,14 +171,14 @@ We created 13 different context items, in which a person (e.g., Ann) gave a perf
 
 Perhaps as expected, negatively-connoted words were matched with the negative end states, and positively- connoted words with positive end states with the highest likelihoods (see Figure \ref{fig:exp1}). The word ``terrible'' had its highest likelihood at state of one heart (``state 1'' from here on) and sharply decreased as state positivity increased. The word ``bad'' had its highest likelihood at state 1 and 2, then sharply decreased as state positivity increased. The words ``amazing'' and ``good'' followed a symmetric, opposite pattern of yielding the highest likelihoods at positive states and close-to-zero likelihoods at negative states. The word ``okay'' had its peak likelihood at state 3, and decreased as state moved away from neutral, either negatively or positively.
 
+\section{Experiment 2: Goal inference}
+
 \begin{figure*}[t]
 \begin{center} 
   \includegraphics[width=.9\textwidth]{figures/exp1.pdf}
   \caption{\label{fig:exp1} Results from Experiment 1. Proportion of acceptances of words (shown in different colors) given the true state represented on a scale of hearts. Error bars represent 95\% confidence intervals.}
   \end{center} 
 \end{figure*}
-
-\section{Experiment 2: Goal inference}
 
 Experiment 1 results were used as the literal meanings of utterances $W$ with respect to states $S$ --- \denote{w}(s) (Eq. \ref{eq:L0}.
 Experiments 2 probed listeners' inferences of the speaker's goals, given an utterance (e.g. \emph{It was good.}) and a true state (e.g. 2 out of 5). 
@@ -261,7 +270,7 @@ Overall, the model displays a strong quantitative fit to the goal inference data
 
 \section{Experiment 3: True state inference}
 
-In this experiment, we examined listeners' inferences about the likely state of the world $s$ given a speaker's utterance (e.g. \emph{It was good.}) and a description of the speaker's intentions (e.g. the speaker was ``trying to be nice'').
+In this experiment, we examined listeners' inferences about the likely state of the world $s$ given a speaker's utterance (e.g. \emph{It was good.}) and a description of the speaker's intentions (e.g. the speaker ``wanted to be nice'').
 
 \subsection{Method}
 
@@ -349,7 +358,7 @@ The model's expected posterior over states when the speaker is trying to be \emp
 When the model knows the speaker was trying to be \emph{nice}, the listener is more conservative in how it interprets positive utterances, with the difference between an honest utterance and a nice utterance increasing as the utterance becomes more likely to signal a higher valued state. 
 For example, the difference between a ``nice'' \emph{amazing} and an ``honest'' \emph{amazing} is greater than the difference between a ``nice'' \emph{okay} and an ``honest'' \emph{okay}.
 Inferences when the speaker is trying to be ``mean'' display the associated opposite behavior when the utterance is indeed negative (e.g. \emph{terrible}).
-Our model does not capture the sarcastic interpretation of a mean speaker who says \emph{It was amazing}, but other RSA models have displayed this behavior \cite{Kao2015}.%\mht{Describe model predictions.}
+Our model does not capture the sarcastic interpretation of a mean speaker who says \emph{It was amazing}, but other RSA models have displayed this behavior \cite{Kao2015}. %\mht{Describe model predictions.}
 Overall, the model explains a lot the variance in the data $r^2(15) = 0.73$. 
 The main discrepancies are with the goal ``trying to be mean'', as noted above. 
 Among the other 2 goal conditions, the model explains almost all of the variance $r^2(10) = 0.94$. 
