@@ -285,7 +285,7 @@ Utterance $\times$ Meanness goal & -.11 (.05) & -2.15 \\
 \end{center} 
 \end{table}
 
-Inference of the actual rating for listener's performance, or the true state, varied depending on speaker's goal and utterance (Figure \ref{fig:exp3}). We fit a linear mixed-effects model to look at the effects of information on speaker's goal and utterance on inferred true states, and found significant main effects for and interactions between utterance and goal. Below we describe main patterns in the data.
+Inferences of the actual rating for listener's performance, or the true state, varied depending on speaker's goal and utterance (Figure \ref{fig:exp3}). We fit a linear mixed-effects model to look at the effects of information on speaker's goal and utterance on inferred true states, and found significant main effects for and interactions between utterance and goal. Below we describe main patterns in the data.
 
 Given the speaker's goal to be honest, as predicted from the literal semantics distribution, inferred state positivity was correlated with utterance positivity: ``terrible'' implied approximately the true state of 1, ``okay'' the state of 3, ``amazing'' the state of 5. Interestingly, state inferred based on the utterance ``[It was] bad'' was not judged to be different from the inferred state based on ``terrible,'' which is seemingly more negatively-connoted. In contrast, the inferred state based on ``good'' was less positive than inferred based on ``amazing.'' This may suggest that saying even a weakly negative remark (e.g., ``bad'') is face-threatening to a similar degree as making a more strongly negative comment, given that the speaker has already decided to express criticism.
 
@@ -304,12 +304,6 @@ Finally, given the speaker's goal to be mean, participants inferred that the tru
 \end{centering} 
 \end{figure}
 
-\section{Model behavior}
-
-We now turn to the predictions of the computational model.
-We compare these predictions to the experimental data from Expt.~2 \& 3, respectively.
-
-\subsection{Model details and priors}
 
 
 %In addition, in each model, we include an explicit submodel of random guessing behavior, and model the behavioral data as mixture of this noise and the predictions of the pragmatic listener model $L_1$ (Eq.~\ref{eq:L1}).
@@ -317,18 +311,18 @@ We compare these predictions to the experimental data from Expt.~2 \& 3, respect
 %We put a uniform prior over this mixture parameter $\phi \sim \text{Uniform}(0,1)$. 
 %This mixture parameter provides an additional measure of goodness of fit: It shows the proportion of the data that is better explained by the cognitive model than by a model of random guessing. 
 
-\subsection{Goal inference}
-\subsection{State inference}
+\subsection{Model predictions}
 
-In Experiment 3, participants were told what the speaker said $w$ as well as described what the speakers intentions were (e.g. \emph{Bob wanted to be nice}). 
-To model this, we assume that the intentions (e.g. \emph{wanted to be nice}) modified the listener's prior distribution over goal-weights for the relevant goal. For example, if a speaker was trying to be nice, we interpret that to mean the speaker has a non-uniform prior distribution over $\beta_{nice}$ (in particular, $\beta_{nice}$ should be skewed toward higher-values). 
+In this experiment, participants were told the speaker said $w$ as well as described what the speakers intentions were (e.g. \emph{Bob wanted to be nice}). 
+To model this, we assume that the intentions (e.g. \emph{wanted to be nice}) modified the listener's prior distribution over goal-weights for the relevant goal. For example, if a speaker was trying to be nice, we interpret that to mean the speaker has a non-uniform prior distribution over $\beta_{nice}$ (in particular, we expect $\beta_{nice}$ to be skewed toward higher-values). 
 We assume $\beta \sim \text{Beta}(\gamma, \delta)$, and for each goal condition (trying to be \emph{nice, mean, honest}), we put uninformative hyperpriors over the associated goal prior\footnote{For ease of interpretation, we are parametrizing the $\beta$ distribution by its mean and concentration. To recover the canonical shape parametrization, use $\gamma \delta$ and $(1-\gamma)\delta$.}.
-For the unassociated goal priors (e.g. $\beta_{mean}$ and $\beta_{honest}$ when \emph{trying to be nice}), we use the same uniform priors we used to model the goal inference data.
+
 %
 \begin{eqnarray*}
 & \gamma \sim  \text{Uniform}(0,1)\\
 & \delta  \sim  \text{Uniform}(0, 20)
 \end{eqnarray*}
+For the unassociated goal priors (e.g. $\beta_{mean}$ and $\beta_{honest}$ when \emph{trying to be nice}), we use the same uniform priors we used to model the goal inference data.
 
 \begin{table}[]
 %\centering
@@ -345,11 +339,15 @@ For each experimental condition (trying to be X), we inferred the likely priors 
 Values shown are MAP estimates and 95\% HDI for the parameter values.}
 \end{table}
 We ran 2 MCMC chains for 20,000 iterations, discarding the first 10,000 for burnin.
-The MAP and 95\% HDI for $\lambda$ is 1.5 [1.2, 1.9]; for $\alpha$ is 2.4 [1.9, 3.0].%; for $\phi$ is \red{0.09 [0.06, 0.13]}.
+The MAP and 95\% HDI for $\lambda$ is 1.5 [1.2, 1.9]; for $\alpha$ is 2.4 [1.9, 3.0]. %; for $\phi$ is \red{0.09 [0.06, 0.13]}.
 Inferred parameter values for the goal priors are shown in Table 1.
 
 The predictions of the model are shown in Figure \ref{fig:exp3}.
-\mht{Describe model predictions.}
+The model's expected posterior over states when the speaker is trying to be \emph{honest} increase as function a function of the utterances likely of matching positive states (i.e. \emph{amazing} means a very high state).
+When the model knows the speaker was trying to be \emph{nice}, the listener is more conservative in how it interprets positive utterances, with the difference between an honest utterance and a nice utterance increasing as the utterance becomes more likely to signal a higher valued state. 
+For example, the difference between a ``nice'' \emph{amazing} and an ``honest'' \emph{amazing} is greater than the difference between a ``nice'' \emph{okay} and an ``honest'' \emph{okay}.
+Inferences when the speaker is trying to be ``mean'' display the associated opposite behavior when the utterance is indeed negative (e.g. \emph{terrible}).
+Our model does not capture the sarcastic interpretation of a mean speaker who says \emph{It was amazing}, but other RSA models have displayed this behavior \cite{Kao2015}.%\mht{Describe model predictions.}
 Overall, the model explains a lot the variance in the data $r^2(15) = 0.73$. 
 The main discrepancies are with the goal ``trying to be mean'', as noted above. 
 Among the other 2 goal conditions, the model explains almost all of the variance $r^2(10) = 0.94$. 
