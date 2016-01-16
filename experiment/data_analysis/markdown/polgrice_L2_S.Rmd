@@ -98,3 +98,38 @@ qplot(utterance, state,
 #  ggtitle("Inferred state given utterance and goal") +
   geom_errorbar(aes(ymin=state-cil,ymax=state+cih,width=.1))
 ```
+
+## model comparison
+
+```{r warning=FALSE, message=FALSE, echo=FALSE, fig.width = 10, fig.height = 2.5}
+
+# comparison to model
+model <- read.csv("/Users/ericang/Documents/Research/polgrice_GIT/model/results/statesbda-politeRSA-stateGivenUttGoal-goalPrior1Beta-sopt-alpha-MH20000burn10000semantics-bern-50k-b25k.csv")
+
+model <- model %>%
+  mutate(utterance = Utterance) %>%
+  mutate(goal = Goal) %>%
+  mutate(state = MAP/20) %>%
+  mutate(cih = (credHigh-MAP)/20) %>%
+  mutate(cil = (MAP-credLow)/20) %>%
+  select(utterance, goal, state, cih, cil)
+model$exp <- "model"
+model$utterance <- ordered(model$utterance, levels = c("terrible", "bad", "okay", "good", "amazing"))
+levels(model$utterance) <- c("utterance: terrible", "utterance: bad","utterance: okay","utterance: good","utterance: amazing")
+model$goal <- ordered(model$goal, levels = c("honest", "nice", "mean"))
+
+ms$exp <- "experiment"
+levels(ms$utterance) <- c("utterance: terrible", "utterance: bad","utterance: okay","utterance: good","utterance: amazing")
+
+ms2 <- rbind(ms, model)
+
+qplot(utterance, state, 
+      colour = goal,
+      data=ms2) + 
+  geom_line(aes(group=goal)) +
+  facet_grid(exp~.) +
+  xlab("utterance") +
+  ylab("inferred state") +
+#  ggtitle("Inferred state given utterance and goal") +
+  geom_errorbar(aes(ymin=state-cil,ymax=state+cih,width=.1))
+```

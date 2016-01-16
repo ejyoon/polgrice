@@ -110,7 +110,7 @@ qplot(true_state, goal_prob,
   geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1))
 
 # comparison to model
-model <- read.csv("/Users/ericang/Documents/Research/polgrice_GIT/model/results/goalsbda-politeRSA-jointUtilityProbScale-goalPriorFixed-sopt-MH10000burn5000semantics-bern-50k-b25k.csv")
+model <- read.csv("/Users/ericang/Documents/Research/polgrice_GIT/model/results/goalsbda-politeRSA-sopt-alphaMH40000burn20000semantics-bern-50k-b25k.csv")
 
 model <- model %>%
   mutate(true_state = State) %>%
