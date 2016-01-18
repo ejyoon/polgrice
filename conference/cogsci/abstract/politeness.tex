@@ -170,14 +170,19 @@ We implemented this model using the probabilisitic programming language WebPPL \
 
 \section{Experiment 1: Literal semantics}
 
+\ndg{briefly motivate this expt.}
+
 \subsection{Method}
 
 We created 13 different context items, in which a person (e.g., Ann) gave a performance of some kind, and another person (e.g., Bob) evaluated it. For example, in one of the contexts, Ann baked a cake, and Bob tasted it. Bob's feelings toward Ann's cake (``\emph{true state}'') were shown on a scale out of five hearts (e.g., two out of five hearts filled in red color). Then we asked, ``Do you think Bob thought Ann's cake was X?'' where X could be one of five possible words: \emph{terrible}, \emph{bad}, \emph{okay}, \emph{good}, and \emph{amazing}.
 
 30 participants with IP addresses in the United States were recruited on Amazon's Mechanical Turk. Each participant read 25 scenarios, depicting every possible combination of 5 true states and 5 words. Participants indicated their answer to each question by answering `No' or `Yes.' The order of context items was randomized, and there were a maximum of two repeats of each context item per participant.
 
+\ndg{do we have space to show an example interface figure? just to give an intuition about the hearts, etc. also, put expt online and link to it.}
+
 \subsection{Results}
 
+\ndg{this paragraph is kind of awkward, and too wordy. basically: the meanings were as you'd expect. see figure...}
 Perhaps as expected, negatively-connoted words were matched with the negative end states, and positively- connoted words with positive end states with the highest likelihoods (see Figure \ref{fig:exp1}). The word ``terrible'' had its highest likelihood at state of one heart (``state 1'' from here on) and sharply decreased as state positivity increased. The word ``bad'' had its highest likelihood at state 1 and 2, then sharply decreased as state positivity increased. The words ``amazing'' and ``good'' followed a symmetric, opposite pattern of yielding the highest likelihoods at positive states and close-to-zero likelihoods at negative states. The word ``okay'' had its peak likelihood at state 3, and decreased as state moved away from neutral, either negatively or positively.
 
 \section{Experiment 2: Goal inference}
@@ -189,8 +194,8 @@ Perhaps as expected, negatively-connoted words were matched with the negative en
   \end{center} 
 \end{figure*}
 
-Experiment 1 results were used as the literal meanings of utterances $W$ with respect to states $S$ --- \denote{w}(s) (Eq. \ref{eq:L0}.
-Experiments 2 probed listeners' inferences of the speaker's goals, given an utterance (e.g. \emph{It was good.}) and a true state (e.g. 2 out of 5). 
+Experiment 1 results were used as the literal meanings of utterances $W$ with respect to states $S$ --- the term $\denote{w}(s)$ in Eq. \ref{eq:L0}.
+Experiment 2 probed listeners' inferences of the speaker's goals, given an utterance (e.g. \emph{It was good.}) and a true state (e.g. 2 out of 5 hearts). 
 
 \subsection{Method} 
 
@@ -232,7 +237,9 @@ True state $\times$ Utterance & -.04 (.003) & -12.2 \\
 \end{center} 
 \end{table}
 
-Participants attributed likelihoods for speaker's goals differentially depending on the true state and utterance. We fit linear mixed-effects models to measure the effects of true state and utterance (as numeric variables, ordered from the worst to the best) on the attribution of each goal (Table \ref{tab:lmer1}) and we found significant main effects and interactions of true state and utterance on each of all three goal attributions, though with varying effect sizes. Below we lay out some primary patterns shown in the data. % maximally converging model: goal_prob ~ true_state * utterance + (utterance | subid)
+\ndg{this section feels too wordy to me. don't need to describe what people can see in the figure, only need to point out aspects that are theoretically important or puzzling.}
+
+Participants attributed likelihoods for speaker's goals differentially depending on the true state and utterance. We fit linear mixed-effects models to measure the effects of true state and utterance (as numeric variables, ordered from the worst to the best) on the attribution of each goal (Table \ref{tab:lmer1}) and we found significant main effects and interactions of true state and utterance on each of the three goal attributions, though with varying effect sizes. Below we lay out some primary patterns shown in the data. % maximally converging model: goal_prob ~ true_state * utterance + (utterance | subid)
 
 Participants' attributions of honesty (``honesty goal'') varied depending on the combination of state and utterance, as evidenced by the high effect size of the interaction. The peak in the likelihood of honesty goal attribution occurred when the literal meaning of the utterance was close to the true state, based on the literal semantics distribution shown in Experiment 1. The honesty goal attribution was highly correlated with the literal semantics distribution given the state and utterance (r = 0.86).
 
@@ -248,7 +255,7 @@ To compare to the empirical data, we condition on the true state of the world gi
 Here, we assume a uniform prior over the likely goals of the speaker, which is operationalized in the computational model as weights over the utilities: $\beta \sim \text{Uniform}(0,1)$ .
 
 The computational model has 2 parameters: the speaker optimality parameter $\lambda$ in Eq.~\ref{eq:S1} and the value scale parameter $\alpha$ in the utility function. 
-We put uninformative priors on these and infer their credible values using Bayesian inference.
+We put uninformative priors on these and infer their posterior credible values  via Bayesian data analysis.
 \begin{eqnarray*}
 & \lambda \sim \text{Uniform}(0,20)\\
 & \alpha \sim \text{Uniform}(0, 5)
@@ -276,6 +283,8 @@ The model believes the speaker to be more honest when the utterance matches the 
 Further, the model increases its ratings of niceness as the utterance better matches states with higher values (green bars, main effect of panel).
 The goal to be mean displays the opposite behavior, decreasing as the utterance matches states with higher values (blue bars).
 Overall, the model displays a strong quantitative fit to the goal inference data $r^2(75) = 0.87$.
+
+\ndg{say something about the biggest mismatches to the data? eg model seems to under-predict honesty?}
 
 \section{Experiment 3: True state inference}
 
