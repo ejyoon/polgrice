@@ -62,7 +62,7 @@ Politeness; computational modeling; communicative goals; pragmatics
 
 
 \section{Introduction}
-
+\ndg{clean up first few paragraphs. can be compressed a bit...}
 You witness your friend give a terrible presentation, and he asks for your opinion. 
 Does rational communication compel you to say: ``Your talk was terrible.''?
 Is it ever reasonable to say: ``Your talk was okay.''?
@@ -74,10 +74,12 @@ In other words, it would be polite.
 Politeness violates one important principle of communication: exchanging information efficiently and accurately \cite{Grice1975}. An indirect or false utterance that misrepresents the true state will fail to transfer information from speaker to hearer. Thus, a cooperative speaker would want to produce utterances in a maximally truthful and informative way, and the listener who is aware of this will interpret the speaker's utterances with this assumption of a cooperative speaker in mind.
 If, however, this was is the only goal to be accomplished in a conversation, how ever would a speaker choose to say anything that misrepresents the true state of affairs?
 
+\ndg{need to say what "face" is...}
 \citeA{Brown1987} suggested this mystery be resolved by extending the idea of a cooperative speaker to one who does not only have an epistemic goal (i.e., to improve the listener's epistemic state), but also has a social goal: to save the listener's or the speaker's own \emph{face}, or their positive self-image and right to avoid imposition from others. If the speaker's intended meaning does not contain threatening information to the speaker's or listener's face, then the speaker will choose to convey the meaning in an efficient manner, putting it on record. As the degree of face-threat becomes more severe, however, the speaker will choose to produce more indirect utterances, keeping the intended meaning off the record.
 
 Empirical data on both production and comprehension confirm Brown and Levinson's predictions that speakers try to accommodate listeners' face-saving needs, and that people infer speakers' intentions to do so. Adults and even young children spontaneously produce requests in polite forms \cite{clark1980, axia1985}. Speakers show politeness strategies even while arguing, preventing unnecessary face threats to their interactants \cite{holtgraves1997}. Interpretation of utterances also reflects listeners' sensitivity to politeness: the same words are interpreted differently depending on the contexts, in a direction that allows charitable attribution of speaker's intention to save the listener's face (e.g., \cite{bonnefon2009}). Neuroimaging research has recently shown that brain responses to the same sentences differ depending on whether or not the context involves face-saving needs that are likely considered by the speaker \cite{bavsnakova2014}.
 
+\ndg{take a little more time to say that formal models based on informativity have worked well, and we extend them here to incorporate the competing goal of kindness...}
 The previous findings of polite utterance production and comprehension have been qualitatively consistent with Brown and Levinson's theory, that as the pressure on the speaker for face-saving increases, the level of politeness of speaker's utterances increases. 
 To our knowledge, there have not been empirical tests of the quantitative degree of truthfulness vs. misinformativity as tradeoffs in speaker's strategies to be informative vs. to save the listener's face. 
 Further, formal models of language understanding currently have no mechanism by which to understand polite language.
@@ -102,27 +104,30 @@ Politeness, then, takes shape as an independent component of a speaker's utility
 \citeA{Goodman2013} define speaker utility by the amount of information a \emph{literal listener} would still not know after know about world state $s$ after hearing a speaker's utterance $w$: 
 $U_{epistemic}(w; s) = \ln(P_{literal}(s \mid w)) $.
 We simply extend this by adding a component related to the intrinsic value of the state in the eyes of the listener\footnote{At this point, we do not differentiate value of the state to the listener from value of the state to the speaker, though it is conceivable that these could be different.}.
-We consider states which have utility values 1 - 5, corresponding to the subjective utility of the state, and roughly corresponding to the scalar value terms \{\emph{terrible}, \emph{bad}, \emph{okay}, \emph{good}, and \emph{amazing}\}.
-The precise mapping from utterance to subjective utility value is measured in \textbf{Experiment 1}.
 
 We define the social utility of an utterance to be the expected utility of the state the listener would infer given the utterance $w$: 
+\ndg{this is written wrong. it's $E_{P(s)}[V(s)]$...}
 %
 $$
 U_{social}(w; s) = E_{V}[[P_{literal}(s \mid w)]]
 $$
 %
 where $V$ is the value function that maps states to subjective utility values. 
+We consider states to have utility values 1 - 5, roughly corresponding to the scalar value terms \{\emph{terrible}, \emph{bad}, \emph{okay}, \emph{good}, and \emph{amazing}\}.
+The precise mapping from utterance to subjective utility value is measured in \textbf{Experiment 1}.
+
 
 %We use the experimental data from Expt.~1 as the literal meaning of utterances $W$ with respect to states $S$ --- \denote{w}(s).
 
 
 
 \textbf{Experiment 2} explores listeners' inferences about the speaker's goals (honesty, kindness, and meanness).
-For ease of comparison to the experimental data, we separate $\beta_{social}$ into a positive component ($\beta_{nice}$) and a negative component ($\beta_{mean}$), writing the utility function now as
+For ease of comparison to the experimental data, we separate $\beta_{social}$ \ndg{what's beta?} into a positive component ($\beta_{nice}$) and a negative component ($\beta_{mean}$), writing the utility function now as
 \begin{eqnarray*}
 U(w;s; \beta) && = \beta_{epistemic}\cdot U_{epistemic} + \beta_{social} \cdot U_{social} \\
 &&= \beta_{epistemic}\cdot U_{epistemic} + (\beta_{nice} - \beta_{mean}) \cdot U_{social}
 \end{eqnarray*}
+\ndg{need to say something about domains (and prior) for betas for this splitting to make sense?}
 
 
 % relative contribution of these two utility components under a variety of scenarios. 
@@ -133,6 +138,7 @@ U(w;s; \beta) && = \beta_{epistemic}\cdot U_{epistemic} + \beta_{social} \cdot U
 %$$
 %
 We follow the treatment of RSA using lifted-variables \cite{GoodmanLassiter2015, Kao2014, Degen2015}; here, the variables lifted to the pragmatic level are the weights in the speaker's utility function ($\beta$'s) .
+\ndg{say what this lifting means: the listener doesn't know how polite the speaker intends to be, and actively reasons about this.}
 
 %
 \begin{eqnarray}
@@ -141,6 +147,7 @@ We follow the treatment of RSA using lifted-variables \cite{GoodmanLassiter2015,
 &&P_{L_0}(s \mid w, \beta)\propto \denote{w}(s) \cdot P(s) \label{eq:L0}
 \end{eqnarray}
 %
+\ndg{define $ \denote{w}(s)$ say where literal meanings come from (measured?).}
 For simplicity, we assume the following:
 \begin{enumerate}
 \item The set of states of the world $S = \{s_{1}, ...,  s_{5}\}$ have subjective numerical values $V(s_{i}) = \alpha \cdot i$ \mht{or is it $i^\alpha$}. 
@@ -150,9 +157,10 @@ For simplicity, we assume the following:
 %\ejy{these were used in Kao \& Goodman (2015), should we cite it as being relevant though?}
 \end{enumerate}
 
-\textbf{Experiment 3} measures listeners' inferences about the likely state of the world $s$, given an utterance and a speaker's goal. 
 We assume a uniform prior distribution over possible states of the world $s\sim \text{DiscreteUniform} \{1, 2, 3, 4, 5\}$. 
 We implemented this model using the probabilisitic programming language WebPPL \cite{dippl} and a fully-specified implementation can be found at \url{http://forestdb.org/models/politeness.html}.
+\textbf{Experiment 3} measures listeners' inferences about the likely state of the world $s$, given an utterance and a speaker's goal. 
+\ndg{that last sentence seems out of place / lonely. recap the three expts here, or just cut it and describe when we get there.}
 
 %We conducted three experiments to measure (1) the literal semantics judgment: what utterance in its literal sense is perceived to aptly describe the true state of the world (i.e., speaker's actual rating of the listener's performance; referred to as `true state' from here on); (2) goal inference: given the true state and the speaker's actual utterance to the listener, what were likely goals for the speaker; (3) true state inference: given the speaker's goal and utterance to the listener, what is the true state inferred?
 %
