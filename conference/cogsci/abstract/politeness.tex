@@ -296,6 +296,8 @@ The procedure was the same as Experiment 2, except that, instead of providing in
 
 \subsection{Behavioral results}
 
+\ndg{same comment: too wordy.}
+
 \begin{table}[t]
 \caption{\label{tab:lmer2}  Coefficient estimates from a mixed-effects model predicting state inferences in Experiment 3.} 
 \begin{center} 
@@ -314,9 +316,11 @@ Utterance $\times$ Meanness goal & -.11 (.05) & -2.15 \\
 \end{center} 
 \end{table}
 
-Inferences of the actual rating for listener's performance, or the true state, varied depending on speaker's goal and utterance (Figure \ref{fig:exp3}). We fit a linear mixed-effects model to look at the effects of information on speaker's goal and utterance on inferred true states, and found significant main effects for and interactions between utterance and goal. Below we describe main patterns in the data.
+Inferences of the actual rating for listener's performance, or the true state, varied depending on speaker's goal and utterance (Figure \ref{fig:exp3}).
+\ndg{fig 3 is showing the mean heart rating and expected state? do we ever analyze the distribution over states?}
+We fit a linear mixed-effects model to look at the effects of information on speaker's goal and utterance on inferred true states, and found significant main effects for and interactions between utterance and goal. Below we describe main patterns in the data.
 
-Given the speaker's goal to be honest, as predicted from the literal semantics distribution, inferred state positivity was correlated with utterance positivity: ``terrible'' implied approximately the true state of 1, ``okay'' the state of 3, ``amazing'' the state of 5. Interestingly, state inferred based on the utterance ``[It was] bad'' was not judged to be different from the inferred state based on ``terrible,'' which is seemingly more negatively-connoted. In contrast, the inferred state based on ``good'' was less positive than inferred based on ``amazing.'' This may suggest that saying even a weakly negative remark (e.g., ``bad'') is face-threatening to a similar degree as making a more strongly negative comment, given that the speaker has already decided to express criticism.
+Given the speaker's goal to be honest, as predicted from the literal semantics distribution, inferred state positivity was correlated with utterance positivity: ``terrible'' implied approximately the true state of 1, ``okay'' the state of 3, ``amazing'' the state of 5. Interestingly, state inferred based on the utterance ``[It was] bad'' was not judged to be different from the inferred state based on ``terrible,'' which is seemingly more negatively-connoted. In contrast, the inferred state based on ``good'' was less positive than inferred based on ``amazing.'' This may suggest that saying even a weakly negative remark (e.g., ``bad'') is face-threatening to a similar degree as making a more strongly negative comment, given that the speaker has already decided to express criticism. \ndg{?}
 
 Given the speaker's goal to be nice, the inferred state positivity also increased with the utterance positivity, but participants inferred that the states are less positive compared to states given honesty goal, based on neutral and positive utterances. Based on the utterance ``amazing,'' participants inferred the true state to be close to 5 given the honesty goal, but they inferred the state to be around 3 given the niceness goal. This suggests that participants thought a speaker who was trying to be nice produced an utterance  with a literal meaning that is more positive that the speaker's true feelings toward the listener's performance.
 
@@ -324,7 +328,8 @@ It should be noted that more positive utterances lead to inference of more posit
 
 Curiously, inferred states based on honesty and niceness goals did not differ from each other given negative utterances (``terrible'' and ``bad''). Thus, given a speaker who tried to be nice and said ``bad,'' participants did not infer the true state to be worse than the state inferred given a speaker who tried to be honest and said ``bad.'' This may indicate a link between the two utilities we posited: ``bad'' is a negative utterance, which suggests it was impossible for the speaker to be ``nice'' and satisfy the social utility, to save the listener's face. But a speaker who tried to cooperate with the listener by being nice would also want to cooperate in another sense, by being honest and satisfying the epistemic utility.  Thus, participants might have reasoned that the speaker encountered an impossible situation to be cooperative with niceness and instead decided to cooperate with honesty. 
 
-Finally, given the speaker's goal to be mean, participants inferred that the true states were more positive if the speaker's utterance was negative or neutral. Thus, they judged that a mean speaker saying ``terrible'' meant it was not terrible but okay (state of 3). Interestingly, if a positive utterance was produced with the goal to be mean, the true state was inferred to be worse compared to the states based on honesty and niceness goal. That is, a mean speaker saying ``amazing'' was judged to mean that the state was worse than average. This may be due to irony in play: making an extremely positive remark about an extremely bad performance is perceived to be sarcastic and ill-intentioned \cite{colston1997}. Our current model does not include a component of sarcasm, and it will be an interesting and useful addition in the future.
+Finally, given the speaker's goal to be mean, participants inferred that the true states were more positive if the speaker's utterance was negative or neutral. Thus, they judged that a mean speaker saying ``terrible'' meant it was not terrible but okay (state of 3). Interestingly, if a positive utterance was produced with the goal to be mean, the true state was inferred to be worse compared to the states based on honesty and niceness goal. That is, a mean speaker saying ``amazing'' was judged to mean that the state was worse than average. This may be due to irony in play: making an extremely positive remark about an extremely bad performance is perceived to be sarcastic and ill-intentioned \cite{colston1997}. 
+%Our current model does not include a component of sarcasm, and it will be an interesting and useful addition in the future.
 
 \begin{figure}
 \begin{centering} 
@@ -352,6 +357,7 @@ We assume $\beta \sim \text{Beta}(\gamma, \delta)$, and for each goal condition 
 & \delta  \sim  \text{Uniform}(0, 20)
 \end{eqnarray*}
 For the unassociated goal priors (e.g. $\beta_{mean}$ and $\beta_{honest}$ when \emph{trying to be nice}), we use the same uniform priors we used to model the goal inference data.
+\ndg{clarify what unassociated goal priors are...}
 
 \begin{table}[]
 \centering
@@ -369,16 +375,20 @@ Values shown are MAP estimates and 95\% HDI for the parameter values.}
 We ran 2 MCMC chains for 20,000 iterations, discarding the first 10,000 for burnin.
 The MAP and 95\% HDI for $\lambda$ is 1.5 [1.2, 1.9]; for $\alpha$ is 2.4 [1.9, 3.0]. %; for $\phi$ is \red{0.09 [0.06, 0.13]}.
 Inferred parameter values for the goal priors are shown in Table \ref{tab:params}.
+\ndg{it'd be nicer to see this as a figure showing posterior predictives of the relevant beta's for each goal...}
 
 The predictions of the model are shown in Figure \ref{fig:exp3}.
-The model's expected posterior over states when the speaker is trying to be \emph{honest} increase as function a function of the utterances likely of matching positive states (i.e. \emph{amazing} means a very high state).
+The model's expected posterior over states when the speaker is trying to be \emph{honest} increase as a function of the utterances likely of matching positive states (i.e. \emph{amazing} means a very high state).
 When the model knows the speaker was trying to be \emph{nice}, the listener is more conservative in how it interprets positive utterances, with the difference between an honest utterance and a nice utterance increasing as the utterance becomes more likely to signal a higher valued state. 
 For example, the difference between a ``nice'' \emph{amazing} and an ``honest'' \emph{amazing} is greater than the difference between a ``nice'' \emph{okay} and an ``honest'' \emph{okay}.
 Inferences when the speaker is trying to be ``mean'' display the associated opposite behavior when the utterance is indeed negative (e.g. \emph{terrible}).
-Our model does not capture the sarcastic interpretation of a mean speaker who says \emph{It was amazing}, but other RSA models have displayed this behavior \cite{Kao2015}. %\mht{Describe model predictions.}
+Our model does not capture the sarcastic interpretation of a mean speaker who says \emph{It was amazing}; other RSA models have captured irony \cite{Kao2015}, and future work could combine the two extensions. %\mht{Describe model predictions.}
 Overall, the model explains a lot the variance in the data $r^2(15) = 0.73$. 
 The main discrepancies are with the goal ``trying to be mean'', as noted above. 
 Among the other 2 goal conditions, the model explains almost all of the variance $r^2(10) = 0.94$. 
+
+\ndg{it's also interesting that the model under-predicts the state for "amazing"/nice. perhaps this is because the params are adjusted to try to squash the mean state? what happens if we run the BDA leaving out meanness?
+for the decrease in "amazing"/mean compared to "ok"/mean... could it just be a prior? eg maybe amazing performances are simply less likely? though that doesn't actually explain why a mean speaker would ever bother saying "amazing". so, yeah, probably need irony/snarkiness to explain this.}
 
 \section{Discussion}
 
