@@ -415,7 +415,7 @@ Participants read each scenario followed by a question that read, ``Based on wha
 \subsection{Behavioral results}
 
 \begin{table}[t]
-\caption{\label{tab:lmer1}  Coefficient estimates from mixed-effects models predicting goal attributions in Experiment 2.} 
+\caption{\label{tab:lmer1}  Coefficient estimates from mixed-effects models predicting goal attributions in Experiment 2 \ndg{3?}.} 
 \begin{center} 
 \begin{tabular}{l r r r l} 
 \hline
@@ -443,7 +443,9 @@ True state $\times$ Utterance & -.04 (.003) & -12.2 \\
 
 %\ndg{this section feels too wordy to me. don't need to describe what people can see in the figure, only need to point out aspects that are theoretically important or puzzling.}
 
-Participants attributed likelihoods for speaker's goals differentially depending on the true state and utterance (see Figure \ref{fig:exp2}). We fit linear mixed-effects models\footnote{Models with the maximal convergent random effects structure: goal likelihood ~ true state $\times$ utterance + (utterance $|$ participant)} to measure the effects of true state and utterance (as numeric variables, ordered from the worst to the best) on the attribution of each goal (Table \ref{tab:lmer1}) and we found significant main effects and interactions of true state and utterance on each of the three goal attributions, though with varying effect sizes. 
+Participants attributed likelihoods for speaker's goals differentially depending on the true state and utterance (see Figure \ref{fig:exp2}).
+\ndg{looks like nice and mean are strongly anti-correlated? say so and give r?}
+ We fit linear mixed-effects models\footnote{Models with the maximal convergent random effects structure: goal likelihood $\sim$ true state $\times$ utterance + (utterance $|$ participant).} to measure the effects of true state and utterance (as numeric variables, ordered from the worst to the best) on the attribution of each goal (Table \ref{tab:lmer1}) and we found significant main effects and interactions of true state and utterance on each of the three goal attributions, though with varying effect sizes. 
 
 For the honesty goal, the peak in the likelihood of honesty goal attribution occurred when the literal meaning of the utterance was close to the true state, based on the literal semantics distribution shown in Experiment 1. The honesty goal attribution was highly correlated with the literal semantics distribution given the state and utterance (r = 0.86). 
 Attributions of niceness (``niceness goal'') generally showed slightly decreasing slope with improved true state given particular utterance (represented by each facet in Figure \ref{fig:exp2}). 
@@ -454,7 +456,7 @@ Attributions of meanness (``meanness goal'') showed the opposite pattern to nice
 The model in Eq.~\ref{eq:L1} specifies a joint-belief distribution over the speaker's goals $\beta$ and possible states of the world $s$.
 To compare to the empirical data, we condition on the true state of the world given in the experimental condition, and compare the marginal distribution of speaker's goals $\beta$ to the empirical ratings.
 %In Experiment 2, participants were supplied with the ``true state'' $s$ as well as the speaker's utterance $w$, and were asked to rate the likely goals of the speaker. 
-With no prior knowledge about the speaker's intentions, we assume a uniform prior over the goal-weights in the speaker's utility function: $\beta \sim \text{Uniform}(0,1)$ .
+With no prior knowledge about the speaker's intentions, we assume a uniform prior over the goal-weights in the speaker's utility function: $\beta \sim \text{Uniform}(0,1)$. \ndg{do we separate $\beta_{nice}$ as above?}
 
 We put the same priors over the speaker optimality parameter $\lambda$ and the value scale parameter $\alpha$.
 We ran 2 MCMC chains for 40,000 iterations, discarding the first 20,000 for burnin.
