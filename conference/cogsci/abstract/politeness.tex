@@ -185,7 +185,7 @@ In what follows, we measure the literal semantics $\denote{w}(s)$ (\textbf{Exper
 %\ndg{briefly motivate this expt.}
 Experiment 1 measured people's judgment for literal semantic meanings of words: 
 does the literal meaning of a word aptly describe how someone performed?
-Responses in this Experiment would be used to set expected literal meanings of words in our formal model.
+Responses in this experiment will be used to set expected literal meanings of words in our formal model.
 
 \subsection{Method}
 
@@ -252,7 +252,7 @@ Utterance $\times$ Meanness goal & -.11 (.05) & -2.15 \\
 \end{table}
 
 Inferences of the actual rating for listener's performance, or the true state, varied depending on speaker's goal and utterance (Figure \ref{fig:exp3}).
-\ndg{fig 3 is showing the mean heart rating and expected state? do we ever analyze the distribution over states?}
+%\ndg{fig 3 is showing the mean heart rating and expected state? do we ever analyze the distribution over states?}
 We fit a linear mixed-effects model\footnote{with the maximal convergent random effects structure: true state ~ goal $\times$ utterance + (utterance $|$ participant)} to look at the effects of information on speaker's goal and utterance on inferred true states, and found significant main effects for and interactions between utterance and goal. 
 
 Given the speaker's goal to be honest, as predicted from the literal semantics distribution, inferred state positivity was correlated with utterance positivity: e.g., ``terrible'' implied approximately the true state of 1, ``amazing'' the state of 5. %Interestingly, state inferred based on the utterance ``[It was] bad'' was not judged to be different from the inferred state based on ``terrible,'' which is seemingly more negatively-connoted. In contrast, the inferred state based on ``good'' was less positive than inferred based on ``amazing.'' This may suggest that saying even a weakly negative remark (e.g., ``bad'') is face-threatening to a similar degree as making a more strongly negative comment, given that the speaker has already decided to express criticism. \ndg{?}
@@ -282,34 +282,39 @@ It should be noted that more positive utterances lead to inference of more posit
 In this experiment, participants were told the speaker said $w$ as well as described what the speakers intentions were (e.g. \emph{Bob wanted to be nice}). 
 To model this, we assume that the intentions (e.g. \emph{wanted to be nice}) modified the listener's prior distribution over goal-weights for the relevant goal. For example, if a speaker was trying to be nice, we interpret that to mean the speaker has a non-uniform prior distribution over $\beta_{nice}$ (in particular, we expect $\beta_{nice}$ to be skewed toward higher-values). 
 We assume $\beta \sim \text{Beta}(\gamma, \delta)$, and for each goal condition (trying to be \emph{nice, mean, honest}), we put uninformative hyperpriors over the associated goal prior\footnote{For ease of interpretation, we are parametrizing the $\beta$ distribution by its mean and concentration. To recover the canonical shape parametrization, use $\gamma \delta$ and $(1-\gamma)\delta$.}.
-
 %
 \begin{eqnarray*}
 & \gamma \sim  \text{Uniform}(0,1)\\
 & \delta  \sim  \text{Uniform}(0, 20)
 \end{eqnarray*}
-For the unassociated goal priors (e.g. $\beta_{mean}$ and $\beta_{honest}$ when \emph{trying to be nice}), we use the same uniform priors we used to model the goal inference data.
-\ndg{clarify what unassociated goal priors are...}
-
-\begin{table}[]
-\centering
-\begin{tabular}{lll}
-\hline
-Expt. Condition  & Goal weight Mean & Concentration \\ \hline
-(trying to be) Honest                        &   0.98 [0.86, 0.99]   & 18.8 [6.2, 19.9] \\
-(trying to be) Nice                          & 0.99 [0.84, 1.0] & 19.0 [7.6, 20] \\
-(trying to be) Mean                          &0.37 [0.01, 0.85] & 0.1[0.03, 2.1] \\ \hline
-\end{tabular}
-\caption{\label{tab:params} Inferred hyper-parameter values for Goal Priors in State Inference task.
+For the goal priors unassociated with the speaker's intentions (e.g., when \emph{trying to be nice}: $\beta_{mean}$ and $\beta_{honest}$), we assume a uniform prior distribution over weights.
+%\ndg{clarify what unassociated goal priors are...}
+%\begin{table}[]
+%\centering
+%\begin{tabular}{lll}
+%\hline
+%Expt. Condition  & Goal weight Mean & Concentration \\ \hline
+%(trying to be) Honest                        &   0.98 [0.86, 0.99]   & 18.8 [6.2, 19.9] \\
+%(trying to be) Nice                          & 0.99 [0.84, 1.0] & 19.0 [7.6, 20] \\
+%(trying to be) Mean                          &0.37 [0.01, 0.85] & 0.1[0.03, 2.1] \\ \hline
+%\end{tabular}
+%\caption{\label{tab:params} Inferred hyper-parameter values for Goal Priors in State Inference task.
+%For each experimental condition (trying to be X), we inferred the likely priors on the goal weights for the associated goal.
+%Values shown are MAP estimates and 95\% HDI for the parameter values.}
+%\end{table}
+\begin{figure}
+\begin{centering} 
+\includegraphics[width=\columnwidth]{figures/goal-priors-bda.pdf}
+\caption{\label{fig:goal-priors-bda} Inferred Goal Priors in State Inference task.
 For each experimental condition (trying to be X), we inferred the likely priors on the goal weights for the associated goal.
-Values shown are MAP estimates and 95\% HDI for the parameter values.}
-\end{table}
+}
+\end{centering} 
+\end{figure}
 We ran 2 MCMC chains for 20,000 iterations, discarding the first 10,000 for burnin.
 The MAP and 95\% HDI for $\lambda$ is 1.5 [1.2, 1.9]; for $\alpha$ is 2.4 [1.9, 3.0]. %; for $\phi$ is \red{0.09 [0.06, 0.13]}.
-Inferred parameter values for the goal priors are shown in Table \ref{tab:params}.
-\ndg{it'd be nicer to see this as a figure showing posterior predictives of the relevant beta's for each goal...}
+Posterior predictive distributions over the goal weight priors are shown in  Figure \ref{fig:goal-priors-bda}.
 
-The predictions of the model are shown in Figure \ref{fig:exp3}.
+The predictions of the listener model for the \emph{true state} (Eq.~\ref{eq:L1}) are shown in Figure \ref{fig:exp3}.
 The model's expected posterior over states when the speaker is trying to be \emph{honest} increase as a function of the utterances likely of matching positive states (i.e. \emph{amazing} means a very high state).
 When the model knows the speaker was trying to be \emph{nice}, the listener is more conservative in how it interprets positive utterances, with the difference between an honest utterance and a nice utterance increasing as the utterance becomes more likely to signal a higher valued state. 
 For example, the difference between a ``nice'' \emph{amazing} and an ``honest'' \emph{amazing} is greater than the difference between a ``nice'' \emph{okay} and an ``honest'' \emph{okay}.
@@ -356,7 +361,8 @@ Experiment 3 probed listeners' inferences of the speaker's goals, given an utter
 
 \subsubsection{Stimuli and Design}
 
-We designed scenarios in which a person (e.g., Ann) gave some performance and asked for another person (e.g., Bob)'s opinion on the performance. The same context items and true states as Experiment 1 were used. Additionally, we provided information on what Bob actually said to Ann (e.g., ``It [your cake] was okay''), where Bob used one of the five possible words,  \emph{terrible}, \emph{bad}, \emph{okay}, \emph{good}, and \emph{amazing}. Then we asked participants to infer the likelihood of Bob's goals to be honest, nice, and mean. As in Experiment 1, each participant read 25 scenarios, depicting every possible combination of 5 true states and 5 words.The order of context items was randomized, and there were a maximum of two repeats of each context item per participant.
+We designed scenarios in which a person (e.g., Ann) gave some performance and asked for another person (e.g., Bob)'s opinion on the performance. The same context items and true states as Experiment 1 were used. Additionally, we provided information on what Bob actually said to Ann (e.g., ``It [your cake] was okay''), where Bob used one of the five possible words,  \emph{terrible}, \emph{bad}, \emph{okay}, \emph{good}, and \emph{amazing}. Then we asked participants to infer the likelihood of Bob's goals to be honest, nice, and mean. As in Experiment 1, each participant read 25 scenarios, depicting every possible combination of 5 true states and 5 words.
+The order of context items was randomized, and there were a maximum of two repeats of each context item per participant.
 
 \subsubsection{Procedure}
 Participants read each scenario followed by a question that read, ``Based on what Bob said, how likely do you think that Bob's goal was to be: honest; nice; mean,'' with the three goals placed in a random order below three slider bars, on which the participant could indicate each goal's likelihood.
