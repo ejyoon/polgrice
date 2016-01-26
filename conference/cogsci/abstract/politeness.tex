@@ -181,6 +181,13 @@ In what follows, we measure the literal semantics $\denote{w}(s)$ (\textbf{Exper
 \end{figure}
 
 \section{Experiment 1: Literal semantics}
+\begin{figure*}[t]
+\begin{center} 
+  \includegraphics[width=.9\textwidth]{figures/exp1.pdf}
+  \caption{\label{fig:exp1} Results from Experiment 1. Proportion of acceptances of words (shown in different colors) given the true state represented on a scale of hearts. Error bars represent 95\% confidence intervals.}
+  \end{center} 
+\end{figure*}
+
 
 %\ndg{briefly motivate this expt.}
 Experiment 1 measured people's judgment for literal semantic meanings of words: 
@@ -266,7 +273,7 @@ It should be noted that more positive utterances lead to inference of more posit
 \begin{figure}
 \begin{centering} 
 \includegraphics[width=3.2in]{figures/exp3.pdf}
-\caption{\label{fig:exp3} Results from Experiment 3 (top) and model predictions (bottom). Average states inferred based on speaker's goal and utterance. Error bars represent 95\% confidence intervals.}
+\caption{\label{fig:exp3} Results from Experiment 2 (top) and model predictions (bottom). Average states inferred based on speaker's goal and utterance. Error bars represent 95\% confidence intervals.}
 \end{centering} 
 \end{figure}
 
@@ -280,7 +287,11 @@ It should be noted that more positive utterances lead to inference of more posit
 \subsection{Model predictions}
 
 In this experiment, participants were told the speaker said $w$ as well as described what the speakers intentions were (e.g. \emph{Bob wanted to be nice}). 
-To model this, we assume that the intentions (e.g. \emph{wanted to be nice}) modified the listener's prior distribution over goal-weights for the relevant goal. For example, if a speaker was trying to be nice, we interpret that to mean the speaker has a non-uniform prior distribution over $\beta_{nice}$ (in particular, we expect $\beta_{nice}$ to be skewed toward higher-values). 
+We want to explore inferences when both the speaker wanted to be mean as well as nice: For ease of comparison to the experimental data, we assume $\beta \in [0,1]$ and separate $\beta_{social}$ into a positive component ($\beta_{nice}$) and a negative component ($\beta_{mean}$), writing the utility function now as
+$$
+ U(w;s; \beta)  =  \beta_{epistemic}\cdot U_{epistemic} + (\beta_{nice} - \beta_{mean}) \cdot U_{social}
+ $$ 
+We assume that the intentions (e.g. \emph{wanted to be nice}) modified the listener's prior distribution over goal-weights for the relevant goal. For example, if a speaker was trying to be nice, we interpret that to mean the speaker has a non-uniform prior distribution over $\beta_{nice}$ (in particular, we expect $\beta_{nice}$ to be skewed toward higher-values). 
 We assume $\beta \sim \text{Beta}(\gamma, \delta)$, and for each goal condition (trying to be \emph{nice, mean, honest}), we put uninformative hyperpriors over the associated goal prior\footnote{For ease of interpretation, we are parametrizing the $\beta$ distribution by its mean and concentration. To recover the canonical shape parametrization, use $\gamma \delta$ and $(1-\gamma)\delta$.}.
 %
 \begin{eqnarray*}
@@ -310,10 +321,17 @@ For each experimental condition (trying to be X), we inferred the likely priors 
 }
 \end{centering} 
 \end{figure}
+In addition, the computational model has 2 parameters: the speaker optimality parameter $\lambda$ in Eq.~\ref{eq:S1} and the value scale parameter $\alpha$ in the utility function. 
+We put uninformative priors on these and infer their posterior credible values via Bayesian data analysis.
+\begin{eqnarray*}
+& \lambda \sim \text{Uniform}(0,20)\\
+& \alpha \sim \text{Uniform}(0, 5)
+\end{eqnarray*}
 We ran 2 MCMC chains for 20,000 iterations, discarding the first 10,000 for burnin.
 The MAP and 95\% HDI for $\lambda$ is 1.5 [1.2, 1.9]; for $\alpha$ is 2.4 [1.9, 3.0]. %; for $\phi$ is \red{0.09 [0.06, 0.13]}.
 Posterior predictive distributions over the goal weight priors are shown in  Figure \ref{fig:goal-priors-bda}.
 
+To test what data the model actually predicts, we examine the posterior predictive distribution by marginalizing out the likely parameter values and generating predictions for what the data should look like, given our cognitive model and the inferred parameters.
 The predictions of the listener model for the \emph{true state} (Eq.~\ref{eq:L1}) are shown in Figure \ref{fig:exp3}.
 The model's expected posterior over states when the speaker is trying to be \emph{honest} increase as a function of the utterances likely of matching positive states (i.e. \emph{amazing} means a very high state).
 When the model knows the speaker was trying to be \emph{nice}, the listener is more conservative in how it interprets positive utterances, with the difference between an honest utterance and a nice utterance increasing as the utterance becomes more likely to signal a higher valued state. 
@@ -325,6 +343,8 @@ The main discrepancies are with the goal ``trying to be mean'', as noted above (
 Among the other 2 goal conditions, the model explains almost all of the variance $r^2(10) = 0.94$. 
 
 \subsection{Discussion}
+
+
 
 The model captured key aspects of our empirical findings, albeit with some discrepancies.
 Unlike the model predictions that the inferred states given honesty goal would be more positive throughout,
@@ -341,15 +361,10 @@ other RSA models have captured irony \cite{Kao2015}, and future work could combi
 
 \ndg{it's also interesting that the model under-predicts the state for "amazing"/nice. perhaps this is because the params are adjusted to try to squash the mean state? what happens if we run the BDA leaving out meanness?
 for the decrease in "amazing"/mean compared to "ok"/mean... could it just be a prior? eg maybe amazing performances are simply less likely? though that doesn't actually explain why a mean speaker would ever bother saying "amazing". so, yeah, probably need irony/snarkiness to explain this.}
+\mht{BDA leaving meanness out doesn't seem to help. what might help is letting the goal weights go above 1, though i haven't yet thought about what the priors on that should be...}
 
 \section{Experiment 3: Goal inference}
 
-\begin{figure*}[t]
-\begin{center} 
-  \includegraphics[width=.9\textwidth]{figures/exp1.pdf}
-  \caption{\label{fig:exp1} Results from Experiment 1. Proportion of acceptances of words (shown in different colors) given the true state represented on a scale of hearts. Error bars represent 95\% confidence intervals.}
-  \end{center} 
-\end{figure*}
 
 Experiment 3 probed listeners' inferences of the speaker's goals, given an utterance (e.g. \emph{``It was good''}) and a true state (e.g. 2 out of 5 hearts). 
 
@@ -370,7 +385,7 @@ Participants read each scenario followed by a question that read, ``Based on wha
 \begin{figure*}[t]
 \begin{center} 
   \includegraphics[width=.9\textwidth]{figures/exp2.pdf}
-  \caption{\label{fig:exp2} Results from Experiment 2 (top) and model predictions (bottom). Attribution of speaker's goals (honest vs. nice vs. mean, shown in different colors) based on the true state and utterance. Error bars represent 95\% confidence intervals.}
+  \caption{\label{fig:exp2} Results from Experiment 3 (top) and model predictions (bottom). Attribution of speaker's goals (honest vs. nice vs. mean, shown in different colors) based on the true state and utterance. Error bars represent 95\% confidence intervals.}
   \end{center} 
 \end{figure*}
 
@@ -407,21 +422,18 @@ True state $\times$ Utterance & -.04 (.003) & -12.2 \\
 
 Participants attributed likelihoods for speaker's goals differentially depending on the true state and utterance (see Figure \ref{fig:exp2}). We fit linear mixed-effects models\footnote{Models with the maximal convergent random effects structure: goal likelihood ~ true state $\times$ utterance + (utterance $|$ participant)} to measure the effects of true state and utterance (as numeric variables, ordered from the worst to the best) on the attribution of each goal (Table \ref{tab:lmer1}) and we found significant main effects and interactions of true state and utterance on each of the three goal attributions, though with varying effect sizes. 
 
-For the honesty goal, the peak in the likelihood of honesty goal attribution occurred when the literal meaning of the utterance was close to the true state, based on the literal semantics distribution shown in Experiment 1. The honesty goal attribution was highly correlated with the literal semantics distribution given the state and utterance (r = 0.86). Attributions of niceness (``niceness goal'') generally showed slightly decreasing slope with improved true state given particular utterance (represented by each facet in Figure \ref{fig:exp2}). Attributions of meanness(``meanness goal'') showed the opposite pattern to niceness: its slope across different utterances generally increased as true state improved, indicating that un utterance is perceived to be more mean when the literal meaning is more negative than the actual state.
+For the honesty goal, the peak in the likelihood of honesty goal attribution occurred when the literal meaning of the utterance was close to the true state, based on the literal semantics distribution shown in Experiment 1. The honesty goal attribution was highly correlated with the literal semantics distribution given the state and utterance (r = 0.86). 
+Attributions of niceness (``niceness goal'') generally showed slightly decreasing slope with improved true state given particular utterance (represented by each facet in Figure \ref{fig:exp2}). 
+Attributions of meanness (``meanness goal'') showed the opposite pattern to niceness: its slope across different utterances generally increased as true state improved, indicating that un utterance is perceived to be more mean when the literal meaning is more negative than the actual state.
 
 \subsection{Model predictions}
 
 The model in Eq.~\ref{eq:L1} specifies a joint-belief distribution over the speaker's goals $\beta$ and possible states of the world $s$.
 To compare to the empirical data, we condition on the true state of the world given in the experimental condition, and compare the marginal distribution of speaker's goals $\beta$ to the empirical ratings.
 %In Experiment 2, participants were supplied with the ``true state'' $s$ as well as the speaker's utterance $w$, and were asked to rate the likely goals of the speaker. 
-Here, we assume a uniform prior over the likely goals of the speaker, which is operationalized in the computational model as weights over the utilities: $\beta \sim \text{Uniform}(0,1)$ .
+With no prior knowledge about the speaker's intentions, we assume a uniform prior over the goal-weights in the speaker's utility function: $\beta \sim \text{Uniform}(0,1)$ .
 
-The computational model has 2 parameters: the speaker optimality parameter $\lambda$ in Eq.~\ref{eq:S1} and the value scale parameter $\alpha$ in the utility function. 
-We put uninformative priors on these and infer their posterior credible values  via Bayesian data analysis.
-\begin{eqnarray*}
-& \lambda \sim \text{Uniform}(0,20)\\
-& \alpha \sim \text{Uniform}(0, 5)
-\end{eqnarray*}
+We put the same priors over the speaker optimality parameter $\lambda$ and the value scale parameter $\alpha$.
 We ran 2 MCMC chains for 40,000 iterations, discarding the first 20,000 for burnin.
 The Maximum A-Posteriori (MAP) estimate and 95\% Highest Probability Density Interval (HDI) for $\lambda$ is 4.6 [4.0, 4.9]; for $\alpha$ is 1.17 [1.04, 1.31].%; for $\phi$ is 0.09 [0.06, 0.13].
 %This is a relatively low value for $\phi$: The model explains about 90\% of the data set better than a model of random guessing.
@@ -439,7 +451,7 @@ The Maximum A-Posteriori (MAP) estimate and 95\% Highest Probability Density Int
 %2               phi        NA -0.0006369482 0.000000 0.000000
 %3 speakerOptimality        NA  4.6635325286 4.033799 4.945555
 
-To test what data the model actually predicts, we examine the posterior predictive distribution by marginalizing out the likely parameter values and generating predictions for what the data should look like, given our cognitive model and the inferred parameters.
+
 The predictions of the model are shown in Figure \ref{fig:exp2} (bottom).
 The model believes the speaker to be more honest when the utterance matches the true state of the world, as given by the literal semantics data (Figure \ref{fig:exp2}, red lines). 
 Further, the model increases its ratings of niceness as the utterance better matches states with higher values (green bars, main effect of panel).
@@ -451,8 +463,8 @@ Overall, the model displays a strong quantitative fit to the goal inference data
 
 The model successfully captured the key patterns in the data: 
 changing goal likelihoods based on the degree of match, and positivity/negativity bias of mismatch, between the utterance and true state. 
-
-\ndg{say something about the biggest mismatches to the data? eg model seems to under-predict honesty?}
+The biggest mismatches seem to be that the model under-predicts the goal to be honest for every utterance except \emph{okay}.
+This may be because of explaining away: explicitly positive/negative utterances can also be caused by the social goals. 
 
 % asymmetry between niceness and meanness
 There was an interesting asymmetry in the data between the niceness versus meanness goal attribution, 
@@ -462,7 +474,7 @@ However, when the true state and utterance were both ``terrible,'' people's rati
 This perhaps reflects participants' expectation of a speaker to try to be kind and honest; 
 speaker's critical remark (e.g., ``terrible'') is perceived to be out of a good will to be maximally truthful to the listener, 
 rather than intention to damage the listener's reputation. 
-\mht{Or is this a bias to expect speakers to be honest and nice, and when it is mean, it is explained away as honest?}.
+%\mht{Or is this a bias to expect speakers to be honest and nice, and when it is mean, it is explained away as honest?}.
 
 
 
