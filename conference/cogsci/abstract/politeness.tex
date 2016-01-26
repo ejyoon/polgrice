@@ -16,6 +16,11 @@
 \usepackage{enumitem}
 \usepackage{apacite}
 \usepackage{url}
+
+\usepackage{caption}
+%\usepackage[caption=false]{subfig}
+\usepackage{subcaption}
+
 %\usepackage{float}
 %\usepackage{hyperref}
 
@@ -292,7 +297,7 @@ It should be noted that more positive utterances lead to inference of more posit
 
 \begin{figure}
 \begin{centering} 
-\includegraphics[width=3.2in]{figures/exp3.pdf}
+\includegraphics[width=\columnwidth]{figures/state-inference-wScatter.pdf}
 \caption{\label{fig:exp3} Results from Experiment 2 (top) and model predictions (bottom). Average states inferred based on speaker's goal and utterance. Error bars represent 95\% confidence intervals.}
 \end{centering} 
 \end{figure}
@@ -311,14 +316,17 @@ We want to explore inferences when both the speaker wanted to be mean as well as
 $$
  U(w;s; \beta)  =  \beta_{epistemic}\cdot U_{epistemic} + (\beta_{nice} - \beta_{mean}) \cdot U_{social}
  $$ 
-We assume that the intentions (e.g. \emph{wanted to be nice}) modified the listener's prior distribution over goal-weights, $P(\beta)$, for the relevant goal. For example, if a speaker was trying to be nice, we interpret that to mean the speaker has a non-uniform prior distribution over $\beta_{nice}$ (in particular, we expect $\beta_{nice}$ to be skewed toward higher-values). 
-We assume $\beta \sim \text{Beta}(\gamma, \delta)$, and for each goal condition (trying to be \emph{nice, mean, honest}), we put uninformative hyperpriors over the associated goal prior\footnote{For ease of interpretation, we are parametrizing the $\beta$ distribution by its mean and concentration. To recover the canonical shape parametrization, use $\gamma \delta$ and $(1-\gamma)\delta$.}.
-%
-\begin{eqnarray*}
-& \gamma \sim  \text{Uniform}(0,1)\\
-& \delta  \sim  \text{Uniform}(0, 20)
-\end{eqnarray*}
-For the goal priors unassociated with the speaker's intentions (e.g., when \emph{trying to be nice}: $\beta_{mean}$ and $\beta_{honest}$), we assume a uniform prior distribution over weights.
+We assume that the intentions (e.g. \emph{wanted to be nice}) notified the listener of a particular set of goal-weights, \{$\beta_{nice}, \beta_{honest}, \beta_{mean}$\}, that the speaker was using. 
+We put uninformative priors on these weights ($\beta \sim \text{Uniform}(0,1)$) and infer their credible values separately for each goal condition (``trying to be X'') using Bayesian data analysis.
+
+%For example, if a speaker was trying to be nice, we interpret that to mean the speaker has a non-uniform prior distribution over $\beta_{nice}$ (in particular, we expect $\beta_{nice}$ to be skewed toward higher-values). 
+%We assume $\beta \sim \text{Beta}(\gamma, \delta)$, and for each goal condition (trying to be \emph{nice, mean, honest}), we put uninformative hyperpriors over the associated goal prior\footnote{For ease of interpretation, we are parametrizing the $\beta$ distribution by its mean and concentration. To recover the canonical shape parametrization, use $\gamma \delta$ and $(1-\gamma)\delta$.}.
+%%
+%\begin{eqnarray*}
+%& \gamma \sim  \text{Uniform}(0,1)\\
+%& \delta  \sim  \text{Uniform}(0, 20)
+%\end{eqnarray*}
+%For the goal priors unassociated with the speaker's intentions (e.g., when \emph{trying to be nice}: $\beta_{mean}$ and $\beta_{honest}$), we assume a uniform prior distribution over weights.
 %\ndg{clarify what unassociated goal priors are...}
 %\begin{table}[]
 %\centering
@@ -348,10 +356,12 @@ We put uninformative priors on these ($\lambda \sim \text{Uniform}(0,20)$ and $\
 %& \alpha \sim \text{Uniform}(0, 5)
 %\end{eqnarray*}
 We ran 2 MCMC chains for 20,000 iterations, discarding the first 10,000 for burnin.
-The MAP and 95\% HDI for $\lambda$ is 1.5 [1.2, 1.9]; for $\alpha$ is 2.4 [1.9, 3.0]. %; for $\phi$ is \red{0.09 [0.06, 0.13]}.
-Posterior predictive distributions over the goal weight priors are shown in  Figure \ref{fig:goal-priors-bda}.
-
-\ndg{you know... i'm not sure we're modeling this expt right. shouldn't we condition the listener on appropriate \emph{observed} values of $\beta$ to get $P(s|\beta,w)$?}
+The MAP and 95\% HDI for $\lambda$ is 1.89 [1.87, 2.02]; for $\alpha$ is 8.3 [3.8, 9.9]. %; for $\phi$ is \red{0.09 [0.06, 0.13]}.
+The inferred weights for each goal condition were mostly as expected: 
+\mht{Do inference using continuously valued parameters and report CIs}.
+%Posterior predictive distributions over the goal weight priors are shown in  Figure \ref{fig:goal-priors-bda}.
+%
+%\ndg{you know... i'm not sure we're modeling this expt right. shouldn't we condition the listener on appropriate \emph{observed} values of $\beta$ to get $P(s|\beta,w)$?}
 
 %To test what data the model actually predicts, we examine the posterior predictive distribution by marginalizing out the likely parameter values and generating predictions for what the data should look like, given our cognitive model and the inferred parameters.
 To generate predictions, given our cognitive model and the inferred parameters, we evaluated the posterior predictive distribution, marginalizing out all parameters. 
