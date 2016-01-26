@@ -104,7 +104,7 @@ We validate this model with empirical data of listeners' inferences about speake
 
 \section{Computational Model}
 
-Politeness poses a challenge for Gricean models of pragmatic language understanding, which assume that speakers' goals are to communicate informatively about some aspect of the world \cite{Frank2012, Goodman2013}. 
+Politeness poses a challenge for formal models of pragmatic language understanding, which assume that speakers' goals are to communicate informatively about some aspect of the world \cite{Frank2012, Goodman2013}. 
 Why ever would you say \emph{please} or \emph{thank you} if they only add cost to the speaker and carry no information content?
 Similarly, what incentive is there to ever ``sugar coat'' utterances if the only currency of communication is information transfer? 
 We propose that information transfer captures just one component of a speaker's utility, \emph{epistemic utility}.
@@ -115,30 +115,27 @@ $U_{epistemic}(w; s) = \ln(P_{literal}(s \mid w)) $.
 We simply extend this by adding a component related to the intrinsic value of the state in the eyes of the listener\footnote{At this point, we do not differentiate value of the state to the listener from value of the state to the speaker, though it is conceivable that these could be different.}.
 
 We define the social utility of an utterance to be the expected utility of the state the listener would infer given the utterance $w$: 
-\ndg{this is written wrong. it's $E_{P(s)}[V(s)]$...}
+%\ndg{this is written wrong. it's $E_{P(s)}[V(s)]$...}
 %
 $$
-U_{social}(w; s) = E_{V}[[P_{literal}(s \mid w)]]
+U_{social}(w; s) = E_{P_{literal}(s \mid w)}[[V(s)]]
 $$
 %
 where $V$ is the value function that maps states to subjective utility values. 
 We consider states to have utility values 1 - 5, roughly corresponding to the scalar value terms \{\emph{terrible}, \emph{bad}, \emph{okay}, \emph{good}, and \emph{amazing}\}.
-The precise mapping from utterance to subjective utility value is measured in \textbf{Experiment 1}.
-
 
 %We use the experimental data from Expt.~1 as the literal meaning of utterances $W$ with respect to states $S$ --- \denote{w}(s).
 
-
-
-\textbf{Experiment 2} explores listeners' inferences about the speaker's goals (honesty, kindness, and meanness).
-For ease of comparison to the experimental data, we separate $\beta_{social}$ \ndg{what's beta?} into a positive component ($\beta_{nice}$) and a negative component ($\beta_{mean}$), writing the utility function now as
-\begin{eqnarray*}
-U(w;s; \beta) && = \beta_{epistemic}\cdot U_{epistemic} + \beta_{social} \cdot U_{social} \\
-&&= \beta_{epistemic}\cdot U_{epistemic} + (\beta_{nice} - \beta_{mean}) \cdot U_{social}
-\end{eqnarray*}
-\ndg{need to say something about domains (and prior) for betas for this splitting to make sense?}
-
-
+We define the speaker utility to be a weighted combination of epistemic and social utilities.
+$$
+U(w;s; \beta) = \beta_{epistemic}\cdot U_{epistemic} + \beta_{social} \cdot U_{social}
+$$
+%For ease of comparison to the experimental data, we separate $\beta_{social}$ \ndg{what's beta?} into a positive component ($\beta_{nice}$) and a negative component ($\beta_{mean}$), writing the utility function now as
+%\begin{eqnarray*}
+% U(w;s; \beta) && = \beta_{epistemic}\cdot U_{epistemic} + \beta_{social} \cdot U_{social} \\
+%&&= \beta_{epistemic}\cdot U_{epistemic} + (\beta_{nice} - \beta_{mean}) \cdot U_{social}
+%\end{eqnarray*}
+%\ndg{need to say something about domains (and prior) for betas for this splitting to make sense?}
 % relative contribution of these two utility components under a variety of scenarios. 
 %In order to consider the relative contributions of the two utility components, we transform both components to probability space (values between 0 - 1): $U_{epistemic}$ by exponentiating; $U_{social}$ by normalizing. Thus, the speaker's joint utility function is
 %
@@ -146,20 +143,21 @@ U(w;s; \beta) && = \beta_{epistemic}\cdot U_{epistemic} + \beta_{social} \cdot U
 %U(w;s; \beta) = \beta_{epistemic}\cdot U_{epistemic} + \beta_{social} \cdot U_{social}
 %$$
 %
-We follow the treatment of RSA using lifted-variables \cite{GoodmanLassiter2015, Kao2014, Degen2015}; here, the variables lifted to the pragmatic level are the weights in the speaker's utility function ($\beta$'s) .
-\ndg{say what this lifting means: the listener doesn't know how polite the speaker intends to be, and actively reasons about this.}
-
+We follow the treatment of RSA using lifted-variables: a random-variable over which a pragmatic listener reasons \cite{GoodmanLassiter2015, Kao2014, Degen2015}.
+Here, the listener doesn't know how polite the speaker intends to be, and actively reasons about it: the variables lifted to the pragmatic level are the weights in the speaker's utility function ($\beta$'s) .
 %
 \begin{eqnarray}
 &&P_{L_1}(s, \beta \mid w)\propto P_{S_1}(w \mid s, \beta)\cdot P(s) \cdot P(\beta) \label{eq:L1}\\
 &&P_{S_1}(w \mid s, \beta) \propto \mathrm{exp}(\lambda \cdot E[[U(w; s; \beta)]])\label{eq:S1}\\
 &&P_{L_0}(s \mid w, \beta)\propto \denote{w}(s) \cdot P(s) \label{eq:L0}
 \end{eqnarray}
+The mapping from utterance $w$ to state $s$ is the literal semantics $\denote{w}(s)$.
+
 %
-\ndg{define $ \denote{w}(s)$ say where literal meanings come from (measured?).}
+%\ndg{define $ \denote{w}(s)$ say where literal meanings come from (measured?).}
 For simplicity, we assume the following:
 \begin{enumerate}
-\item The set of states of the world $S = \{s_{1}, ...,  s_{5}\}$ have subjective numerical values $V(s_{i}) = \alpha \cdot i$ \mht{or is it $i^\alpha$}. 
+\item The set of states of the world $S = \{s_{1}, ...,  s_{5}\}$ have subjective numerical values $V(s_{i}) = \alpha \cdot i$. 
 \item The set of utterances is \{\emph{terrible}, \emph{bad}, \emph{okay}, \emph{good}, and \emph{amazing}\}.
 % $\{w_{amazing}, w_{bad}, w_{okay}, w_{good}, w_{amazing}\}$
 %\mht{used in relevant empirical studies (Bonnefon ?).}
@@ -167,9 +165,10 @@ For simplicity, we assume the following:
 \end{enumerate}
 
 We assume a uniform prior distribution over possible states of the world $s\sim \text{DiscreteUniform} \{1, 2, 3, 4, 5\}$. 
-We implemented this model using the probabilisitic programming language WebPPL \cite{dippl} and a fully-specified implementation can be found at http://forestdb.org/models/politeness.html.
-\textbf{Experiment 3} measures listeners' inferences about the likely state of the world $s$, given an utterance and a speaker's goal. 
-\ndg{that last sentence seems out of place / lonely. recap the three expts here, or just cut it and describe when we get there.}
+We implemented this model using the probabilisitic programming language WebPPL \cite{dippl} and a fully-specified implementation can be found at \url{http://forestdb.org/models/politeness.html}.
+
+In what follows, we measure the literal semantics $\denote{w}(s)$ (\textbf{Experiment 1}), explore listeners' inferences about the world $s$ given an utterance and a speaker's goal (\textbf{Experiment 2}), and about the speaker's goals given an utterance and a state (\textbf{Experiment 3}).
+
 
 %We conducted three experiments to measure (1) the literal semantics judgment: what utterance in its literal sense is perceived to aptly describe the true state of the world (i.e., speaker's actual rating of the listener's performance; referred to as `true state' from here on); (2) goal inference: given the true state and the speaker's actual utterance to the listener, what were likely goals for the speaker; (3) true state inference: given the speaker's goal and utterance to the listener, what is the true state inferred?
 %
