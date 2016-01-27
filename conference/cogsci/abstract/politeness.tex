@@ -239,6 +239,13 @@ The fraction of participants that endorsed utterance $w$ for state $s$ will be u
 \end{figure*}
 
 \section{Experiment 2: True state inference}
+\begin{figure*}
+\begin{centering} 
+\includegraphics[width=\textwidth]{figures/state-inference-wScatter.pdf}
+\caption{\label{fig:exp3} Results from Experiment 2 (top) and model predictions (bottom). Average states inferred based on speaker's goal and utterance. Error bars represent 95\% confidence intervals.}
+\end{centering} 
+\end{figure*}
+
 In Experiment 2, we examined listeners' inferences about the likely state of the world $s$ given a speaker's utterance (e.g. \emph{It was good.}) and a description of the speaker's intentions (e.g. the speaker ``wanted to be nice'').
 
 \subsection{Method}
@@ -295,12 +302,7 @@ This response pattern might be due to people's attribution of sarcasm or irony t
 
 It should be noted that more positive utterances lead to inference of more positive states given the goal to be nice, which indicates that people think a ``nice'' speaker is still being somewhat informative with respect to communicating what the true state is. Thus, a nice speaker probably used the word ``amazing'' to describe an okay presentation rather than a terrible one.
 
-\begin{figure}
-\begin{centering} 
-\includegraphics[width=\columnwidth]{figures/state-inference-wScatter.pdf}
-\caption{\label{fig:exp3} Results from Experiment 2 (top) and model predictions (bottom). Average states inferred based on speaker's goal and utterance. Error bars represent 95\% confidence intervals.}
-\end{centering} 
-\end{figure}
+
 
 
 
@@ -343,10 +345,11 @@ We put uninformative priors on these weights ($\beta \sim \text{Uniform}(0,1)$) 
 %\end{table}
 \begin{figure}
 \begin{centering} 
-\includegraphics[width=\columnwidth]{figures/goal-priors-bda.pdf}
-\caption{\label{fig:goal-priors-bda} Inferred Goal Priors in State Inference task.
-For each experimental condition (trying to be X), we inferred the likely priors on the goal weights for the associated goal.
-}
+\includegraphics[width=\columnwidth]{figures/goal-posterior.pdf}
+\caption{\label{fig:goal-priors-bda} Inferred Goal Weights in State Inference task.
+Facets are different experimental conditions (trying to be X). Density plots show the likely weights used in the speaker's utility function.
+For the honesty goal, kindness and meanness are unidentifiable (they cancel out).
+The model does the worst at accounting for the meanness data; all that the model infers is that the speaker is not being honest.}
 \end{centering} 
 \end{figure}
 There are 2 additional parameters of the cognitive model: the speaker optimality parameter $\lambda$ in Eq.~\ref{eq:S1} and the value scale parameter $\alpha$ in the utility function. 
@@ -355,25 +358,31 @@ We put uninformative priors on these ($\lambda \sim \text{Uniform}(0,20)$ and $\
 %& \lambda \sim \text{Uniform}(0,20)\\
 %& \alpha \sim \text{Uniform}(0, 5)
 %\end{eqnarray*}
-We ran 2 MCMC chains for 20,000 iterations, discarding the first 10,000 for burnin.
-The MAP and 95\% HDI for $\lambda$ is 1.89 [1.87, 2.02]; for $\alpha$ is 8.3 [3.8, 9.9]. %; for $\phi$ is \red{0.09 [0.06, 0.13]}.
-The inferred weights for each goal condition were mostly as expected: 
-\mht{Do inference using continuously valued parameters and report CIs}.
+We ran 2 MCMC chains for 100,000 iterations, discarding the first 50,000 for burnin.
+The MAP and 95\% HDI for $\lambda$ is 1.8 [1.08, 3.1]; for $\alpha$ is 9.1 [3.4, 9.9]. %; for $\phi$ is \red{0.09 [0.06, 0.13]}.
+The inferred weights for each goal condition were largely as expected. 
+For the ``trying to be honest condition'', the model infers the speaker was using a high weight on honesty (the weights on kindness and meanness are unidentifiable because they are inverses of each other).
+For ``trying to be nice'', the model puts a high weight on niceness but also some appreciable on honesty. 
+The model fits worse for the ``trying to be mean'' case; all that the model infers is that the speaker was not honest.
+%\mht{Do inference using continuously valued parameters and report CIs}.
 %Posterior predictive distributions over the goal weight priors are shown in  Figure \ref{fig:goal-priors-bda}.
 %
 %\ndg{you know... i'm not sure we're modeling this expt right. shouldn't we condition the listener on appropriate \emph{observed} values of $\beta$ to get $P(s|\beta,w)$?}
 
 %To test what data the model actually predicts, we examine the posterior predictive distribution by marginalizing out the likely parameter values and generating predictions for what the data should look like, given our cognitive model and the inferred parameters.
 To generate predictions, given our cognitive model and the inferred parameters, we evaluated the posterior predictive distribution, marginalizing out all parameters. 
-The predictions of the listener model for the \emph{true state} (Eq.~\ref{eq:L1}) are shown in Figure \ref{fig:exp3}.
+The predictions of the expectations of the listener model for the \emph{true state} (Eq.~\ref{eq:L1}) are shown in Figure \ref{fig:exp3}.
 The model's expected posterior over states when the speaker is trying to be \emph{honest} increase as a function of the utterances likely of matching positive states (i.e. \emph{amazing} means a very high state).
 When the model knows the speaker was trying to be \emph{nice}, the listener is more conservative in how it interprets positive utterances, with the difference between an honest utterance and a nice utterance increasing as the utterance becomes more likely to signal a higher valued state. 
 For example, the difference between a ``nice'' \emph{amazing} and an ``honest'' \emph{amazing} is greater than the difference between a ``nice'' \emph{okay} and an ``honest'' \emph{okay}.
 Inferences when the speaker is trying to be ``mean'' display the associated opposite behavior when the utterance is indeed negative (e.g. \emph{terrible}).
  %\mht{Describe model predictions.}
-Overall, the model explains a lot the variance in the data $r^2(15) = 0.73$. 
+Overall, the model explains a lot the variance in the mean data $r^2(15) = 0.91$. 
 The main discrepancies are with the goal ``trying to be mean'', as noted above (see Discussion). 
-Among the other 2 goal conditions, the model explains almost all of the variance $r^2(10) = 0.94$. 
+Among the other 2 goal conditions, the model explains almost all of the variance $r^2(10) = 0.97$. 
+
+The model makes predictions not only for the mean data but also for the full distribution of responses (Figure \ref{fig:exp3} right).
+The model predicts the full distribution with high accuracy $r^2(75) = 0.79$, and even higher among just the goals to be honest and nice $r^2(50) = 0.86$.
 
 \subsection{Discussion}
 
