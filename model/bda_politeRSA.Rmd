@@ -24,6 +24,42 @@ options("scipen"=10)
 fpath<- "~/Documents/research/polgrice/model/results/"
 ```
 
+
+# Literal semantics data
+
+```{r literal.sem.load}
+fpath<- "~/Documents/research/polgrice/model/results/semantics/"
+prefix<-"bda-semantics-thetaBernoulli-IncrMH"
+prefix<- "bda-semantics-s1-nullAlt-IncrMH"
+samples = 100000
+burn =  samples /2
+m<-read.csv(paste(fpath, prefix, samples/1000, "k-b", burn/1000,"k.csv", sep=''))
+m.samples <- m[rep(row.names(m), m$Probability*samples), 1:3]
+```
+
+
+```{r semantics.bda}
+
+s.tidy <- m.samples %>%
+  group_by(Utterance,State) %>%
+  summarise(MAP = estimate_mode(Theta),
+            credHigh = HPDhi(Theta),
+            credLow = HPDlo(Theta)) %>%
+  ungroup() %>%
+  mutate(Utterance = factor(Utterance, levels=c("terrible", "bad",
+                                                "okay", "good",
+                                                "amazing")))
+
+ggplot(s.tidy, aes(x=State, y = MAP, color=Utterance))+
+  geom_point()+
+  geom_errorbar(aes(ymin=credLow, ymax=credHigh), width=0.1)+
+  geom_line()+
+  facet_grid(.~Utterance)
+
+ggsave("~/Documents/research/polgrice/model/results/literalSemantics-bda-s1-negationAlt_incrmh100k-b50k.pdf")
+```
+
+
 # Model
 
 ```{r model.load}
@@ -40,14 +76,16 @@ prefix<-"bda-politeRSA-jointUtilityLogProbScale-sopt-MH"
 prefix<-"bda-politeRSA-jointUtilityProbScale-OneSocialsopt-MH"
 prefix<-"bda-politeRSA-jointUtilityProbScale-goalPriorFixed-sopt-MH"
 prefix<-"bda-politeRSA-informativity-expectation-goalPrior-sopt-MH"
+prefix<-"bda-politeRSA-widesopt-alphaMH"
 # prefix<-"bda-politeRSA-jointUtilityMatchWeight-wMeanness-goalPrior-sopt-MH"
 # prefix<-"bda-politeRSA-jointUtilityMatchWeight-wMeanness-goalPrior-sopt-MH"
-samples = 5000
+samples = 500
 burn =  samples /2
 semsamp = 50000
 semburn =semsamp/2
 m.samples<- data.frame()
-for (i in c("a","b","c")){
+i<-"c"
+for (i in c("a","b")){
 m<-read.csv(paste(fpath, prefix, samples, "burn", burn,
                   "semantics-bern-",semsamp/1000,
                   "k-b",semburn/1000,"k",i,".csv", sep=''))
@@ -77,11 +115,11 @@ m.params %>%
   summarize(MAP = estimate_mode(Value),
             credLow = HPDlo(Value),
             credHigh = HPDhi(Value))
-
-ggsave(paste("~/Documents/research/polgrice/model/results/params",
-             prefix, samples, "burn", burn,
-                  "semantics-bern-",semsamp/1000,
-                  "k-b",semburn/1000,"kx3.pdf", sep=''))
+# 
+# ggsave(paste("~/Documents/research/polgrice/model/results/params",
+#              prefix, samples, "burn", burn,
+#                   "semantics-bern-",semsamp/1000,
+#                   "k-b",semburn/1000,"kx2.pdf", sep=''))
 ```
 
 ## Posterior predictive
@@ -174,40 +212,6 @@ write.csv(m.pp.3, file = "~/Documents/research/polgrice/model/results/goals-sopt
 ```
 
 
-# Literal semantics data
-
-```{r literal.sem.load}
-fpath<- "~/Documents/research/polgrice/model/results/semantics/"
-prefix<-"bda-semantics-thetaBernoulli-IncrMH"
-prefix<- "bda-semantics-s1-nullAlt-IncrMH"
-samples = 100000
-burn =  samples /2
-m<-read.csv(paste(fpath, prefix, samples/1000, "k-b", burn/1000,"k.csv", sep=''))
-m.samples <- m[rep(row.names(m), m$Probability*samples), 1:3]
-```
-
-
-```{r semantics.bda}
-
-s.tidy <- m.samples %>%
-  group_by(Utterance,State) %>%
-  summarise(MAP = estimate_mode(Theta),
-            credHigh = HPDhi(Theta),
-            credLow = HPDlo(Theta)) %>%
-  ungroup() %>%
-  mutate(Utterance = factor(Utterance, levels=c("terrible", "bad",
-                                                "okay", "good",
-                                                "amazing")))
-
-ggplot(s.tidy, aes(x=State, y = MAP, color=Utterance))+
-  geom_point()+
-  geom_errorbar(aes(ymin=credLow, ymax=credHigh), width=0.1)+
-  geom_line()+
-  facet_grid(.~Utterance)
-
-ggsave("~/Documents/research/polgrice/model/results/literalSemantics-bda-s1-negationAlt_incrmh100k-b50k.pdf")
-```
-
 
 # State given utterance and goal
 
@@ -216,10 +220,14 @@ ggsave("~/Documents/research/polgrice/model/results/literalSemantics-bda-s1-nega
 #prefix<- "bda-politeRSA-stateGivenUttGoal-3goalPrior-sopt-MH"
 prefix<- "bda-politeRSA-stateGivenUttGoal-goalSpecPriorsAll3-sopt-MH"
 #prefix<- "bda-politeRSA-stateGivenUttGoal-goalSpecPriors-sopt-MH"
-prefix<-"bda-politeRSA-stateGivenUttGoal-informativity-expectation-goalPrior3Gaussian-sopt-MH"
-samples = 100
+prefix<-"bda-politeRSA-stateGivenUttGoal-informativity-expectation-goalPrior1Beta-sopt-MH"
+prefix<-"bda-politeRSA-stateGivenUttGoal-goalPrior1Beta-sopt-alpha-phi-MH"
+prefix<-"bda-politeRSA-stateGivenUttGoal-goalPrior1Beta-sopt-alpha-MH"
+prefix<-"bda-politeRSA-stateGivenUttGoal-goalPrior1wide-Beta50d-sopt-alpha-IncrMH"
+prefix<-"bda-politeRSA-stateGivenUttGoal-goal3Vals-Beta50d-sopt-alpha-IncrMH"
+samples = 10000
 burn =  samples /2
-semsamp = 10000
+semsamp = 50000
 semburn =semsamp/2
 # m<-read.csv(paste(fpath, prefix, samples, "burn", burn,
 #                   "semantics-bern-",semsamp/1000,
@@ -228,7 +236,7 @@ semburn =semsamp/2
 #                   "k-b",semburn/1000,"kb.csv", sep=''))
 # m.samples <- m[rep(row.names(m), m$Probability*samples), 1:5]
 # 
-
+i<-"c"
 m.samples<- data.frame()
 for (i in c("a", "b")){
 m<-read.csv(paste(fpath, prefix, samples, "burn", burn,
@@ -258,17 +266,19 @@ ggplot(m.params, aes(x=Value, fill = Goal))+
   geom_histogram(position=position_dodge())+
   facet_grid(Cndition~Parameter, scales='free')
 
-m.params %>%
+View(m.params %>%
   group_by(Cndition, Goal,Parameter) %>%
   summarize(MAP = estimate_mode(Value),
             credLow = HPDlo(Value),
-            credHigh = HPDhi(Value))
+            credHigh = HPDhi(Value)))
 
 ggsave(paste("~/Documents/research/polgrice/model/results/params",
              prefix, samples, "burn", burn,
                   "semantics-bern-",semsamp/1000,
                   "k-b",semburn/1000,"k.pdf", sep=''), width =12, height = 8)
 ```
+
+
 
 ## Posterior predictive
 
@@ -277,9 +287,10 @@ ggsave(paste("~/Documents/research/polgrice/model/results/params",
 lvls = c("terrible", "bad", "okay", "good", "amazing")
 
 m.pp <- m.samples %>%
-  filter(Parameter == 'predictive') %>%
+  filter(Parameter == 'predictive' & Goal == 'expectation') %>%
   select(-Goal) %>%
   rename(Goal = State) %>%
+  mutate(Value = Value/20) %>%
   group_by(Utterance, Goal) %>%
   summarize(MAP = estimate_mode(Value),
             credHigh = HPDhi(Value),
@@ -287,16 +298,216 @@ m.pp <- m.samples %>%
   ungroup() %>%
   mutate(#State = factor(State, levels = lvls, labels =c(1,2,3,4,5)),
          Utterance = factor(Utterance, levels = lvls),
-         Goal = factor(Goal, levels =c("honest", "nice", "mean")))
+         Goal = factor(Goal, levels =c("honest", "nice", "mean")),
+         src = "model") %>%
+  rename(mean = MAP,
+         ci_lower = credLow,
+         ci_upper = credHigh)
 
-ggplot(m.pp, aes(x=Utterance, y = MAP, color = Goal, group= Goal))+
+# 
+# write.csv(m.pp, 
+#           file =paste("~/Documents/research/polgrice/model/results/states",
+#                       prefix, samples, "burn", burn,
+#                   "semantics-bern-",semsamp/1000,
+#                   "k-b",semburn/1000,"k.csv", sep=""), row.names=F)
+
+fig1<-ggplot(m.pp, aes(x=Utterance, y = MAP, color = Goal, group= Goal))+
   geom_point(size=2, position=position_dodge(0.3))+
   geom_line(position=position_dodge(0.3))+
   geom_errorbar(aes(ymin = credLow, ymax = credHigh),
-                position=position_dodge(0.3), width=0.2)
+                position=position_dodge(0.3), width=0.2)+
+  ylim(1,5)+
+  ylab("Model posterior predictive")
+  theme_bw()
 
-ggsave(paste("~/Documents/research/polgrice/model/results/goals",
-             prefix, samples, "burn", burn,
-                  "semantics-bern-",semsamp/1000,
-                  "k-b",semburn/1000,"k.pdf", sep=''), width = 8, height = 5 )
+fig1
+# 
+# ggsave(paste("~/Documents/research/polgrice/model/results/goals",
+#              prefix, samples, "burn", burn,
+#                   "semantics-bern-",semsamp/1000,
+#                   "k-b",semburn/1000,"k.pdf", sep=''), width = 8, height = 5 )
+```
+
+Figure of Expectation (data and model) 
+
+```{r}
+ds.tidy <- d.s %>%
+  mutate(State = state/20,
+         Utterance = utterance,
+         Goal = goal) %>%
+  #mutate(State = factor(State, levels = lvls, labels =c(1,2,3,4,5))) %>%
+  group_by(Utterance, Goal) %>%
+  multi_boot_standard(column= "State") %>%
+  mutate(src = 'experiment')
+
+
+md.bars <- bind_rows(m.pp, ds.tidy)
+fig1<-ggplot(md.bars, aes(x=Utterance, y = mean, color = Goal, group= Goal))+
+  geom_point(size=3, position=position_dodge(0.3))+
+  geom_line(position=position_dodge(0.3))+
+  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper),
+                position=position_dodge(0.3), width=0.2)+
+  ylim(1,5)+
+  ylab("Inferred true state")+
+  facet_grid(src~.)+
+  theme_bw()
+
+ggsave("~/Documents/research/polgrice/conference/cogsci/abstract/figures/state-inference.pdf", height =5, width = 5)
+
+
+md.tidy<- left_join(m.pp, ds.tidy)
+
+ggplot(md.tidy, aes(x=MAP, y = mean, color = Goal))+
+  geom_point()+
+  geom_abline(intercept = 0, slope = 1, lty=2)+
+  geom_errorbar(aes(ymin=ci_lower, ymax=ci_upper))+
+  geom_errorbarh(aes(xmin=credLow, xmax = credHigh))+
+  theme_paper()+
+  coord_fixed()+
+  xlim(0,100)+
+  ylim(0,100)
+
+with(md.tidy# %>% filter(Goal!='mean')
+     , cor(MAP, mean))^2
+```
+
+
+### Full distribution
+
+
+### Model - data fit
+
+Full distribution
+```{r}
+
+
+
+d.s<-read.csv("~/Documents/research/polgrice/model/data/state.csv")
+
+ds.dist <- d.s %>%
+  rename(State = state,
+         Utterance = utterance,
+         Goal = goal) %>%
+    mutate(State = State/20) %>%
+  #mutate(State = factor(State, levels = lvls, labels =c(1,2,3,4,5))) %>%
+  group_by(Utterance, Goal, State) %>%
+  summarize(n = length(subid)) %>%
+  ungroup() %>%
+  group_by(Utterance, Goal) %>%
+  mutate(norm_n = n / sum(n))
+
+
+m.pp <- m.samples %>%
+  filter(Parameter == 'predictive' & !(Goal == 'expectation')) %>%
+  rename(State1 = Goal,
+         Goal = State) %>%
+  mutate(State1 = to.n(State1)/20) %>%
+  group_by(Utterance,Goal, State1) %>%
+  summarize(MAP = estimate_mode(Value),
+            credHigh = HPDhi(Value),
+            credLow = HPDlo(Value)) %>%
+  ungroup() %>%
+  mutate(#State = factor(State, levels = lvls, labels =c(1,2,3,4,5)),
+         Utterance = factor(Utterance, levels = lvls),
+         Goal = factor(Goal, levels =c("honest", "nice", "mean"))) %>%
+  rename(State = State1)
+
+md.dist<-left_join(m.pp, ds.dist)
+
+md.dist[is.na(md.dist$n),"norm_n"]<-0
+
+md.dist$State = factor(md.dist$State, levels=c(1,2,3,4,5))
+
+ggplot(md.dist, aes(x = MAP, y = norm_n, 
+                    xmin = credLow, xmax = credHigh, 
+                    color = Goal))+
+  geom_point(size = 2)+
+  #scale_alpha_manual(values = c(0.5, 0.8, 0.8, 0.8, 1))+
+  geom_errorbarh()+
+  geom_abline(intercept=0, slope=1, lty = 3)+
+  coord_fixed()+
+  xlim(-0.05,0.9)+
+  ylim(-0.05,0.9)+
+  xlab("Model posterior predictive")+
+  ylab("Human proportion responses")+
+  theme_bw()+
+  guides(color=F)
+ggsave("~/Documents/research/polgrice/conference/cogsci/abstract/figures/state-inference-scatter.pdf", height =4, width = 4)
+
+
+with(md.dist,# %>% filter(Goal!="mean"),
+     cor(MAP, norm_n))^2
+```
+
+
+
+### Predictive over goal weight priors
+ (the cheap way)
+Reconstruct goal weight prior by forward sampling
+
+```{r posterior.predictive.forwardSample}
+
+
+
+m.prior.params <- m.params %>% filter(!(is.na(Goal))) %>%
+  filter((Cndition=='honest' & Goal=='honesty') |
+           (Cndition=='nice' & Goal == "kindness") |
+           (Cndition=='mean' & Goal == 'meanness'))
+
+shape1 = function(gamma,delta){return (gamma * delta)}
+shape2= function(gamma,delta){return ((1-gamma) * delta)}
+
+d.samples<-data.frame()
+
+for (i in 1:1000){
+
+  d.samp<-m.prior.params %>%
+    group_by(Cndition, Goal, Parameter) %>%
+    sample_n(1) %>%
+    ungroup() %>%
+    spread(Parameter, Value) %>%
+    mutate(alpha = shape1(gamma,delta),
+           beta = shape2(gamma, delta))
+  
+    for (k in 1:length(d.samp$Goal)){
+    d.iter<-data.frame(
+               Cndition = d.samp[k,1],
+               Goal = d.samp[k,2],
+               Weight = rbeta(10, d.samp[[k, "alpha"]], d.samp[[k, "beta"]])
+    )
+    d.samples<-bind_rows(d.samples, d.iter)
+  }
+  
+#   %>%
+#     group_by(Cndition, Goal)
+#   
+#   
+#   %>%
+#     mutate(goalweight = rbeta(10, alpha, beta)) %>%
+#     mutate(hasDoneA = rbinom(1,1,prob_hasF)) %>%
+#     select(-gamma, -delta, -Measure)
+# 
+#   
+#     d.freq.samp<-m2.params %>%
+#     group_by(Item, Gender, Parameter) %>%
+#     sample_n(1) %>%
+#     ungroup() %>%
+#       spread(Parameter, Value) %>%
+#       select(-Measure)
+#     
+#     d.samp <- left_join(d.samp.exis, d.freq.samp)
+#   
+
+  
+  if ((i %% 10)==0) { print(i) }
+}
+
+ggplot(d.samples, aes(x=Weight, fill=Goal))+
+  geom_density(adjust=0.9,alpha = 0.6, color='black',size = 1.1)+
+  #facet_wrap(~Goal)+
+  guides(color=F)+
+  scale_x_continuous(breaks=c(0,0.5,1))
+
+ggsave("~/Documents/research/polgrice/conference/cogsci/abstract/figures/goal-priors-bda.pdf")
+
 ```
