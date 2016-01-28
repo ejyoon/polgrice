@@ -265,7 +265,7 @@ Participants indicated their answer on a scale of five hearts.
 \begin{figure*}[t]
 \begin{centering}
 \includegraphics[width=\textwidth]{figures/state-inference-wScatter.pdf}
-\caption{\label{fig:exp3} Results from Experiment 2 (top) and model predictions (bottom). Average states inferred based on speaker's goal and utterance. Error bars represent 95\% confidence intervals. \mcf{FIXME}}
+\caption{\label{fig:exp3} Average states inferred based on speaker's goal and utterance. Results from Experiment 2 (left) and model predictions (center) and scatter plot showing correlation between data and model predictions (right). Error bars represent 95\% confidence intervals.  \ejy{bootstrapping data}}
 \end{centering}
 \end{figure*}
 
@@ -449,27 +449,25 @@ Participants read each scenario followed by a question that read, ``Based on wha
 \subsection{Behavioral results}
 
 \begin{table}[t]
-\caption{\label{tab:lmer1}  Coefficient estimates from mixed-effects models predicting goal attributions in Experiment 3. \mcf{could make goal a column?}}
+\caption{\label{tab:lmer1}  Coefficient estimates from mixed-effects models predicting goal attributions in Experiment 3.}
 \begin{center}
-\begin{tabular}{l r r r l}
+\begin{tabular}{l l r r l}
 \hline
 Predictor  &  Value (SE) & \emph{t}-value\\
 \hline
-\emph{Goal to be honest} \\
-Intercept  & 1.5 (.04) & 34.1 \\
-True state & -.35 (.01) &  -29.9 \\
-Utterance & -.32 (.01) & -26.6 \\
-True state $\times$ Utterance & .11 (.003) & 31.9 \\
-\emph{Goal to be nice} \\
-Intercept  & .07 (.04) & 1.70\\
-True state & -.05 (.01) &  -5.46 \\
-Utterance & .17 (.01) & 12.7 \\
-True state $\times$ Utterance & .01 (.002) & 2.73 \\
-\emph{Goal to be mean} \\
-Intercept  & .37 (.04) & 9.18 \\
-True state & .18 (.01) &  18.3 \\
-Utterance & -.05 (.01) & -3.76 \\
-True state $\times$ Utterance & -.04 (.003) & -12.2 \\
+Goal  &  Predictor  &  Value (SE) & \emph{t}-value\\
+To be honest  &  Intercept  & 1.5 (.04) & 34.1 \\
+  &  True state & -.35 (.01) &  -29.9 \\
+  &  Utterance & -.32 (.01) & -26.6 \\
+  &  State $\times$ Utterance & .11 (.003) & 31.9 \\
+To be nice  &  Intercept  & .07 (.04) & 1.70\\
+  &  True state & -.05 (.01) &  -5.46 \\
+  &  Utterance & .17 (.01) & 12.7 \\
+  &  State $\times$ Utterance & .01 (.002) & 2.73 \\
+To be mean  &  Intercept  & .37 (.04) & 9.18 \\
+  &  True state & .18 (.01) &  18.3 \\
+  &  Utterance & -.05 (.01) & -3.76 \\
+  &  State $\times$ Utterance & -.04 (.003) & -12.2 \\
 \hline
 \end{tabular}
 \end{center}
