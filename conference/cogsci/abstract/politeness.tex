@@ -16,6 +16,7 @@
 \usepackage{enumitem}
 \usepackage{apacite}
 \usepackage{url}
+\usepackage{dblfloatfix}
 
 \usepackage{caption}
 %\usepackage[caption=false]{subfig}
@@ -103,6 +104,9 @@ Here we extend RSA to take into account a speaker with both the usual epistemic 
 %to include speaker utility that is not dependent on the transfer of information about the world to the listener \cite{Frank2012, Goodman2013}.
 We test this model by gathering data about utterance interpretations and goal attributions in settings where the true state of the world carries affective consequences for the listener.
 
+
+
+
 %with empirical data of listeners' inferences about speakers' intentions and about inferences about the world given a speaker with a transparent communicative intent.
 %Specifically, we empirically test how people reason about utterance truthfulness vs. niceness
 %as tradeoffs in speaker's strategies to be informative versus to save the listener's face.
@@ -114,6 +118,22 @@ Politeness poses a challenge for formal models of pragmatic language understandi
 %Similarly, what incentive is there to ever ``sugar coat'' utterances if the only currency of communication is information transfer?
 We propose that information transfer captures just one component of a speaker's utility, \emph{epistemic utility}.
 Politeness then emerges from an independent component of a speaker's utility, what we will call \emph{social utility}.
+
+
+
+\begin{figure*}[!b]
+\begin{center}
+  \includegraphics[width=.9\textwidth]{figures/exp1.pdf}
+  \caption{\label{fig:exp1} Results from Experiment 1. Proportion of acceptances of words (shown in different colors) given the true state represented on a scale of hearts. Error bars represent 95\% confidence intervals.}
+  \end{center}
+\end{figure*}
+
+\begin{figure}[t]
+\begin{centering}
+\includegraphics[width=3.2in]{figures/example.png}
+\caption{\label{fig:ex} Example of a trial in Experiment 1.}
+\end{centering}
+\end{figure}
 
 The speaker in RSA models is assumed to choose utterances approximately optimally, given a utility function:
 \begin{equation}
@@ -154,6 +174,7 @@ $$
 %U(w;s; \beta) = \beta_{epistemic}\cdot U_{epistemic} + \beta_{social} \cdot U_{social}
 %$$
 %
+
 
 The pragmatic listener, denoted $L_1$, infers the world state based on this speaker model.
 We will assume the listener does not know exactly how the speaker weights his competing goals, however.
@@ -199,12 +220,16 @@ In what follows, we measure the literal semantics in Experiment 1, then use thes
 \section{Experiment 1: Literal semantics}
 
 
-\begin{figure}[t]
+
+\begin{figure*}[t]
 \begin{centering}
-\includegraphics[width=3.2in]{figures/example.png}
-\caption{\label{fig:ex} Example of a trial in Experiment 1.}
+\includegraphics[width=\textwidth]{figures/state-inference-wScatter.pdf}
+\caption{\label{fig:exp3} Average states inferred based on speaker's goal and utterance. Results from Experiment 2 (left) and model predictions (center) and scatter plot showing correlation between data and model predictions (right). Error bars represent 95\% confidence intervals.  \ejy{bootstrapping data}}
 \end{centering}
-\end{figure}
+\end{figure*}
+
+
+
 
 Experiment 1 measured people's judgment for literal meaning of our target words:
 does the literal meaning of a word aptly describe how someone performed?
@@ -241,12 +266,6 @@ In Experiment 2, we examined listeners' inferences about the likely state of the
 
 35 participants with IP addresses in the United States were recruited on Amazon's Mechanical Turk.
 
-\begin{figure*}
-\begin{center}
-  \includegraphics[width=.9\textwidth]{figures/exp1.pdf}
-  \caption{\label{fig:exp1} Results from Experiment 1. Proportion of acceptances of words (shown in different colors) given the true state represented on a scale of hearts. Error bars represent 95\% confidence intervals.}
-  \end{center}
-\end{figure*}
 
 \subsubsection{Stimuli and Design}
 
@@ -259,14 +278,6 @@ Then a question asked, ``How do you think Bob actually felt about Ann's cake?''
 Participants indicated their answer on a scale of five hearts.
 
 \subsection{Behavioral results}
-
-
-\begin{figure*}[t]
-\begin{centering}
-\includegraphics[width=\textwidth]{figures/state-inference-wScatter.pdf}
-\caption{\label{fig:exp3} Average states inferred based on speaker's goal and utterance. Results from Experiment 2 (left) and model predictions (center) and scatter plot showing correlation between data and model predictions (right). Error bars represent 95\% confidence intervals.  \ejy{bootstrapping data}}
-\end{centering}
-\end{figure*}
 
 %\ndg{same comment: too wordy.}
 
@@ -328,6 +339,7 @@ This is likely due to participants attributing sarcasm or irony to the speaker w
 
 \subsection{Model predictions}
 
+
 \subsubsection{Model fitting}
 
 In this experiment, participants were told the speaker said $w$ as well as described what the speakers intentions were (e.g., \emph{Bob wanted to be nice}).
@@ -361,6 +373,9 @@ We put uninformative priors on these weights ($\beta \sim \text{Uniform}(0,1)$) 
 %Values shown are MAP estimates and 95\% HDI for the parameter values.}
 %\end{table}
 
+
+
+
 There are 2 additional parameters of the cognitive model: the speaker optimality parameter $\lambda$ in Eq.~\ref{eq:S1} and the value scale parameter $\alpha$ in the utility function.
 We put uninformative priors on these ($\lambda \sim \text{Uniform}(0,20)$ and $\alpha \sim \text{Uniform}(0, 5)$) and infer their posterior credible values via Bayesian data analysis.
 %\begin{eqnarray*}
@@ -379,6 +394,7 @@ To generate predictions, given our cognitive model and the inferred parameters, 
 %To test what data the model actually predicts, we examine the posterior predictive distribution by marginalizing out the likely parameter values and generating predictions for what the data should look like, given our cognitive model and the inferred parameters.
 
 \subsubsection{Results}
+
 
 The inferred weights for each goal condition were largely as expected (Fig.~\ref{fig:goal-priors-bda}).
 For the ``trying to be honest condition'', the model infers the speaker was using a high weight on honesty (the weights on kindness and meanness are unidentifiable because they are inverses of each other).
@@ -421,6 +437,26 @@ Our model does not include sarcastic interpretation though other models in the R
 
 \section{Experiment 3: Goal inference}
 
+\begin{figure*}[!t]
+\begin{center}
+  \includegraphics[width=\textwidth]{figures/exp2.pdf}
+  \caption{\label{fig:exp2} Results from Experiment 3 (top) and model predictions (bottom). Attribution of speaker's goals (honest vs. nice vs. mean, shown in different colors) based on the true state and utterance. Error bars represent 95\% confidence intervals.}
+  \end{center}
+\end{figure*}
+
+
+\begin{figure}[!b] % MCF; moved this down for pagination reasons.
+\begin{centering}
+\includegraphics[width=0.70\columnwidth]{figures/goal-posterior.pdf}
+\caption{\label{fig:goal-priors-bda} Inferred Goal Weights in State Inference task.
+Facets are different experimental conditions (trying to be X). Density plots show the likely weights used in the speaker's utility function.
+% For the honesty goal, kindness and meanness are unidentifiable (they cancel out).
+% The model does the worst at accounting for the meanness data; all that the model infers is that the speaker is not being honest.
+%\mcf{make the smoothing kernel wider---so not so bumpy---and maybe put the legend on the plot? Could take up less space.}
+}
+\end{centering}
+\end{figure}
+
 Experiment 3 probed listeners' inferences of the speaker's goals, given an utterance (e.g. \emph{``It was good''}) and a true state (e.g. 2 out of 5 hearts).
 
 \subsection{Method}
@@ -429,16 +465,6 @@ Experiment 3 probed listeners' inferences of the speaker's goals, given an utter
 
 45 participants with IP addresses in the United States were recruited on Amazon's Mechanical Turk.
 
-\begin{figure}[t] % MCF; moved this down for pagination reasons.
-\begin{centering}
-\includegraphics[width=\columnwidth]{figures/goal-posterior.pdf}
-\caption{\label{fig:goal-priors-bda} Inferred Goal Weights in State Inference task.
-Facets are different experimental conditions (trying to be X). Density plots show the likely weights used in the speaker's utility function.
-% For the honesty goal, kindness and meanness are unidentifiable (they cancel out).
-% The model does the worst at accounting for the meanness data; all that the model infers is that the speaker is not being honest.
-\mcf{make the smoothing kernel wider---so not so bumpy---and maybe put the legend on the plot? Could take up less space.}}
-\end{centering}
-\end{figure}
 
 \subsubsection{Stimuli and Design}
 
@@ -451,12 +477,7 @@ The order of context items was randomized, and there were a maximum of two repea
 \subsubsection{Procedure}
 Participants read each scenario followed by a question that read, ``Based on what Bob said, how likely do you think that Bob's goal was to be: honest; nice; mean,'' with the three goals placed in a random order below three slider bars, on which the participant could indicate each goal's likelihood.
 
-\begin{figure*}[t]
-\begin{center}
-  \includegraphics[width=.9\textwidth]{figures/exp2.pdf}
-  \caption{\label{fig:exp2} Results from Experiment 3 (top) and model predictions (bottom). Attribution of speaker's goals (honest vs. nice vs. mean, shown in different colors) based on the true state and utterance. Error bars represent 95\% confidence intervals.}
-  \end{center}
-\end{figure*}
+
 
 \subsection{Behavioral results}
 
