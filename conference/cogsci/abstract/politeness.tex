@@ -448,8 +448,11 @@ Honesty was rated highest when the true state was most consistent with the liter
 As utterances became more positive, participants rated the speaker's kindness higher and meanness displayed the reverse pattern. 
 Ratings for niceness and meanness goals were strongly anti-correlated $r = -.78$.
 
-Interestingly, we observe that truthfully saying something is ``amazing'' is both honest and nice, while 
-truthfully saying something is ``terrible'' is honest but not that mean.
+Interestingly, we observe an asymmetry in how positive and negative utterances map onto niceness and meanness, respectively. 
+Participants report that \emph{truthfully} saying ``amazing'' is both honest and nice, while \emph{truthfully} saying something is ``terrible'' is honest but not that mean.
+%That is, truthfully saying positive utterances is strictly nice but truthfully saying negative utterances is not strictly mean. 
+Here, meanness can decrease in likelihood (i.e., be \emph{explained away}) by honesty.
+And yet honesty does not explain away niceness when the speaker say a truthful ``amazing''. 
 To our knowledge, this is the first evidence of an asymmetry in honesty \emph{explaining away} social goals.
 
 %We fit linear mixed-effects models to measure the effects of true state and utterance (as numeric variables, ordered from the worst to the best) on the attribution of each goal (Table \ref{tab:lmer1}) and we found significant main effects and interactions of true state and utterance on each of the three goal attributions, though with varying effect sizes.\footnote{Models with the maximal convergent random effects structure: goal likelihood $\sim$ true state $\times$ utterance + (utterance $|$ participant).}
@@ -486,18 +489,18 @@ The MAP estimate and 95\% HDI for $\lambda$ is 4.6 [4.0, 4.9]; for $\alpha$ is 1
 The predictions of the model are shown in Figure \ref{fig:exp2} (bottom).
 Like our participants, the model believes the speaker to be more honest when the utterance matches the true state of the world, as given by the literal semantics data (Figure \ref{fig:exp2}, red lines).
 Further, the model increases its ratings of niceness as the utterance better matches states with higher values (green bars, main effect of panel).
-The goal to be mean displays the opposite behavior, decreasing as the utterance matches states with higher values (blue bars).
+The goal to be mean displays the opposite behavior, increasing as the utterance matches states with lower values (blue bars).
 Overall, the model displays a strong quantitative fit to the goal inference data $r^2(75) = 0.87$.
 
 The model successfully captured the key patterns in the data:
 changing goal likelihoods based on the degree of match, and positivity/negativity bias of mismatch, between the utterance and true state.
 The biggest mismatches seem to be that the model under-predicts the goal to be honest for every utterance except \emph{okay}.
-This may be because explicitly positive/negative utterances can also be explained away by the social goals.
+This may be because explicitly positive/negative utterances can also be explained away by a social goal in the model.
 Also, the model does not capture the interaction that a truthful positive utterance is both honest and nice, while a truthful negative utterance is honest but not that mean.
- The model treats niceness and meanness perfectly opposite to each other, while there is an interesting asymmetry in participants' behavior. 
-This asymmetry may be due in part to intuitive theories of socially optimal speakers who strive to be both honest and nice.
+ The model treats niceness and meanness as perfectly opposite to each other, while there is an interesting asymmetry in participants' behavior. 
+This asymmetry may be because listeners expect honesty and niceness to be correlated \emph{a priori}, and anti-correlated with meanness, rather than assumed to be independent as this model does.  
 
-\section{General Discussion}
+\section{Discussion}
 
 Why would a speaker ever say something that is not maximally truthful and informative?
 Communication is often looked at from the perspective of successful transfer of information from speaker to listener.
