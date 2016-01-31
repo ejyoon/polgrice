@@ -53,7 +53,7 @@
 Conveying information in a false or indirect manner in consideration of a listener's wants (i.e., being polite)
 seemingly contradicts an important goal of a cooperative speaker: information transfer.
 We propose that a cooperative speaker considers both
-\emph{epistemic utility}, or utility of improving the epistemic state of a listener,
+\emph{epistemic utility}, or utility of providing the listener new information,
 and \emph{social utility}, or utility of maintaining or boosting the listener's self-image (being polite).
 We formalize this tradeoff within a probabilistic model of language understanding and test it with empirical data on people's inferences about the relation between a speaker's goals, utterances and the true states of the world.
 
@@ -83,7 +83,7 @@ who has both an epistemic goal to improve the listener's knowledge state as well
 In their analysis, if the speaker's intended meaning contains no threat to the speaker or listener's face,
 then the speaker will choose to convey the meaning in an efficient manner, putting it \emph{on the record}.
 As the degree of face-threat becomes more severe, however,
-a speaker will choose to be polite and produce more indirect utterances, keeping the intended meaning \emph{off the record}
+a speaker will choose to be polite by producing more indirect utterances.
 
 In the current paper, we formalize a version of \citeA{Brown1987}'s theory, exploring the idea that cooperative speakers attempt to balance two goals, epistemic and social.
 The Rational Speech Act (RSA) framework \cite{Frank2012, Goodman2013} describes language understanding as recursive probabilistic inference between a pragmatic listener and an informative speaker. This framework has been successful at capturing the quantitative details of a number of language understanding tasks, but it neglects the social goals a speaker may pursue.
@@ -456,8 +456,8 @@ Interestingly, we observe an asymmetry in how positive and negative utterances m
 Participants report that \emph{truthfully} saying ``amazing'' is both honest and nice, while \emph{truthfully} saying something is ``terrible'' is honest and not that mean.
 %That is, truthfully saying positive utterances is strictly nice but truthfully saying negative utterances is not strictly mean. 
 Here, meanness can decrease in likelihood (i.e., be \emph{explained away}) because of honesty.
-And yet honesty does not explain away niceness when the speaker say a truthful ``amazing''. 
-To our knowledge, this is the first evidence of an asymmetry in honesty can \emph{explain away} social goals.
+And yet honesty does not explain away niceness when the speaker says a truthful ``amazing''. 
+%To our knowledge, this is the first evidence of an asymmetry in honesty can \emph{explain away} social goals.
 
 %We fit linear mixed-effects models to measure the effects of true state and utterance (as numeric variables, ordered from the worst to the best) on the attribution of each goal (Table \ref{tab:lmer1}) and we found significant main effects and interactions of true state and utterance on each of the three goal attributions, though with varying effect sizes.\footnote{Models with the maximal convergent random effects structure: goal likelihood $\sim$ true state $\times$ utterance + (utterance $|$ participant).}
 
@@ -500,9 +500,9 @@ The model successfully captured the key patterns in the data:
 changing goal likelihoods based on the degree of match, and positivity/negativity bias of mismatch, between the utterance and true state.
 The biggest mismatches seem to be that the model under-predicts the goal to be honest for every utterance except \emph{okay}.
 This may be because explicitly positive/negative utterances can also be explained away by a social goal in the model.
-Also, the model does not capture the interaction that a truthful positive utterance is both honest and nice, while a truthful negative utterance is honest but not that mean.
+The model also does not capture the interaction that a truthful positive utterance is both honest and nice, while a truthful negative utterance is honest but not that mean.
  The model treats niceness and meanness as perfectly opposite to each other, while there is an interesting asymmetry in participants' behavior. 
-This asymmetry may be because listeners expect honesty and niceness to be correlated \emph{a priori}, and anti-correlated with meanness, rather than assumed to be independent as this model does.  
+This asymmetry may be because listeners expect honesty and niceness to be correlated \emph{a priori}, and anti-correlated with meanness, rather than independent as assumed by the model.
 
 \section{Discussion}
 
@@ -524,18 +524,18 @@ how well the literal utterance meaning matched the actual rating the performance
 %and proposed an addition of social utility (i.e., face-saving).
 %This is the first work to generalize the Rational Speech-Act theory to include utility parameters not based on the successful transfer of information.
 The model presented here relates to other work done in game-theoretic pragmatics and within the Rational Speech-Acts framework.
-\citeA{VanRooy2003} presents a game-theoretic analysis of polite requests (``Could you possibly take me home?'') to argue the purpose of polite language is to align the preferences of interlocutors. 
+\citeA{VanRooy2003} uses a game-theoretic analysis of polite requests (``Could you possibly take me home?'') to argue the purpose of polite language is to align the preferences of interlocutors. 
 Our notion of social utility $U_{social}$ is similar in that it motivates speakers to signal worlds that make the listener feel good. 
 \citeauthor{VanRooy2003}'s analysis, however, relies on the notion that polite language is \emph{costly} (in a social way e.g. by reducing one's social status, incurring social debt to one's conversational partner) but it's not clear how the polite behaviors explored in our experiments (not polite requests) would incur any cost to speaker or listener. 
 %Rather, when cost is tied to the social world, it's not clear when something is costly vs. not (e.g. is a speaker who says your project was ``bad'' when it was indeed bad is producing a more costly utterance because his utterance will make the listener feel bad?)
 Our model derives its predictions by construing the speaker utility as a collection of possible goals (here, epistemic and social goals). The speech-acts themselves are not costly. 
 
-Work in the Rational Speech-Acts theory has demonstrated nonliteral interpretations of figurative language by elaborating the set of possible \emph{Questions Under Discussion} \cite{Kao2014, Kao2015}.
-Speakers may use language hyperbolically (``The latte costs a hundred bucks.''), for example, to communicate along the dimensions of affect (\emph{The speaker thinks the latte is expensive}).
-With politeness, it is not clear that speakers want to communicate along a dimension of affect, but rather they would rather \emph{not communicate} along any epistemic dimension. 
-This possibility is given to the speaker who can use social utility as a motivating force for a speech act. 
-%Our approach is different in that we do not modify what question the speaker is addressing, but rather what utilities motivate him to act. 
-%\ndg{if we have room, we can discuss relation to other models. both RSA and game theory. eg we should cite that van rooij paper?}
+%Work in the Rational Speech-Acts theory has demonstrated nonliteral interpretations of figurative language by elaborating the set of possible \emph{Questions Under Discussion} \cite{Kao2014, Kao2015}.
+%Speakers may use language hyperbolically (``The latte costs a hundred bucks.''), for example, to communicate along the dimensions of affect (\emph{The speaker thinks the latte is expensive}).
+%With politeness, it is not clear that speakers want to communicate along a dimension of affect, but rather they would rather \emph{not communicate} along any epistemic dimension. 
+%This possibility is given to the speaker who can use social utility as a motivating force for a speech act. 
+%%Our approach is different in that we do not modify what question the speaker is addressing, but rather what utilities motivate him to act. 
+%%\ndg{if we have room, we can discuss relation to other models. both RSA and game theory. eg we should cite that van rooij paper?}
 
 Will machines ever be polite?
 Politeness requires more than merely saying conventionalized words (\emph{please}, \emph{thank you}) at the right moments; it requires a balance of informativity and kindness.
@@ -546,7 +546,7 @@ And it moves us closer to computation with tact---to computers that communicate 
 
 \section{Acknowledgments}
 
-This work was supported by NSF grant BCS \#1456077. 
+This work was supported by NSF grant BCS \#1456077 and ONR grant N00014-13-1-0788. 
 
 \bibliographystyle{apacite}
 \setlength{\bibleftmargin}{.125in}
