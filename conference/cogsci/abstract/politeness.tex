@@ -50,12 +50,12 @@
 
 \begin{abstract}
 
-Politeness, or conveying information in a false or indirect manner in consideration of listener's wants,
+Conveying information in a false or indirect manner in consideration of a listener's wants (i.e., politeness)
 seemingly contradicts an important goal of a cooperative speaker: information transfer.
 We propose that a cooperative speaker considers both
 \emph{epistemic utility}, or utility of improving the epistemic state of a listener,
 and \emph{social utility}, or utility of maintaining or boosting the listener's self-image (being polite).
-We formalize this tradeoff within a probabilistic model and test it with empirical data on people's inferences about the relation between a speaker's goals, utterances and the true states of the world.
+We formalize this tradeoff within a probabilistic model of language understanding and test it with empirical data on people's inferences about the relation between a speaker's goals, utterances and the true states of the world.
 
 \textbf{Keywords:}
 Politeness; computational modeling; communicative goals; pragmatics
@@ -64,28 +64,27 @@ Politeness; computational modeling; communicative goals; pragmatics
 
 
 \section{Introduction}
-You witness your friend give a terrible presentation, and he asks for your opinion.
+Your friend gives a terrible presentation and asks for your opinion.
 Must a cooperative person say ``Your talk was terrible,'' or is it acceptable to say: ``Your talk was fine''?
 The latter gives potentially misleading information in deference to what the listener might want to hear---in other words, it's polite.
 
 Politeness violates a critical principle of cooperative communication: exchanging information efficiently and accurately \cite{Grice1975}.
-If information transfer was the only goal in communication, a cooperative speaker would consider polite (and thus potentially misleading) utterances as undesirable.
-People do spontaneously produce polite utterances, however.
+If information transfer was the only currency in communication, a cooperative speaker would find polite utterances undesirable (they are potentially misleading).
+People are polite, however, and speakers do produce polite utterances.
 Adults and even young children spontaneously produce requests in polite forms \cite{clark1980, axia1985}.
-Speakers show politeness strategies even while arguing, preventing unnecessary offense to their interactants \cite{holtgraves1997}.
-People even attribute ambiguous speech to a polite desire to hide a truth that could hurt the listener's self-image (e.g., \citeNP{bonnefon2009}).
-But does this mean that people are not cooperative communicators?
+Speakers exhibit politeness strategies even while arguing, preventing unnecessary offense to their interactants \cite{holtgraves1997}.
+Listeners even attribute ambiguous speech to a polite desire to hide a truth that could hurt another's self-image (e.g., \citeNP{bonnefon2009}).
+Must this mean that people are not cooperative communicators?
 
-To address this issue, \citeA{Brown1987} sought to redefine the notion of ``cooperative speaker'' as a speaker
-who has both an epistemic goal to improve the listener's knowledge state,
-and a social goal to minimize any potential damage to the hearer's (and the speaker's own) self-image, which they called ``face.''
-If the speaker's intended meaning does not contain any threat to the speaker's or listener's face,
+\citeA{Brown1987} addressed this issue by recasting the notion of ``cooperative speaker'' as a speaker
+who has both an epistemic goal to improve the listener's knowledge state as well as a social goal to minimize any potential damage to the hearer's (and the speaker's own) self-image, which they called ``face.''
+In their analysis, if the speaker's intended meaning contains no threat to the speaker or listener's face,
 then the speaker will choose to convey the meaning in an efficient manner, putting it ``on record."
 As the degree of face-threat becomes more severe, however,
-the speaker will choose to produce more indirect utterances, keeping the intended meaning ``off the record."
+a speaker will choose to produce more indirect utterances, keeping the intended meaning ``off the record."
 
 In the current paper, we formalize a version of \citeA{Brown1987}'s theory, exploring the idea that cooperative speakers attempt to balance two goals, epistemic and social.
-The Rational Speech Act (RSA) framework \cite{Frank2012, Goodman2013} describes language understanding as probabilistic inference by a listener who reasons about an informative speaker. This framework has been successful at capturing quantitative details of a number of language understanding tasks, but it neglects the social goals a speaker may pursue.
+The Rational Speech Act (RSA) framework \cite{Frank2012, Goodman2013} describes language understanding as recursive probabilistic inference between a pragmatic listener and an informative speaker. This framework has been successful at capturing quantitative details of a number of language understanding tasks, but it neglects the social goals a speaker may pursue.
 Here we extend RSA to take into account a speaker with both the usual epistemic goal and a competing social goal: be kind.
 We test this model by gathering data about utterance interpretations and goal attributions in settings where the true state of the world carries affective consequences for the listener.
 
@@ -523,7 +522,7 @@ And it moves us closer to computation with tact---to computers that communicate 
 
 \section{Acknowledgments}
 
-This work was supported by a NSF grant BCS #1456077. 
+This work was supported by a NSF grant BCS \#1456077. 
 
 \bibliographystyle{apacite}
 \setlength{\bibleftmargin}{.125in}
