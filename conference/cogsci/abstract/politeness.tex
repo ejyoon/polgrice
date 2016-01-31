@@ -69,7 +69,7 @@ Must a cooperative person say ``Your talk was terrible,'' or is it acceptable to
 The latter gives potentially misleading information in deference to what the listener might want to hear---in other words, it's polite.
 
 Politeness violates a critical principle of cooperative communication: exchanging information efficiently and accurately \cite{Grice1975}.
-If information transfer was the only currency in communication, a cooperative speaker would find polite utterances undesirable (they are potentially misleading).
+If information transfer was the only currency in communication, a cooperative speaker would find polite utterances undesirable because they are potentially misleading.
 People are polite, however, and speakers do produce polite utterances.
 Adults and even young children spontaneously produce requests in polite forms \cite{clark1980, axia1985}.
 Speakers exhibit politeness strategies even while arguing, preventing unnecessary offense to their interactants \cite{holtgraves1997}.
@@ -81,7 +81,7 @@ who has both an epistemic goal to improve the listener's knowledge state as well
 In their analysis, if the speaker's intended meaning contains no threat to the speaker or listener's face,
 then the speaker will choose to convey the meaning in an efficient manner, putting it ``on record."
 As the degree of face-threat becomes more severe, however,
-a speaker will choose to produce more indirect utterances, keeping the intended meaning ``off the record."
+a speaker will choose to be polite and produce more indirect utterances, keeping the intended meaning ``off the record."
 
 In the current paper, we formalize a version of \citeA{Brown1987}'s theory, exploring the idea that cooperative speakers attempt to balance two goals, epistemic and social.
 The Rational Speech Act (RSA) framework \cite{Frank2012, Goodman2013} describes language understanding as recursive probabilistic inference between a pragmatic listener and an informative speaker. This framework has been successful at capturing quantitative details of a number of language understanding tasks, but it neglects the social goals a speaker may pursue.
@@ -103,13 +103,6 @@ Politeness then emerges from an independent component of a speaker's utility, wh
   \end{center}
 \end{figure*}
 
-\begin{figure}[t]
-\begin{centering}
-\includegraphics[width=3.2in]{figures/example.png}
-\caption{\label{fig:ex} Example of a trial in Experiment 1.}
-\end{centering}
-\end{figure}
-
 The speaker in RSA models is assumed to choose utterances approximately optimally, given a utility function:
 \begin{equation}
 P_{S_1}(w \mid s, \hat{\beta}) \propto \mathrm{exp}(\lambda \cdot \mathbb{E}[U(w; s;  \hat{\beta})])\label{eq:S1}
@@ -121,7 +114,7 @@ where the literal listener is a simple Bayesian agent that takes the utterance t
 P_{L_0}(s \mid w,  \hat{\beta})\propto \denote{w}(s) \cdot P(s) \label{eq:L0}.
 \end{equation}
 
-Here we extend the speaker's utility by adding a component related to the intrinsic value of the state in the eyes of the listener.\footnote{At this point, we do not differentiate value of the state to the listener from value of the state to the speaker, though in many situations these could in principle be different.}
+Here we extend the speaker's utility by adding a component related to the intrinsic value of the state in the eyes of the listener.\footnote{At this point, we do not differentiate state value to the listener from state value to the speaker, though in many situations these could in principle be different.}
 %
 We define the social utility of an utterance to be the expected utility of the state the listener would infer given the utterance $w$:
 $$
@@ -182,10 +175,18 @@ The set of utterances is \{\emph{terrible}, \emph{bad}, \emph{okay}, \emph{good}
 %We assume a uniform prior distribution over possible states of the world $s\sim \text{DiscreteUniform} \{1, 2, 3, 4, 5\}$.
 We implemented this model using the probabilisitic programming language WebPPL \cite{dippl} and a complete implementation can be found at \url{http://forestdb.org/models/politeness.html}.
 
-In what follows, we measure the literal semantics in Experiment 1, then use these to predict performance in two additioanl experiments. In Experiment 2, we explore listeners' inferences about the world $s$ given an utterance and a speaker's goal. In Experiment 3, we investigate inferences about speakers' goals given an utterance and a state.
-
+In what follows, we measure the literal semantics in Experiment 1, then use these to predict performance in two experiments. In Experiment 2, we explore listeners' inferences about the world $s$ given an utterance and a speaker's goal. In Experiment 3, we investigate inferences about speakers' goals given an utterance and a state. 
+Then we compare the behavioral results to our model predictions, that people's inferences are based on a speaker model with two utilities, epistemic and social. 
 
 \section{Experiment 1: Literal semantics}
+
+\begin{figure}[th]
+\begin{centering}
+\includegraphics[width=3.2in]{figures/example.png}
+\caption{\label{fig:ex} Example of a trial in Experiment 1.}
+\end{centering}
+\end{figure}
+
 
 \begin{figure*}[t]
 \begin{centering}
@@ -194,8 +195,7 @@ In what follows, we measure the literal semantics in Experiment 1, then use thes
 \end{centering}
 \end{figure*}
 
-Experiment 1 measured people's judgments of literal meanings of our target words:
-does the literal meaning of a word aptly describe how someone performed?
+Experiment 1 measured people's judgments of literal meanings of our target words.
 Responses in this experiment will be used to set expected literal meanings of words in our formal model.
 
 \subsection{Method}
@@ -206,15 +206,15 @@ Responses in this experiment will be used to set expected literal meanings of wo
 
 \subsubsection{Stimuli and Design}
 
-We created 13 different context items, in which a person (e.g., Ann) gave a performance of some kind, and another person (e.g., Bob) evaluated it. For example, in one of the contexts, Ann baked a cake, and Bob tasted it. Bob's feelings toward Ann's cake (``\emph{true state}'') were shown on a scale out of five hearts (e.g., two out of five hearts filled in red color). The question of interest was ``Do you think Bob thought Ann's cake was X?'' where X could be one of five possible words: \emph{terrible}, \emph{bad}, \emph{okay}, \emph{good}, and \emph{amazing}. Each participant read 25 scenarios, depicting every possible combination of 5 true states and 5 words.The order of context items was randomized, and there were a maximum of two repeats of each context item per participant.
+We created 13 different context items, in which someone (e.g., Ann) gave a performance of some kind, and another person (e.g., Bob) evaluated it. For example, in one of the contexts, Ann baked a cake, and Bob tasted it. Bob's feelings toward Ann's cake (``\emph{true state}'') were shown on a scale out of five hearts (e.g., two out of five hearts filled in red color). The question of interest was ``Do you think Bob thought Ann's cake was X?'' where X could be one of five possible words: \emph{terrible}, \emph{bad}, \emph{okay}, \emph{good}, and \emph{amazing}. Each participant read 25 scenarios, depicting every possible combination of 5 true states and 5 words.The order of context items was randomized, and there were a maximum of two repeats of each context item per participant.
 
 \subsubsection{Procedure}
 
-Participants read scenarios and indicate their answer to each question by answering `No' or `Yes' (see Fig. \ref{fig:ex} for a screenshot of an example trial).\footnote{Link to Experiment 1: \url{http://langcog.stanford.edu/expts/EJY/polgrice/L2_J/polgrice_L2_J.html}}
+Participants read scenarios and indicate their answer to each question by answering `No' or `Yes' (see Fig. \ref{fig:ex} for a screenshot of an example trial).\footnote{The experiment can be viewed at: \url{http://langcog.stanford.edu/expts/EJY/polgrice/L2_J/polgrice_L2_J.html}}
 
 \subsection{Results}
 
-Meanings of the words were as one would expect (see Figure \ref{fig:exp1}).
+Meanings of the words as judged by participants were as one would expect (see Figure \ref{fig:exp1}).
 Proportion of acceptances for a word given the true state peaked where the degree of positivity, neutrality and negativity of the state matched that of the word.
 The fraction of participants that endorsed utterance $w$ for state $s$ will be used as the literal meaning $\denote{w}(s)$ in Eq. \ref{eq:L0}.
 
@@ -232,13 +232,13 @@ In Experiment 2, we examined listeners' inferences about the likely state of the
 
 \subsubsection{Stimuli and Design}
 
-We designed scenarios in which a person (e.g., Ann) gave some performance and asked for another person (e.g., Bob)'s opinion on the performance. The same context items and true states as Experiment 1 were used. Additionally, we provided information on what Bob's goal was (to be honest, to be nice, or to be mean) and what Bob actually said to Ann (e.g., ``It [your cake] was okay''), where Bob used one of the five possible words: \emph{terrible}, \emph{bad}, \emph{okay}, \emph{good}, and \emph{amazing}. Then we asked participants to infer the true state of the world (i.e., how Bob actually felt about Ann's performance). Each participant read 15 scenarios, depicting every possible combination of 3 goals and 5 words. The order of context items was randomized, and there were a maximum of two repeats of each context item per participant.
+We designed scenarios in which a person (e.g., Ann) gave some performance and asked for another person (e.g., Bob)'s opinion on the performance. The same context items and true states as Experiment 1 were used. Additionally, we provided information on Bob's goal (to be honest, to be nice, or to be mean) and what Bob actually said to Ann (e.g., ``It [your cake] was okay''), where Bob used one of the five possible words: \emph{terrible}, \emph{bad}, \emph{okay}, \emph{good}, and \emph{amazing}. Then we asked participants to infer the true state of the world (i.e., how Bob actually felt about Ann's performance). Each participant read 15 scenarios, depicting every possible combination of 3 goals and 5 words. The order of context items was randomized, and there were a maximum of two repeats of each context item per participant.
 
 \subsubsection{Procedure}
 Participants read each story (e.g., Ann baked a cake and asked Bob about it) followed by a prompt that said,
 e.g., ``Bob wanted to be nice: ``It was okay,'' he said.''
 Then a question asked, ``How do you think Bob actually felt about Ann's cake?''
-Participants indicated their answer on a scale of five hearts.
+Participants indicated their answer on a scale of five hearts.\footnote{The experiment can be viewed at: \url{http://langcog.stanford.edu/expts/EJY/polgrice/L2_S/polgrice_L2_S.html}}
 
 \subsection{Behavioral results}
 
@@ -264,7 +264,7 @@ Inferences of the actual rating for listener's performance, or the true state, v
 
 %We fit a linear mixed-effects model to look at the effects of information on speaker's goal and utterance on inferred true states, and found significant main effects for and interactions between utterance and goal.\footnote{With the maximal convergent random effects structure: true state $\sim$ goal $\times$ utterance + (utterance $|$ participant).}
 
-Consistent with intuition, when the speaker was trying to be honest, utterances accurately mapped onto inferred states (Figure \ref{fig:exp3}, left, red line).
+Consistent with one's intuition, when the speaker was trying to be honest, utterances accurately mapped onto inferred states (Figure \ref{fig:exp3}, left, red line).
 For utterances consistent with the speaker's goals (e.g. saying positive utterances when the speaker was trying to be nice; negative utterances when trying to be mean), the results are also consistent with intuition.
 Knowing that the speaker was trying to be nice, participants inferred a true state appreciably lower than the state inferred given honesty (green line).
 The reverse was true when the speaker was trying to be mean (blue).
@@ -412,7 +412,7 @@ Each participant read 25 scenarios, depicting every possible combination of 5 tr
 The order of context items was randomized, and there were a maximum of two repeats of each context item per participant.
 
 \subsubsection{Procedure}
-Participants read each scenario followed by a question that read, ``Based on what Bob said, how likely do you think that Bob's goal was to be: honest; nice; mean,'' with the three goals placed in a random order below three slider bars, on which the participant could indicate each goal's likelihood.
+Participants read each scenario followed by a question that read, ``Based on what Bob said, how likely do you think that Bob's goal was to be: honest; nice; mean,'' with the three goals placed in a random order below three slider bars, on which the participant could indicate each goal's likelihood.\footnote{The experiment can be viewed at: \url{http://langcog.stanford.edu/expts/EJY/polgrice/L2_G/polgrice_L2_G.html}}
 
 
 
@@ -504,14 +504,14 @@ This asymmetry may be because listeners expect honesty and niceness to be correl
 
 Why would a speaker ever say something that is not maximally truthful and informative?
 Communication is often looked at from the perspective of successful transfer of information from speaker to listener.
-Yet in the social realm, communication also can serve the social function of making the listener feel good.
+Yet in the social realm, communication serves the social function of making the listener feel good.
 
-We proposed here that intuitively ``polite'' utterances arise from the desire to be kind (i.e., save the listener's face). 
+We proposed here that intuitively ``polite'' utterances arise from the desire to be kind (i.e., save face). 
 A cooperative speaker then tries to balance the goals to be kind and to be informative, and produces utterances of varying degrees of politeness that reflect this balance.
 To test this proposal, we examined inferential judgment on a speaker's utterance, where the utterance was a face-threatening evaluation of the listener's performance.
-As we predicted, participants' inferences about the true state of the world differed based on what the speaker said and whether the speaker's intended goal was to be honest, nice or mean.
+As we predicted, participants' inferences about the true state of the world differed based on what the speaker said and whether the speaker's intended goal was to be honest, nice or mean (Experiment 2).
 We were also able to predict participants' attributions of different social goals to speakers depending on
-how much the literal utterance meaning matched the actual rating the performance deserved.
+how much the literal utterance meaning matched the actual rating the performance deserved (Experiment 3).
 % Overall, these findings support the idea that polite uses of language can emerge from utility-theoretic models of language use.
  % (higher attribution for goal to be honest)
 % and how much positive bias (goal to be nice) or negative bias (goal to be mean) the utterance meaning carries.
