@@ -19,11 +19,7 @@
 \usepackage{dblfloatfix}
 
 \usepackage{caption}
-%\usepackage[caption=false]{subfig}
 \usepackage{subcaption}
-
-%\usepackage{float}
-%\usepackage{hyperref}
 
  \definecolor{Red}{RGB}{255,0,0}
 \newcommand{\red}[1]{\textcolor{Red}{#1}}
@@ -35,7 +31,6 @@
 \newcommand{\ejy}[1]{\textcolor{Blue}{[ejy: #1]}}
 \newcommand{\mcf}[1]{\textcolor{Red}{[mcf: #1]}}
 
-%\title{Understanding polite language as a balance between informativity and kindness}
 \title{Talking with tact: Polite language as a balance between kindness and informativity}
 
   \author{ {\large \bf Erica J. Yoon*}, {\large \bf Michael Henry Tessler*}, {\large \bf Noah D. Goodman}, and {\large \bf Michael C. Frank}   \\
@@ -51,7 +46,7 @@
 
 \begin{abstract}
 
-Conveying information in a false or indirect manner in consideration of listeners' wants (i.e., being polite)
+Conveying information in a false or indirect manner in consideration of listeners' wants (i.e. being polite)
 seemingly contradicts an important goal of a cooperative speaker: information transfer.
 We propose that a cooperative speaker considers both
 \emph{epistemic utility}, or utility of providing the listener new information,
@@ -65,8 +60,9 @@ Politeness; computational modeling; communicative goals; pragmatics
 
 
 %\section{Introduction}
+
 Your friend gives a terrible presentation and asks for your opinion.
-Must you cooperatively admit, ``Your talk was terrible,'' or is it acceptable to say: ``Your talk was fine''?
+Must you admit, ``Your talk was terrible,'' or is it acceptable to say: ``Your talk was fine''?
 The latter is potentially misleading but gives the listener what she might want to hear----in other words, it would be polite.
 
 Politeness violates a critical principle of cooperative communication: exchanging information efficiently and accurately \cite{Grice1975}.
@@ -74,7 +70,7 @@ If information transfer was the only currency in communication, a cooperative sp
 People are polite, however, and speakers do produce polite utterances.
 Adults and even young children spontaneously produce requests in polite forms \cite{clark1980, axia1985}.
 Speakers exhibit politeness strategies even while arguing, preventing unnecessary offense to their interactants \cite{holtgraves1997}.
-Listeners even attribute ambiguous speech to a polite desire to hide a truth that could hurt another's self-image (e.g., \citeNP{bonnefon2009}).
+Listeners even attribute ambiguous speech to a polite desire to hide a truth that could hurt another's self-image (e.g. \citeNP{bonnefon2009}).
 In fact, it is difficult to imagine human speech that efficiently conveys only the truth.
 Intuitively, politeness is what differentiates human speech from stereotyped robotic communication, 
 which may try to follow rules to say ``please'' or ``thank you'' yet still lack genuine \emph{politeness}. 
@@ -126,25 +122,10 @@ U_{social}(w; s) = \mathbb{E}_{P_{L_0}(s \mid w)}[V(s)],
 $$
 %
 where $V$ is a value function that maps states to subjective utility values---this captures the affective consequences for the listener of being in state $s$.
-%We use the experimental data from Expt.~1 as the literal meaning of utterances $W$ with respect to states $S$ --- \denote{w}(s).
 The overall speaker utility is thus a weighted combination of epistemic and social utilities:
 $$
 U(w;s;  \hat{\beta}) = \beta_{epistemic}\cdot U_{epistemic} + \beta_{social} \cdot U_{social}.
 $$
-%For ease of comparison to the experimental data, we separate $\beta_{social}$ \ndg{what's beta?} into a positive component ($\beta_{nice}$) and a negative component ($\beta_{mean}$), writing the utility function now as
-%\begin{eqnarray*}
-% U(w;s; \beta) && = \beta_{epistemic}\cdot U_{epistemic} + \beta_{social} \cdot U_{social} \\
-%&&= \beta_{epistemic}\cdot U_{epistemic} + (\beta_{nice} - \beta_{mean}) \cdot U_{social}
-%\end{eqnarray*}
-%\ndg{need to say something about domains (and prior) for betas for this splitting to make sense?}
-% relative contribution of these two utility components under a variety of scenarios.
-%In order to consider the relative contributions of the two utility components, we transform both components to probability space (values between 0 - 1): $U_{epistemic}$ by exponentiating; $U_{social}$ by normalizing. Thus, the speaker's joint utility function is
-%
-%$$
-%U(w;s; \beta) = \beta_{epistemic}\cdot U_{epistemic} + \beta_{social} \cdot U_{social}
-%$$
-%
-
 
 The pragmatic listener, denoted $L_1$, infers the world state based on this speaker model.
 We will assume the listener does not know exactly how the speaker weights his competing goals, however.
@@ -154,29 +135,10 @@ we assume the pragmatic listener jointly infers the world state, $s$, and the ut
 P_{L_1}(s,  \hat{\beta} \mid w)\propto P_{S_1}(w \mid s,  \hat{\beta})\cdot P(s) \cdot P( \hat{\beta}) \label{eq:L1}
 \end{equation}
 
-%%Here, the listener doesn't know how polite the speaker intends to be, and actively reasons about it: the variables lifted to the pragmatic level are the weights in the speaker's utility function ($\beta$'s) .
-%%
-%\begin{eqnarray}
-%&&P_{L_1}(s, \beta \mid w)\propto P_{S_1}(w \mid s, \beta)\cdot P(s) \cdot P(\beta) \label{eq:L1}\\
-%&&P_{S_1}(w \mid s, \beta) \propto \mathrm{exp}(\lambda \cdot E[[U(w; s; \beta)]])\label{eq:S1}\\
-%&&P_{L_0}(s \mid w, \beta)\propto \denote{w}(s) \cdot P(s) \label{eq:L0}
-%\end{eqnarray}
-%
-
-Within our experimental domain, shown in Fig.~\ref{fig:ex} and described in more detail below, we assume there are five possible states of the world corresponding to the value placed on a particular referent (e.g., the presentation the speaker is commenting on): $S = \{s_{1}, ...,  s_{5}\}$.
+Within our experimental domain, shown in Fig.~\ref{fig:ex} and described in more detail below, we assume there are five possible states of the world corresponding to the value placed on a particular referent (e.g. the presentation the speaker is commenting on): $S = \{s_{1}, ...,  s_{5}\}$.
 We further assume a uniform prior distribution over possible states of the world.
 The states have subjective numerical values $V(s_{i}) = \alpha \cdot i$, where $\alpha$ is a scaling parameter (later inferred from data).
 The set of utterances is \{\emph{terrible}, \emph{bad}, \emph{okay}, \emph{good}, and \emph{amazing}\}.
-% In Experiment 1, we measure the literal semantics $\denote{w}(s)$, capturing the fit between these utterances and the states.
-%For simplicity, we assume the following:
-%\begin{enumerate}
-%\item  have subjective numerical values $V(s_{i}) = \alpha \cdot i$.
-%\item The set of utterances is \{\emph{terrible}, \emph{bad}, \emph{okay}, \emph{good}, and \emph{amazing}\}.
-%% $\{w_{amazing}, w_{bad}, w_{okay}, w_{good}, w_{amazing}\}$
-%%\mht{used in relevant empirical studies (Bonnefon ?).}
-%%\ejy{these were used in Kao \& Goodman (2015), should we cite it as being relevant though?}
-%\end{enumerate}
-%We assume a uniform prior distribution over possible states of the world $s\sim \text{DiscreteUniform} \{1, 2, 3, 4, 5\}$.
 We implemented this model using the probabilisitic programming language WebPPL \cite{dippl} and a complete implementation can be found at \url{http://forestdb.org/models/politeness-cogsci2016.html}.
 
 In what follows, we measure the literal semantics in Experiment 1, then use these to predict performance in two experiments. In Experiment 2, we explore listeners' inferences about the world $s$ given an utterance and a speaker's goal. In Experiment 3, we investigate inferences about speakers' goals given an utterance and a state. 
@@ -208,11 +170,11 @@ Responses in this experiment will be used to set expected literal meanings of wo
 30 participants with IP addresses in the United States were recruited on Amazon's Mechanical Turk.
 
 \noindent {\bf Stimuli and Design}
-We created 13 different context items, in which someone (e.g., Ann) gave a performance of some kind, and another person (e.g., Bob) evaluated it. For example, in one of the contexts, Ann baked a cake, and Bob tasted it. Bob's feelings toward Ann's cake (``\emph{true state}'') were shown on a scale out of five hearts (e.g., two out of five hearts filled in red color). The question of interest was ``Do you think Bob thought Ann's cake was X?'' where X could be one of five possible words: \emph{terrible}, \emph{bad}, \emph{okay}, \emph{good}, and \emph{amazing}. Each participant read 25 scenarios, depicting every possible combination of 5 true states and 5 words. 
+We created 13 different context items, in which someone (e.g. Ann) gave a performance of some kind, and another person (e.g. Bob) evaluated it. For example, in one of the contexts, Ann baked a cake, and Bob tasted it. Bob's feelings toward Ann's cake (``\emph{true state}'') were shown on a scale out of five hearts (e.g. two out of five hearts filled in red color). The question of interest was ``Do you think Bob thought Ann's cake was X?'' where X could be one of five possible words: \emph{terrible}, \emph{bad}, \emph{okay}, \emph{good}, and \emph{amazing}. Each participant read 25 scenarios, depicting every possible combination of 5 true states and 5 words. 
 The order of context items was randomized, and there were a maximum of two repeats of each context item per participant.
 
 \noindent {\bf Procedure}
-Participants read scenarios and indicate their answer to each question by answering `No' or `Yes' (see Fig. \ref{fig:ex} for a screenshot of an example trial).
+Participants read scenarios and indicated their answer to each question by answering `No' or `Yes' (see Fig. \ref{fig:ex} for a screenshot of an example trial).
 The experiment can be viewed at: \url{http://langcog.stanford.edu/expts/EJY/polgrice/L2_J/polgrice_L2_J.html}.
 
 \noindent {\bf Results}
@@ -224,7 +186,7 @@ The fraction of participants that endorsed utterance $w$ for state $s$ will be u
 
 \section{Experiment 2: True state inference}
 
-In Experiment 2, we examined listeners' inferences about the likely state of the world $s$ given a speaker's utterance (e.g. \emph{It was good.}) and a description of the speaker's intentions (e.g. the speaker ``wanted to be nice'').
+In Experiment 2, we examined listeners' inferences about the likely state of the world $s$ given a speaker's utterance (e.g. \emph{``It was good''}) and a description of the speaker's intentions (e.g. the speaker wanted to be \emph{nice}).
 
 \subsection{Method}
 
@@ -233,10 +195,10 @@ In Experiment 2, we examined listeners' inferences about the likely state of the
 
 
 \noindent {\bf Stimuli and Design}
-We designed scenarios in which a person (e.g., Ann) gave some performance and asked for another person (e.g., Bob)'s opinion on the performance. The same context items and true states as Experiment 1 were used. Additionally, we provided information on Bob's goal (to be honest, to be nice, or to be mean) and what Bob actually said to Ann (e.g., ``It [your cake] was okay''), where Bob used one of the five possible words: \emph{terrible}, \emph{bad}, \emph{okay}, \emph{good}, and \emph{amazing}. Then we asked participants to infer the true state of the world (i.e., how Bob actually felt about Ann's performance). Each participant read 15 scenarios, depicting every possible combination of 3 goals and 5 words. The order of context items was randomized, and there were a maximum of two repeats of each context item per participant.
+We designed scenarios in which a person (e.g. Ann) gave some performance and asked for another person (e.g. Bob)'s opinion on the performance. The same context items and true states as Experiment 1 were used. Additionally, we provided information on Bob's goal (to be \emph{honest}, \emph{nice}, or \emph{mean}) and what Bob actually said to Ann (e.g. ``It [your cake] was okay''), where Bob used one of the five possible words: \emph{terrible}, \emph{bad}, \emph{okay}, \emph{good}, or \emph{amazing}. Then we asked participants to infer the true state of the world (i.e. how Bob actually felt about Ann's performance). Each participant read 15 scenarios, depicting every possible combination of 3 goals and 5 words. The order of context items was randomized, and there were a maximum of two repeats of each context item per participant.
 
 \noindent {\bf Procedure}
-Participants read each story (e.g., Ann baked a cake and asked Bob about it) followed by a prompt that said,
+Participants read each story (e.g. Ann baked a cake and asked Bob about it) followed by a prompt that said,
 e.g., ``Bob wanted to be nice: ``It was okay,'' he said.''
 Then a question asked, ``How do you think Bob actually felt about Ann's cake?''
 Participants indicated their answer on a scale of five hearts. 
@@ -244,26 +206,7 @@ The experiment can be viewed at: \url{http://langcog.stanford.edu/expts/EJY/polg
 
 \subsection{Behavioral results}
 
-%\begin{table}
-%\caption{\label{tab:lmer2}  Coefficient estimates from a mixed-effects model predicting state inferences in Experiment 2.}
-%\begin{center}
-%\begin{tabular}{l r r r l}
-%\hline
-%Predictor  &  Value (SE) & \emph{t}-value\\
-%\hline
-%Intercept (Honesty goal)  & 1.4 (.16) & 8.91 \\
-%Utterance & .41 (.05) &  8.58 \\
-%Niceness goal  & 1.9 (.19) & 10.2 \\
-%Meanness goal & .75 (.19) & 4.03 \\
-%Utterance $\times$ Niceness goal & -.69 (.05) & -13.5 \\
-%Utterance $\times$ Meanness goal & -.11 (.05) & -2.15 \\
-%\hline
-%\end{tabular}
-%\end{center}
-%\end{table}
-
 Inferences of the actual rating for listener's performance, or the true state, varied depending on speaker's goal and utterance (Figure \ref{fig:exp3}).
-%We fit a linear mixed-effects model to look at the effects of information on speaker's goal and utterance on inferred true states, and found significant main effects for and interactions between utterance and goal.\footnote{With the maximal convergent random effects structure: true state $\sim$ goal $\times$ utterance + (utterance $|$ participant).}
 Consistent with intuition, when the speaker was trying to be honest, utterances accurately mapped onto inferred states (Figure \ref{fig:exp3}, left, red line).
 For utterances consistent with the speaker's goals (e.g. saying positive utterances when the speaker was trying to be nice; negative utterances when trying to be mean), the results are also consistent with intuition.
 Knowing that the speaker was trying to be nice, participants inferred a true state appreciably lower than the state inferred given honesty (green line).
@@ -271,74 +214,26 @@ The reverse was true when the speaker was trying to be mean (blue).
 
 
 For utterances inconsistent with the speaker's goals, we observe an interesting asymmetry.
-When the speaker is trying to be nice and says a negative utterance (e.g., ``it was bad''), participants infer that the true state really was bad (no difference between an honest ``bad'' and a nice ``bad''), perhaps because of a floor effect or owing to the fact that one can be nice by being honest.
-When the speaker is trying to be mean, however, and says a positive utterance (e.g., ``it was amazing''), participants infer a state that is \emph{worse} compared to the states based on honesty and niceness goal.
+When the speaker was trying to be nice and said a negative utterance (e.g. ``it was bad''), participants inferred that the true state really was bad (no difference between an \emph{honest} ``bad'' and a \emph{nice} ``bad''), perhaps because of a floor effect or owing to the fact that one can be nice by being honest.
+When the speaker was trying to be mean, however, and said a positive utterance (e.g. ``it was amazing''), participants inferred a state that is \emph{worse} compared to the states based on honesty and niceness goal.
 This is likely due to participants attributing sarcasm or irony to the speaker who was trying to be mean.
-
-%In addition, in each model, we include an explicit submodel of random guessing behavior, and model the behavioral data as mixture of this noise and the predictions of the pragmatic listener model $L_1$ (Eq.~\ref{eq:L1}).
-%Including such a contamination parameter is important for getting reliable estimates of the parameters of the RSA model, which would otherwise be corrupted by this noise \cite{LW2014}.
-%We put a uniform prior over this mixture parameter $\phi \sim \text{Uniform}(0,1)$.
-%This mixture parameter provides an additional measure of goodness of fit: It shows the proportion of the data that is better explained by the cognitive model than by a model of random guessing.
 
 \subsection{Model predictions}
 
-
 \noindent {\bf Model fitting}
-In this experiment, participants were told the speaker said $w$ and described what the speakers' intentions were (e.g., \emph{Bob wanted to be nice}).
+In this experiment, participants were told the speaker said $w$ and described what the speakers' intentions were (e.g. \emph{Bob wanted to be nice}).
 We want to explore inferences both when speaker wanted to be nice and when he wanted to be mean: For ease of comparison to the experimental data, we assume each $\beta \in [0,1]$ and separate $\beta_{social}$ into a positive component ($\beta_{nice}$) and a negative component ($\beta_{mean}$), writing the utility function now as
 $$
  U(w;s; \beta)  =  \beta_{epistemic}\cdot U_{epistemic} + (\beta_{nice} - \beta_{mean}) \cdot U_{social}
  $$
-We assume that the intentions (e.g., \emph{wanted to be nice}) notified the listener of a particular set of goal-weights \{$\beta_{nice}, \beta_{honest}, \beta_{mean}$\} that the speaker was using.
+We assume that the intentions (e.g. \emph{wanted to be nice}) notified the listener of a particular set of goal-weights \{$\beta_{nice}, \beta_{honest}, \beta_{mean}$\} that the speaker was using.
 We put uninformative priors on these weights ($\beta \sim \text{Uniform}(0,1)$) and infer their credible values separately for each goal condition (``trying to be X'') using Bayesian data analytic techniques \cite{LW2014}.
-
-
-%For example, if a speaker was trying to be nice, we interpret that to mean the speaker has a non-uniform prior distribution over $\beta_{nice}$ (in particular, we expect $\beta_{nice}$ to be skewed toward higher-values).
-%We assume $\beta \sim \text{Beta}(\gamma, \delta)$, and for each goal condition (trying to be \emph{nice, mean, honest}), we put uninformative hyperpriors over the associated goal prior\footnote{For ease of interpretation, we are parametrizing the $\beta$ distribution by its mean and concentration. To recover the canonical shape parametrization, use $\gamma \delta$ and $(1-\gamma)\delta$.}.
-%%
-%\begin{eqnarray*}
-%& \gamma \sim  \text{Uniform}(0,1)\\
-%& \delta  \sim  \text{Uniform}(0, 20)
-%\end{eqnarray*}
-%For the goal priors unassociated with the speaker's intentions (e.g., when \emph{trying to be nice}: $\beta_{mean}$ and $\beta_{honest}$), we assume a uniform prior distribution over weights.
-%\ndg{clarify what unassociated goal priors are...}
-%\begin{table}[]
-%\centering
-%\begin{tabular}{lll}
-%\hline
-%Expt. Condition  & Goal weight Mean & Concentration \\ \hline
-%(trying to be) Honest                        &   0.98 [0.86, 0.99]   & 18.8 [6.2, 19.9] \\
-%(trying to be) Nice                          & 0.99 [0.84, 1.0] & 19.0 [7.6, 20] \\
-%(trying to be) Mean                          &0.37 [0.01, 0.85] & 0.1[0.03, 2.1] \\ \hline
-%\end{tabular}
-%\caption{\label{tab:params} Inferred hyper-parameter values for Goal Priors in State Inference task.
-%For each experimental condition (trying to be X), we inferred the likely priors on the goal weights for the associated goal.
-%Values shown are MAP estimates and 95\% HDI for the parameter values.}
-%\end{table}
-
-
-
 
 There are 2 additional parameters of the cognitive model: the speaker optimality parameter $\lambda$ in Eq.~\ref{eq:S1} and the value scale parameter $\alpha$ in the utility function.
 We put uninformative priors on these ($\lambda \sim \text{Uniform}(0,20)$ and $\alpha \sim \text{Uniform}(0, 5)$) and infer their posterior credible values from the data.
-%\begin{eqnarray*}
-%& \lambda \sim \text{Uniform}(0,20)\\
-%& \alpha \sim \text{Uniform}(0, 5)
-%\end{eqnarray*}
 We ran 2 MCMC chains for 100,000 iterations, discarding the first 50,000 for burnin.
 The Maximum A-Posteriori (MAP) estimate and 95\% Highest Probability Density Interval (HDI) for $\lambda$ is 1.8 [1.08, 3.1]; for $\alpha$ is 9.1 [3.4, 9.9]. %; for $\phi$ is \red{0.09 [0.06, 0.13]}.
 To generate predictions, given our cognitive model and the inferred parameters, we evaluated the posterior predictive distribution, marginalizing out all parameters.
-
-
-
-%\mht{Do inference using continuously valued parameters and report CIs}.
-%Posterior predictive distributions over the goal weight priors are shown in  Figure \ref{fig:goal-priors-bda}.
-%
-%\ndg{you know... i'm not sure we're modeling this expt right. shouldn't we condition the listener on appropriate \emph{observed} values of $\beta$ to get $P(s|\beta,w)$?}
-
-%To test what data the model actually predicts, we examine the posterior predictive distribution by marginalizing out the likely parameter values and generating predictions for what the data should look like, given our cognitive model and the inferred parameters.
-
-
 
 \noindent {\bf Results}
 The inferred weights for each goal condition were largely as expected (Fig.~\ref{fig:goal-priors-bda}).
@@ -347,11 +242,10 @@ For ``trying to be nice'', the model puts a high weight on niceness but also som
 The model fits are worse for the ``trying to be mean'' case; all that the model infers is that the speaker was not honest.
 
 The predictions of the expectations of the listener model for the \emph{true state} (Eq.~\ref{eq:L1}) are shown in Figure \ref{fig:exp3}.
-The model's expected posterior over states when the speaker is trying to be \emph{honest} increases as a function of the positivity implied by the utterances (i.e. \emph{amazing} means a very high state).
+The model's expected posterior over states when the speaker is trying to be \emph{honest} increases as a function of the positivity implied by the utterances (e.g. ``amazing'' means a very high state).
 When it knows the speaker was trying to be \emph{nice}, the pragmatic listener is more conservative in how it interprets positive utterances, with the difference between an honest utterance and a nice utterance increasing as the utterance becomes more positive. 
 For example, the difference between a \emph{nice} ``amazing'' and an \emph{honest} ``amazing'' is greater than the difference between a \emph{nice} ``okay'' and an \emph{honest} ``okay''.
 Inferences when the speaker is trying to be \emph{mean} display the associated opposite behavior when the utterance is indeed negative (e.g. ``terrible'').
- %\mht{Describe model predictions.}
 Overall, the expected values of the model explain a lot of the variance in the average data $r^2(15) = 0.91$.
 The main discrepancies are with the goal ``trying to be mean'', as noted above.
 Among the other 2 goal conditions, the model explains almost all of the variance $r^2(10) = 0.97$.
@@ -366,12 +260,7 @@ Participants thought that a mean speaker saying ``[your cake] was amazing'' mean
 This deviation is likely due to the effect of irony: making an extremely positive remark about an extremely bad performance is perceived to be sarcastic and ill-intentioned \cite{colston1997}.
 Our model does not include sarcastic interpretation though other models in the RSA family do \cite{Kao2015}, and future work should address the delicate interplay of politeness and sarcasm.
 
-% \ndg{it's also interesting that the model under-predicts the state for "amazing"/nice. perhaps this is because the params are adjusted to try to squash the mean state? what happens if we run the BDA leaving out meanness?
-% for the decrease in "amazing"/mean compared to "ok"/mean... could it just be a prior? eg maybe amazing performances are simply less likely? though that doesn't actually explain why a mean speaker would ever bother saying "amazing". so, yeah, probably need irony/snarkiness to explain this.}
-% \mht{BDA leaving meanness out doesn't seem to help. what might help is letting the goal weights go above 1, though i haven't yet thought about what the priors on that should be...}
-
 \section{Experiment 3: Goal inference}
-
 
 \begin{figure*}[!t]
 \begin{center}
@@ -381,14 +270,12 @@ Our model does not include sarcastic interpretation though other models in the R
 \end{figure*}
 
 
-\begin{figure}[!b] % MCF; moved this down for pagination reasons.
+\begin{figure}[!b] 
 \begin{centering}
 \includegraphics[width=0.70\columnwidth]{figures/goal-posterior.pdf}
 \caption{\label{fig:goal-priors-bda} Inferred goal weights $\beta$ for Expt.~3.
 Facets are different experimental conditions (trying to be X). 
 Density plots show likely weights used in the speaker's utility function.
-% For the honesty goal, kindness and meanness are unidentifiable (they cancel out).
-% The model does the worst at accounting for the meanness data; all that the model infers is that the speaker is not being honest.
 }
 \end{centering}
 \end{figure}
@@ -418,51 +305,22 @@ The experiment can be viewed at: \url{http://langcog.stanford.edu/expts/EJY/polg
 
 \subsection{Behavioral results}
 
-%\begin{table}[t]
-%\caption{\label{tab:lmer1}  Coefficient estimates from mixed-effects models predicting goal attributions in Experiment 3.}
-%\begin{center}
-%\begin{tabular}{l l r r l}
-%\hline
-%Predictor  &  Value (SE) & \emph{t}-value\\
-%\hline
-%Goal  &  Predictor  &  Value (SE) & \emph{t}-value\\
-%To be honest  &  Intercept  & 1.5 (.04) & 34.1 \\
-%  &  True state & -.35 (.01) &  -29.9 \\
-%  &  Utterance & -.32 (.01) & -26.6 \\
-%  &  State $\times$ Utterance & .11 (.003) & 31.9 \\
-%To be nice  &  Intercept  & .07 (.04) & 1.70\\
-%  &  True state & -.05 (.01) &  -5.46 \\
-%  &  Utterance & .17 (.01) & 12.7 \\
-%  &  State $\times$ Utterance & .01 (.002) & 2.73 \\
-%To be mean  &  Intercept  & .37 (.04) & 9.18 \\
-%  &  True state & .18 (.01) &  18.3 \\
-%  &  Utterance & -.05 (.01) & -3.76 \\
-%  &  State $\times$ Utterance & -.04 (.003) & -12.2 \\
-%\hline
-%\end{tabular}
-%\end{center}
-%\end{table}
-
 Participants rated speaker's goals differentially depending on the true state and utterance (see Figure \ref{fig:exp2}).
 Honesty was rated highest when the true state was most consistent with the literal semantics. 
 As utterances became more positive, participants rated the speaker's niceness higher and meanness displayed the reverse pattern. 
 Ratings for niceness and meanness goals were strongly anti-correlated $r = -.78$.
 
 Interestingly, we observe an asymmetry in how positive and negative utterances map onto the goals of niceness and meanness, respectively. 
-Participants report that \emph{truthfully} saying ``amazing'' is both honest and nice, while \emph{truthfully} saying something is ``terrible'' is honest and not that mean.
-%That is, truthfully saying positive utterances is strictly nice but truthfully saying negative utterances is not strictly mean. 
-Here, meanness can decrease in likelihood (i.e., be \emph{explained away}) because of honesty.
+Participants reported that \emph{truthfully} saying ``amazing'' is both honest and nice, while \emph{truthfully} saying something is ``terrible'' is honest and not that mean.
+Here, meanness can decrease in likelihood (i.e. be \emph{explained away}) because of honesty.
 And yet honesty does not explain away niceness when the speaker says a truthful ``amazing''. 
 %To our knowledge, this is the first evidence of an asymmetry in honesty can \emph{explain away} social goals.
-
-%We fit linear mixed-effects models to measure the effects of true state and utterance (as numeric variables, ordered from the worst to the best) on the attribution of each goal (Table \ref{tab:lmer1}) and we found significant main effects and interactions of true state and utterance on each of the three goal attributions, though with varying effect sizes.\footnote{Models with the maximal convergent random effects structure: goal likelihood $\sim$ true state $\times$ utterance + (utterance $|$ participant).}
 
 \subsection{Model predictions}
 
 \noindent {\bf Model fitting}
 The model in Eq.~\ref{eq:L1} specifies a joint-belief distribution over the speaker's goals $\beta$ and possible states of the world $s$.
 To compare to the empirical data, we condition on the true state of the world given in the experimental condition, and compare the marginal distribution of the speaker's goals $\beta$ to the empirical ratings.
-%In Experiment 2, participants were supplied with the ``true state'' $s$ as well as the speaker's utterance $w$, and were asked to rate the likely goals of the speaker.
 We separate $\beta_{social}$ into  $\beta_{nice}$ and  $\beta_{mean}$, as in Expt.~2.
 With no prior knowledge about the speaker's intentions, we assume a uniform prior over the goal-weights in the speaker's utility function: $\beta \sim \text{Uniform}(0,1)$.
 
@@ -470,19 +328,6 @@ We put the same priors over the speaker optimality parameter $\lambda$ and the v
 We ran 2 MCMC chains for 40,000 iterations, discarding the first 20,000 for burnin.
 The MAP estimate and 95\% HDI for $\lambda$ is 4.6 [4.0, 4.9]; for $\alpha$ is 1.17 [1.04, 1.31].%; for $\phi$ is 0.09 [0.06, 0.13].
 %This is a relatively low value for $\phi$: The model explains about 90\% of the data set better than a model of random guessing.
-
-%               Goal Parameter        MAP    credLow  credHigh
-%             (fctr)    (fctr)      (dbl)      (dbl)     (dbl)
-%1             alpha        NA 1.02553704 0.91319156 1.1865188
-%2               phi        NA 0.08983868 0.05699245 0.1284084
-%3 speakerOptimality        NA 6.81149016 5.76426562 7.8453595
-
-%% sans guessing
-%               Goal Parameter           MAP  credLow credHigh
-%             (fctr)    (fctr)         (dbl)    (dbl)    (dbl)
-%1             alpha        NA  1.1707125822 1.042176 1.311626
-%2               phi        NA -0.0006369482 0.000000 0.000000
-%3 speakerOptimality        NA  4.6635325286 4.033799 4.945555
 
 \noindent {\bf Results}
 The predictions of the model are shown in Fig.~\ref{fig:exp2} (bottom).
@@ -495,7 +340,7 @@ The model successfully captured the key patterns in the data:
 changing goal likelihoods based on the degree of match, and positivity/negativity bias of mismatch, between the utterance and true state.
 The biggest mismatch seems to be that the model under-predicts the goal to be honest for every utterance except \emph{okay}.
 This may be because explicitly positive/negative utterances can also be explained by a social goal in the model.
-The model also does not capture the interaction that a truth positive utterance is both honest and nice, while a truth negative utterance is honest and not that mean.
+The model also does not capture the interaction that a truthful positive utterance is both honest and nice, while a truthful negative utterance is honest and not that mean.
  The model treats niceness and meanness as perfectly opposite to each other, while there is an interesting asymmetry in participants' behavior. 
 This asymmetry may be because listeners expect honesty and niceness to be correlated \emph{a priori}, and anti-correlated with meanness, rather than independent as assumed by the model.
 
@@ -505,32 +350,18 @@ Why would a speaker ever say something that is not maximally truthful and inform
 Communication is often examined from the perspective of successful information transfer from speaker to listener.
 In the social realm, however, communication also can serve the social function of making the listener feel good and saving her face.
 
-We proposed here that intuitively ``polite'' utterances arise from the desire to be kind (i.e., save face). 
+We proposed here that intuitively ``polite'' utterances arise from the desire to be kind (i.e. save face). 
 A cooperative speaker then tries to balance the goals to be kind and to be informative, and produces utterances of varying degrees of politeness that reflect this balance.
-To test this proposal, we examined inferential judgments on a speaker's utterance, where the utterance was a face-threatening evaluation of the listener's performance.
+To test this proposal, we examined inferential judgments on a speaker's utterance, which was a potentially face-threatening evaluation of the listener's performance.
 As we predicted, participants' inferences about the true state of the world differed based on what the speaker said and whether the speaker's intended goal was to be honest, nice or mean (Expt.~2).
 We were also able to predict participants' attributions of different social goals to speakers depending on
 how well the literal utterance meaning matched the actual rating the performance deserved (Expt.~3).
 
-% Overall, these findings support the idea that polite uses of language can emerge from utility-theoretic models of language use.
- % (higher attribution for goal to be honest)
-% and how much positive bias (goal to be nice) or negative bias (goal to be mean) the utterance meaning carries.
-%We also extended the previous formal pragmatics models based on epistemic utility (i.e., information transfer)
-%and proposed an addition of social utility (i.e., face-saving).
-%This is the first work to generalize the Rational Speech-Act theory to include utility parameters not based on the successful transfer of information.
 The model presented here relates to other work done in game-theoretic pragmatics and within the Rational Speech-Acts framework.
 \citeA{VanRooy2003} uses a game-theoretic analysis of polite requests (``Could you possibly take me home?'') to argue the purpose of polite language is to align the preferences of interlocutors. 
 Our notion of social utility $U_{social}$ is similar in that it motivates speakers to signal worlds that make the listener feel good. 
-\citeauthor{VanRooy2003}'s analysis, however, relies on the notion that polite language is \emph{costly} (in a social way e.g. by reducing one's social status, incurring social debt to one's conversational partner) but it's not clear how the polite behaviors explored in our experiments (not polite requests) would incur any cost to speaker or listener. 
-%Rather, when cost is tied to the social world, it's not clear when something is costly vs. not (e.g. is a speaker who says your project was ``bad'' when it was indeed bad is producing a more costly utterance because his utterance will make the listener feel bad?)
+\citeauthor{VanRooy2003}'s analysis, however, relies on the notion that polite language is \emph{costly} (in a social way e.g., by reducing one's social status, or incurring social debt to one's conversational partner) but it's not clear how the polite behaviors explored in our experiments (not polite requests) would incur any cost to speaker or listener. 
 Our model derives its predictions by construing the speaker utility as a collection of possible goals (here, epistemic and social goals). The speech-acts themselves are not costly. 
-
-%Work in the Rational Speech-Acts theory has demonstrated nonliteral interpretations of figurative language by elaborating the set of possible \emph{Questions Under Discussion} \cite{Kao2014, Kao2015}.
-%Speakers may use language hyperbolically (``The latte costs a hundred bucks.''), for example, to communicate along the dimensions of affect (\emph{The speaker thinks the latte is expensive}).
-%With politeness, it is not clear that speakers want to communicate along a dimension of affect, but rather they would rather \emph{not communicate} along any epistemic dimension. 
-%This possibility is given to the speaker who can use social utility as a motivating force for a speech act. 
-%%Our approach is different in that we do not modify what question the speaker is addressing, but rather what utilities motivate him to act. 
-%%\ndg{if we have room, we can discuss relation to other models. both RSA and game theory. eg we should cite that van rooij paper?}
 
 Will machines ever be polite?
 Politeness requires more than merely saying conventionalized words (\emph{please}, \emph{thank you}) at the right moments; it requires a balance of informativity and kindness.
