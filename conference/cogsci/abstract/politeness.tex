@@ -92,29 +92,23 @@ We test this model by gathering data about utterance interpretations and goal at
 \section{Computational Model}
 
 Politeness poses a challenge for formal models of pragmatic language understanding, which assume that speakers' goals are to communicate informatively about some aspect of the world \cite{Frank2012, Goodman2013}.
-We propose that information transfer captures just one component of a speaker's utility, \emph{epistemic utility}.
-Politeness then emerges from a second component of a speaker's utility, what we will call \emph{social utility}.
-
-
+The speaker in RSA models is assumed to choose utterances approximately optimally, given a utility function.
+\citeA{Goodman2013} define speaker utility by the amount of information a \emph{literal listener} would still not know about world state $s$ after hearing a speaker's utterance $w$, what we will call \emph{epistemic utility}:
+$U_{epistemic}(w; s) = \ln(P_{L_0}(s \mid w)) $,
+where the literal listener is a simple Bayesian agent that takes the utterance to be true:
+\begin{equation}
+P_{L_0}(s \mid w)\propto \denote{w}(s) \cdot P(s) \label{eq:L0}.
+\end{equation}
+%
 \begin{figure*}[!b]
 \begin{center}
   \includegraphics[width=.9\textwidth]{figures/exp1.pdf}
   \caption{\label{fig:exp1} Results from Experiment 1. Proportion of acceptances of words (shown in different colors) given the true state represented on a scale of hearts. Error bars represent 95\% confidence intervals.}
   \end{center}
 \end{figure*}
-
-The speaker in RSA models is assumed to choose utterances approximately optimally, given a utility function:
-\begin{equation}
-P_{S_1}(w \mid s, \hat{\beta}) \propto \mathrm{exp}(\lambda \cdot \mathbb{E}[U(w; s;  \hat{\beta})])\label{eq:S1}
-\end{equation}
-\citeA{Goodman2013} define speaker utility by the amount of information a \emph{literal listener} would still not know about world state $s$ after hearing a speaker's utterance $w$:
-$U_{epistemic}(w; s) = \ln(P_{L_0}(s \mid w)) $,
-where the literal listener is a simple Bayesian agent that takes the utterance to be true:
-\begin{equation}
-P_{L_0}(s \mid w)\propto \denote{w}(s) \cdot P(s) \label{eq:L0}.
-\end{equation}
-
-Here we extend the speaker's utility by adding a component related to the intrinsic value of the state in the eyes of the listener.\footnote{At this point, we do not differentiate state value to the listener from state value to the speaker, though in many situations these could in principle be different.}
+%
+%
+We propose there is a second component to the speaker's utility related to the intrinsic value of the state in the eyes of the listener\footnote{At this point, we do not differentiate state value to the listener from state value to the speaker, though in many situations these could in principle be different.},  what we will call \emph{social utility}.
 %
 We define the social utility of an utterance to be the expected utility of the state the listener would infer given the utterance $w$:
 $$
@@ -122,15 +116,26 @@ U_{social}(w; s) = \mathbb{E}_{P_{L_0}(s \mid w)}[V(s)],
 $$
 %
 where $V$ is a value function that maps states to subjective utility values---this captures the affective consequences for the listener of being in state $s$.
+%
 The overall speaker utility is thus a weighted combination of epistemic and social utilities:
 $$
 U(w;s;  \hat{\beta}) = \beta_{epistemic}\cdot U_{epistemic} + \beta_{social} \cdot U_{social}.
 $$
-
+%
+%We propose that information transfer captures just one component of a speaker's utility, 
+%Politeness then emerges from a second component of a speaker's utility, what we will call \emph{social utility}.
+%
+The speaker chooses utterances $w$ given the state $s$ and his goal weights $\hat{\beta}$: 
+\begin{equation}
+P_{S_1}(w \mid s, \hat{\beta}) \propto \mathrm{exp}(\lambda \cdot \mathbb{E}[U(w; s;  \hat{\beta})])\label{eq:S1}
+\end{equation}
+%
+%Here we extend the speaker's utility by adding a component related to the intrinsic value of the state in the eyes of the listener.\footnote{At this point, we do not differentiate state value to the listener from state value to the speaker, though in many situations these could in principle be different.}
+%
 The pragmatic listener, denoted $L_1$, infers the world state based on this speaker model.
 We will assume the listener does not know exactly how the speaker weights his competing goals, however.
 Following the treatment of RSA using lifted variables \cite{GoodmanLassiter2015, bergen2016, Kao2014},
-we assume the pragmatic listener jointly infers the world state, $s$, and the utility weights of the speaker, $\beta_{epistemic}$ and $\beta_{social}$:
+we assume the pragmatic listener jointly infers the state $s$ and the utility weights of the speaker, $\beta_{epistemic}$ and $\beta_{social}$:
 \begin{equation}
 P_{L_1}(s,  \hat{\beta} \mid w)\propto P_{S_1}(w \mid s,  \hat{\beta})\cdot P(s) \cdot P( \hat{\beta}) \label{eq:L1}
 \end{equation}
