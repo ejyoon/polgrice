@@ -51,7 +51,7 @@
 
 \begin{abstract}
 
-Conveying information in a false or indirect manner in consideration of a listener's wants (i.e., being polite)
+Conveying information in a false or indirect manner in consideration of listeners' wants (i.e., being polite)
 seemingly contradicts an important goal of a cooperative speaker: information transfer.
 We propose that a cooperative speaker considers both
 \emph{epistemic utility}, or utility of providing the listener new information,
@@ -79,7 +79,8 @@ In fact, it is difficult to imagine human speech that efficiently conveys only t
 Intuitively, politeness is what differentiates human speech from stereotyped robotic communication, 
 which may try to follow rules to say ``please'' or ``thank you'' yet still lack genuine \emph{politeness}. 
 
-Must we conclude people are not cooperative communicators? \citeA{Brown1987} recast the notion of a \emph{cooperative speaker} as one
+Does this mean people are not cooperative communicators? 
+\citeA{Brown1987} recast the notion of a \emph{cooperative speaker} as one
 who has both an epistemic goal to improve the listener's knowledge state as well as a social goal to minimize any potential damage to the hearer's (and the speaker's own) self-image, which they called \emph{face}.
 In their analysis, if the speaker's intended meaning contains no threat to the speaker or listener's face,
 then the speaker will choose to convey the meaning in an efficient manner, putting it \emph{on the record}.
@@ -162,7 +163,7 @@ P_{L_1}(s,  \hat{\beta} \mid w)\propto P_{S_1}(w \mid s,  \hat{\beta})\cdot P(s)
 %\end{eqnarray}
 %
 
-Within our experimental domain, shown in Fig.~\ref{fig:ex} and described in more detail below, we assume that are five states of the world corresponding to the value placed on a particular referent (e.g., the presentation the speaker is commenting on): $S = \{s_{1}, ...,  s_{5}\}$.
+Within our experimental domain, shown in Fig.~\ref{fig:ex} and described in more detail below, we assume there are five possible states of the world corresponding to the value placed on a particular referent (e.g., the presentation the speaker is commenting on): $S = \{s_{1}, ...,  s_{5}\}$.
 We further assume a uniform prior distribution over possible states of the world.
 The states have subjective numerical values $V(s_{i}) = \alpha \cdot i$, where $\alpha$ is a scaling parameter (later inferred from data).
 The set of utterances is \{\emph{terrible}, \emph{bad}, \emph{okay}, \emph{good}, and \emph{amazing}\}.
@@ -289,8 +290,8 @@ This is likely due to participants attributing sarcasm or irony to the speaker w
 
 \subsubsection{Model fitting}
 
-In this experiment, participants were told the speaker said $w$ as well as described what the speakers intentions were (e.g., \emph{Bob wanted to be nice}).
-We want to explore inferences when both the speaker wanted to be mean as well as nice: For ease of comparison to the experimental data, we assume each $\beta \in [0,1]$ and separate $\beta_{social}$ into a positive component ($\beta_{nice}$) and a negative component ($\beta_{mean}$), writing the utility function now as
+In this experiment, participants were told the speaker said $w$ and described what the speakers' intentions were (e.g., \emph{Bob wanted to be nice}).
+We want to explore inferences both when speaker wanted to be nice and when he wanted to be mean: For ease of comparison to the experimental data, we assume each $\beta \in [0,1]$ and separate $\beta_{social}$ into a positive component ($\beta_{nice}$) and a negative component ($\beta_{mean}$), writing the utility function now as
 $$
  U(w;s; \beta)  =  \beta_{epistemic}\cdot U_{epistemic} + (\beta_{nice} - \beta_{mean}) \cdot U_{social}
  $$
@@ -348,7 +349,7 @@ To generate predictions, given our cognitive model and the inferred parameters, 
 \subsubsection{Results}
 
 The inferred weights for each goal condition were largely as expected (Fig.~\ref{fig:goal-priors-bda}).
-For the ``trying to be honest'' condition, the model infers the speaker was using a high weight on honesty (the weights on kindness and meanness are unidentifiable because they are inverses of each other).
+For the ``trying to be honest'' condition, the model infers the speaker was using a high weight on honesty (the weights on niceness and meanness are unidentifiable because they are inverses of each other).
 For ``trying to be nice'', the model puts a high weight on niceness but also some appreciable weight on honesty.
 The model fits are worse for the ``trying to be mean'' case; all that the model infers is that the speaker was not honest.
 
@@ -356,7 +357,7 @@ The predictions of the expectations of the listener model for the \emph{true sta
 The model's expected posterior over states when the speaker is trying to be \emph{honest} increases as a function of the positivity implied by the utterances (i.e. \emph{amazing} means a very high state).
 When it knows the speaker was trying to be \emph{nice}, the pragmatic listener is more conservative in how it interprets positive utterances, with the difference between an honest utterance and a nice utterance increasing as the utterance becomes more positive. 
 For example, the difference between a \emph{nice} ``amazing'' and an \emph{honest} ``amazing'' is greater than the difference between a \emph{nice} ``okay'' and an \emph{honest} ``okay''.
-Inferences when the speaker is trying to be \emph{mea} display the associated opposite behavior when the utterance is indeed negative (e.g. ``terrible'').
+Inferences when the speaker is trying to be \emph{mean} display the associated opposite behavior when the utterance is indeed negative (e.g. ``terrible'').
  %\mht{Describe model predictions.}
 Overall, the model explains a lot of the variance in the mean data $r^2(15) = 0.91$.
 The main discrepancies are with the goal ``trying to be mean'', as noted above.
@@ -450,7 +451,7 @@ The experiment can be viewed at: \url{http://langcog.stanford.edu/expts/EJY/polg
 
 Participants rated speaker's goals differentially depending on the true state and utterance (see Figure \ref{fig:exp2}).
 Honesty was rated highest when the true state was most consistent with the literal semantics. 
-As utterances became more positive, participants rated the speaker's kindness higher and meanness displayed the reverse pattern. 
+As utterances became more positive, participants rated the speaker's niceness higher and meanness displayed the reverse pattern. 
 Ratings for niceness and meanness goals were strongly anti-correlated $r = -.78$.
 
 Interestingly, we observe an asymmetry in how positive and negative utterances map onto the goals of niceness and meanness, respectively. 
@@ -509,7 +510,7 @@ This asymmetry may be because listeners expect honesty and niceness to be correl
 
 Why would a speaker ever say something that is not maximally truthful and informative?
 Communication is often examined from the perspective of successful information transfer from speaker to listener.
-In the social realm, however, communication also can serve the social function of making the listener feel good.
+In the social realm, however, communication also can serve the social function of making the listener feel good and saving her face.
 
 We proposed here that intuitively ``polite'' utterances arise from the desire to be kind (i.e., save face). 
 A cooperative speaker then tries to balance the goals to be kind and to be informative, and produces utterances of varying degrees of politeness that reflect this balance.
