@@ -46,11 +46,11 @@
 
 \begin{abstract}
 
-Conveying information in a false or indirect manner in consideration of addressees' wants (i.e. being polite)
+Conveying information in a false or indirect manner in consideration of listeners' wants (i.e. being polite)
 seemingly contradicts an important goal of a cooperative speaker: information transfer.
 We propose that a cooperative speaker considers both
-\emph{epistemic utility}, or utility of providing the addressee new and accurate information,
-and \emph{social utility}, or utility of maintaining or boosting the addressee's self-image (being polite).
+\emph{epistemic utility}, or utility of providing the listener new and accurate information,
+and \emph{social utility}, or utility of maintaining or boosting the listener's self-image (being polite).
 We formalize this tradeoff within a probabilistic model of language understanding and test it with empirical data on people's inferences about the relation between a speaker's goals, utterances and the true states of the world.
 
 \textbf{Keywords:}
@@ -63,7 +63,7 @@ Politeness; computational modeling; communicative goals; pragmatics
 
 Your friend gives a terrible presentation and asks for your opinion.
 Must you admit, ``Your talk was terrible,'' or is it acceptable to say: ``Your talk was fine''?
-The latter is potentially misleading but gives the addressee what she might want to hear----in other words, it would be polite.
+The latter is potentially misleading but gives the listener what she might want to hear----in other words, it would be polite.
 
 Politeness violates a critical principle of cooperative communication: exchanging information efficiently and accurately \cite{Grice1975}.
 If information transfer was the only currency in communication, a cooperative speaker would find polite utterances undesirable because they are potentially misleading.
@@ -77,8 +77,8 @@ which may try to follow rules to say ``please'' or ``thank you'' yet still lack 
 
 Does this mean people are not cooperative communicators? 
 \citeA{Brown1987} recast the notion of a \emph{cooperative speaker} as one
-who has both an epistemic goal to improve the addressee's knowledge state as well as a social goal to minimize any potential damage to the hearer's (and the speaker's own) self-image, which they called \emph{face}.
-In their analysis, if the speaker's intended meaning contains no threat to the speaker or addressee's face,
+who has both an epistemic goal to improve the listener's knowledge state as well as a social goal to minimize any potential damage to the hearer's (and the speaker's own) self-image, which they called \emph{face}.
+In their analysis, if the speaker's intended meaning contains no threat to the speaker or listener's face,
 then the speaker will choose to convey the meaning in an efficient manner, putting it \emph{on the record}.
 As the degree of face-threat becomes more severe, however,
 a speaker will choose to be polite by producing more indirect utterances.
@@ -86,7 +86,7 @@ a speaker will choose to be polite by producing more indirect utterances.
 In the current paper, we formalize a version of \citeA{Brown1987}'s theory, exploring the idea that cooperative speakers attempt to balance two goals, epistemic and social.
 The Rational Speech Act (RSA) framework \cite{Frank2012, Goodman2013} describes language understanding as recursive probabilistic inference between a pragmatic listener and an informative speaker. This framework has been successful at capturing the quantitative details of a number of language understanding tasks, but it neglects the social goals a speaker may pursue.
 Here we extend RSA to take into account a speaker with both the usual epistemic goal and a competing social goal: be kind.
-We test this model by gathering data about utterance interpretations and goal attributions in settings where the true state of the world carries affective consequences for the addressee.
+We test this model by gathering data about utterance interpretations and goal attributions in settings where the true state of the world carries affective consequences for the hearer.
 
 
 \section{Computational Model}
@@ -110,14 +110,14 @@ P_{L_0}(s \mid w)\propto \denote{w}(s) \cdot P(s) \label{eq:L0}.
 %
 %We propose that information transfer captures just one component of a speaker's utility, 
 %Politeness then emerges from a second component of a speaker's utility, what we will call \emph{social utility}.
-We propose there is a second component to the speaker's utility related to the intrinsic value of the state in the eyes of the addressee\footnote{At this point, we do not differentiate state value to the addressee from state value to the speaker, though in many situations these could in principle be different.}, what we will call \emph{social utility}.
+We propose there is a second component to the speaker's utility related to the intrinsic value of the state in the eyes of the listener\footnote{At this point, we do not differentiate state value to the listener from state value to the speaker, though in many situations these could in principle be different.}, what we will call \emph{social utility}.
 %
 We define the social utility of an utterance to be the expected utility of the state the listener would infer given the utterance $w$:
 $$
 U_{social}(w; s) = \mathbb{E}_{P_{L_0}(s \mid w)}[V(s)],
 $$
 %
-where $V$ is a value function that maps states to subjective utility values---this captures the affective consequences for the addressee of being in state $s$.
+where $V$ is a value function that maps states to subjective utility values---this captures the affective consequences for the listener of being in state $s$.
 %
 The overall speaker utility is thus a weighted combination of epistemic and social utilities:
 $$
@@ -211,7 +211,7 @@ The experiment can be viewed at: \url{http://langcog.stanford.edu/expts/EJY/polg
 
 \subsection{Behavioral results}
 
-Inferences of the actual rating for addressee's performance, or the true state, varied depending on speaker's goal and utterance (Figure \ref{fig:exp3}).
+Inferences of the actual rating for hearer's performance, or the true state, varied depending on speaker's goal and utterance (Figure \ref{fig:exp3}).
 Consistent with intuition, when the speaker was trying to be honest, utterances accurately mapped onto inferred states (Figure \ref{fig:exp3}, left, red line).
 For utterances consistent with the speaker's goals (e.g. saying positive utterances when the speaker was trying to be nice; negative utterances when trying to be mean), the results are also consistent with intuition.
 Knowing that the speaker was trying to be nice, participants inferred a true state appreciably lower than the state inferred given honesty (green line).
@@ -350,20 +350,20 @@ This asymmetry may be because listeners expect honesty and niceness to be correl
 \section{Discussion}
 
 Why would a speaker ever say something that is not maximally truthful and informative?
-Communication is often examined from the perspective of successful information transfer from speaker to addressee.
-In the social realm, however, communication also can serve the social function of making the addressee feel good and saving her face.
+Communication is often examined from the perspective of successful information transfer from speaker to listener.
+In the social realm, however, communication also can serve the social function of making the listener feel good and saving her face.
 
 We proposed here that intuitively ``polite'' utterances arise from the desire to be kind (i.e. save face). 
 A cooperative speaker then tries to balance the goals to be kind and to be informative, and produces utterances of varying degrees of politeness that reflect this balance.
-To test this proposal, we examined inferential judgments on a speaker's utterance, which was a potentially face-threatening evaluation of the addressee's performance.
+To test this proposal, we examined inferential judgments on a speaker's utterance, which was a potentially face-threatening evaluation of the listener's performance.
 As we predicted, participants' inferences about the true state of the world differed based on what the speaker said and whether the speaker's intended goal was to be honest, nice or mean (Expt.~2).
 We were also able to predict participants' attributions of different social goals to speakers depending on
 how well the literal utterance meaning matched the actual rating the performance deserved (Expt.~3).
 
 The model presented here relates to other work done in game-theoretic pragmatics and within the Rational Speech-Acts framework.
 \citeA{VanRooy2003} uses a game-theoretic analysis of polite requests (``Could you possibly take me home?'') to argue the purpose of polite language is to align the preferences of interlocutors. 
-Our notion of social utility $U_{social}$ is similar in that it motivates speakers to signal worlds that make the addressee feel good. 
-\citeauthor{VanRooy2003}'s analysis, however, relies on the notion that polite language is \emph{costly} (in a social way e.g., by reducing one's social status or incurring social debt to one's conversational partner) but it's not clear how the polite behaviors explored in our experiments (not polite requests) would incur any cost to speaker or addressee. 
+Our notion of social utility $U_{social}$ is similar in that it motivates speakers to signal worlds that make the listener feel good. 
+\citeauthor{VanRooy2003}'s analysis, however, relies on the notion that polite language is \emph{costly} (in a social way e.g., by reducing one's social status or incurring social debt to one's conversational partner) but it's not clear how the polite behaviors explored in our experiments (not polite requests) would incur any cost to speaker or listener. 
 Our model derives its predictions by construing the speaker utility as a collection of possible goals (here, epistemic and social goals). The speech-acts themselves are not costly. 
 
 Will machines ever be polite?
