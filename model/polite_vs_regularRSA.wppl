@@ -1,0 +1,280 @@
+// time webppl BDA_politeRSA_stateGivenUtteranceGoal.wppl --require mht --require utils
+var fpath = "/Users/mht/Documents/research/polgrice/model/data/"
+
+var stateData = utils.readCSV(fpath+"state.csv").data
+var df_state = dataFrame(stateData, ["state"])	
+
+// df_state
+var allGoals = _.uniq(_.pluck(df_state,"goal"))
+var allUtterances = _.uniq(_.pluck(df_state,"utterance"))
+
+var goalDictionary = {
+	"nice": "kindness",
+	"honest" : "honesty",
+	"mean" : "meanness"
+}
+
+var RSAopts = {
+	stochasticWords:false,//"experimental", 
+	stochasticValence:false
+}
+
+var pre1 = RSAopts.stochasticWords ? 
+				"stochWords-" : ""
+var pre2 = RSAopts.stochasticValence ? 
+				"stochVal-" : ""
+
+
+// // run BDA on literal semantics data
+var sem_mhiter = 50000
+var sem_burn = sem_mhiter/2
+var incrOpts = {burn:sem_burn, verbose: true, verboseLag: sem_mhiter/10}
+// semanticsBDA()
+var semanticsERP = IncrementalMH(semanticsBDA, sem_mhiter, incrOpts)
+
+// var semanticsERPobject = _.object(
+// 	map(function(s){
+// 		return [s, _.object(map(function(u){
+// 			return [u, marginalize(semanticsERP, [u,s])]
+// 		}, allUtterances))]
+// },allStates))
+
+// sample(semanticsERP)
+
+
+
+var addGuessing = function(erp, phi){
+    Enumerate(function(){
+        var x = flip(1-phi) ? 
+                    sample(erp) :
+                    uniformDraw([20,40,60,80,100])
+        return x
+    })
+}
+
+
+var dataAnalysis = function(){
+
+	var RSAparams = {
+		speakerOptimality : uniform(0,20),
+		alpha: uniform(0,10),
+		weightScale : 1//uniform(0,20)
+	}
+
+	// var phi = uniform(0,1)
+	var phi = 0
+
+	// var priorParams = {
+	// 	honestGamma : 0.5,
+	// 	honestDelta :2,
+	// 	kindGamma : 0.5,
+	// 	kindDelta : 2
+	// }
+
+	// var threshold = uniformDraw([0.2,0.4,0.6,0.8])
+
+	var semantics = sample(semanticsERP)
+
+	// foreach(['nice','honest'], function(goal){
+	foreach(allGoals, function(goal){
+
+		var stateData = subset(df_state, "goal", goal)
+
+		// var priorParams = {
+		// 	honestGamma : goal=="honest" ? uniform(0,1) : 0.5,
+		// 	honestDelta : goal=="honest" ? uniform(0,50) : 2,
+		// 	kindGamma : goal=="nice" ? uniform(0,1) : 0.5,
+		// 	kindDelta : goal=="nice" ? uniform(0,50) : 2,
+		// 	meanGamma : goal=="mean" ? uniform(0,1) : 0.5,
+		// 	meanDelta : goal=="mean" ? uniform(0,50) : 2,
+		// 	weightScale : 1//uniform(0,20)
+		// }
+
+		var priorParams = {
+			includeMeanness: "oneScale",
+			honestGamma : 0.5,
+			honestDelta : 2,
+			kindGamma : 0.5,
+			kindDelta : 2,
+			meanGamma : 0.5,
+			meanDelta : 2,
+			weightScale : 1//uniform(0,20)
+		}
+
+		var weights = {
+			honesty: uniform(0,1),
+			kindness: uniform(0,1),
+			meanness: uniform(0,1)
+		}
+
+		// var priorParams = {
+		// 	honestGamma : uniform(0,1),
+		// 	honestDelta : uniform(0,20),
+		// 	kindGamma : uniform(0,1),
+		// 	kindDelta : uniform(0,20),
+		// 	meanGamma : uniform(0,1),
+		// 	meanDelta : uniform(0,20)
+		// }
+
+		// truncated Gaussian on (0, 1)
+		// var priorParams = {
+		// 	honestMu : goal=="honest" ? uniform(0,1) : 0.5,
+		// 	honestSigma : goal=="honest" ? uniform(0,50) : 2,
+		// 	kindMu : goal=="honest" ? uniform(0,1) : 0.5,
+		// 	kindSigma : uniform(0,20),
+		// 	meanMu : uniform(0,1),
+		// 	meanSigma : uniform(0,20)
+		// }
+
+		foreach(allUtterances, function(utterance){
+
+			var utteranceData = subset(stateData, "utterance", utterance)
+
+			var condParams = {
+					utterance: utterance
+					// goal: _.object([[goalDictionary[goal], threshold]])
+					// goal:  _.object([[goalDictionary[goal], threshold]])
+				}
+
+			var predictiveERP = politeRSA(
+				condParams,
+				RSAopts,
+				RSAparams,
+				priorParams,
+				weights,
+				semantics,
+				"state")
+
+			var predictiveWGuessing = addGuessing(predictiveERP, phi)
+
+			// console.log(map(function(s){return [s, Math.exp(predictiveERP.score([],s))]},predictiveERP.support()))
+			// foreach(allGoals, function(goal){
+			var dataPoints = _.pluck(utteranceData, "state")
+			// console.log(dataPoints)
+
+			var likelihoodOfData = sum(map(function(d){return predictiveWGuessing.score([], d)}, dataPoints))
+			// console.log(goal + " " + utterance + " " + likelihoodOfData)
+
+			factor(likelihoodOfData)
+
+			query.add(["predictive", goal, utterance, "expectation"], expectation(predictiveWGuessing))
+			foreach([20,40,60,80,100], function(s){
+				query.add(["predictive", goal, utterance, s], Math.exp(predictiveWGuessing.score([], s)))
+			})
+
+			// })
+
+		})
+
+		query.add(["parameter",goal, "honesty", "weight"], weights.honesty)
+		query.add(["parameter",goal, "kindness", "weight"], weights.kindness)
+		query.add(["parameter",goal, "meanness", "weight"], weights.meanness)
+
+		// query.add(["parameter",goal, "honesty", "gamma"], priorParams.honestGamma)
+		// query.add(["parameter",goal, "honesty", "delta"], priorParams.honestDelta)
+		// query.add(["parameter",goal, "kindness", "gamma"], priorParams.kindGamma)
+		// query.add(["parameter",goal, "kindness", "delta"], priorParams.kindDelta)
+		// query.add(["parameter",goal, "meanness", "gamma"], priorParams.meanGamma)
+		// query.add(["parameter",goal, "meanness", "delta"], priorParams.meanDelta)
+
+		// query.add(["parameter",goal,"weightScale", "NA"], priorParams.weightScale)
+
+
+		// query.add(["parameter",goal, "honesty", "mu"], priorParams.honestMu)
+		// query.add(["parameter",goal, "honesty", "sigma"], priorParams.honestSigma)
+		// query.add(["parameter",goal, "kindness", "mu"], priorParams.kindMu)
+		// query.add(["parameter",goal, "kindness", "sigma"], priorParams.kindSigma)
+		// query.add(["parameter",goal, "meanness", "mu"], priorParams.meanMu)
+		// query.add(["parameter",goal, "meanness", "sigma"], priorParams.meanSigma)
+
+	})
+
+	query.add(["parameter","speakerOptimality", "NA", "NA"], RSAparams.speakerOptimality)
+	query.add(["parameter","alpha", "NA", "NA"], RSAparams.alpha)
+	// query.add(["parameter","phi", "NA", "NA"], phi)
+
+	// query.add(["parameter","weightScale", "NA", "NA"], RSAparams.weightScale)
+
+	// query.add(["parameter","threshold", "NA", "NA"], threshold)
+		// var t1 = utils.getTime()
+	// console.log((t1-t0)/1000)
+	return query
+}
+
+
+var inference ='IncrMH'
+var samples = 100000
+var burn = samples/2
+// var resultsERP = MCMC(dataAnalysis, {samples:samples/2, burn:burn, verbose:true})
+var resultsERP = IncrementalMH(dataAnalysis,samples, {burn:burn, verbose:true,verboseLag:samples/100})
+
+console.log('inference complete... printing')
+
+// var outfile = "results/bda-politeRSA-stateGivenUttGoal-goalPrior1wide-Beta50d-sopt-alpha-"+
+// 						inference + samples + "burn" + burn + 
+// 						"semantics-bern-" + sem_mhiter/1000 + "k-b" + sem_burn/1000 +"kc.csv"
+
+var outfile = "results/bda-politeRSA-stateGivenUttGoal-goal3Vals-Beta50d-sopt-alpha-"+
+						inference + samples + "burn" + burn + 
+						"semantics-bern-" + sem_mhiter/1000 + "k-b" + sem_burn/1000 +"kb.csv"
+
+
+utils.erpWriter(resultsERP, outfile)
+
+console.log('output written to ' + outfile)
+
+// df_state
+
+// var semantics = sample(semanticsERP)
+
+// var predictiveERP = politeRSA(
+// 	{
+// 		utterance: "amazing",
+// 		knowledge: 3
+// 	},
+// 	RSAopts,
+// 	 {
+// 		speakerOptimality : 5
+// 	},
+//  {
+// 	honestGamma : 0.5,
+// 	honestDelta : 2,
+// 	kindGamma : 0.5,
+// 	kindDelta : 2
+// },
+// 	semantics)
+
+// predictiveERP
+
+
+
+// semantics
+
+// var RSAparams = {
+// 	speakerOptimality :5
+// }
+
+
+
+
+// var utterance = "amazing"
+// var state = 2
+
+// var predictiveERP = politeRSA(
+// 	{
+// 		utterance: utterance,
+// 		knowledge: state
+// 	},
+// 	RSAopts,
+// 	RSAparams,
+// 	priorParams,
+// 	semantics)
+
+// var goal = "nice"
+// var goalERP = marginalize(predictiveERP, goalDictionary[goal])
+
+// // expectation(goalERP)
+// goalERP
+// var responses = 
+
+// responses
