@@ -128,18 +128,19 @@ button[disabled] {
     line-height: 26px;
 }
 
-.progress{
+.progress_white{
     
     text-align: right;
     margin-top:0.5em;
     
 }
 
-.progress span{
+.progress_white span{
     position:relative;
     top: -6px;
     text-align: center;
-    margin-right: 1em;    
+    margin-right: 1em;  
+    color: transparent;
 }
 
 .bar-wrapper{

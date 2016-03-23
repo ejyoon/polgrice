@@ -80,7 +80,7 @@
     top: 0;
     white-space: nowrap;
     overflow: hidden;
-    color: #fde16d;
+    color: #d80000;
     /*transition: all 0.25s ease-out;
     -o-transition: all 0.25s ease-out;
     -moz-transition: all 0.25s ease-out;
@@ -97,7 +97,7 @@
     vertical-align: middle;
     display: inline-block;
     overflow: hidden;
-    color: #fde16d;
+    color: #d80000;
 }
 
 .rating-container-rtl:before {

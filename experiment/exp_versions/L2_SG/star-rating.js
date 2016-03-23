@@ -201,7 +201,7 @@
             if (self.rtl) {
                 $el.attr('dir', 'rtl');
             }
-            defaultStar = (self.glyphicon) ? '\ue006' : '\u2605';
+            defaultStar = (self.glyphicon) ? '\ue005' : '\u2665';
             self.setDefault('symbol', defaultStar);
             self.setDefault('clearButtonBaseClass', 'clear-rating');
             self.setDefault('clearButtonActiveClass', 'clear-rating-active');
@@ -247,7 +247,7 @@
                 css = (self.rtl) ? 'rating-container-rtl' : 'rating-container',
                 stars = self.getStars();
             if (self.glyphicon) {
-                css += (self.symbol === '\ue006' ? ' rating-gly-star' : ' rating-gly') + self.ratingClass;
+                css += (self.symbol === '\ue005' ? ' rating-gly-star' : ' rating-gly') + self.ratingClass;
             } else {
                 css += isEmpty(self.ratingClass) ? ' rating-uni' : ' ' + self.ratingClass;
             }
