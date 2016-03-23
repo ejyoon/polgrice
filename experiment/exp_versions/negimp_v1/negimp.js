@@ -175,20 +175,20 @@ var states3 =
 //    ["amazing", "terrible", "bad", "okay", "good"];
 var states = states1.concat(states2, states3)
 
-//var utterances = 
-//    shuffle(["terrible", "bad", "okay", "good", "amazing"]);
+var utterances = 
+    shuffle(["not_amazing", "not_terrible"]);
 
-var utterances1 = 
-    ["terrible", "bad", "okay", "good", "amazing"];
-var utterances2 = 
-    ["terrible", "bad", "okay", "good", "amazing"];
-var utterances3 = 
-    ["terrible", "bad", "okay", "good", "amazing"];
+//var utterances1 = 
+//    ["not terrible", "bad", "okay", "good", "amazing"];
+//var utterances2 = 
+//    ["terrible", "bad", "okay", "good", "amazing"];
+//var utterances3 = 
+//    ["terrible", "bad", "okay", "good", "amazing"];
 //var utterances4 = 
 //    ["terrible", "bad", "okay", "good", "amazing"];
 //var utterances5 = 
 //    ["terrible", "bad", "okay", "good", "amazing"];
-var utterances = utterances1.concat(utterances2, utterances3)
+//var utterances = utterances1.concat(utterances2, utterances3)
 
     var allConditions = 
 shuffle(
@@ -206,71 +206,71 @@ shuffle(
  "utterance": utterances[1],
  "people": "people2",
 },
-{"domain": domains[2],
- "state": states[2],
- "utterance": utterances[2],
- "people": "people3",
-},
-{"domain": domains[3],
- "state": states[3],
- "utterance": utterances[3],
- "people": "people4",
-},
-{"domain": domains[4],
- "state": states[4],
- "utterance": utterances[4],
- "people": "people5",
-},
-{"domain": domains[5],
- "state": states[5],
- "utterance": utterances[5],
- "people": "people6",
-},
-{"domain": domains[6],
- "state": states[6],
- "utterance": utterances[6],
- "people": "people7",
-},
-{"domain": domains[7],
- "state": states[7],
- "utterance": utterances[7],
- "people": "people8",
-},
-{"domain": domains[8],
- "state": states[8],
- "utterance": utterances[8],
- "people": "people9",
-},
-{"domain": domains[9],
- "state": states[9],
- "utterance": utterances[9],
- "people": "people10",
-},
-{"domain": domains[10],
- "state": states[10],
- "utterance": utterances[10],
- "people": "people11",
-},
-{"domain": domains[11],
- "state": states[11],
- "utterance": utterances[11],
- "people": "people12",
-},
-{"domain": domains[12],
- "state": states[12],
- "utterance": utterances[12],
- "people": "people13",
-},
-{"domain": domains[13],
- "state": states[13],
- "utterance": utterances[13],
- "people": "people14",
-},
-{"domain": domains[14],
- "state": states[14],
- "utterance": utterances[14],
- "people": "people15",
-},
+//{"domain": domains[2],
+// "state": states[2],
+// "utterance": utterances[2],
+// "people": "people3",
+//},
+//{"domain": domains[3],
+// "state": states[3],
+// "utterance": utterances[3],
+// "people": "people4",
+//},
+//{"domain": domains[4],
+// "state": states[4],
+// "utterance": utterances[4],
+// "people": "people5",
+//},
+//{"domain": domains[5],
+// "state": states[5],
+// "utterance": utterances[5],
+// "people": "people6",
+//},
+//{"domain": domains[6],
+// "state": states[6],
+// "utterance": utterances[6],
+// "people": "people7",
+//},
+//{"domain": domains[7],
+// "state": states[7],
+// "utterance": utterances[7],
+// "people": "people8",
+//},
+//{"domain": domains[8],
+// "state": states[8],
+// "utterance": utterances[8],
+// "people": "people9",
+//},
+//{"domain": domains[9],
+// "state": states[9],
+// "utterance": utterances[9],
+// "people": "people10",
+//},
+//{"domain": domains[10],
+// "state": states[10],
+// "utterance": utterances[10],
+// "people": "people11",
+//},
+//{"domain": domains[11],
+// "state": states[11],
+// "utterance": utterances[11],
+// "people": "people12",
+//},
+//{"domain": domains[12],
+// "state": states[12],
+// "utterance": utterances[12],
+// "people": "people13",
+//},
+//{"domain": domains[13],
+// "state": states[13],
+// "utterance": utterances[13],
+// "people": "people14",
+//},
+//{"domain": domains[14],
+// "state": states[14],
+// "utterance": utterances[14],
+// "people": "people15",
+//},
 //{"domain": domains[15],
 // "state": states[15],
 // "utterance": utterances[15],
@@ -358,20 +358,20 @@ speakers25 = shuffle(speakers[24]);
 
 var sents = {
     utterances: {
-        terrible: {
-            sent_utterance: " SP said, <b>\"It was terrible!\" </b>"
+        not_terrible: {
+            sent_utterance: " <b>\"It wasn't terrible,\"</b> SP said."
         },        
-        bad: {
-            sent_utterance: " SP said, <b>\"It was bad!\"</b>"
-        },        
-        okay: {
-            sent_utterance: " SP said, <b>\"It was okay!\"</b>" 
-        },
-        good: {
-            sent_utterance: " SP said, <b>\"It was good!\"</b>" 
-        },
-        amazing: {
-            sent_utterance: " SP said, <b>\"It was amazing!\"</b>" 
+//        bad: {
+//            sent_utterance: " SP said, <b>\"It was bad!\"</b>"
+//        },        
+//        okay: {
+//            sent_utterance: " SP said, <b>\"It was okay!\"</b>" 
+//        },
+//        good: {
+//            sent_utterance: " SP said, <b>\"It was good!\"</b>" 
+//        },
+        not_amazing: {
+            sent_utterance: " <b>\"It wasn't amazing,\"</b> SP said."
         },
     },
     domains: {
