@@ -160,20 +160,37 @@ var domains2 =
 //    shuffle(["poem", "cake", "cookie", "presentation", "song", "film", "solo", "monologue", "dance", "painting", "app", "review", "recital"]);
 var domains = domains1.concat(domains2)
 
-//var states = 
+////var states = 
+////    ["terrible", "bad", "okay", "good", "amazing"];
+////
+//var states1 = 
 //    ["terrible", "bad", "okay", "good", "amazing"];
-//
-var states1 = 
-    ["terrible", "bad", "okay", "good", "amazing"];
-var states2 = 
-    ["bad", "okay", "good", "amazing", "terrible"];
-var states3 = 
-    ["okay", "good", "amazing", "terrible", "bad"];
+//var states2 = 
+//    ["bad", "okay", "good", "amazing", "terrible"];
+//var states3 = 
+//    ["okay", "good", "amazing", "terrible", "bad"];
+////var states4 = 
+////    ["good", "amazing", "terrible", "bad", "okay"];
+////var states5 = 
+////    ["amazing", "terrible", "bad", "okay", "good"];
+//var states = states1.concat(states2, states3)
+
+var states = 
+    ["heart2", "heart4"];
+
+
+//var states1 = 
+//    ["heart1", "heart2", "heart3", "heart4", "heart5"];
+//var states2 = 
+//    ["heart2", "heart3", "heart4", "heart5","heart1"];
+//var states3 = 
+//    ["heart3", "heart4", "heart5","heart1", "heart2"];
 //var states4 = 
-//    ["good", "amazing", "terrible", "bad", "okay"];
+//    ["heart4", "heart5","heart1", "heart2", "heart3"];
 //var states5 = 
-//    ["amazing", "terrible", "bad", "okay", "good"];
-var states = states1.concat(states2, states3)
+//    ["heart5","heart1", "heart2", "heart3", "heart4"];
+//var states = states1.concat(states2, states3, states4, states5)
+//
 
 var utterances = 
     shuffle(["not_amazing", "not_terrible"]);
@@ -442,22 +459,39 @@ var sents = {
 	},
     },
     states: {
-        terrible: {
-            state: " <b>everyone thought LS's BB was terrible</b>,"        
+        heart1: {
+            state: "20"
         },
-        bad: {
-            state: " <b>everyone thought LS's BB was bad</b>,"        
+        heart2: {
+            state: "40"
         },
-        okay: {
-            state: " <b>everyone thought LS's BB was just okay</b>,"        
+        heart3: {
+            state: "60"
         },
-        good: {
-            state: " <b>everyone thought LS's BB was good</b>,"        
+        heart4: {
+            state: "80"
         },
-        amazing: {
-            state: " <b>everyone thought LS's BB was amazing</b>,"        
-        },
+        heart5: {
+            state: "100"
+        }
     },
+//    states: {
+//        terrible: {
+//            state: " <b>everyone thought LS's BB was terrible</b>,"        
+//        },
+//        bad: {
+//            state: " <b>everyone thought LS's BB was bad</b>,"        
+//        },
+//        okay: {
+//            state: " <b>everyone thought LS's BB was just okay</b>,"        
+//        },
+//        good: {
+//            state: " <b>everyone thought LS's BB was good</b>,"        
+//        },
+//        amazing: {
+//            state: " <b>everyone thought LS's BB was amazing</b>,"        
+//        },
+//    },
     people: {
         people1: {
             SP: speakers1[0],
@@ -625,7 +659,7 @@ var experiment = {
 //    buttonOrder: buttonOrder,
     knowledge: state_knowledge,
     domain: [],
-//    state: [],
+    state: [],
     utterance: [],
     people: [],
 //    context: [],
@@ -686,7 +720,7 @@ var experiment = {
       experiment.data.order.push(numComplete);
       experiment.data.utterance.push(trial.utterance);
       experiment.data.domain.push(trial.domain);
-//      experiment.data.state.push(trial.state);
+      experiment.data.state.push(trial.state);
       experiment.data.goalProb0.push(prob0);
       experiment.data.goalProb1.push(prob1);
       experiment.data.goalProb2.push(prob2);
@@ -759,7 +793,9 @@ var experiment = {
 			    	function(event) {
 						var selection = $("#rating-stars").val();
 			});
-        
+       $(".rating-stars").attr("style","width: " +
+							    state + "%");
+       
 
       numComplete++;      
     }}

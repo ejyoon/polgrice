@@ -35,10 +35,10 @@
   <button type="button" 
           onclick="this.blur(); 
                    experiment.next();
-        document.getElementById('form0').hidden=false;
-        document.getElementById('form1').hidden=true;
-        document.getElementById('next0').hidden=false;
-        document.getElementById('next1').hidden=true;
+        document.getElementById('form1').hidden=false;
+        document.getElementById('form0').hidden=true;
+        document.getElementById('next1').hidden=false;
+        document.getElementById('next0').hidden=true;
                                   ">Start</button>
   
   <p class="block-text"><br> <b> Note: you won't be able to preview this HIT before accepting it because it's so short. </b></p>
@@ -213,7 +213,30 @@ function pressEnter(e) {
 
     <p id="context" class="block-text"></p>
 
+<!--###############################################################
+  Star-ratings
+  http://www.jqueryscript.net/other/Simple-jQuery-Star-Rating-System-For-Bootstrap-3.html
+  -->
+  <div id="test" name= "actual" align="center">
+    <input id="rating-system" type="number" class="rating" 
+    	min="0" max="5" step="1" 
+    	data-showCaption="true" showClear="false" hoverEnabled="false">
+  </div>
+<!--
+  <div align="center" class="star-rating rating-sm rating-active">
+    <div class="rating-container rating-gly-star" data-content="">
+      <div class="rating-stars" data-content="">
+      </div>
+    </div>
+  </div>
+-->
+  <!--star-ratings
+  ###############################################################
+  -->  
+
+        
 <span id="form0" name="goalForm">
+
 <form name= "affectForm1">
     <input type="hidden" name="hSlider0" id="hiddenSliderValue0" />
     <input type="hidden" name="hSlider1" id="hiddenSliderValue1" />
@@ -275,7 +298,8 @@ function pressEnter(e) {
 </span>
     <br> 
 
-        <button type="button" id="next0" name="goalButton" onclick="this.blur(); if (ValidateSliderFormPart1(document.affectForm1)) {
+
+        <button type="button" id="next0" name="goalButton" onclick="this.blur(); if (ValidateSliderFormPart1(document.affectForm1)) {experiment.next();   
         document.getElementById('form0').hidden=true;
         document.getElementById('form1').hidden=false;
         document.getElementById('next0').hidden=true;
@@ -284,28 +308,7 @@ function pressEnter(e) {
 
 <span id="form1">
         <p id="question2"></p>
-<!--
-    <form id= "affectForm2" name="stateForm">
-    <table width="500" cellspacing="0" cellpadding="0" border="0" align="center" class="text-center">
-    <tr>
-        <td><span id="opt">Terrible</span></td>
-        <td><span id="opt">Bad</span></td>
-        <td><span id="opt">Neutral</span></td>
-        <td><span id="opt">Good</span></td>
-        <td><span id="opt">Amazing</span></td>
-    </tr>
-    <tr>
-        <td><input type="radio" name="state" value="1" /></td>
-        <td><input type="radio" name="state" value="2" /></td>
-        <td><input type="radio" name="state" value="3" /></td>
-        <td><input type="radio" name="state" value="4" /></td>
-        <td><input type="radio" name="state" value="5" /></td>
 
-    </tr>
-</table>
-</form>
-
--->
  <!--
   ###############################################################
   Star-ratings
@@ -320,53 +323,9 @@ function pressEnter(e) {
   ###############################################################
   -->    
     
-
-    
-<!--
-    <p id="question2" class="block-text"></p>
-     <input type="hidden" name="hSlider3" id="hiddenSliderValue3" />
-   
-<table width="600" cellspacing="0" cellpadding="0" border="0" align="center">
-    <tbody>
-        <tr>
-            <td align="center" colspan="7">
-            <div id="slider3">&nbsp;</div>
-            </td>
-        </tr>
-        <tr>
-        <td width="5" valign="top" align="center"><br /></td>
-        <td width="100" valign="top" align="center">|<br />Impossible</td>
-        <td width="400" valign="top" align="center"><br /></td>
-        <td width="100" valign="top" align="center">|<br />Absolutely certain</td>
-        </tr>
-    </tbody>
-</table>
-    <p id="question3" class="block-text"></p>
-     <input type="hidden" name="hSlider4" id="hiddenSliderValue4" />
-   
-<table width="600" cellspacing="0" cellpadding="0" border="0" align="center">
-    <tbody>
-        <tr>
-            <td align="center" colspan="7">
-            <div id="slider4">&nbsp;</div>
-            </td>
-        </tr>
-        <tr>
-        <td width="5" valign="top" align="center"><br /></td>
-        <td width="100" valign="top" align="center">|<br />Impossible</td>
-        <td width="400" valign="top" align="center"><br /></td>
-        <td width="100" valign="top" align="center">|<br />Absolutely certain</td>
-        </tr>
-    </tbody>
-</table>
-
-    </span>
-    
-    </form>
--->
     
     <button type="button" id="next1" onclick="this.blur(); if
-     (ValidateStar(document.star)) {experiment.next();   
+     (ValidateStar(document.star)) {
         document.getElementById('form0').hidden=false;
         document.getElementById('form1').hidden=true;
         document.getElementById('next0').hidden=false;
