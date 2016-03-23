@@ -88,9 +88,9 @@ function ValidateSliderFormPart2(form){
 
     
 function ValidateStar(form) {
-		var judgment = $(".rating-stars").attr("style");
+		var judgment = $("#testing").attr("style");
 		judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
-		//console.log("judgment: ", judgment); for debuggging
+		console.log("judgment: ", judgment); //for debuggging
 		if (judgment == 0) {
 			//Else respondent didn't make a response
             alert ( "Please answer all the questions." );
@@ -326,7 +326,7 @@ function pressEnter(e) {
     
     
     <button type="button" id="next1" onclick="this.blur(); if
-     (ValidateStar(document.star)) {
+     (ValidateStar(document.test)) {
         document.getElementById('form0').hidden=false;
         document.getElementById('form1').hidden=true;
         document.getElementById('next0').hidden=false;

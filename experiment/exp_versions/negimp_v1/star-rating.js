@@ -210,7 +210,7 @@
             self.$clearElement = isEmpty(options.clearElement) ? null : $(options.clearElement);
             self.$captionElement = isEmpty(options.captionElement) ? null : $(options.captionElement);
             if (self.$rating === undefined && self.$container === undefined) {
-                self.$rating = $(document.createElement("div")).html('<div class="rating-stars"></div>');
+                self.$rating = $(document.createElement("div")).html('<div id = "testing" class="rating-stars"></div>');
                 self.$container = $(document.createElement("div"));
                 self.$container.before(self.$rating).append(self.$rating);
                 $el.before(self.$container).appendTo(self.$rating);

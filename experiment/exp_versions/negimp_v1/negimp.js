@@ -795,6 +795,7 @@ var experiment = {
 			});
        $(".rating-stars").attr("style","width: " +
 							    state + "%");
+      $("#testing").attr({"style":"width: 0%"});
 
       numComplete++;      
     }}
