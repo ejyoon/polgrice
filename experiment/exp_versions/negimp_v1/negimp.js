@@ -2,8 +2,8 @@ var filename = "EJY_polgrice_goals_v4"
 var condCounts = "1,5;2,5;" //Example: "1,20;2,20;3,20"
 
 // ---------------- HELPER ------------------
-var NUM_SLIDERS = 3;
-var NUM_SLIDERS1 = 3;
+var NUM_SLIDERS = 2;
+var NUM_SLIDERS1 = 2;
 var NUM_SLIDERS2 = 2;
 
 function showSlide(id) {
@@ -141,7 +141,7 @@ var cond = "stateGoalPos"
 //var cond = xmlHttp.responseText;
 var formOrder = shuffle([['form0','next0'],['form1','next1']])
 
-var score = shuffle(["nice", "honest", "mean"]);
+var score = shuffle(["polite", "informative"]);
 var prediction = shuffle(["ask", "like"])
 
 //if (cond == 1) {
@@ -611,8 +611,9 @@ function doSentSubs (sents, polite, domain, utterance, people)
     question = "Based on what SP said, how likely do you think that <b>SP's goal</b> was to be:";
     
 //    if (prediction[0] == "ask") {
-    question2 = "How would SP <b>actually</b> rate LS's BB? <br>Please select the number of stars you think SP would actually give:";
-    question3 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
+    question2 = "How do you think SP actually felt about LS's BB?";
+    prequestion3 = "Here's how SP actually felt about LS's BB:";
+//    question3 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
 //    } else if (prediction[0] == "like") {
 //    question3 = "Based on what SP said, how likely is it for you to <b>ask for SP's opinion on your own BB</b>?";
 //    question2 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
@@ -627,11 +628,11 @@ function doSentSubs (sents, polite, domain, utterance, people)
     state = state.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);
     question = question.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     question2 = question2.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
-    question3 = question3.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
+    prequestion3 = prequestion3.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);  
     knowledge = knowledge.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
 
     
-    return [utterance, context, state, precontext, question, question2, question3, knowledge];
+    return [utterance, context, state, precontext, question, question2, prequestion3, knowledge];
 }
 
 var numConditions = allConditions.length;
@@ -665,13 +666,13 @@ var experiment = {
 //    context: [],
     goal0: score[0],
     goal1: score[1],
-    goal2: score[2],
+//    goal2: score[2],
 //    goal3: score[3],
 //    prediction0: prediction[0],
 //    prediction1: prediction[1],
     goalProb0: [],
     goalProb1: [],
-    goalProb2: [],
+//    goalProb2: [],
 //    stateProb: [],
     judgment: [],
 //    predictedProb0: [],
@@ -707,7 +708,7 @@ var experiment = {
 
       var prob0 = parseInt(document.getElementById("hiddenSliderValue0").value) / 40.00;
       var prob1 = parseInt(document.getElementById("hiddenSliderValue1").value) / 40.00;
-      var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
+//      var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
 //      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
 //      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
 //      var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
@@ -788,7 +789,7 @@ var experiment = {
         $("#score" + 10*i).html(score[i]);
       }
       $("#question2").html(sent_materials[5]);    
-      $("#question3").html(sent_materials[6]);    
+      $("#prequestion").html(sent_materials[6]);    
       $("#rating-stars").on("click", 
 			    	function(event) {
 						var selection = $("#rating-stars").val();
@@ -837,23 +838,23 @@ $("#slider1").slider({
                      "background":"#667D94",
                      "border-color": "#001F29" });
                }});
-$("#slider2").slider({
-               animate: true,
-               orientation: "vertical",
-               max: 40 , min: 0, step: 1, value: 20,
-               slide: function( event, ui ) {
-                   $("#slider2 .ui-slider-handle").css({
-                      "background":"#E0F5FF",
-                      "border-color": "#001F29"
-                   });
-               },
-               change: function( event, ui ) {
-                   $('#hiddenSliderValue2').attr('value', ui.value);
-                   $("#slider2").css({"background":"#99D6EB"});
-                   $("#slider2 .ui-slider-handle").css({
-                     "background":"#667D94",
-                     "border-color": "#001F29" });
-               }});
+//$("#slider2").slider({
+//               animate: true,
+//               orientation: "vertical",
+//               max: 40 , min: 0, step: 1, value: 20,
+//               slide: function( event, ui ) {
+//                   $("#slider2 .ui-slider-handle").css({
+//                      "background":"#E0F5FF",
+//                      "border-color": "#001F29"
+//                   });
+//               },
+//               change: function( event, ui ) {
+//                   $('#hiddenSliderValue2').attr('value', ui.value);
+//                   $("#slider2").css({"background":"#99D6EB"});
+//                   $("#slider2 .ui-slider-handle").css({
+//                     "background":"#667D94",
+//                     "border-color": "#001F29" });
+//               }});
 //$("#slider3").slider({
 //               animate: true,
 //               orientation: "vertical",
@@ -872,37 +873,37 @@ $("#slider2").slider({
 //                     "border-color": "#001F29" });
 //               }});
 
-$("#slider3").slider({
-               animate: true,
-               max: 40 , min: 0, step: 1, value: 20,
-               slide: function( event, ui ) {
-                   $("#slider3 .ui-slider-handle").css({
-                      "background":"#E0F5FF",
-                      "border-color": "#001F29"
-                   });
-               },
-               change: function( event, ui ) {
-                   $('#hiddenSliderValue3').attr('value', ui.value);
-                   $("#slider3").css({"background":"#99D6EB"});
-                   $("#slider3 .ui-slider-handle").css({
-                     "background":"#667D94",
-                     "border-color": "#001F29" });
-               }});
-
-$("#slider4").slider({
-               animate: true,
-               max: 40 , min: 0, step: 1, value: 20,
-               slide: function( event, ui ) {
-                   $("#slider4 .ui-slider-handle").css({
-                      "background":"#E0F5FF",
-                      "border-color": "#001F29"
-                   });
-               },
-               change: function( event, ui ) {
-                   $('#hiddenSliderValue4').attr('value', ui.value);
-                   $("#slider4").css({"background":"#99D6EB"});
-                   $("#slider4 .ui-slider-handle").css({
-                     "background":"#667D94",
-                     "border-color": "#001F29" });
-               }});
+//$("#slider3").slider({
+//               animate: true,
+//               max: 40 , min: 0, step: 1, value: 20,
+//               slide: function( event, ui ) {
+//                   $("#slider3 .ui-slider-handle").css({
+//                      "background":"#E0F5FF",
+//                      "border-color": "#001F29"
+//                   });
+//               },
+//               change: function( event, ui ) {
+//                   $('#hiddenSliderValue3').attr('value', ui.value);
+//                   $("#slider3").css({"background":"#99D6EB"});
+//                   $("#slider3 .ui-slider-handle").css({
+//                     "background":"#667D94",
+//                     "border-color": "#001F29" });
+//               }});
+//
+//$("#slider4").slider({
+//               animate: true,
+//               max: 40 , min: 0, step: 1, value: 20,
+//               slide: function( event, ui ) {
+//                   $("#slider4 .ui-slider-handle").css({
+//                      "background":"#E0F5FF",
+//                      "border-color": "#001F29"
+//                   });
+//               },
+//               change: function( event, ui ) {
+//                   $('#hiddenSliderValue4').attr('value', ui.value);
+//                   $("#slider4").css({"background":"#99D6EB"});
+//                   $("#slider4 .ui-slider-handle").css({
+//                     "background":"#667D94",
+//                     "border-color": "#001F29" });
+//               }});
 

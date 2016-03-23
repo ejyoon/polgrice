@@ -34,19 +34,19 @@
 
 .rating-gly-star {
     font-family: 'Glyphicons Halflings';
-    padding-left: 2px;
+    padding-left: 1px;
 }
 
 .rating-gly-star .rating-stars:before {
-    padding-left: 2px;
+    padding-left: 1px;
 }
 
 .rating-lg .rating-gly-star, .rating-lg .rating-gly-star .rating-stars:before {
-    padding-left: 4px;
+    padding-left: 1px;
 }
 
 .rating-xl .rating-gly-star, .rating-xl .rating-gly-star .rating-stars:before {
-    padding-left: 2px;
+    padding-left: 1px;
 }
 
 .rating-active {
@@ -165,7 +165,7 @@
 }
 
 .star-rating .clear-rating {
-    padding-right: 5px;
+    padding-right: 1px;
 }
 
 /**
