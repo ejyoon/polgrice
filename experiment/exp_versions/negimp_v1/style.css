@@ -179,12 +179,14 @@ button[disabled] {
 #slider1 .ui-slider-handle {
                background: #FAFAFA; }
 
+/*
 #slider2 { width: 12px;
                height: 200px;
                position: relative;
                margin: 5px; }
 #slider2 .ui-slider-handle {
                background: #FAFAFA; }
+*/
 
 /*
 #slider3 { width: 12px;
@@ -196,6 +198,7 @@ button[disabled] {
 */
 
 
+/*
 #slider3 { width: 500px;
                height: 12px;
                position: relative;
@@ -208,3 +211,4 @@ button[disabled] {
                margin: 5px; }
 #slider4 .ui-slider-handle {
                background: #FAFAFA; }
+*/

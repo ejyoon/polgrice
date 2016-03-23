@@ -724,7 +724,7 @@ var experiment = {
       experiment.data.state.push(trial.state);
       experiment.data.goalProb0.push(prob0);
       experiment.data.goalProb1.push(prob1);
-      experiment.data.goalProb2.push(prob2);
+//      experiment.data.goalProb2.push(prob2);
 //      experiment.data.stateProb.push(prob3);
 //      experiment.data.predictedProb0.push(prob3);
 //      experiment.data.predictedProb1.push(prob4);
