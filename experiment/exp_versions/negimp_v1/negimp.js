@@ -128,10 +128,16 @@ function getRadioCheckedValue(formNum, radio_name)
 
 // CONDITION ASSIGNMENT
 // var cond = random(3)+1;
-var expt = "politeImp_stateGoalPos";
-//var cond = random(2)+1;
+var expt = "NegImp_v1";
+var cond = 1;
 //var cond = 1;
-var cond = "stateGoalPos"
+//var cond = "stateGoalPos"
+
+if (cond == 1) {
+    threat = threat;
+} else {
+    threat = no_threat;   
+}
 
 // call the maker getter to get the cond variable 
 //var xmlHttp = null;
@@ -342,11 +348,11 @@ shuffle(
 ]); 
 //}
 
-speakers = shuffle([["John","Bob",], ["Hailey", "Mika"], ["Karen", "Jenny"], ["Kyle", "James"], ["Sean", "Chris"],
-                    ["Lucy", "Sarah"], ["Bill", "Tom"], ["Heather", "Grace"], ["Jake", "Kevin"], ["Ann", "Diana"],
-                    ["George", "Henry"], ["Nathan", "Patrick"], ["Wendy", "Emma"], ["Stephanie", "Barbara"], ["Oliver", "Robert"],
-                    ["Matt", "Larry"], ["Steven", "Zack"], ["Fiona", "Yvonne"], ["Rebecca", "Cheryl"], ["Victoria", "Jasmine"],
-                    ["Albert", "Frank"], ["Greg", "Colin"], ["Ed", "Peter"], ["Molly", "Kara"], ["Justine", "Kelly"]]);
+speakers = shuffle([["John","Bob","Ken"], ["Hailey", "Mika","Sherry"], ["Karen", "Jenny","Pam"], ["Kyle", "James","Derek"], ["Sean", "Chris","Harry"],
+                    ["Lucy", "Sarah","Joanne"], ["Bill", "Tom","Larry"], ["Heather", "Grace","Christine"], ["Jake", "Kevin","Mike"], ["Ann", "Diana","Gina"],
+                    ["George", "Henry","Scott"], ["Nathan", "Patrick","Tyson"], ["Wendy", "Emma","Shirley"], ["Stephanie", "Barbara","Caroline"], ["Oliver", "Robert","Chris"],
+                    ["Matt", "Larry","Bobby"], ["Steven", "Zack","Wayne"], ["Fiona", "Yvonne","Helen"], ["Rebecca", "Cheryl","Tracy"], ["Victoria", "Jasmine","Naomi"],
+                    ["Albert", "Frank","Xavier"], ["Greg", "Colin","Benoit"], ["Ed", "Peter","Lawrence"], ["Molly", "Kara","Sophia"], ["Justine", "Kelly","Irene"]]);
 speakers1 = shuffle(speakers[0]);
 speakers2 = shuffle(speakers[1]);
 speakers3 = shuffle(speakers[2]);
@@ -496,102 +502,127 @@ var sents = {
         people1: {
             SP: speakers1[0],
             LS: speakers1[1],
+            TP: speakers1[2],
         },
         people2: {
             SP: speakers2[0],
             LS: speakers2[1],
+            TP: speakers2[2],
         },
         people3: {
             SP: speakers3[0],
             LS: speakers3[1],
+            TP: speakers3[2],
         },
         people4: {
             SP: speakers4[0],
             LS: speakers4[1],
-        },
+            TP: speakers4[2],
+       },
         people5: {
             SP: speakers5[0],
             LS: speakers5[1],
+            TP: speakers5[2],
         },
         people6: {
             SP: speakers6[0],
             LS: speakers6[1],
+            TP: speakers6[2],
         },
         people7: {
             SP: speakers7[0],
             LS: speakers7[1],
+            TP: speakers7[2],
         },
         people8: {
             SP: speakers8[0],
             LS: speakers8[1],
+            TP: speakers8[2],
         },
         people9: {
             SP: speakers9[0],
             LS: speakers9[1],
+            TP: speakers9[2],
         },
         people10: {
             SP: speakers10[0],
             LS: speakers10[1],
+            TP: speakers10[2],
         },
         people11: {
             SP: speakers11[0],
             LS: speakers11[1],
+            TP: speakers11[2],
         },
         people12: {
             SP: speakers12[0],
             LS: speakers12[1],
+            TP: speakers12[2],
         },
         people13: {
             SP: speakers13[0],
             LS: speakers13[1],
+            TP: speakers13[2],
         },
         people14: {
             SP: speakers14[0],
             LS: speakers14[1],
+            TP: speakers14[2],
         },
         people15: {
             SP: speakers15[0],
             LS: speakers15[1],
+            TP: speakers15[2],
         },
         people16: {
             SP: speakers16[0],
             LS: speakers16[1],
+            TP: speakers16[2],
         },
         people17: {
             SP: speakers17[0],
             LS: speakers17[1],
+            TP: speakers17[2],
         },
         people18: {
             SP: speakers18[0],
             LS: speakers18[1],
+            TP: speakers18[2],
         },
         people19: {
             SP: speakers19[0],
             LS: speakers19[1],
+            TP: speakers19[2],
         },
         people20: {
             SP: speakers20[0],
             LS: speakers20[1],
+            TP: speakers20[2],
         },
         people21: {
             SP: speakers21[0],
             LS: speakers21[1],
+            TP: speakers21[2],
         },
         people22: {
             SP: speakers22[0],
             LS: speakers22[1],
+            TP: speakers22[2],
         },
         people23: {
             SP: speakers23[0],
             LS: speakers23[1],
+            TP: speakers23[2],
         },
         people24: {
             SP: speakers24[0],
             LS: speakers24[1],
+            TP: speakers24[2],
         },
         people25: {
             SP: speakers25[0],
             LS: speakers25[1],
+            TP: speakers25[2],
         },
     }
 };
@@ -602,6 +633,11 @@ function doSentSubs (sents, polite, domain, utterance, people)
     precontext = sents["domains"][domain]["sent_precontext"];
     context = sents["domains"][domain]["sent_context"];
     state = sents["states"][state]["state"]
+    if (threat == "threat") {
+        precontext = precontext;
+    } else if (threat == "no_threat") {
+        precontext = precontext.replace("LS", "TP");
+    }
     if (state_knowledge == "known") {
         knowledge = " <b>and LS knew it</b>."
     } else if (state_knowledge == "unknown") {
