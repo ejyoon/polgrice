@@ -182,7 +182,7 @@ var domains = domains1.concat(domains2)
 //var states = states1.concat(states2, states3)
 
 var states = 
-    ["heart2", "heart4"];
+    ["heart1", "heart2", "heart3", "heart4", "heart5"];
 
 
 //var states1 = 
@@ -199,7 +199,7 @@ var states =
 //
 
 var utterances = 
-    shuffle(["not_amazing", "not_terrible"]);
+    shuffle(["not_amazing", "not_terrible","yes_amazing", "yes_terrible"]);
 
 //var utterances1 = 
 //    ["not terrible", "bad", "okay", "good", "amazing"];
@@ -229,16 +229,16 @@ shuffle(
  "utterance": utterances[1],
  "people": "people2",
 },
-//{"domain": domains[2],
-// "state": states[2],
-// "utterance": utterances[2],
-// "people": "people3",
-//},
-//{"domain": domains[3],
-// "state": states[3],
-// "utterance": utterances[3],
-// "people": "people4",
-//},
+{"domain": domains[2],
+ "state": states[2],
+ "utterance": utterances[2],
+ "people": "people3",
+},
+{"domain": domains[3],
+ "state": states[3],
+ "utterance": utterances[3],
+ "people": "people4",
+},
 //{"domain": domains[4],
 // "state": states[4],
 // "utterance": utterances[4],
@@ -395,6 +395,21 @@ var sents = {
 //        },
         not_amazing: {
             sent_utterance: " <b>\"It wasn't amazing,\"</b> SP said."
+        },
+        yes_terrible: {
+            sent_utterance: " <b>\"It was terrible,\"</b> SP said."
+        },        
+//        bad: {
+//            sent_utterance: " SP said, <b>\"It was bad!\"</b>"
+//        },        
+//        okay: {
+//            sent_utterance: " SP said, <b>\"It was okay!\"</b>" 
+//        },
+//        good: {
+//            sent_utterance: " SP said, <b>\"It was good!\"</b>" 
+//        },
+        yes_amazing: {
+            sent_utterance: " <b>\"It was amazing,\"</b> SP said."
         },
     },
     domains: {
