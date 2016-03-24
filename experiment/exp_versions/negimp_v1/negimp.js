@@ -127,9 +127,9 @@ function getRadioCheckedValue(formNum, radio_name)
 // ---------------- PARAMETERS ------------------
 
 // CONDITION ASSIGNMENT
-// var cond = random(3)+1;
+ var cond = random(2)+1;
 var expt = "NegImp_v1";
-var cond = 1;
+//var cond = 2;
 //var cond = 1;
 //var cond = "stateGoalPos"
 
@@ -416,66 +416,92 @@ var sents = {
        presentation: {
             sent_precontext: "Imagine that LS just gave a presentation, ", 
             sent_context: " LS approached SP, who had just seen LS's presentation, and asked \"How was my presentation?\"",
+            sent_precontext_TP: "Imagine that TP just gave a presentation. LS didn't see it, so", 
+            sent_context_TP: " LS approached SP, who had just seen TP's presentation, and asked \"How was TP's presentation?\"",
             BB: "presentation",
 	},
 	   cookie: {
             sent_precontext: "Imagine that LS baked some cookies, ", 
             sent_context: " LS approached SP, who had just tasted LS's cookie, and asked \"How did my cookie taste?\"", 
+            sent_precontext_TP: "Imagine that TP baked some cookies. LS didn't taste it, so", 
+            sent_context_TP: " LS approached SP, who had just tasted TP's cookie, and asked \"How did TP's cookie taste?\"", 
             BB: "cookie",
 	},
 	   poem: {
             sent_precontext: "Imagine that LS wrote a poem, ", 
             sent_context: " LS approached SP, who had just read LS's poem, and asked \"How was my poem?\"", 
+            sent_precontext_TP: "Imagine that TP wrote a poem. LS didn't read it, so", 
+            sent_context_TP: " LS approached SP, who had just read TP's poem, and asked \"How was TP's poem?\"", 
             BB: "poem",
 	},        
 	   cake: {
             sent_precontext: "Imagine that LS baked a cake, ", 
             sent_context: " LS approached SP, who had just tasted LS's cake, and asked \"How did my cake taste?\"", 
+            sent_precontext_TP: "Imagine that TP baked a cake. LS didn't taste it, so", 
+            sent_context_TP: " LS approached SP, who had just tasted TP's cake, and asked \"How did TP's cake taste?\"", 
             BB: "cake",
 	},
 	   song: {
             sent_precontext: "Imagine that LS composed a song, ", 
             sent_context: " LS approached SP, who had just heard LS's song, and asked \"How was my song?\"", 
+            sent_precontext_TP: "Imagine that TP composed a song. LS didn't hear it, so", 
+            sent_context_TP: " LS approached SP, who had just heard TP's song, and asked \"How was TP's song?\"", 
             BB: "song",
 	},
 	   film: {
             sent_precontext: "Imagine that LS filmed a movie, ", 
             sent_context: " LS approached SP, who had just seen LS's movie, and asked \"How was my movie?\"", 
+            sent_precontext_TP: "Imagine that TP filmed a movie. LS didn't see it, so", 
+            sent_context_TP: " LS approached SP, who had just seen TP's movie, and asked \"How was TP's movie?\"", 
             BB: "movie",
 	},
 	   solo: {
             sent_precontext: "Imagine that LS played a cello solo part at a concert, ", 
             sent_context: " LS approached SP, who had just heard LS's solo, and asked \"How was my solo?\"", 
+            sent_precontext_TP: "Imagine that TP played a cello solo part at a concert. LS didn't hear it, so", 
+            sent_context_TP: " LS approached SP, who had just heard TP's solo, and asked \"How was TP's solo?\"", 
             BB: "solo",
 	},        
 	   dance: {
             sent_precontext: "Imagine that LS gave a tap dance performance, ", 
             sent_context: " LS approached SP, who had just seen LS's dance, and asked \"How was my dance?\"", 
+            sent_precontext_TP: "Imagine that TP gave a tap dance performance. LS didn't see it, so", 
+            sent_context_TP: " LS approached SP, who had just seen TP's dance, and asked \"How was TP's dance?\"", 
             BB: "dance",
 	},   
 	   painting: {
             sent_precontext: "Imagine that LS drew a painting, ", 
             sent_context: " LS approached SP, who had just seen LS's painting, and asked \"How was my painting?\"", 
+            sent_precontext_TP: "Imagine that TP drew a painting. LS didn't see it, so", 
+            sent_context_TP: " LS approached SP, who had just seen TP's painting, and asked \"How was TP's painting?\"", 
             BB: "painting",
 	}, 
 	   monologue: {
             sent_precontext: "Imagine that LS gave a monologue during a school play, ", 
-            sent_context: " LS approached SP, who had just heard LS's monologue, and asked \"How was my monologue?\"", 
+            sent_context: " LS approached SP, who had just heard LS's monologue and asked \"How was my monologue?\"", 
+            sent_precontext_TP: "Imagine that TP gave a monologue during a school play. LS didn't hear it, so", 
+            sent_context_TP: " LS approached SP, who had just heard TP's monologue, and asked \"How was TP's monologue?\"", 
             BB: "monologue",
 	},
 	   app: {
             sent_precontext: "Imagine that LS designed a mobile app, ", 
             sent_context: " LS approached SP, who looked at LS's mobile app, and asked \"How was my app?\"", 
+            sent_precontext_TP: "Imagine that TP designed a mobile app. LS didn't see it, so", 
+            sent_context_TP: " LS approached SP, who looked at TP's mobile app, and asked \"How was TP's app?\"", 
             BB: "app",
 	},
 	   review: {
             sent_precontext: "Imagine that LS wrote a review for a book, ", 
             sent_context: " LS approached SP, who had just read LS's review, and asked \"How was my review?\"", 
+            sent_precontext_TP: "Imagine that TP wrote a review for a book. LS didn't read it, so", 
+            sent_context_TP: " LS approached SP, who had just read TP's review, and asked \"How was TP's review?\"", 
             BB: "review",
 	},
 	   recital: {
             sent_precontext: "Imagine that LS had a piano recital, ", 
             sent_context: " LS approached SP, who had just attended LS's recital, and asked \"How was my recital performance?\"", 
+            sent_precontext_TP: "Imagine that TP had a piano recital, ", 
+            sent_context_TP: " LS approached SP, who had just attended TP's recital, and asked \"How was TP's recital performance?\"", 
             BB: "recital performance",
 	},
     },
@@ -645,25 +671,35 @@ var sents = {
 function doSentSubs (sents, polite, domain, utterance, people)
 {
     utterance = sents["utterances"][utterance]["sent_utterance"];
-    precontext = sents["domains"][domain]["sent_precontext"];
-    context = sents["domains"][domain]["sent_context"];
-    state = sents["states"][state]["state"]
+//    precontext = sents["domains"][domain]["sent_precontext"];
     if (threat == "threat") {
-        precontext = precontext;
-    } else if (threat == "no_threat") {
-        precontext = precontext.replace("LS", "TP");
-    }
-    if (state_knowledge == "known") {
+        precontext = sents["domains"][domain]["sent_precontext"];
+        context = sents["domains"][domain]["sent_context"];
+            if (state_knowledge == "known") {
         knowledge = " <b>and LS knew it</b>."
     } else if (state_knowledge == "unknown") {
         knowledge = " but had no idea what people thought about it."
     }
+
+    } else if (threat == "no_threat") {
+        precontext = sents["domains"][domain]["sent_precontext_TP"];
+        context = sents["domains"][domain]["sent_context_TP"];
+        if (state_knowledge == "known") {
+        knowledge = " <b>and LS knew it</b>."
+    } else if (state_knowledge == "unknown") {
+        knowledge = ""
+    }
+
+    }
+//    context = sents["domains"][domain]["sent_context"];
+    state = sents["states"][state]["state"]
     
     question = "Based on what SP said, how likely do you think that <b>SP's goal</b> was to be:";
     
 //    if (prediction[0] == "ask") {
     question2 = "How do you think SP actually felt about LS's BB?";
-    prequestion3 = "Here's how SP actually felt about LS's BB:";
+    summary = "Here's what you thought SP felt about LS's BB:";
+    prequestion3 = "Here's how SP <b>actually</b> felt about LS's BB:";
 //    question3 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
 //    } else if (prediction[0] == "like") {
 //    question3 = "Based on what SP said, how likely is it for you to <b>ask for SP's opinion on your own BB</b>?";
@@ -672,18 +708,20 @@ function doSentSubs (sents, polite, domain, utterance, people)
     BB = sents["domains"][domain]["BB"]; //Item 2
     SP = sents["people"][people]["SP"]; //speaker
     LS = sents["people"][people]["LS"]; //addressee
+    TP = sents["people"][people]["TP"]; //third party (target)
  
     utterance = utterance.replace("BB",BB).replace("SP",SP);
-    context = context.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);
-    precontext = precontext.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);
+    context = context.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS).replace("TP",TP).replace("TP",TP).replace("TP",TP);
+    precontext = precontext.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS).replace("TP",TP).replace("TP",TP).replace("TP",TP);
     state = state.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);
     question = question.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     question2 = question2.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     prequestion3 = prequestion3.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);  
     knowledge = knowledge.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
+    summary = summary.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
 
     
-    return [utterance, context, state, precontext, question, question2, prequestion3, knowledge];
+    return [utterance, context, state, precontext, question, question2, prequestion3, knowledge, summary];
 }
 
 var numConditions = allConditions.length;
@@ -751,6 +789,15 @@ var experiment = {
     setTimeout(function() {turk.submit(experiment.data) }, 1500);
   },
     
+  next0: function() {
+
+      var judgment = $(".rating-stars").attr("style");
+      judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
+   
+      experiment.data.judgment.push(judgment);
+    
+  },
+    
   next: function() {
     // Allow experiment to start if it's a turk worker OR if it's a test run
 	if (window.self == window.top | turk.workerId.length > 0) {
@@ -762,8 +809,6 @@ var experiment = {
 //      var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
         
 //      experiment.stateRatings[currentTrialNum] = getRadioCheckedValue(1, "state");
-      var judgment = $(".rating-stars").attr("style");
-      judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
 
       experiment.data.order.push(numComplete);
       experiment.data.utterance.push(trial.utterance);
@@ -775,7 +820,6 @@ var experiment = {
 //      experiment.data.stateProb.push(prob3);
 //      experiment.data.predictedProb0.push(prob3);
 //      experiment.data.predictedProb1.push(prob4);
-      experiment.data.judgment.push(judgment);
    
       clearForm(document.forms[0]);
       clearForm(document.forms[1]);
@@ -814,6 +858,7 @@ var experiment = {
       }
       $("#question2").html(sent_materials[5]);    
       $("#prequestion").html(sent_materials[6]);    
+      $("#summary").html(sent_materials[8]);    
       $("#rating-stars").on("click", 
 			    	function(event) {
 						var selection = $("#rating-stars").val();

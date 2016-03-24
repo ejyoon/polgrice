@@ -38,6 +38,8 @@
                    experiment.next();
         document.getElementById('form1').hidden=false;
         document.getElementById('form0').hidden=true;
+        document.getElementById('form2').hidden=true;
+        document.getElementById('form3').hidden=false;
         document.getElementById('next1').hidden=false;
         document.getElementById('next0').hidden=true;
                                   ">Start</button>
@@ -214,9 +216,14 @@ function pressEnter(e) {
 
     <p id="context" class="block-text"></p>
 
-
+<span id="form2">
+    <p id="summary"></p>
+        </span>
+<span id="form3">
+    <p id="question2"></p>
+        </span>
+        
 <span id="form1">
-        <p id="question2"></p>
 
  <!--
   ###############################################################
@@ -234,9 +241,11 @@ function pressEnter(e) {
     
     
     <button type="button" id="next1" onclick="this.blur(); if
-     (ValidateStar(document.test)) {
+     (ValidateStar(document.test)) {experiment.next0(); 
         document.getElementById('form0').hidden=false;
         document.getElementById('form1').hidden=false;
+        document.getElementById('form2').hidden=false;
+        document.getElementById('form3').hidden=true;
         document.getElementById('next0').hidden=false;
         document.getElementById('next1').hidden=true;
 }">Next</button>
@@ -320,6 +329,8 @@ function pressEnter(e) {
         <button type="button" id="next0" name="goalButton" onclick="this.blur(); if (ValidateSliderFormPart1(document.affectForm1)) {experiment.next();   
         document.getElementById('form0').hidden=true;
         document.getElementById('form1').hidden=false;
+        document.getElementById('form2').hidden=true;
+        document.getElementById('form3').hidden=false;
         document.getElementById('next0').hidden=true;
         document.getElementById('next1').hidden=false;
 ;}">Next</button>
