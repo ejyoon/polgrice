@@ -134,9 +134,9 @@ var cond = 1;
 //var cond = "stateGoalPos"
 
 if (cond == 1) {
-    threat = threat;
+    var threat = "threat";
 } else {
-    threat = no_threat;   
+    var threat = "no_threat";   
 }
 
 // call the maker getter to get the cond variable 
@@ -745,11 +745,7 @@ var experiment = {
       var prob0 = parseInt(document.getElementById("hiddenSliderValue0").value) / 40.00;
       var prob1 = parseInt(document.getElementById("hiddenSliderValue1").value) / 40.00;
 //      var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
-//      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
-//      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
-//      var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
-
-//      var prob3 = getRadioCheckedValue(1, "state");
+        
 //      experiment.stateRatings[currentTrialNum] = getRadioCheckedValue(1, "state");
       var judgment = $(".rating-stars").attr("style");
       judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
@@ -785,29 +781,6 @@ var experiment = {
     	$("#trial-num").html(numComplete);
     	$("#total-num").html(numTrials);
 
-        // randomize question form order
-//        var formAElements = document.querySelectorAll('.formA');
-//        formAElements[0].id = formOrder[0][0];
-//        var formBElements = document.querySelectorAll('.formB');
-//        formBElements[0].id = formOrder[1][0];
-//        var buttonAElements = document.querySelectorAll('.nextA');
-//        buttonAElements[0].id = formOrder[0][1];
-//        var buttonBElements = document.querySelectorAll('.nextB');
-//        buttonBElements[0].id = formOrder[1][1];
-        
-//        var formA = document.getElementsByClassName('.formA');
-//        formA.id = 'form0';
-//        var formB = document.getElementsByClassName('.formB');
-//        formB.id = 'form1';
-//        var nextA = document.getElementsByClassName('.nextA');
-//        nextA.id = 'next0';
-//        var nextB = document.getElementsByClassName('.nextB');
-//        nextB.id = 'next1';        
-//        document.getElementById('form0').hidden=true;
-//        document.getElementById('form1').hidden=false;
-////        document.getElementById('next0').hidden=true;
-//        document.getElementById('next1').hidden=false;
-        
     	currentTrialNum = numComplete;
     	trial = allTrialOrders[shuffledOrder[numComplete]];
         utterance = trial.utterance;

@@ -215,6 +215,33 @@ function pressEnter(e) {
     <p id="context" class="block-text"></p>
 
 
+<span id="form1">
+        <p id="question2"></p>
+
+ <!--
+  ###############################################################
+  Star-ratings
+  http://www.jqueryscript.net/other/Simple-jQuery-Star-Rating-System-For-Bootstrap-3.html
+  -->
+  <div id="test" name= "star" align="center">
+    <input id="rating-system" type="number" class="rating" 
+    	min="0" max="5" step="1" 
+    	data-showCaption="true" showClear="false" hoverEnabled="false">
+  </div>
+  <!--star-ratings
+  ###############################################################
+  -->    
+    
+    
+    <button type="button" id="next1" onclick="this.blur(); if
+     (ValidateStar(document.test)) {
+        document.getElementById('form0').hidden=false;
+        document.getElementById('form1').hidden=false;
+        document.getElementById('next0').hidden=false;
+        document.getElementById('next1').hidden=true;
+}">Next</button>
+</span>
+        
 <span id="form0" name="goalForm">
 
 <p id="prequestion"></p>
@@ -297,31 +324,7 @@ function pressEnter(e) {
         document.getElementById('next1').hidden=false;
 ;}">Next</button>
 
-<span id="form1">
-        <p id="question2"></p>
 
- <!--
-  ###############################################################
-  Star-ratings
-  http://www.jqueryscript.net/other/Simple-jQuery-Star-Rating-System-For-Bootstrap-3.html
-  -->
-  <div id="test" name= "star" align="center">
-    <input id="rating-system" type="number" class="rating" 
-    	min="0" max="5" step="1" 
-    	data-showCaption="true" showClear="false" hoverEnabled="false">
-  </div>
-  <!--star-ratings
-  ###############################################################
-  -->    
-    
-    
-    <button type="button" id="next1" onclick="this.blur(); if
-     (ValidateStar(document.test)) {
-        document.getElementById('form0').hidden=false;
-        document.getElementById('form1').hidden=true;
-        document.getElementById('next0').hidden=false;
-        document.getElementById('next1').hidden=true;
-}">Next</button>
     </div>
 </div>
 
