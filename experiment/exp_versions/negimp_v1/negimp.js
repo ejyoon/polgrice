@@ -157,11 +157,38 @@ var domains1 =
     shuffle(["poem", "cake", "cookie", "presentation", "song", "film", "solo", "monologue", "dance", "painting", "app", "review", "recital"]);
 var domains = domains1.concat(domains1, domains1, domains1)
 
-var states1 = 
-    shuffle(["heart1", "heart2", "heart3", "heart4", "heart5"]);
-var states2 = 
-    shuffle(["heart2", "heart3", "heart4", "heart5","heart1"]);
-var states = states1.concat(states2);
+var statecond = random(5) + 1;
+if (statecond == 1) {
+    var states1 = 
+        ["heart1", "heart3", "heart2", "heart5", "heart4"];
+    var states2 = 
+        ["heart3", "heart2", "heart5", "heart4", "heart1"];
+    var states = states1.concat(states2);
+} else if (statecond == 2) {
+    var states1 = 
+        ["heart3", "heart2", "heart5", "heart4", "heart1"];
+    var states2 = 
+        ["heart2", "heart5", "heart4", "heart1", "heart3"];
+    var states = states1.concat(states2);
+} else if (statecond == 3) {
+    var states1 = 
+        ["heart2", "heart5", "heart4", "heart1", "heart3"];
+    var states2 = 
+        ["heart5", "heart4", "heart1", "heart3", "heart2"];
+    var states = states1.concat(states2);    
+} else if (statecond == 4) {
+    var states1 = 
+        ["heart5", "heart4", "heart1", "heart3", "heart2"];
+    var states2 = 
+        ["heart4", "heart1", "heart3", "heart2", "heart5"];
+    var states = states1.concat(states2);    
+} else if (statecond == 5) {
+    var states1 = 
+        ["heart4", "heart1", "heart3", "heart2", "heart5"];
+    var states2 = 
+        ["heart1", "heart3", "heart2", "heart5", "heart4"];
+    var states = states1.concat(states2);    
+}
 
 var utterances1 = 
     ["yes_terrible", "not_bad", "yes_okay", "not_good", "yes_amazing"];
