@@ -127,11 +127,8 @@ function getRadioCheckedValue(formNum, radio_name)
 // ---------------- PARAMETERS ------------------
 
 // CONDITION ASSIGNMENT
- var cond = random(2)+1;
+var cond = random(2)+1;
 var expt = "NegImp_v1";
-//var cond = 2;
-//var cond = 1;
-//var cond = "stateGoalPos"
 
 if (cond == 1) {
     var threat = "threat";
@@ -164,37 +161,18 @@ var states1 =
     shuffle(["heart1", "heart2", "heart3", "heart4", "heart5"]);
 var states2 = 
     shuffle(["heart2", "heart3", "heart4", "heart5","heart1"]);
-//var states3 = 
-//    ["heart3", "heart4", "heart5","heart1", "heart2"];
-//var states4 = 
-//    ["heart4", "heart5","heart1", "heart2", "heart3"];
-//var states5 = 
-//    ["heart5","heart1", "heart2", "heart3", "heart4"];
 var states = states1.concat(states2);
-//var states = states1.concat(states2, states3, states4, states5, states1, states2, states3, states4, states5);
-
 
 var utterances1 = 
     ["yes_terrible", "not_bad", "yes_okay", "not_good", "yes_amazing"];
 var utterances2 = 
     ["not_terrible", "yes_bad", "not_okay", "yes_good", "not_amazing"];
 var utterances = utterances1.concat(utterances2)
-//var utterances = utterances1.concat(utterances1, utterances1, utterances1, utterances1, utterances2, utterances2, utterances2, utterances2, utterances2)
 
 var drawnum1 = shuffle([0, 1, 2, 3, 4]);
 var drawnum2 = shuffle([5, 6, 7, 8, 9]);
-//var drawnum3 = shuffle([10, 11, 12, 13, 14]);
-//var drawnum4 = shuffle([15, 16, 17, 18, 19]);
-//var drawnum5 = shuffle([20, 21, 22, 23, 24]);
-//var drawnum6 = shuffle([25, 26, 27, 28, 29]);
-//var drawnum7 = shuffle([30, 31, 32, 33, 34]);
-//var drawnum8 = shuffle([35, 36, 37, 38, 39]);
-//var drawnum9 = shuffle([40, 41, 42, 43, 44]);
-//var drawnum10 = shuffle([45, 46, 47, 48, 49]);
 var drawnumdraw = shuffle([drawnum1, drawnum2]);
 var drawnum = drawnumdraw[0].concat(drawnumdraw[1]);
-//var drawnumdraw = shuffle([drawnum1, drawnum2, drawnum3, drawnum4, drawnum5, drawnum6, drawnum7, drawnum8, drawnum9, drawnum10]);
-//var drawnum = drawnumdraw[0].concat(drawnumdraw[1], drawnumdraw[2], drawnumdraw[3], drawnumdraw[4], drawnumdraw[5], drawnumdraw[6], drawnumdraw[7], drawnumdraw[8], drawnumdraw[9]);
 
     var allConditions = 
 //shuffle(
@@ -252,223 +230,17 @@ var drawnum = drawnumdraw[0].concat(drawnumdraw[1]);
  "utterance": utterances[9],
  "people": "people10",
 },
-//{"domain": domains[10],
-// "state": states[10],
-// "utterance": utterances[10],
-// "people": "people11",
-//},
-//{"domain": domains[11],
-// "state": states[11],
-// "utterance": utterances[11],
-// "people": "people12",
-//},
-//{"domain": domains[12],
-// "state": states[12],
-// "utterance": utterances[12],
-// "people": "people13",
-//},
-//{"domain": domains[13],
-// "state": states[13],
-// "utterance": utterances[13],
-// "people": "people14",
-//},
-//{"domain": domains[14],
-// "state": states[14],
-// "utterance": utterances[14],
-// "people": "people15",
-//},
-//{"domain": domains[15],
-// "state": states[15],
-// "utterance": utterances[15],
-// "people": "people16",
-//},
-//{"domain": domains[16],
-// "state": states[16],
-// "utterance": utterances[16],
-// "people": "people17",
-//},
-//{"domain": domains[17],
-// "state": states[17],
-// "utterance": utterances[17],
-// "people": "people18",
-//},
-//{"domain": domains[18],
-// "state": states[18],
-// "utterance": utterances[18],
-// "people": "people19",
-//},
-//{"domain": domains[19],
-// "state": states[19],
-// "utterance": utterances[19],
-// "people": "people20",
-//},
-//{"domain": domains[20],
-// "state": states[20],
-// "utterance": utterances[20],
-// "people": "people21",
-//},
-//{"domain": domains[21],
-// "state": states[21],
-// "utterance": utterances[21],
-// "people": "people22",
-//},
-//{"domain": domains[22],
-// "state": states[22],
-// "utterance": utterances[22],
-// "people": "people23",
-//},
-//{"domain": domains[23],
-// "state": states[23],
-// "utterance": utterances[23],
-// "people": "people24",
-//},
-//{"domain": domains[24],
-// "state": states[24],
-// "utterance": utterances[24],
-// "people": "people25",
-//},
-//{"domain": domains[25],
-// "state": states[25],
-// "utterance": utterances[25],
-// "people": "people26",
-//},
-//{"domain": domains[26],
-// "state": states[26],
-// "utterance": utterances[26],
-// "people": "people27",
-//},
-//{"domain": domains[27],
-// "state": states[27],
-// "utterance": utterances[27],
-// "people": "people28",
-//},
-//{"domain": domains[28],
-// "state": states[28],
-// "utterance": utterances[28],
-// "people": "people29",
-//},
-//{"domain": domains[29],
-// "state": states[29],
-// "utterance": utterances[29],
-// "people": "people30",
-//},
-//{"domain": domains[30],
-// "state": states[30],
-// "utterance": utterances[30],
-// "people": "people31",
-//},
-//{"domain": domains[31],
-// "state": states[31],
-// "utterance": utterances[31],
-// "people": "people32",
-//},
-//{"domain": domains[32],
-// "state": states[32],
-// "utterance": utterances[32],
-// "people": "people33",
-//},
-//{"domain": domains[33],
-// "state": states[33],
-// "utterance": utterances[33],
-// "people": "people34",
-//},
-//{"domain": domains[34],
-// "state": states[34],
-// "utterance": utterances[34],
-// "people": "people35",
-//},
-//{"domain": domains[35],
-// "state": states[35],
-// "utterance": utterances[35],
-// "people": "people36",
-//},
-//{"domain": domains[36],
-// "state": states[36],
-// "utterance": utterances[36],
-// "people": "people37",
-//},
-//{"domain": domains[37],
-// "state": states[37],
-// "utterance": utterances[37],
-// "people": "people38",
-//},
-//{"domain": domains[38],
-// "state": states[38],
-// "utterance": utterances[38],
-// "people": "people39",
-//},
-//{"domain": domains[39],
-// "state": states[39],
-// "utterance": utterances[39],
-// "people": "people40",
-//},
-//{"domain": domains[40],
-// "state": states[40],
-// "utterance": utterances[40],
-// "people": "people41",
-//},
-//{"domain": domains[41],
-// "state": states[41],
-// "utterance": utterances[41],
-// "people": "people42",
-//},
-//{"domain": domains[42],
-// "state": states[42],
-// "utterance": utterances[42],
-// "people": "people43",
-//},
-//{"domain": domains[43],
-// "state": states[43],
-// "utterance": utterances[43],
-// "people": "people44",
-//},
-//{"domain": domains[44],
-// "state": states[44],
-// "utterance": utterances[44],
-// "people": "people45",
-//},
-//{"domain": domains[45],
-// "state": states[45],
-// "utterance": utterances[45],
-// "people": "people46",
-//},
-//{"domain": domains[46],
-// "state": states[46],
-// "utterance": utterances[46],
-// "people": "people47",
-//},
-//{"domain": domains[47],
-// "state": states[47],
-// "utterance": utterances[47],
-// "people": "people48",
-//},
-//{"domain": domains[48],
-// "state": states[48],
-// "utterance": utterances[48],
-// "people": "people49",
-//},
-//{"domain": domains[49],
-// "state": states[49],
-// "utterance": utterances[49],
-// "people": "people50",
-//},
     ]
 //        )
 ]
 //    ); 
 //}
 
-var speakers_1 = shuffle([["John","Bob","Ken"], ["Hailey", "Mika","Sherry"], ["Karen", "Jenny","Pam"], ["Kyle", "James","Derek"], ["Sean", "Chris","Harry"],
+var speakers = shuffle([["John","Bob","Ken"], ["Hailey", "Mika","Sherry"], ["Karen", "Jenny","Pam"], ["Kyle", "James","Derek"], ["Sean", "Chris","Harry"],
                     ["Lucy", "Sarah","Joanne"], ["Bill", "Tom","Larry"], ["Heather", "Grace","Christine"], ["Jake", "Kevin","Mike"], ["Ann", "Diana","Gina"],
                     ["George", "Henry","Scott"], ["Nathan", "Patrick","Tyson"], ["Wendy", "Emma","Shirley"], ["Stephanie", "Barbara","Caroline"], ["Oliver", "Robert","Chris"],
                     ["Matt", "Landon","Bobby"], ["Steven", "Zack","Wayne"], ["Fiona", "Yvonne","Helen"], ["Rebecca", "Cheryl","Tracy"], ["Victoria", "Jasmine","Naomi"],
                     ["Albert", "Frank","Xavier"], ["Greg", "Colin","Benoit"], ["Ed", "Peter","Lawrence"], ["Molly", "Kara","Sophia"], ["Justine", "Kelly","Irene"]]);
-var speakers_2 = shuffle([["Jon","Bob","Kent"], ["Haily", "Mika","Sherrie"], ["Caren", "Jen","Pammy"], ["Cameron", "James","Derek"], ["Shawn", "Kris","Harry"],
-                    ["Leila", "Sara","Joan"], ["Bill", "Thomas","Lincoln"], ["Holly", "Gracie","Kristen"], ["Jacob", "Kevin","Mikhail"], ["Annie", "Diane","Gina"],
-                    ["Jorge", "Henry","Samuel"], ["Nathaniel", "Phillip","Tyler"], ["Willa", "Emily","Asha"], ["Steph", "Bella","Camille"], ["Olivier", "Russ","Chester"],
-                    ["Maverick", "Nolan","Brian"], ["Stephan", "Zade","Howard"], ["Fenna", "Kairi","Henrietta"], ["Greta", "Rachel","Trudy"], ["Vicky", "Jade","Anais"],
-                    ["Asher", "Fred","Cohen"], ["Gavin", "Caleb","Brody"], ["Elias", "Phineas","Roman"], ["Mila", "Cecilia","Daisy"], ["Juliet", "Paige","Elaine"]]);
-var speakers = speakers_1.concat(speakers_2);
 
 speakers1 = shuffle(speakers[0]);
 speakers2 = shuffle(speakers[1]);
@@ -480,46 +252,6 @@ speakers7 = shuffle(speakers[6]);
 speakers8 = shuffle(speakers[7]);
 speakers9 = shuffle(speakers[8]);
 speakers10 = shuffle(speakers[9]);
-speakers11 = shuffle(speakers[10]);
-speakers12 = shuffle(speakers[11]);
-speakers13 = shuffle(speakers[12]);
-speakers14 = shuffle(speakers[13]);
-speakers15 = shuffle(speakers[14]);
-speakers16 = shuffle(speakers[15]);
-speakers17 = shuffle(speakers[16]);
-speakers18 = shuffle(speakers[17]);
-speakers19 = shuffle(speakers[18]);
-speakers20 = shuffle(speakers[19]);
-speakers21 = shuffle(speakers[20]);
-speakers22 = shuffle(speakers[21]);
-speakers23 = shuffle(speakers[22]);
-speakers24 = shuffle(speakers[23]);
-speakers25 = shuffle(speakers[24]);
-speakers26 = shuffle(speakers[25]);
-speakers27 = shuffle(speakers[26]);
-speakers28 = shuffle(speakers[27]);
-speakers29 = shuffle(speakers[28]);
-speakers30 = shuffle(speakers[29]);
-speakers31 = shuffle(speakers[30]);
-speakers32 = shuffle(speakers[31]);
-speakers33 = shuffle(speakers[32]);
-speakers34 = shuffle(speakers[33]);
-speakers35 = shuffle(speakers[34]);
-speakers36 = shuffle(speakers[35]);
-speakers37 = shuffle(speakers[36]);
-speakers38 = shuffle(speakers[37]);
-speakers39 = shuffle(speakers[38]);
-speakers40 = shuffle(speakers[39]);
-speakers41 = shuffle(speakers[40]);
-speakers42 = shuffle(speakers[41]);
-speakers43 = shuffle(speakers[42]);
-speakers44 = shuffle(speakers[43]);
-speakers45 = shuffle(speakers[44]);
-speakers46 = shuffle(speakers[45]);
-speakers47 = shuffle(speakers[46]);
-speakers48 = shuffle(speakers[47]);
-speakers49 = shuffle(speakers[48]);
-speakers50 = shuffle(speakers[49]);
 
 var sents = {
     utterances: {
@@ -664,23 +396,6 @@ var sents = {
             state: "100"
         }
     },
-//    states: {
-//        terrible: {
-//            state: " <b>everyone thought LS's BB was terrible</b>,"        
-//        },
-//        bad: {
-//            state: " <b>everyone thought LS's BB was bad</b>,"        
-//        },
-//        okay: {
-//            state: " <b>everyone thought LS's BB was just okay</b>,"        
-//        },
-//        good: {
-//            state: " <b>everyone thought LS's BB was good</b>,"        
-//        },
-//        amazing: {
-//            state: " <b>everyone thought LS's BB was amazing</b>,"        
-//        },
-//    },
     people: {
         people1: {
             SP: speakers1[0],
@@ -731,206 +446,6 @@ var sents = {
             SP: speakers10[0],
             LS: speakers10[1],
             TP: speakers10[2],
-        },
-        people11: {
-            SP: speakers11[0],
-            LS: speakers11[1],
-            TP: speakers11[2],
-        },
-        people12: {
-            SP: speakers12[0],
-            LS: speakers12[1],
-            TP: speakers12[2],
-        },
-        people13: {
-            SP: speakers13[0],
-            LS: speakers13[1],
-            TP: speakers13[2],
-        },
-        people14: {
-            SP: speakers14[0],
-            LS: speakers14[1],
-            TP: speakers14[2],
-        },
-        people15: {
-            SP: speakers15[0],
-            LS: speakers15[1],
-            TP: speakers15[2],
-        },
-        people16: {
-            SP: speakers16[0],
-            LS: speakers16[1],
-            TP: speakers16[2],
-        },
-        people17: {
-            SP: speakers17[0],
-            LS: speakers17[1],
-            TP: speakers17[2],
-        },
-        people18: {
-            SP: speakers18[0],
-            LS: speakers18[1],
-            TP: speakers18[2],
-        },
-        people19: {
-            SP: speakers19[0],
-            LS: speakers19[1],
-            TP: speakers19[2],
-        },
-        people20: {
-            SP: speakers20[0],
-            LS: speakers20[1],
-            TP: speakers20[2],
-        },
-        people21: {
-            SP: speakers21[0],
-            LS: speakers21[1],
-            TP: speakers21[2],
-        },
-        people22: {
-            SP: speakers22[0],
-            LS: speakers22[1],
-            TP: speakers22[2],
-        },
-        people23: {
-            SP: speakers23[0],
-            LS: speakers23[1],
-            TP: speakers23[2],
-        },
-        people24: {
-            SP: speakers24[0],
-            LS: speakers24[1],
-            TP: speakers24[2],
-        },
-        people25: {
-            SP: speakers25[0],
-            LS: speakers25[1],
-            TP: speakers25[2],
-        },
-        people26: {
-            SP: speakers26[0],
-            LS: speakers26[1],
-            TP: speakers26[2],
-        },
-        people27: {
-            SP: speakers27[0],
-            LS: speakers27[1],
-            TP: speakers27[2],
-        },
-        people28: {
-            SP: speakers28[0],
-            LS: speakers28[1],
-            TP: speakers28[2],
-        },
-        people29: {
-            SP: speakers29[0],
-            LS: speakers29[1],
-            TP: speakers29[2],
-        },
-        people30: {
-            SP: speakers30[0],
-            LS: speakers30[1],
-            TP: speakers30[2],
-        },
-        people31: {
-            SP: speakers31[0],
-            LS: speakers31[1],
-            TP: speakers31[2],
-        },
-        people32: {
-            SP: speakers32[0],
-            LS: speakers32[1],
-            TP: speakers32[2],
-        },
-        people33: {
-            SP: speakers33[0],
-            LS: speakers33[1],
-            TP: speakers33[2],
-        },
-        people34: {
-            SP: speakers34[0],
-            LS: speakers34[1],
-            TP: speakers34[2],
-        },
-        people35: {
-            SP: speakers35[0],
-            LS: speakers35[1],
-            TP: speakers35[2],
-        },
-        people36: {
-            SP: speakers36[0],
-            LS: speakers36[1],
-            TP: speakers36[2],
-        },
-        people37: {
-            SP: speakers37[0],
-            LS: speakers37[1],
-            TP: speakers37[2],
-        },
-        people38: {
-            SP: speakers38[0],
-            LS: speakers38[1],
-            TP: speakers38[2],
-        },
-        people39: {
-            SP: speakers39[0],
-            LS: speakers39[1],
-            TP: speakers39[2],
-        },
-        people40: {
-            SP: speakers40[0],
-            LS: speakers40[1],
-            TP: speakers40[2],
-        },
-        people41: {
-            SP: speakers41[0],
-            LS: speakers41[1],
-            TP: speakers41[2],
-        },
-        people42: {
-            SP: speakers42[0],
-            LS: speakers42[1],
-            TP: speakers42[2],
-        },
-        people43: {
-            SP: speakers43[0],
-            LS: speakers43[1],
-            TP: speakers43[2],
-        },
-        people44: {
-            SP: speakers44[0],
-            LS: speakers44[1],
-            TP: speakers44[2],
-        },
-        people45: {
-            SP: speakers45[0],
-            LS: speakers45[1],
-            TP: speakers45[2],
-        },
-        people46: {
-            SP: speakers46[0],
-            LS: speakers46[1],
-            TP: speakers46[2],
-        },
-        people47: {
-            SP: speakers47[0],
-            LS: speakers47[1],
-            TP: speakers47[2],
-        },
-        people48: {
-            SP: speakers48[0],
-            LS: speakers48[1],
-            TP: speakers48[2],
-        },
-        people49: {
-            SP: speakers49[0],
-            LS: speakers49[1],
-            TP: speakers49[2],
-        },
-        people50: {
-            SP: speakers50[0],
-            LS: speakers50[1],
-            TP: speakers50[2],
         },
     }
 };
@@ -1093,10 +608,6 @@ var experiment = {
       experiment.data.state.push(trial.state);
       experiment.data.goalProb0.push(prob0);
       experiment.data.goalProb1.push(prob1);
-//      experiment.data.goalProb2.push(prob2);
-//      experiment.data.stateProb.push(prob3);
-//      experiment.data.predictedProb0.push(prob3);
-//      experiment.data.predictedProb1.push(prob4);
    
       clearForm(document.forms[0]);
       clearForm(document.forms[1]);
@@ -1184,72 +695,3 @@ $("#slider1").slider({
                      "background":"#667D94",
                      "border-color": "#001F29" });
                }});
-//$("#slider2").slider({
-//               animate: true,
-//               orientation: "vertical",
-//               max: 40 , min: 0, step: 1, value: 20,
-//               slide: function( event, ui ) {
-//                   $("#slider2 .ui-slider-handle").css({
-//                      "background":"#E0F5FF",
-//                      "border-color": "#001F29"
-//                   });
-//               },
-//               change: function( event, ui ) {
-//                   $('#hiddenSliderValue2').attr('value', ui.value);
-//                   $("#slider2").css({"background":"#99D6EB"});
-//                   $("#slider2 .ui-slider-handle").css({
-//                     "background":"#667D94",
-//                     "border-color": "#001F29" });
-//               }});
-//$("#slider3").slider({
-//               animate: true,
-//               orientation: "vertical",
-//               max: 40 , min: 0, step: 1, value: 20,
-//               slide: function( event, ui ) {
-//                   $("#slider3 .ui-slider-handle").css({
-//                      "background":"#E0F5FF",
-//                      "border-color": "#001F29"
-//                   });
-//               },
-//               change: function( event, ui ) {
-//                   $('#hiddenSliderValue3').attr('value', ui.value);
-//                   $("#slider3").css({"background":"#99D6EB"});
-//                   $("#slider3 .ui-slider-handle").css({
-//                     "background":"#667D94",
-//                     "border-color": "#001F29" });
-//               }});
-
-//$("#slider3").slider({
-//               animate: true,
-//               max: 40 , min: 0, step: 1, value: 20,
-//               slide: function( event, ui ) {
-//                   $("#slider3 .ui-slider-handle").css({
-//                      "background":"#E0F5FF",
-//                      "border-color": "#001F29"
-//                   });
-//               },
-//               change: function( event, ui ) {
-//                   $('#hiddenSliderValue3').attr('value', ui.value);
-//                   $("#slider3").css({"background":"#99D6EB"});
-//                   $("#slider3 .ui-slider-handle").css({
-//                     "background":"#667D94",
-//                     "border-color": "#001F29" });
-//               }});
-//
-//$("#slider4").slider({
-//               animate: true,
-//               max: 40 , min: 0, step: 1, value: 20,
-//               slide: function( event, ui ) {
-//                   $("#slider4 .ui-slider-handle").css({
-//                      "background":"#E0F5FF",
-//                      "border-color": "#001F29"
-//                   });
-//               },
-//               change: function( event, ui ) {
-//                   $('#hiddenSliderValue4').attr('value', ui.value);
-//                   $("#slider4").css({"background":"#99D6EB"});
-//                   $("#slider4 .ui-slider-handle").css({
-//                     "background":"#667D94",
-//                     "border-color": "#001F29" });
-//               }});
-
