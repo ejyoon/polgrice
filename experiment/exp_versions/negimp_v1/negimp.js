@@ -127,13 +127,16 @@ function getRadioCheckedValue(formNum, radio_name)
 // ---------------- PARAMETERS ------------------
 
 // CONDITION ASSIGNMENT
-var cond = random(2)+1;
+//var cond = random(3)+1;
+var cond = 3;
 var expt = "NegImp_v1";
 
 if (cond == 1) {
     var threat = "threat";
-} else {
+} else if (cond == 2) {
     var threat = "no_threat";   
+} else {
+    var threat = "no_identity"
 }
 
 // call the maker getter to get the cond variable 
@@ -319,6 +322,8 @@ var sents = {
             sent_context: " LS approached SP, who had just seen LS's presentation, and asked \"How was my presentation?\"",
             sent_precontext_TP: "Imagine that TP just gave a presentation. LS didn't see it, so", 
             sent_context_TP: " LS approached SP, who had just seen TP's presentation, and asked \"How was TP's presentation?\"",
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just seen a presentation, and asked \"How was the presentation?\"",
             BB: "presentation",
 	},
 	   cookie: {
@@ -326,6 +331,8 @@ var sents = {
             sent_context: " LS approached SP, who had just tasted LS's cookie, and asked \"How did my cookie taste?\"", 
             sent_precontext_TP: "Imagine that TP baked some cookies. LS didn't taste it, so", 
             sent_context_TP: " LS approached SP, who had just tasted TP's cookie, and asked \"How did TP's cookie taste?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just tasted a cookie, and asked \"How did the cookie taste?\"", 
             BB: "cookie",
 	},
 	   poem: {
@@ -333,6 +340,8 @@ var sents = {
             sent_context: " LS approached SP, who had just read LS's poem, and asked \"How was my poem?\"", 
             sent_precontext_TP: "Imagine that TP wrote a poem. LS didn't read it, so", 
             sent_context_TP: " LS approached SP, who had just read TP's poem, and asked \"How was TP's poem?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just read a poem, and asked \"How was the poem?\"", 
             BB: "poem",
 	},        
 	   cake: {
@@ -340,6 +349,8 @@ var sents = {
             sent_context: " LS approached SP, who had just tasted LS's cake, and asked \"How did my cake taste?\"", 
             sent_precontext_TP: "Imagine that TP baked a cake. LS didn't taste it, so", 
             sent_context_TP: " LS approached SP, who had just tasted TP's cake, and asked \"How did TP's cake taste?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just tasted a cake, and asked \"How did the cake taste?\"", 
             BB: "cake",
 	},
 	   song: {
@@ -347,6 +358,8 @@ var sents = {
             sent_context: " LS approached SP, who had just heard LS's song, and asked \"How was my song?\"", 
             sent_precontext_TP: "Imagine that TP composed a song. LS didn't hear it, so", 
             sent_context_TP: " LS approached SP, who had just heard TP's song, and asked \"How was TP's song?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just heard a song, and asked \"How was the song?\"", 
             BB: "song",
 	},
 	   film: {
@@ -354,6 +367,8 @@ var sents = {
             sent_context: " LS approached SP, who had just seen LS's movie, and asked \"How was my movie?\"", 
             sent_precontext_TP: "Imagine that TP filmed a movie. LS didn't see it, so", 
             sent_context_TP: " LS approached SP, who had just seen TP's movie, and asked \"How was TP's movie?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just seen a movie, and asked \"How was the movie?\"", 
             BB: "movie",
 	},
 	   solo: {
@@ -361,6 +376,8 @@ var sents = {
             sent_context: " LS approached SP, who had just heard LS's solo, and asked \"How was my solo?\"", 
             sent_precontext_TP: "Imagine that TP played a cello solo part at a concert. LS didn't hear it, so", 
             sent_context_TP: " LS approached SP, who had just heard TP's solo, and asked \"How was TP's solo?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just heard a cello solo, and asked \"How was the solo?\"", 
             BB: "solo",
 	},        
 	   dance: {
@@ -368,6 +385,8 @@ var sents = {
             sent_context: " LS approached SP, who had just seen LS's dance, and asked \"How was my dance?\"", 
             sent_precontext_TP: "Imagine that TP gave a tap dance performance. LS didn't see it, so", 
             sent_context_TP: " LS approached SP, who had just seen TP's dance, and asked \"How was TP's dance?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just seen a tap dance performance, and asked \"How was the dance?\"", 
             BB: "dance",
 	},   
 	   painting: {
@@ -375,6 +394,8 @@ var sents = {
             sent_context: " LS approached SP, who had just seen LS's painting, and asked \"How was my painting?\"", 
             sent_precontext_TP: "Imagine that TP drew a painting. LS didn't see it, so", 
             sent_context_TP: " LS approached SP, who had just seen TP's painting, and asked \"How was TP's painting?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just seen a painting, and asked \"How was the painting?\"", 
             BB: "painting",
 	}, 
 	   monologue: {
@@ -382,6 +403,8 @@ var sents = {
             sent_context: " LS approached SP, who had just heard LS's monologue and asked \"How was my monologue?\"", 
             sent_precontext_TP: "Imagine that TP gave a monologue during a school play. LS didn't hear it, so", 
             sent_context_TP: " LS approached SP, who had just heard TP's monologue, and asked \"How was TP's monologue?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just heard a monologue during a school play, and asked \"How was the monologue?\"", 
             BB: "monologue",
 	},
 	   app: {
@@ -389,6 +412,8 @@ var sents = {
             sent_context: " LS approached SP, who looked at LS's mobile app, and asked \"How was my app?\"", 
             sent_precontext_TP: "Imagine that TP designed a mobile app. LS didn't see it, so", 
             sent_context_TP: " LS approached SP, who looked at TP's mobile app, and asked \"How was TP's app?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who looked at a mobile app, and asked \"How was the app?\"", 
             BB: "app",
 	},
 	   review: {
@@ -396,6 +421,8 @@ var sents = {
             sent_context: " LS approached SP, who had just read LS's review, and asked \"How was my review?\"", 
             sent_precontext_TP: "Imagine that TP wrote a review for a book. LS didn't read it, so", 
             sent_context_TP: " LS approached SP, who had just read TP's review, and asked \"How was TP's review?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just read a review for a book, and asked \"How was the review?\"", 
             BB: "review",
 	},
 	   recital: {
@@ -403,6 +430,8 @@ var sents = {
             sent_context: " LS approached SP, who had just attended LS's recital, and asked \"How was my recital performance?\"", 
             sent_precontext_TP: "Imagine that TP had a piano recital, ", 
             sent_context_TP: " LS approached SP, who had just attended TP's recital, and asked \"How was TP's recital performance?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just attended a piano recital, and asked \"How was the recital performance?\"", 
             BB: "recital performance",
 	},
     },
@@ -499,6 +528,15 @@ function doSentSubs (sents, polite, domain, utterance, people)
         knowledge = ""
     }
 
+    } else if (threat == "no_identity") {
+        precontext = sents["domains"][domain]["sent_precontext_NI"];
+        context = sents["domains"][domain]["sent_context_NI"];
+        if (state_knowledge == "known") {
+        knowledge = " <b>and LS knew it</b>."
+    } else if (state_knowledge == "unknown") {
+        knowledge = ""
+    }
+
     }
 //    context = sents["domains"][domain]["sent_context"];
     state = sents["states"][state]["state"]
@@ -506,9 +544,19 @@ function doSentSubs (sents, polite, domain, utterance, people)
     question = "Based on what SP said, how likely do you think that <b>SP's goal</b> was to be:";
     
 //    if (prediction[0] == "ask") {
+    if (threat == "threat") {
     question2 = "How do you think SP actually felt about LS's BB?";
     summary = "Here's what you thought SP felt about LS's BB:";
     prequestion3 = "Here's how SP <b>actually</b> felt about LS's BB:";
+    } else if (threat == "no_threat") {
+    question2 = "How do you think SP actually felt about TP's BB?";
+    summary = "Here's what you thought SP felt about TP's BB:";
+    prequestion3 = "Here's how SP <b>actually</b> felt about TP's BB:";        
+    } else {
+    question2 = "How do you think SP actually felt about the BB?";
+    summary = "Here's what you thought SP felt about the BB:";
+    prequestion3 = "Here's how SP <b>actually</b> felt about the BB:";        
+    }
 //    question3 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
 //    } else if (prediction[0] == "like") {
 //    question3 = "Based on what SP said, how likely is it for you to <b>ask for SP's opinion on your own BB</b>?";
@@ -524,10 +572,10 @@ function doSentSubs (sents, polite, domain, utterance, people)
     precontext = precontext.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS).replace("TP",TP).replace("TP",TP).replace("TP",TP);
     state = state.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);
     question = question.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
-    question2 = question2.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
-    prequestion3 = prequestion3.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);  
+    question2 = question2.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS).replace("TP",TP);   
+    prequestion3 = prequestion3.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS).replace("TP",TP);  
     knowledge = knowledge.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
-    summary = summary.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
+    summary = summary.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS).replace("TP",TP);   
 
     
     return [utterance, context, state, precontext, question, question2, prequestion3, knowledge, summary];
