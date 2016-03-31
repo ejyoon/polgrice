@@ -1,0 +1,199 @@
+// webppl politeUtility.wppl
+
+var foreach = function(lst, fn) {
+    var foreach_ = function(i) {
+        if (i < lst.length) {
+            fn(lst[i]);
+            foreach_(i + 1);
+        }
+    };
+    foreach_(0);
+};
+
+var marginalizeERP = function(myERP, label){
+  Enumerate(function(){
+    var x = sample(myERP)
+    return x[label]
+  })
+}
+
+var logNormalPDF = function(x, mu, sigma){
+  var coef = (1 / (x*sigma*Math.sqrt(2*Math.PI)))
+  var fe = Math.exp(-(Math.pow(Math.log(x)-mu,2))/(2*Math.pow(sigma,2)))
+  return coef*fe
+}
+
+var discretizedLogNormal = function(mu, sigma, bins){
+  return Enumerate(function(){
+    var probs = map(function(b){return logNormalPDF(b, mu, sigma)}, bins)
+    return bins[discrete(probs)]
+  })
+}
+
+var discretizeBeta = function(gamma, delta, bins){
+  var shape_alpha =  gamma * delta
+  var shape_beta = (1-gamma) * delta
+  var betaPDF = function(x){
+    return Math.pow(x,shape_alpha-1)*Math.pow((1-x),shape_beta-1)
+  }
+  return map(betaPDF, bins)
+}
+
+var alpha = 1.25
+var states = [1,2,3]
+var utterances = ["terrible","okay","amazing",
+                  "not terrible", "not okay","not amazing"]
+
+var statePrior = function(){
+  // return states[discrete([3,30,100,30,3])]
+  return uniformDraw(states)
+}
+
+var utterancePrior = function(){
+  return uniformDraw(utterances)
+}
+
+
+
+var speakerOptimality = 5
+// var bins = [0.1, 1, 5, 10, 20, 50, 100]
+var bins = [0.1,0.3,0.5,0.7,0.9]
+
+
+var literalSemantics = {
+  "terrible":    [0.95,0.02,0.02],
+  "okay":        [0.02,0.95,0.02],
+  "amazing":     [0.02,0.02,0.95],
+  "not terrible":[0.02,0.95,0.95],
+  // "not okay":[0.95,0.02,0.95], // "i can't say enough good things about this person"
+  "not okay":    [0.95,0.02,0.02],
+  "not amazing": [0.95,0.95,0.02]
+}
+
+var meaning = function(words, state){
+    return words=="sayNothing" ? true : flip(literalSemantics[words][state-1])
+} 
+
+var roundTen = function(n){
+  return Math.round(n*100)/100
+}
+
+var roundToBin = function(x){
+  var roundFive = x < 0.2 ? 0.1 :
+                  x < 0.4 ? 0.3 :
+                  x < 0.6 ? 0.5 :
+                  x < 0.8 ? 0.7 :
+                  0.9
+  return roundFive
+}
+
+// var hprior = [1,1,1,1,1]
+var hprior = discretizeBeta(0.5, 2, bins)
+// var nprior = [1,1,1,1,100]
+// var nprior = discretizeBeta(0.99, 20, bins)
+var nprior = discretizeBeta(0.5, 2, bins)
+// var mprior = [1,1,1,1,1]
+var mprior = discretizeBeta(0.5, 2, bins)
+
+var goalPriors = {
+  honesty: Enumerate(function(){return bins[discrete(hprior)]}),
+  kindness: Enumerate(function(){return bins[discrete(nprior)]}),
+  meanness: Enumerate(function(){return bins[discrete(mprior)]})
+}
+
+
+
+
+var listener0 = cache(function(utterance) {
+  Enumerate(function(){
+  var state = statePrior()
+  var m = meaning(utterance, state)
+  condition(m)
+  return state
+  })
+})
+
+
+var speaker1 = cache(function(state, speakerGoals) {
+  Enumerate(function(){
+    var utterance = utterancePrior()
+
+    var L0 = listener0(utterance)
+
+    var epistemicUtility = L0.score([],state)
+    var socialUtility = expectation(L0, function(s){return alpha*s})
+
+    // var epistemicWeight = speakerGoals.honesty
+    // var niceWeight =  speakerGoals.kindness 
+    // var meanWeight = speakerGoals.meanness
+
+    var eUtility = speakerGoals.honesty*epistemicUtility 
+    var sUtility = speakerGoals.kindness*socialUtility
+    var mUtility = speakerGoals.meanness*socialUtility
+
+    // console.log(utterance)
+    // console.log(speakerGoals.meanness)
+    factor(eUtility+sUtility-mUtility)
+    // factor(eUtility+sUtility)
+
+    // return [utterance, eUtility, sUtility, eUtility+sUtility]
+    return utterance
+  })
+})
+
+
+
+var listener1 = function(exptCondition, queryStatement) {
+  Enumerate(function(){
+    var utterance = exptCondition.utterance
+    var trueState = exptCondition.state
+    var knownGoals = exptCondition.goal
+
+    var honestyPrior = goalPriors.honesty
+    var kindnessPrior = goalPriors.kindness
+    var meannessPrior = goalPriors.meanness
+
+    var state = statePrior()
+
+    var speakerGoals = {
+      honesty: sample(honestyPrior),
+      kindness: sample(kindnessPrior),
+      meanness: sample(meannessPrior)
+     }
+
+    condition(trueState ? trueState == state : true)
+
+    // condition(speakerGoals["kindness"] == 0.9)
+
+      // foreach(_.keys(knownGoals), function(g){
+      //   condition(speakerGoals[g] > knownGoals[g])
+      // })
+
+    var S1 = speaker1(state, speakerGoals)
+
+    factor(speakerOptimality*S1.score([],utterance))
+
+    var returnStatement = {
+      state: state,
+      goals: speakerGoals
+    }
+
+    return returnStatement//[queryStatement]
+  })
+}
+
+var speaker2 = function(state, intendedGoals) {
+  Enumerate(function(){
+
+    var utterance = utterancePrior()
+
+    var L1 = listener1({utterance: utterance})
+
+    factor(L1.score([], {"state":state, "goals":intendedGoals}))
+
+    return utterance
+
+  })
+}
+
+speaker2(1, {honesty:0.9, kindness: 0.9, meanness:0.1})
