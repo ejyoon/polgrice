@@ -1,0 +1,204 @@
+// time webppl polite_vs_regularRSA.wppl --require mht --require utils
+
+// Model comparison parameters
+
+var priorParams = {
+	includeMeanness: false,
+	honestGamma: 0.5,
+	honestDelta : 2,
+	kindGamma : 0.5,
+	kindDelta : 2,
+	meanGamma : 0.5,
+	meanDelta : 2
+}
+
+var meanPrefix = priorParams.includeMeanness == "oneScale" ? "1scale" :
+					priorParams.includeMeanness ? 1 : 0
+
+var n_subjects = 50
+
+var correctHypothesis = "pRSA"
+
+var sem_mhiter = 50000
+var sem_burn = sem_mhiter/2
+var incrOpts = {burn:sem_burn, verbose: true, verboseLag: sem_mhiter/10}
+
+var inference ='IncrMH'
+var samples = 10000
+var burn = samples/2
+var outfile = "results/simulated_data/modelComparison-answer_"+correctHypothesis+"stateGivenUtt-"+"meanness-"+
+				meanPrefix+"nSubjects-"+ n_subjects+inference + samples + 
+				"burn" + burn + "semantics-bern-" + sem_mhiter/1000 + "k-b" + sem_burn/1000 +"kb.csv"
+
+// Step 0: Run BDA on literal semantics data
+
+var semanticsERP = IncrementalMH(semanticsBDA, sem_mhiter, incrOpts)
+var semanticsMAP = semanticsERP.MAP().val
+
+
+console.log('Semantics BDA complete')
+
+// Step 1: Generate data from RSA and pRSA for a given parameter setting
+
+var addNoise = function(erp, phi){
+    Enumerate(function(){
+        var x = flip(1-phi) ? 
+                    sample(erp) :
+                    uniformDraw([20,40,60,80,100])
+        return x
+    })
+}
+
+// 95% HDI from State Inference task in CogSci paper [1.08, 3.1]
+var generating_speaker_optimality = 2
+// 95% HDI from State Inference task in CogSci paper [3.4, 9.9]
+var generating_alpha = 9
+var generating_noise = 0.1
+
+var RSA_data = _.object(map(function(utterance){
+	
+	var RSA = politeRSA(
+		{
+			utterance: utterance
+		},
+		{
+			speakerOptimality : generating_speaker_optimality,
+			alpha: 0
+		},
+		priorParams,
+		{
+			honesty: 1,
+			kindness: 0,
+			meanness: 0
+		},
+		semanticsMAP,
+		"state"
+		)
+
+	var RSA_wNoise = addNoise(RSA, generating_noise)
+
+	return [utterance, repeat(n_subjects, function(){return sample(RSA_wNoise)})]
+
+}, ["terrible","bad","okay","good","amazing"]))
+
+var pRSA_data = _.object(map(function(utterance){
+	
+	var pRSA = politeRSA(
+		{
+			utterance: utterance
+		},
+		{
+			speakerOptimality : generating_speaker_optimality,
+			alpha: generating_alpha
+		},
+		priorParams,
+		false,
+		semanticsMAP,
+		"state"
+		)
+
+	var pRSA_wNoise = addNoise(pRSA, generating_noise)
+
+	return [utterance, repeat(n_subjects, function(){return sample(pRSA_wNoise)})]
+
+}, ["terrible","bad","okay","good","amazing"]))
+
+// console.log(pRSA_data)
+console.log("RSA and pRSA data generated. Now backing out the correct model given correct answer = " + correctHypothesis)
+// Step 2: Do Bayesian Model Comparison (via heirarchical model)
+
+var generated_data = correctHypothesis == "pRSA" ? pRSA_data : RSA_data
+
+var dataAnalysis = function(){
+	// var t0 = utils.getTime()
+
+	var RSAparams = {
+		speakerOptimality : uniform(0,20),
+		alpha: 0
+	}
+
+	var pRSAparams = {
+		speakerOptimality : uniform(0,20),
+		alpha: uniform(0,10)
+	}
+
+
+	var phi = 0
+
+	var RSA_vs_pRSA = flip(0.5)
+
+	foreach(["terrible","bad","okay","good","amazing"], function(utterance){
+
+		// console.log(utterance)
+		var semantics = sample(semanticsERP)
+
+		var utteranceData = generated_data[utterance]
+		// console.log(utteranceData)
+
+		// console.log('before pRSA')
+		var condParams = {
+			utterance: utterance
+		}
+
+		var pRSA_predictions = politeRSA(
+			condParams,
+			pRSAparams,
+			priorParams,
+			false,
+			semantics,
+			"state")
+		// console.log('before RSA')
+
+		var RSA_predictions = politeRSA(
+			condParams,
+			RSAparams,
+			priorParams,
+			{
+				honesty: 1,
+				kindness: 0,
+				meanness: 0
+			},
+			semantics,
+			"state")
+		// console.log('after RSA')
+
+		var trueModelPredictions = RSA_vs_pRSA ? RSA_predictions : pRSA_predictions
+
+		// console.log(map(function(s){return [s, Math.exp(trueModelPredictions.score([], s))]}, trueModelPredictions.support()))
+		// console.log('before data map')
+		// console.log(utteranceData)
+		var likelihoodOfData = sum(map(function(d){return trueModelPredictions.score([], d)}, utteranceData))
+		// console.log('after data map')
+		// console.log(likelihoodOfData)
+		factor(likelihoodOfData)
+
+		// query.add(["predictive", goal, utterance, "expectation"], expectation(predictiveWGuessing))
+		// foreach([20,40,60,80,100], function(s){
+		// 	query.add(["predictive", goal, utterance, s], Math.exp(predictiveWGuessing.score([], s)))
+		// })
+
+	})
+
+	query.add(["parameter","RSA_speakerOptimality", "NA", "NA"], RSAparams.speakerOptimality)
+	query.add(["parameter","pRSA_speakerOptimality", "NA", "NA"], pRSAparams.speakerOptimality)
+	query.add(["parameter","pRSA_alpha", "NA", "NA"], pRSAparams.alpha)
+	query.add(["parameter","RSA_vs_pRSA", "NA", "NA"], RSA_vs_pRSA)
+	// query.add(["parameter","phi", "NA", "NA"], phi)
+
+	// var t1 = utils.getTime()
+	// console.log((t1-t0)/1000)
+	return query
+}
+
+
+// var resultsERP = MCMC(dataAnalysis, {samples:samples/2, burn:burn, verbose:true})
+var resultsERP = IncrementalMH(dataAnalysis,samples, {burn:burn, verbose:true,verboseLag:samples/100})
+
+console.log('inference complete... printing')
+
+// var outfile = "results/bda-politeRSA-stateGivenUttGoal-goalPrior1wide-Beta50d-sopt-alpha-"+
+// 						inference + samples + "burn" + burn + 
+// 						"semantics-bern-" + sem_mhiter/1000 + "k-b" + sem_burn/1000 +"kc.csv"
+
+utils.erpWriter(resultsERP, outfile)
+console.log('output written to ' + outfile)

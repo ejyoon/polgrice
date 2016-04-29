@@ -1,0 +1,56 @@
+// time webppl generateRSAdata.wppl --require mht --require utils
+
+var sem_mhiter = 50000
+var sem_burn = sem_mhiter/2
+var incrOpts = {burn:sem_burn, verbose: true, verboseLag: sem_mhiter/10}
+var semanticsERP = IncrementalMH(semanticsBDA, sem_mhiter, incrOpts)
+
+var samples = 100
+
+var priorParams = {
+	includeMeanness: "oneScale",
+	honestGamma : 0.5,
+	honestDelta : 2,
+	kindGamma : 0.5,
+	kindDelta : 2,
+	meanGamma : 0.5,
+	meanDelta : 2
+}
+
+
+
+foreach([1,3,5,10,15,20], function(speaker_optimality){
+	var semantics = sample(semanticsERP)
+	repeat(samples, function(){
+
+		foreach(["terrible","bad","okay","good","amazing"], function(utterance){
+
+
+			var weights = {
+				honesty: 1,
+				kindness: 0
+				meanness: 0
+			}
+			var condParams = {utterance: utterance}
+			var RSAparams = {
+				speakerOptimality : speaker_optimality,
+				alpha: alpha
+			}
+			var RSA = politeRSA(
+				condParams,
+				RSAparams,
+				priorParams,
+				weights,
+				semantics,
+				"state")
+
+
+			foreach([0.7,1.0,1.3,1.6,2], function(alpha){
+
+			})
+
+			foreach([0.01,0.05,0.1,0.2,0.3,0.4,0.5], function(phi){
+
+
+		})
+
