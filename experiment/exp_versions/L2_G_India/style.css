@@ -17,6 +17,17 @@ body {
 	padding: 1% 2% 1% 2%;
 }
 
+#askInfo {
+    text-align: justify;
+	width: 95%;
+	height: 95%;
+	display: none;
+	position: absolute;
+	margin: 0;
+	margin-left: 0.5%;
+	padding: 1% 2% 1% 2%;
+}
+
 input, select, button {font-family: Georgia, serif; font-size: 14px;}
 
 button {

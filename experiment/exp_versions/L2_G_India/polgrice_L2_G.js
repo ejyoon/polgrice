@@ -357,11 +357,12 @@ shuffle(
 ]); 
 //}
 
-speakers = shuffle([["John","Bob",], ["Hailey", "Mika"], ["Karen", "Jenny"], ["Kyle", "James"], ["Sean", "Chris"],
-                    ["Lucy", "Sarah"], ["Bill", "Tom"], ["Heather", "Grace"], ["Jake", "Kevin"], ["Ann", "Diana"],
-                    ["George", "Henry"], ["Nathan", "Patrick"], ["Wendy", "Emma"], ["Stephanie", "Barbara"], ["Oliver", "Robert"],
-                    ["Matt", "Larry"], ["Steven", "Zack"], ["Fiona", "Yvonne"], ["Rebecca", "Cheryl"], ["Victoria", "Jasmine"],
-                    ["Albert", "Frank"], ["Greg", "Colin"], ["Ed", "Peter"], ["Molly", "Kara"], ["Justine", "Kelly"]]);
+speakers = shuffle([["Ankit","Manoj",], ["Sneha", "Gayatri"], ["Vani", "Priyanka"], ["Rahul", "Ankur"], ["Kumar", "Deepak"],
+                    ["Sakshi", "Varsha"], ["Vinay", "Neeraj"], ["Nikita", "Shivangi"], ["Rohan", "Vivek"], ["Pavithra", "Suhani"],
+                    ["Soham", "Raj"], ["Pranav", "Arjun"], ["Aswini", "Ira"], ["Ayushi", "Radhika"], ["Sanjay", "Mohit"],
+                    ["Arun", "Raju"], ["Vishal", "Dhruv"], ["Prachi", "Aastha"], ["Rutuja", "Akansha"], ["Rhea", "Kalyani"],
+                    ["Anil", "Vikas"], ["Abdul", "Sanchit"], ["Kartik", "Prashant"], ["Kamalika", "Nisha"], ["Swati", "Lavanya"]]);
+
 speakers1 = shuffle(speakers[0]);
 speakers2 = shuffle(speakers[1]);
 speakers3 = shuffle(speakers[2]);
@@ -715,18 +716,34 @@ var experiment = {
 //    predictedProb0: [],
 //    predictedProb1: [],
     language: [],
-	expt_aim: [],
+    region: [],
+    religion: [],
+    expt_aim: [],
+    expt_gen: [],
 	goal_thoughts: [],
-	expt_gen: [],
     numTrials: numTrials
     },
     
   end: function() {	
-    experiment.data.language.push(document.getElementById("homelang").value);
-	experiment.data.expt_aim.push(document.getElementById("expthoughts").value);
-	experiment.data.goal_thoughts.push(document.getElementById("goal_thoughts").value);
-	experiment.data.expt_gen.push(document.getElementById("expcomments").value);
-    showSlide("finished");
+    experiment.data.language.push(document.getElementById("homelang").value);	
+            experiment.data.expt_aim.push(document.getElementById("expthoughts").value);		
+            experiment.data.expt_gen.push(document.getElementById("expcomments").value);
+            
+            if(getRadioCheckedValue(1, "region") == "other" || getRadioCheckedValue(1, "region") == "") {
+                experiment.data.region.push(document.getElementById("region_other").value);
+            } else {
+                experiment.data.region.push(getRadioCheckedValue(1, "region"));
+            }
+            
+            if(getRadioCheckedValue(1, "religion") == "other" || getRadioCheckedValue(1, "religion") == "") {
+                experiment.data.religion.push(document.getElementById("religion_other").value);
+            } else {
+                experiment.data.religion.push(getRadioCheckedValue(1, "religion"));
+            }
+
+      experiment.data.goal_thoughts.push(document.getElementById("goal_thoughts").value);
+
+      showSlide("finished");
       
 //    			//Decrement			
 //			var xmlHttp = null;
