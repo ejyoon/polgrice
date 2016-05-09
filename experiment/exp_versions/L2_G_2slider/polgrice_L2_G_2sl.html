@@ -240,112 +240,30 @@ function pressEnter(e) {
 <br>
 <p id="question"></p>
         
-<span id= "form1">
-<form name= "affectForm1">
-    <input type="hidden" name="hSlider0" id="hiddenSliderValue0" />
-    <input type="hidden" name="hSlider1" id="hiddenSliderValue1" />
-    <input type="hidden" name="hSlider2" id="hiddenSliderValue2" />
-<!--    <input type="hidden" name="hSlider3" id="hiddenSliderValue3" />-->
-
-<!--    <p id="question"></p>-->
-
-<!--
-    <table width= "500" cellspacing="0" cellpadding="0" border="0" align="center"><tbody>
+<span id="form2">
+        <p id="question2"></p>
+    <form id= "affectForm2" name="uttForm">
+    <table width="500" cellspacing="0" cellpadding="0" border="0" align="center" class="text-center">
     <tr>
-      <td align="right" height="48">
-        Extremely likely &#8210;<br>
-      </td>
-      <td rowspan="5" width="150" align="center"><div id="slider0">&nbsp;</div></td>
-      <td rowspan="5" width="150" align="center"><div id="slider1">&nbsp;</div></td>
-      <td rowspan="5" width="150" align="center"><div id="slider2">&nbsp;</div></td>
-      <td rowspan="5" width="150" align="center"><div id="slider3">&nbsp;</div></td>
-
+        <td><span id="opt">Terrible</span></td>
+        <td><span id="opt">Bad</span></td>
+        <td><span id="opt">Neutral</span></td>
+        <td><span id="opt">Good</span></td>
+        <td><span id="opt">Amazing</span></td>
     </tr>
     <tr>
-      <td align="right" height="48">
-        Very Likely &#8210;<br>
-      </td>
-    </tr>
-    </tr>
-    <tr>
-      <td align="right" height="48">
-        Neutral &#8210;<br>
-      </td>
-    </tr>
-    <tr>
-      <td align="right" height="48">
-        Not very likely &#8210;<br>
-      </td>
-    </tr>
-    <tr>
-      <td align="right" height="48">
-        Impossible &#8210;<br>
-      </td>
-    </tr>
-    <tr>
-      <td></td>
-      <td align="center"><span id="score00">{{}}</span></td>
-      <td align="center"><span id="score01">{{}}</span></td>
-      <td align="center"><span id="score10">{{}}</span></td>
-      <td align="center"><span id="score01">{{}}</span></td>
-    </tr>
-      
-    </tbody></table>
--->
-    
-    
-    <table width="650" cellspacing="0" cellpadding="0" border="0" align="center">
+        <td><input type="radio" name="state" value="1" /></td>
+        <td><input type="radio" name="state" value="2" /></td>
+        <td><input type="radio" name="state" value="3" /></td>
+        <td><input type="radio" name="state" value="4" /></td>
+        <td><input type="radio" name="state" value="5" /></td>
 
-        <tr>
-        <td width="100" valign="top" align="center">Definitely <span id="goal00">{{}}</span><br />|</td>
-        <td width="1" valign="top" align="center"><br /></td>
-        <td width="100" valign="top" align="center">Definitely <span id="goal01">{{}}</span><br />|</td>
-      </tr>
-      <tr>
-        <td align="center" colspan="3"><div class="slider" id="slider0">&nbsp;</div></td>
-      </tr> 
-     </table>
-
-     <table width="650" cellspacing="0" cellpadding="0" border="0" align="center">
-
-        <tr>
-        <td width="100" valign="top" align="center">Definitely <span id="goal10">{{}}</span><br />|</td>
-        <td width="200" valign="top" align="center"><br /></td>
-        <td width="100" valign="top" align="center">Definitely <span id="goal11">{{}}</span><br />|</td>
-      </tr>
-      <tr>
-        <td align="center" colspan="3"><div class="slider" id="slider1">&nbsp;</div></td>
-      </tr> 
-     </table>
-   
-    </form>
-</span>
-    <br> 
-
-<!--
-        <button type="button" id="next1" onclick="this.blur(); if (ValidateSliderFormPart1(document.affectForm1)) {
-}">Next</button>
--->
-
-    
-<!--
-<br>
-<form name="judgment">
-<table align = "center"><tr>
-<td align="center">
-  <tr>
-  	<td>No</td>
-    <td>Yes</td>    
-  </tr>
-  	<td><input type="radio" name="judgment" value = "0"></td>
-    <td><input type="radio" name="judgment" value = "1"></td>
-  </tr>
+    </tr>
 </table>
 </form>
--->
 
     <button type="button" id="next2" onclick="this.blur(); if
-    (ValidateSliderFormPart1(document.affectForm1)) {
+    (ValidateForm(document.uttForm)) {
 experiment.next();                                                       
 }">Next</button>
     </div>
