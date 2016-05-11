@@ -10,3 +10,4 @@ model/results/
 *.bbl
 *.blg
 reading/
+.Rproj.user
