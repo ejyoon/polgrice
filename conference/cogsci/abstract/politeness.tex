@@ -17,7 +17,7 @@
 \usepackage{apacite}
 \usepackage{url}
 \usepackage{dblfloatfix}
-
+ 
 \usepackage{caption}
 \usepackage{subcaption}
 
@@ -92,13 +92,15 @@ We test this model by gathering data about utterance interpretations and goal at
 \section{Computational Model}
 
 Politeness poses a challenge for formal models of pragmatic language understanding, which assume that speakers' goals are to communicate informatively about some aspect of the world \cite{Frank2012, Goodman2013}.
-The speaker in RSA models is assumed to choose utterances approximately optimally, given a utility function.
-\citeA{Goodman2013} define speaker utility by the amount of information a \emph{literal listener} would still not know about world state $s$ after hearing a speaker's utterance $w$, what we will call \emph{epistemic utility}:
+RSA models a listener as reasoning about a speaker, who chooses utterances approximately optimally given a utility function.
+\citeA{Goodman2013} define speaker utility by the amount of information a \emph{literal listener} would still not know about world state $s$ after hearing a speaker's utterance $w$ (i.e. \emph{surprisal}), what we will call \emph{epistemic utility}:
 $U_{epistemic}(w; s) = \ln(P_{L_0}(s \mid w)) $,
 where the literal listener is a simple Bayesian agent that takes the utterance to be true:
 \begin{equation}
 P_{L_0}(s \mid w)\propto \denote{w}(s) \cdot P(s) \label{eq:L0}.
 \end{equation}
+Here, $\denote{w}(s)$ is the truth-functional denotation of the utterance $w$ (i.e. the utterance's literal meaning): It is a function that maps world-states $s$ to Boolean truth values.
+The literal meaning is used to update the literal listener's prior beliefs over world states $P(s)$.
 %
 \begin{figure*}[!b]
 \begin{center}
@@ -110,6 +112,7 @@ P_{L_0}(s \mid w)\propto \denote{w}(s) \cdot P(s) \label{eq:L0}.
 %
 %We propose that information transfer captures just one component of a speaker's utility, 
 %Politeness then emerges from a second component of a speaker's utility, what we will call \emph{social utility}.
+
 We propose there is a second component to the speaker's utility related to the intrinsic value of the state in the eyes of the listener\footnote{At this point, we do not differentiate state value to the listener from state value to the speaker, though in many situations these could in principle be different.}, what we will call \emph{social utility}.
 %
 We define the social utility of an utterance to be the expected utility of the state the listener would infer given the utterance $w$:
@@ -119,13 +122,13 @@ $$
 %
 where $V$ is a value function that maps states to subjective utility values---this captures the affective consequences for the listener of being in state $s$.
 %
-The overall speaker utility is thus a weighted combination of epistemic and social utilities:
+We take the overall speaker utility to be a weighted combination of epistemic and social utilities:
 $$
 U(w;s;  \hat{\beta}) = \beta_{epistemic}\cdot U_{epistemic} + \beta_{social} \cdot U_{social}.
 $$
 %
 %
-The speaker chooses utterances $w$ given the state $s$ and his goal weights $\hat{\beta}$: 
+The speaker chooses utterances $w$ softmax-optimally (determined by \emph{speaker rationality} parameter $\lambda$) given the state $s$ and his goal weights $\hat{\beta}$: 
 \begin{equation}
 P_{S_1}(w \mid s, \hat{\beta}) \propto \mathrm{exp}(\lambda \cdot \mathbb{E}[U(w; s;  \hat{\beta})])\label{eq:S1}
 \end{equation}
