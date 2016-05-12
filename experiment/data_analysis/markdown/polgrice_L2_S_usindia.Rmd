@@ -41,11 +41,41 @@ for (file.name in files) {
   ## now here's where data get bound together
   all.data <- rbind(all.data, jso1)
 }
+
+d_us <- all.data %>%
+  select(subid, site, answers.data.order, answers.data.knowledge, answers.data.domain, answers.data.goal, answers.data.utterance, answers.data.judgment)
+
+raw.data.path <- "/Users/ericang/Documents/Research/polgrice_GIT/experiment/exp_versions/10_L2_S_India/production-results/"
+
+## LOOP TO READ IN FILES
+all.data <- data.frame()
+files <- dir(raw.data.path,pattern="*.json")
+
+for (file.name in files) {
+  
+  ## these are the two functions that are most meaningful
+  json_file <- readLines(paste(raw.data.path,file.name,sep=""))
+  json_file_str = paste(json_file, collapse = "")
+  json_file_str = gsub(",}", "}", json_file_str)
+  jso = jsonlite::fromJSON(json_file_str)
+  jso$answers$data$people <- NULL
+  jso1 <- data.frame(jso)
+  jso1$subid <- substring(file.name, 1, 6)
+  jso1$site <- "India"
+  
+  ## now here's where data get bound together
+  all.data <- rbind(all.data, jso1)
+}
+
+d_india <- all.data %>%
+  select(subid, site, answers.data.order, answers.data.knowledge, answers.data.domain, answers.data.goal, answers.data.utterance, answers.data.judgment)
+
+all.data <- rbind(d_us, d_india)
 ```
 
 ```{r warning=FALSE, message=FALSE, echo=FALSE}
 d <- all.data %>%
-  select(subid, answers.data.order, answers.data.knowledge, answers.data.domain, answers.data.goal, answers.data.utterance, answers.data.judgment)
+  select(subid, site, answers.data.order, answers.data.knowledge, answers.data.domain, answers.data.goal, answers.data.utterance, answers.data.judgment)
 
 d <- d %>%
   mutate(trial = answers.data.order) %>%
@@ -54,9 +84,10 @@ d <- d %>%
   mutate(knowledge = answers.data.knowledge) %>%
   mutate(goal = answers.data.goal) %>%
   mutate(state = answers.data.judgment) %>%
-  select(subid, trial, knowledge, utterance, goal, state)
+  select(subid, site, trial, knowledge, utterance, goal, state)
 
 d$subid <- as.factor(d$subid)
+d$site <- as.factor(d$site)
 d$trial <- as.numeric(d$trial)
 d$state <- as.factor(d$state) 
 d$knowledge <- as.factor(d$knowledge)
@@ -71,11 +102,11 @@ d$goal <- ordered(d$goal, levels = c("honest", "nice", "mean"))
 ```{r warning=FALSE, message=FALSE, echo=FALSE}
 # goal_prob ~ true_state + utterance + goal
 ms <- d %>%
-  group_by(utterance, goal, subid) %>%
+  group_by(site, utterance, goal, subid) %>%
   summarize(
             state = mean(state, na.rm=TRUE)
           ) %>%
-  group_by(utterance, goal) %>%
+  group_by(site, utterance, goal) %>%
   multi_boot_standard(column = "state") %>%
   mutate(state = mean) %>%
   select(-mean)
@@ -89,11 +120,11 @@ qplot(utterance, state,
       shape = goal,
       data=ms) + 
   geom_line(aes(group=goal)) +
-  geom_point(position=position_dodge(width=0.05), size=2) +
+  facet_grid(.~site) +
   xlab("utterance") +
   ylab("inferred state") +
 #  ggtitle("Inferred state given utterance and goal") +
-  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1), position=position_dodge(width=0.05))
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1))
 ```
 
 ## model comparison
