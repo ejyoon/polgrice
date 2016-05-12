@@ -114,16 +114,37 @@ qplot(true_state, goal_prob,
  # ggtitle("Experiment: goals given heart-state and utterance") +
   geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1))
 
-# # only honesty goal
-# qplot(true_state, goal_prob, 
-#       colour = utterance,
-#       data=subset(ms, goal=="honest")) + 
-#   geom_line(aes(group=goal)) +
-#   facet_grid(.~utterance) +
-#   xlab("state (1=worst, 5=best)") +
-#   ylab("likelihood for goal") +
-#   ggtitle("honesty goal attribution given state and utterance (heart-scale)") +
-#   geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1))
+# comparison to model
+model <- read.csv("/Users/ericang/Documents/Research/polgrice_GIT/model/results/goalsbda-politeRSA-jointUtilityProbScale-goalPriorFixed-sopt-MH10000burn5000semantics-bern-50k-b25k.csv")
+
+model <- model %>%
+  mutate(true_state = State) %>%
+  mutate(utterance = Utterance) %>%
+  mutate(goal = Goal) %>%
+  mutate(goal_prob = MAP) %>%
+  mutate(cih = credHigh-MAP) %>%
+  mutate(cil = MAP-credLow) %>%
+  select(true_state, utterance, goal, goal_prob, cih, cil)
+model$exp <- "model"
+model$utterance <- ordered(model$utterance, levels = c("terrible", "bad", "okay", "good", "amazing"))
+levels(model$utterance) <- c("utterance: terrible", "utterance: bad","utterance: okay","utterance: good","utterance: amazing")
+
+ms$exp <- "experiment"
+
+ms2 <- rbind(ms, model)
+
+qplot(true_state, goal_prob, 
+      colour = goal,
+      shape = goal,
+      data=ms2) + 
+  geom_line(aes(group=goal)) +
+  geom_point(position=position_dodge(width=0.05), size=2) +
+  facet_grid(exp~utterance) +
+  xlab("state") +
+  ylab("likelihood for goal") +
+ # ggtitle("Experiment: goals given heart-state and utterance") +
+  geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1), position=position_dodge(width=0.1))
+
 
 d3 <- d
 ms3 <- ms
@@ -416,3 +437,7 @@ qplot(state, judgment,
 ```
 
 Honesty attribution with word-state looks more comparable to semantic distribution data?
+
+```{r}
+# comparison to model
+
