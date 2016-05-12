@@ -79,12 +79,13 @@ prefix<-"bda-politeRSA-informativity-expectation-goalPrior-sopt-MH"
 prefix<-"bda-politeRSA-widesopt-alphaMH"
 # prefix<-"bda-politeRSA-jointUtilityMatchWeight-wMeanness-goalPrior-sopt-MH"
 # prefix<-"bda-politeRSA-jointUtilityMatchWeight-wMeanness-goalPrior-sopt-MH"
-samples = 500
+prefix<-"bda-politeRSA-truesopt-alphaMH"
+samples = 10000
 burn =  samples /2
 semsamp = 50000
 semburn =semsamp/2
 m.samples<- data.frame()
-i<-"c"
+i<-"a"
 for (i in c("a","b")){
 m<-read.csv(paste(fpath, prefix, samples, "burn", burn,
                   "semantics-bern-",semsamp/1000,
@@ -138,12 +139,12 @@ m.pp <- m.samples %>%
     mutate(#State = factor(State, levels = lvls, labels =c(1,2,3,4,5)),
            Utterance = factor(Utterance, levels = lvls))
   
-  
-write.csv(m.pp, 
-          file =paste("~/Documents/research/polgrice/model/results/goals",
-                      prefix, samples, "burn", burn,
-                  "semantics-bern-",semsamp/1000,
-                  "k-b",semburn/1000,"k.csv", sep=""), row.names=F)
+#   
+# write.csv(m.pp, 
+#           file =paste("~/Documents/research/polgrice/model/results/goals",
+#                       prefix, samples, "burn", burn,
+#                   "semantics-bern-",semsamp/1000,
+#                   "k-b",semburn/1000,"k.csv", sep=""), row.names=F)
 
   
 ggplot(m.pp, aes(x=State, y = MAP, color = Goal, group= Goal))+
@@ -153,10 +154,10 @@ ggplot(m.pp, aes(x=State, y = MAP, color = Goal, group= Goal))+
                   position=position_dodge(0.3), width=0.2)+
     facet_grid(.~Utterance)
 
-ggsave(paste("~/Documents/research/polgrice/model/results/goals",
-             prefix, samples, "burn", burn,
-                  "semantics-bern-",semsamp/1000,
-                  "k-b",semburn/1000,"k.pdf", sep='') )
+# ggsave(paste("~/Documents/research/polgrice/model/results/goals",
+#              prefix, samples, "burn", burn,
+#                   "semantics-bern-",semsamp/1000,
+#                   "k-b",semburn/1000,"k.pdf", sep='') )
 ```
 
 
@@ -180,7 +181,7 @@ ggplot(md.tidy, aes(x=MAP, y = mean, color = Goal))+
   geom_abline(intercept = 0, slope = 1, lty=2)+
   geom_errorbar(aes(ymin=ci_lower, ymax=ci_upper))+
   geom_errorbarh(aes(xmin=credLow, xmax = credHigh))+
-  theme_paper()+
+  #theme_paper()+
   xlim(-0.05,1.05)+
   ylim(-0.05,1.05)+
   coord_fixed()
@@ -225,7 +226,7 @@ prefix<-"bda-politeRSA-stateGivenUttGoal-goalPrior1Beta-sopt-alpha-phi-MH"
 prefix<-"bda-politeRSA-stateGivenUttGoal-goalPrior1Beta-sopt-alpha-MH"
 prefix<-"bda-politeRSA-stateGivenUttGoal-goalPrior1wide-Beta50d-sopt-alpha-IncrMH"
 prefix<-"bda-politeRSA-stateGivenUttGoal-goal3Vals-Beta50d-sopt-alpha-IncrMH"
-samples = 10000
+samples = 100000
 burn =  samples /2
 semsamp = 50000
 semburn =semsamp/2
@@ -260,7 +261,10 @@ m.params <- m.samples %>%
   rename(Cndition = State,
            #Goal = State,
          Goal = Utterance,
-         Parameter = Goal)
+         Parameter = Goal) %>%
+  mutate(Cndition = factor(Cndition, levels=c("honest", "nice", "mean")),
+         Goal = factor(Goal, levels=c("honesty", "kindness", "meanness"),
+                       labels=c("honesty", "niceness", "meanness")))
 
 ggplot(m.params, aes(x=Value, fill = Goal))+
   geom_histogram(position=position_dodge())+
@@ -276,6 +280,18 @@ ggsave(paste("~/Documents/research/polgrice/model/results/params",
              prefix, samples, "burn", burn,
                   "semantics-bern-",semsamp/1000,
                   "k-b",semburn/1000,"k.pdf", sep=''), width =12, height = 8)
+
+
+
+ggplot(m.params %>% filter(Parameter=="weight"), aes(x=Value, fill = Goal))+
+  geom_density(alpha=0.5, adjust = 3.5, color ='black', size = 1.1)+
+    facet_grid(Cndition~., scales='free')+
+  theme_bw()+
+  ylab("posterior density")+
+  xlab("Inferred speaker goal weight")
+
+ggsave("~/Documents/research/polgrice/conference/cogsci/abstract/figures/goal-posterior.pdf", height =5, width = 5)
+
 ```
 
 
@@ -311,10 +327,10 @@ m.pp <- m.samples %>%
 #                   "semantics-bern-",semsamp/1000,
 #                   "k-b",semburn/1000,"k.csv", sep=""), row.names=F)
 
-fig1<-ggplot(m.pp, aes(x=Utterance, y = MAP, color = Goal, group= Goal))+
+fig1<-ggplot(m.pp, aes(x=Utterance, y = mean, color = Goal, group= Goal))+
   geom_point(size=2, position=position_dodge(0.3))+
   geom_line(position=position_dodge(0.3))+
-  geom_errorbar(aes(ymin = credLow, ymax = credHigh),
+  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper),
                 position=position_dodge(0.3), width=0.2)+
   ylim(1,5)+
   ylab("Model posterior predictive")
@@ -349,13 +365,16 @@ fig1<-ggplot(md.bars, aes(x=Utterance, y = mean, color = Goal, group= Goal))+
                 position=position_dodge(0.3), width=0.2)+
   ylim(1,5)+
   ylab("Inferred true state")+
-  facet_grid(src~.)+
-  theme_bw()
+  facet_grid(~src)+
+  theme_bw()+
+  theme(legend.title = element_text(hjust=0),
+        legend.position="bottom",
+        legend.direction="horizontal")
 
-ggsave("~/Documents/research/polgrice/conference/cogsci/abstract/figures/state-inference.pdf", height =5, width = 5)
+ggsave("~/Documents/research/polgrice/conference/cogsci/abstract/figures/state-inference.pdf", height =4, width = 6)
 
 
-md.tidy<- left_join(m.pp, ds.tidy)
+ md.tidy<- left_join(m.pp %>% select(-src), ds.tidy)
 
 ggplot(md.tidy, aes(x=MAP, y = mean, color = Goal))+
   geom_point()+
@@ -367,8 +386,8 @@ ggplot(md.tidy, aes(x=MAP, y = mean, color = Goal))+
   xlim(0,100)+
   ylim(0,100)
 
-with(md.tidy# %>% filter(Goal!='mean')
-     , cor(MAP, mean))^2
+with(md.tidy%>% filter(Goal!='mean')
+     , cor(mean, MAP))^2
 ```
 
 
@@ -417,6 +436,7 @@ md.dist<-left_join(m.pp, ds.dist)
 md.dist[is.na(md.dist$n),"norm_n"]<-0
 
 md.dist$State = factor(md.dist$State, levels=c(1,2,3,4,5))
+md.dist$Goal = factor(md.dist$Goal, levels=c("honest", "nice", "mean"))
 
 ggplot(md.dist, aes(x = MAP, y = norm_n, 
                     xmin = credLow, xmax = credHigh, 
@@ -432,10 +452,10 @@ ggplot(md.dist, aes(x = MAP, y = norm_n,
   ylab("Human proportion responses")+
   theme_bw()+
   guides(color=F)
-ggsave("~/Documents/research/polgrice/conference/cogsci/abstract/figures/state-inference-scatter.pdf", height =4, width = 4)
+#ggsave("~/Documents/research/polgrice/conference/cogsci/abstract/figures/state-inference-scatter.pdf", height =4, width = 4)
 
 
-with(md.dist,# %>% filter(Goal!="mean"),
+with(md.dist %<% filter(Goal!="mean"),
      cor(MAP, norm_n))^2
 ```
 
