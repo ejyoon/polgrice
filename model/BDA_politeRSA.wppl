@@ -24,7 +24,7 @@ var stateDictionary = {
 	"amazing":5
 }
 // run BDA on literal semantics data
-var sem_mhiter = 10000
+var sem_mhiter = 50000
 var sem_burn = sem_mhiter/2
 var incrOpts = {samples: sem_mhiter, burn:sem_burn, verbose: true, verboseLag: sem_mhiter/10}
 // semanticsBDA()
@@ -62,12 +62,9 @@ var addGuessing = function(erp, phi){
 
 // sample(semanticsERP)
 
-var priorParams = {
-	honestGamma : 0.5, honestDelta : 2,
-	kindGamma : 0.5, kindDelta : 2,
-	meanGamma : 0.5, meanDelta : 2,
-	includeMeanness: true
-}
+
+
+
 
 var weights = false
 
@@ -89,12 +86,13 @@ var dataAnalysis = function(){
 			var utteranceData = subset(stateData, "utterance", utterance)
 
 			var predictiveERP = politeRSA({utterance: utterance, state: stateDictionary[state]},
-				RSAparams, priorParams, weights, semantics, "goals")
+				RSAparams, weights, semantics, "goals")
 
 			foreach(allGoals, function(goal){
 
 				var dataPoints = _.pluck(subset(utteranceData, "goal", goal), "roundval")
 				var goalERP = marginalize(predictiveERP, goalDictionary[goal])
+				// console.log(dataPoints)
 				var likelihoodOfData = sum(map(function(d){return goalERP.score(d)}, dataPoints))
 
 				factor(likelihoodOfData)
@@ -112,7 +110,7 @@ var dataAnalysis = function(){
 
 
 var inference ='MH'
-var samples = 10
+var samples = 10000
 var burn =  samples/2
 var resultsERP = MCMC(dataAnalysis, {samples:samples/2, burn:burn, verbose:true})
 // var resultsERP = MCMC(dataAnalysis, 
@@ -127,10 +125,8 @@ console.log('inference complete... printing')
 
 var outfile = "results/bda-politeRSA-truesopt-alpha"+ 
 						inference + samples + "burn" + burn + 
-						"semantics-bern-" + sem_mhiter/1000 + "k-b" + sem_burn/1000 +"kb.csv"
-
+						"semantics-bern-" + sem_mhiter/1000 + "k-b" + sem_burn/1000 +"kc.csv"
 
 utils.erpWriter(resultsERP, outfile)
 
 console.log('output written to ' + outfile)
-
