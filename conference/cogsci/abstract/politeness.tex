@@ -149,11 +149,6 @@ The states have subjective numerical values $V(s_{i}) = \alpha \cdot i$, where $
 The set of utterances is \{\emph{terrible}, \emph{bad}, \emph{okay}, \emph{good}, and \emph{amazing}\}.
 We implemented this model using the probabilisitic programming language WebPPL \cite{dippl} and a complete implementation can be found at \url{http://forestdb.org/models/politeness-cogsci2016.html}.
 
-In what follows, we measure the literal semantics in Experiment 1, then use these to predict performance in two experiments. In Experiment 2, we explore listeners' inferences about the world $s$ given an utterance and a speaker's goal. In Experiment 3, we investigate inferences about speakers' goals given an utterance and a state. 
-Then we compare the behavioral results to our model predictions, that people's inferences are based on a speaker model with two utilities, epistemic and social. 
-
-\section{Experiment 1: Literal semantics}
-
 \begin{figure}[th]
 \begin{centering}
 \includegraphics[width=3.2in]{figures/example.png}
@@ -162,10 +157,15 @@ Then we compare the behavioral results to our model predictions, that people's i
 \end{figure}
 
 
+In what follows, we measure the literal semantics in Experiment 1, then use these to predict performance in two experiments. In Experiment 2, we explore listeners' inferences about the world $s$ given an utterance and a speaker's goal. In Experiment 3, we investigate inferences about speakers' goals given an utterance and a state. 
+Then we compare the behavioral results to our model predictions, that people's inferences are based on a speaker model with two utilities, epistemic and social. 
+
+\section{Experiment 1: Literal semantics}
+
 \begin{figure*}[b]
 \begin{centering}
 \includegraphics[width=\textwidth]{figures/exp2.pdf}
-\caption{\label{fig:exp2} Results from Expt.~2 (left) and model predictions (center) for average states inferred based on a speaker's goal and utterance. Right: Full distribution of human responses vs. model predictions. Error bars represent 95\% confidence intervals for the data and 95\% highest density intervals for the model.}
+\caption{\label{fig:expt2} Results from Expt.~2 (left) and model predictions (center) for average states inferred based on a speaker's goal and utterance. Right: Full distribution of human responses vs. model predictions. Error bars represent 95\% confidence intervals for the data and 95\% highest density intervals for the model.}
 \end{centering}
 \end{figure*}
 
@@ -212,8 +212,8 @@ The experiment can be viewed at: \url{http://langcog.stanford.edu/expts/EJY/polg
 
 \subsection{Behavioral results}
 
-Inferences of the actual rating for hearer's performance, or the true state, varied depending on speaker's goal and utterance (Figure \ref{fig:exp3}).
-Consistent with intuition, when the speaker was trying to be honest, utterances accurately mapped onto inferred states (Figure \ref{fig:exp3}, left, red line).
+Inferences of the actual rating for hearer's performance, or the true state, varied depending on speaker's goal and utterance (Figure \ref{fig:expt2}).
+Consistent with intuition, when the speaker was trying to be honest, utterances accurately mapped onto inferred states (Figure \ref{fig:expt2}, left, red line).
 For utterances consistent with the speaker's goals (e.g. saying positive utterances when the speaker was trying to be nice; negative utterances when trying to be mean), the results are also consistent with intuition.
 Knowing that the speaker was trying to be nice, participants inferred a true state appreciably lower than the state inferred given honesty (green line).
 The reverse was true when the speaker was trying to be mean (blue).
@@ -258,7 +258,7 @@ For the ``trying to be honest'' condition, the model infers the speaker was usin
 For ``trying to be nice'', the model puts a high weight on niceness but also some appreciable weight on honesty.
 The model fits are worse for the ``trying to be mean'' case; all that the model infers is that the speaker was not honest.
 
-The predictions of the expectations of the listener model for the \emph{true state} (Eq.~\ref{eq:L1}) are shown in Figure \ref{fig:exp3} (center).
+The predictions of the expectations of the listener model for the \emph{true state} (Eq.~\ref{eq:L1}) are shown in Figure \ref{fig:expt2} (center).
 The model's expected posterior over states when the speaker is trying to be \emph{honest} increases as a function of the positivity implied by the utterances (e.g. ``amazing'' means a very high state).
 When it knows the speaker was trying to be \emph{nice}, the pragmatic listener is more conservative in how it interprets positive utterances, with the difference between an honest utterance and a nice utterance increasing as the utterance becomes more positive. 
 For example, the difference between a \emph{nice} ``amazing'' and an \emph{honest} ``amazing'' is greater than the difference between a \emph{nice} ``okay'' and an \emph{honest} ``okay''.
@@ -267,7 +267,7 @@ Overall, the expected values of the model explain a lot of the variance in the a
 The main discrepancies are with the goal ``trying to be mean'', as noted above.
 Among the other 2 goal conditions, the model explains almost all of the variance $r^2(10) = 0.97$.
 
-The model makes predictions not only for the average data but also for the full distribution of responses (Figure \ref{fig:exp3}, right).
+The model makes predictions not only for the average data but also for the full distribution of responses (Figure \ref{fig:expt2}, right).
 The model predicts the full distribution with relatively high accuracy $r^2(75) = 0.79$.
 % predictive accuracy is even higher for just the goals to be honest and nice $r^2(50) = 0.86$.
 
@@ -282,7 +282,7 @@ Our model does not include sarcastic interpretation though other models in the R
 \begin{figure*}[!t]
 \begin{center}
   \includegraphics[width=\textwidth]{figures/exp3.pdf}
-  \caption{\label{fig:exp2} Results from Expt.~3 (top) and model predictions (bottom). Attribution of speaker's goals: honest, nice and mean (colors) based on the true state and utterance. Error bars represent 95\% CIs for the data and 95\% HDIs for the model.}
+  \caption{\label{fig:expt3} Results from Expt.~3 (top) and model predictions (bottom). Attribution of speaker's goals: honest, nice and mean (colors) based on the true state and utterance. Error bars represent 95\% CIs for the data and 95\% HDIs for the model.}
   \end{center}
 \end{figure*}
 
@@ -309,7 +309,7 @@ The experiment can be viewed at: \url{http://langcog.stanford.edu/expts/EJY/polg
 
 \subsection{Behavioral results}
 
-Participants rated speaker's goals differentially depending on the true state and utterance (see Figure \ref{fig:exp2}, top).
+Participants rated speaker's goals differentially depending on the true state and utterance (see Figure \ref{fig:expt3}, top).
 Honesty was rated highest when the true state was most consistent with the literal semantics. 
 As utterances became more positive, participants rated the speaker's niceness higher and meanness displayed the reverse pattern. 
 Ratings for niceness and meanness goals were strongly anti-correlated $r = -.78$.
@@ -334,8 +334,8 @@ The MAP estimate and 95\% HDI for $\lambda$ is 4.6 [4.0, 4.9]; for $\alpha$ is 1
 %This is a relatively low value for $\phi$: The model explains about 90\% of the data set better than a model of random guessing.
 
 \noindent {\bf Results}
-The predictions of the model are shown in Figure~\ref{fig:exp2} (bottom).
-Like our participants, the model believes the speaker to be more honest when the utterance matches the true state of the world, as given by the literal semantics data (Figure~\ref{fig:exp2}, red lines).
+The predictions of the model are shown in Figure~\ref{fig:expt3} (bottom).
+Like our participants, the model believes the speaker to be more honest when the utterance matches the true state of the world, as given by the literal semantics data (Figure~\ref{fig:expt3}, red lines).
 Further, the model increases its ratings of niceness as the utterance better matches states with higher values (green lines, main effect of panel).
 The goal to be mean displays the opposite behavior, increasing as the utterance matches states with lower values (blue lines).
 Overall, the model displays a strong quantitative fit to the goal inference data $r^2(75) = 0.87$.
