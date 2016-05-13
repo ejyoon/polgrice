@@ -17,7 +17,7 @@
 \usepackage{apacite}
 \usepackage{url}
 \usepackage{dblfloatfix}
- 
+  
 \usepackage{caption}
 \usepackage{subcaption}
 
@@ -249,8 +249,14 @@ We put uninformative priors on these weights ($\beta \sim \text{Uniform}(0,1)$) 
 There are 2 additional parameters of the cognitive model: the speaker optimality parameter $\lambda$ in Eq.~\ref{eq:S1} and the value scale parameter $\alpha$ in the utility function.
 We put uninformative priors on these ($\lambda \sim \text{Uniform}(0,20)$ and $\alpha \sim \text{Uniform}(0, 5)$) and infer their posterior credible values from the data.
 We ran 2 MCMC chains for 100,000 iterations, discarding the first 50,000 for burnin.
-The Maximum A-Posteriori (MAP) estimate and 95\% Highest Probability Density Interval (HDI) for $\lambda$ is 1.8 [1.08, 3.1]; for $\alpha$ is 9.1 [3.4, 9.9]. %; for $\phi$ is \red{0.09 [0.06, 0.13]}.
+The Maximum A-Posteriori (MAP) estimate and 95\% Highest Probability Density Interval (HDI) for $\lambda$ is 1.4 [0.9, 8.5]; for $\alpha$ is 6.4 [1.9, 9.9]. %; for $\phi$ is \red{0.09 [0.06, 0.13]}.
 To generate predictions, given our cognitive model and the inferred parameters, we evaluated the posterior predictive distribution, marginalizing out all parameters.
+
+
+%              State      MAP   credLow credHigh
+%              (chr)    (dbl)     (dbl)    (dbl)
+%1             alpha 6.383304 1.9431475 9.983394
+%2 speakerOptimality 1.380568 0.9014144 8.544265
 
 \noindent {\bf Results}
 The inferred weights for each goal condition were largely as expected (Figure~\ref{fig:goal-priors-bda}).
@@ -378,7 +384,7 @@ And it moves us closer to courteous computation---to computers that communicate 
 
 \section{Acknowledgments}
 
-This work was supported by NSF grant BCS \#1456077 and ONR grant N00014-13-1-0788. 
+This work was supported by NSF grant BCS \#1456077 to MCF, ONR grant N00014-13-1-0788 and a James S. McDonnell Foundation Scholar Award to NDG, and NSF Graduate Research Fellowship DGE-114747 to MHT. 
 
 \bibliographystyle{apacite}
 \setlength{\bibleftmargin}{.125in}
