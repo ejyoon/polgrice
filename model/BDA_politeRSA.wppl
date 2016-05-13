@@ -24,46 +24,22 @@ var stateDictionary = {
 	"amazing":5
 }
 // run BDA on literal semantics data
-var sem_mhiter = 50000
+var sem_mhiter = 10000
 var sem_burn = sem_mhiter/2
-var incrOpts = {samples: sem_mhiter, burn:sem_burn, verbose: true, verboseLag: sem_mhiter/10}
-// semanticsBDA()
-var semanticsERP = IncrementalMH(semanticsBDA, incrOpts)
+var mcmcOpts = {samples: sem_mhiter, burn:sem_burn, verbose: true}
+// var incrOpts = {samples: sem_mhiter, burn:sem_burn, verbose: true, verboseLag: sem_mhiter/10}
 
 
-var logistic = function(x0, midpoint,k){
-  return 1 / (1 + Math.exp(-k*(midpoint - x0)))
-}
-var roundToBin = function(x){
-  var roundFive = x < 0.2 ? 0.1 :
-                  x < 0.4 ? 0.3 :
-                  x < 0.6 ? 0.5 :
-                  x < 0.8 ? 0.7 :
-                  0.9
-  return roundFive
-}
-
-
-var addGuessing = function(erp, phi){
-    Enumerate(function(){
-        var x = flip(1-phi) ? 
-                    sample(erp) :
-                    uniformDraw([0.1,0.3,0.5,0.7,0.9])
-        return x
-    })
-}
-
-// var semanticsERPobject = _.object(
-// 	map(function(s){
-// 		return [s, _.object(map(function(u){
-// 			return [u, marginalize(semanticsERP, [u,s])]
-// 		}, allUtterances))]
-// },allStates))
-
-// sample(semanticsERP)
-
-
-
+var semanticsERPobject = _.object(map(function(utt){
+	return [utt, _.object(map(function(s){
+		var responses = _.pluck(subset(subset(df_semantics, "utterance", utt), "state", s), "judgment")
+		var n = responses.length
+		var d = sum(responses)
+		var erp = MCMC(function(){return semanticsBDA(utt,s, d, n)}, mcmcOpts)
+		return [s, erp]
+	}, [1,2,3,4,5]))]
+}, allUtterances))
+		
 
 
 var weights = false
@@ -75,7 +51,15 @@ var dataAnalysis = function(){
 		alpha: sample(UniformDrift({a: 0, b: 10, r: 0.5}))
 	}
 
-	var semantics = sample(semanticsERP)
+	var semantics = _.object(map(function(utt){
+		return [utt, _.object(map(function(s){
+			return [s, sample(semanticsERPobject[utt][s])]
+		}, [1,2,3,4,5]))]
+	}, allUtterances))
+
+
+	// var semantics = sample(semanticsERP)
+	// var semantics = sample(semanticsERP)
 
 	foreach(allStates, function(state){
 
@@ -125,7 +109,7 @@ console.log('inference complete... printing')
 
 var outfile = "results/bda-politeRSA-truesopt-alpha"+ 
 						inference + samples + "burn" + burn + 
-						"semantics-bern-" + sem_mhiter/1000 + "k-b" + sem_burn/1000 +"kc.csv"
+						"indpdnt-semantics-bern-" + sem_mhiter/1000 + "k-b" + sem_burn/1000 +"kb.csv"		
 
 utils.erpWriter(resultsERP, outfile)
 
