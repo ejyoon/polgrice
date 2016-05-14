@@ -1,0 +1,158 @@
+---
+title: "Summary of expts so far"
+author: "Erica Yoon"
+date: "Dec 3, 2015"
+output: html_document
+---
+
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+rm(list = ls())
+library(jsonlite)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(binom)
+library(bootstrap)
+source("/Users/ericang/Documents/Research/polgrice_GIT/experiment/data_analysis/helper/useful.R")
+
+raw.data.path <- "/Users/ericang/Documents/Research/polgrice_GIT/experiment/exp_versions/5_L2_G/production-results/"
+
+## LOOP TO READ IN FILES
+all.data <- data.frame()
+files <- dir(raw.data.path,pattern="*.json")
+
+for (file.name in files) {
+  
+  ## these are the two functions that are most meaningful
+  json_file <- readLines(paste(raw.data.path,file.name,sep=""))
+  json_file_str = paste(json_file, collapse = "")
+  json_file_str = gsub(",}", "}", json_file_str)
+  jso = jsonlite::fromJSON(json_file_str)
+  jso$answers$data$people <- NULL
+  jso1 <- data.frame(jso)
+  jso1$subid <- substring(file.name, 1, 6)
+  
+  ## now here's where data get bound together
+  all.data <- rbind(all.data, jso1)
+}
+```
+
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+rearr <- all.data %>%
+  select(subid, num_range("answers.data.goal", 0:2)) %>%
+  distinct(subid) %>%
+  gather(goal_order, goal, num_range("answers.data.goal", 0:2)) %>%
+  mutate(goal_order = substr(goal_order, 18, 18))
+
+d <- all.data %>%
+  select(subid, answers.data.order, answers.data.knowledge, answers.data.domain, answers.data.state, answers.data.utterance, num_range("answers.data.goalProb", 0:2)) %>%
+  gather(goal_order, goal_prob, num_range("answers.data.goalProb", 0:2)) %>%
+  mutate(goal_order = substr(goal_order, 22, 22))
+
+detach(package:dplyr)
+library(plyr)
+d <- join(d, rearr)
+
+detach(package:plyr)
+library(dplyr)
+d <- d %>%
+  mutate(trial = answers.data.order) %>%
+  mutate(item = answers.data.domain) %>%
+  mutate(true_state = substr(answers.data.state, 6, 6)) %>%
+  mutate(utterance = answers.data.utterance) %>%
+  mutate(knowledge = answers.data.knowledge) %>%
+  select(subid, trial, knowledge, true_state, utterance, goal, goal_prob)
+
+d$subid <- as.factor(d$subid)
+d$trial <- as.numeric(d$trial)
+d$true_state <- as.factor(d$true_state) 
+d$knowledge <- as.factor(d$knowledge)
+d$utterance <- as.factor(d$utterance)
+d$goal <- as.factor(d$goal)
+d$goal_prob <- as.numeric(d$goal_prob)
+
+d$utterance <- ordered(d$utterance, levels = c("terrible", "bad", "okay", "good", "amazing"))
+```
+
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+# goal_prob ~ true_state + utterance + goal
+ms <- d %>%
+  mutate(Goal = goal) %>%
+  select(-goal) %>%
+  group_by(true_state, utterance, Goal, subid) %>%
+  summarize(
+            goal_prob = mean(goal_prob, na.rm=TRUE)
+          ) %>%
+  group_by(true_state, utterance, Goal) %>%
+  multi_boot_standard(column = "goal_prob")
+
+ms$goal <- ordered(ms$goal, levels = c("honest", "nice", "mean"))
+levels(ms$utterance) <- c("utterance: terrible", "utterance: bad","utterance: okay","utterance: good","utterance: amazing")
+ms$src <- "experiment"
+
+qplot(true_state, goal_prob, 
+      colour = goal,
+      data=ms) + 
+  geom_line(aes(group=goal)) +
+  facet_grid(.~utterance) +
+  xlab("state") +
+  ylab("likelihood for goal") +
+ # ggtitle("Experiment: goals given heart-state and utterance") +
+  geom_errorbar(aes(ymin=goal_prob-cil,ymax=goal_prob+cih,width=.1))
+
+
+# need m.samples to be loaded
+library(langcog)
+library(coda)
+library(data.table)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(lme4)
+estimate_mode <- function(s) {
+  d <- density(s)
+  return(d$x[which.max(d$y)])
+}
+HPDhi<- function(s){
+  m <- HPDinterval(mcmc(s))
+  return(m["var1","upper"])
+}
+HPDlo<- function(s){
+  m <- HPDinterval(mcmc(s))
+  return(m["var1","lower"])
+}
+options("scipen"=10)
+
+m.pp <- m.samples %>%
+  filter(Parameter == 'predictive') %>%
+  mutate(goal_prob = Value,
+         true_state = State,
+         Goal = factor(Goal, levels =c("honest", "nice", "mean")),
+         utterance = factor(Utterance, levels=c("terrible", "bad", "okay", "good", "amazing")),
+         utterance = factor(utterance, labels = c("utterance: terrible", "utterance: bad","utterance: okay","utterance: good","utterance: amazing"))) %>%
+  group_by(true_state, utterance, Goal) %>%
+  summarize(MAP = estimate_mode(goal_prob),
+            credHigh = HPDhi(goal_prob),
+            credLow = HPDlo(goal_prob)) %>%
+  ungroup() %>%
+  mutate(src = "model") %>%
+  rename(mean = MAP,
+         ci_lower = credLow,
+         ci_upper = credHigh)
+
+ms1 <- rbind(ms, m.pp)
+
+
+qplot(true_state, mean, 
+      colour = goal,
+      shape = goal,
+      data=ms1) + 
+  geom_line(aes(group=goal)) +
+  geom_point(position=position_dodge(width=0.05), size=2) +
+  facet_grid(src~utterance) +
+  xlab("state") +
+  ylab("likelihood for goal") +
+ # ggtitle("Experiment: goals given heart-state and utterance") +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1), position=position_dodge(width=0.1))
+
+```
