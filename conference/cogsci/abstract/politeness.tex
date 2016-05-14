@@ -336,15 +336,21 @@ With no prior knowledge about the speaker's intentions, we assume a uniform prio
 
 We put the same priors over the speaker optimality parameter $\lambda$ and the value scale parameter $\alpha$.
 We ran 2 MCMC chains for 40,000 iterations, discarding the first 20,000 for burnin.
-The MAP estimate and 95\% HDI for $\lambda$ is 4.6 [4.0, 4.9]; for $\alpha$ is 1.17 [1.04, 1.31].%; for $\phi$ is 0.09 [0.06, 0.13].
+The MAP estimate and 95\% HDI for $\lambda$ is 3.8 [3.1, 4.9]; for $\alpha$ is 1.4 [1.23, 1.53].%; for $\phi$ is 0.09 [0.06, 0.13].
 %This is a relatively low value for $\phi$: The model explains about 90\% of the data set better than a model of random guessing.
+%               Goal Parameter      MAP  credLow credHigh
+%             (fctr)    (fctr)    (dbl)    (dbl)    (dbl)
+%1             alpha        NA 1.400904 1.226980 1.530623
+%2 speakerOptimality        NA 3.848798 3.170766 4.841235
+%> # 
+
 
 \noindent {\bf Results}
 The predictions of the model are shown in Figure~\ref{fig:expt3} (bottom).
 Like our participants, the model believes the speaker to be more honest when the utterance matches the true state of the world, as given by the literal semantics data (Figure~\ref{fig:expt3}, red lines).
 Further, the model increases its ratings of niceness as the utterance better matches states with higher values (green lines, main effect of panel).
 The goal to be mean displays the opposite behavior, increasing as the utterance matches states with lower values (blue lines).
-Overall, the model displays a strong quantitative fit to the goal inference data $r^2(75) = 0.87$.
+Overall, the model displays a strong quantitative fit to the goal inference data $r^2(75) = 0.82$.
 
 The model successfully captured the key patterns in the data:
 changing goal likelihoods based on the degree of match, and positivity/negativity bias of mismatch, between the utterance and true state.
