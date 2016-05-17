@@ -68,6 +68,54 @@ function clearForm(oForm) {
   }
 }
 
+function clearFormPractice(oForm) {
+  var sliderVar = "";
+  for(var i=0; i<2; i++)
+  {
+    sliderVar = "#sliderpractice" + i;
+    $(sliderVar).slider("value", 20);
+    $(sliderVar).css({"background":"#FFFFFF"});
+    $(sliderVar + " .ui-slider-handle").css({
+        "background":"#FAFAFA",
+        "border-color": "#CCCCCC" });
+    sliderVar = "sliderpractice" + i;
+    document.getElementById(sliderVar).style.background = "";
+  }
+  
+  var elements = oForm.elements; 
+  
+  oForm.reset();
+
+  for(var i=0; i<elements.length; i++) {
+    field_type = elements[i].type.toLowerCase();
+    switch(field_type) {
+    
+      case "text": 
+      case "password": 
+      case "textarea":
+            case "hidden":	
+        
+        elements[i].value = ""; 
+        break;
+          
+      case "radio":
+      case "checkbox":
+          if (elements[i].checked) {
+            elements[i].checked = false; 
+        }
+        break;
+  
+      case "select-one":
+      case "select-multi":
+                  elements[i].selectedIndex = -1;
+        break;
+  
+      default: 
+        break;
+    }
+  }
+}
+
 Array.prototype.random = function() {
   return this[random(this.length)];
 }
@@ -761,16 +809,19 @@ var experiment = {
   },
     
     practice: function () {
-    if (practiceComplete >= practiceTrials) {
+    if (practiceComplete > practiceTrials) {
     	showSlide("instructions3");
     } else {
       showSlide('practice');      
-      var question_practice = ["Pritika gave her friend a beautiful gift."];
-      var scorepractice0 = ["Was Pritika <b>nice</b>?"]
-      var scorepractice10 = ["Was Pritika <b>mean</b>?"]
+      var question_practice = ["There was a girl named Pritika. <b>Pritika gave her friend a beautiful gift.</b>", "There was a boy named Jawan. <b>Jawan hit his friend really hard.</b>", "Kamal broke his mom's cup, and he told his mom the truth that he broke it.", "Purti ate five cakes, but Purti told her mom a lie that she didn't eat any cake."];
+      var scorepractice0 = ["Was Pritika <b>nice</b>?", "Was Jawan <b>nice</b>?","Was Kamal honest?","Was Purti honest?"]
+      var scorepractice10 = ["Was Pritika <b>mean</b>?", "Was Jawan <b>mean</b>?","Was Kamal lying?","Was Purti lying?"]
       $("#question_practice").html(question_practice[practiceComplete]); 
       $("#scorepractice0").html(scorepractice0[practiceComplete]); 
       $("#scorepractice10").html(scorepractice10[practiceComplete]); 
+    
+      clearFormPractice(document.forms[0]);
+
       practiceComplete++;      
     }    },
     
