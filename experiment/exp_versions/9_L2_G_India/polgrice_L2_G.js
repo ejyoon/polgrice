@@ -752,6 +752,8 @@ var experiment = {
     people: [],
 //    goal: [],
 //    context: [],
+    practiceprob0: [],
+    practiceprob1: [],
     goal0: score[0],
     goal1: score[1],
     goal2: score[2],
@@ -779,16 +781,16 @@ var experiment = {
             experiment.data.expt_aim.push(document.getElementById("expthoughts").value);		
             experiment.data.expt_gen.push(document.getElementById("expcomments").value);
             
-            if(getRadioCheckedValue(1, "region") == "other" || getRadioCheckedValue(1, "region") == "") {
+            if(getRadioCheckedValue(2, "region") == "other" || getRadioCheckedValue(2, "region") == "") {
                 experiment.data.region.push(document.getElementById("region_other").value);
             } else {
-                experiment.data.region.push(getRadioCheckedValue(1, "region"));
+                experiment.data.region.push(getRadioCheckedValue(2, "region"));
             }
             
-            if(getRadioCheckedValue(1, "religion") == "other" || getRadioCheckedValue(1, "religion") == "") {
+            if(getRadioCheckedValue(2, "religion") == "other" || getRadioCheckedValue(2, "religion") == "") {
                 experiment.data.religion.push(document.getElementById("religion_other").value);
             } else {
-                experiment.data.religion.push(getRadioCheckedValue(1, "religion"));
+                experiment.data.religion.push(getRadioCheckedValue(2, "religion"));
             }
 
       experiment.data.goal_thoughts.push(document.getElementById("goal_thoughts").value);
@@ -810,7 +812,12 @@ var experiment = {
     
     practice: function () {
     if (practiceComplete > practiceTrials) {
-    	showSlide("instructions3");
+      var practiceprob0 = parseInt(document.getElementById("hiddenSliderValuepractice0").value) / 40.00;
+      var practiceprob1 = parseInt(document.getElementById("hiddenSliderValuepractice1").value) / 40.00;
+      experiment.data.practiceprob0.push(practiceprob0);
+      experiment.data.practiceprob1.push(practiceprob1);
+
+        showSlide("instructions3");
     } else {
       showSlide('practice');      
       var question_practice = ["There was a girl named Pritika. <b>Pritika gave her friend a beautiful gift.</b>", "There was a boy named Jawan. <b>Jawan hit his friend really hard.</b>", "Kamal broke his mom's cup, and he told his mom the truth that he broke it.", "Purti ate five cakes, but Purti told her mom a lie that she didn't eat any cake."];
@@ -819,10 +826,19 @@ var experiment = {
       $("#question_practice").html(question_practice[practiceComplete]); 
       $("#scorepractice0").html(scorepractice0[practiceComplete]); 
       $("#scorepractice10").html(scorepractice10[practiceComplete]); 
+
+    if (practiceComplete > 0) {
     
+      var practiceprob0 = parseInt(document.getElementById("hiddenSliderValuepractice0").value) / 40.00;
+      var practiceprob1 = parseInt(document.getElementById("hiddenSliderValuepractice1").value) / 40.00;
+      experiment.data.practiceprob0.push(practiceprob0);
+      experiment.data.practiceprob1.push(practiceprob1);
+    } 
+
+        
       clearFormPractice(document.forms[0]);
 
-      practiceComplete++;      
+      practiceComplete++;    
     }    },
     
   next: function() {
