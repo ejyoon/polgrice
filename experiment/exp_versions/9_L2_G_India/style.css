@@ -227,3 +227,17 @@ td {
                margin: 5px; }
 #slider4 .ui-slider-handle {
                background: #FAFAFA; }
+
+#sliderpractice0 { width: 12px;
+               height: 200px;
+               position: relative;
+               margin: 5px; }
+#sliderpractice0 .ui-slider-handle {
+               background: #FAFAFA; }
+
+#sliderpractice1 { width: 12px;
+               height: 200px;
+               position: relative;
+               margin: 5px; }
+#sliderpractice1 .ui-slider-handle {
+               background: #FAFAFA; }

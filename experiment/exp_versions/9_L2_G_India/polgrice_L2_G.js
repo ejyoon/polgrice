@@ -682,6 +682,8 @@ var shuffledOrder = shuffledSampleArray(allTrialOrders.length, numTrials);
 var currentTrialNum = 0;
 var trial;
 var numComplete = 0;
+var practiceComplete = 0;
+var practiceTrials = 3;
 var buyer;
 
 showSlide("instructions");
@@ -753,6 +755,24 @@ var experiment = {
       
     setTimeout(function() {turk.submit(experiment.data) }, 1500);
   },
+    
+  instructions:function() {
+    showSlide('instructions2')
+  },
+    
+    practice: function () {
+    if (practiceComplete >= practiceTrials) {
+    	showSlide("instructions3");
+    } else {
+      showSlide('practice');      
+      var question_practice = ["Pritika gave her friend a beautiful gift."];
+      var scorepractice0 = ["Was Pritika <b>nice</b>?"]
+      var scorepractice10 = ["Was Pritika <b>mean</b>?"]
+      $("#question_practice").html(question_practice[practiceComplete]); 
+      $("#scorepractice0").html(scorepractice0[practiceComplete]); 
+      $("#scorepractice10").html(scorepractice10[practiceComplete]); 
+      practiceComplete++;      
+    }    },
     
   next: function() {
     // Allow experiment to start if it's a turk worker OR if it's a test run
@@ -938,6 +958,41 @@ $("#slider4").slider({
                    $('#hiddenSliderValue4').attr('value', ui.value);
                    $("#slider4").css({"background":"#99D6EB"});
                    $("#slider4 .ui-slider-handle").css({
+                     "background":"#667D94",
+                     "border-color": "#001F29" });
+               }});
+
+$("#sliderpractice0").slider({
+               animate: true,
+               orientation: "vertical",
+               max: 40 , min: 0, step: 1, value: 20,
+               slide: function( event, ui ) {
+                   $("#sliderpractice0 .ui-slider-handle").css({
+                      "background":"#E0F5FF",
+                      "border-color": "#001F29"
+                   });
+               },
+               change: function( event, ui ) {
+                   $('#hiddenSliderValuepractice0').attr('value', ui.value);
+                   $("#sliderpractice0").css({"background":"#99D6EB"});
+                   $("#sliderpractice0 .ui-slider-handle").css({
+                     "background":"#667D94",
+                     "border-color": "#001F29" });
+               }});
+$("#sliderpractice1").slider({
+               animate: true,
+               orientation: "vertical",
+               max: 40 , min: 0, step: 1, value: 20,
+               slide: function( event, ui ) {
+                   $("#sliderpractice1 .ui-slider-handle").css({
+                      "background":"#E0F5FF",
+                      "border-color": "#001F29"
+                   });
+               },
+               change: function( event, ui ) {
+                   $('#hiddenSliderValuepractice1').attr('value', ui.value);
+                   $("#sliderpractice1").css({"background":"#99D6EB"});
+                   $("#sliderpractice1 .ui-slider-handle").css({
                      "background":"#667D94",
                      "border-color": "#001F29" });
                }});

@@ -36,7 +36,7 @@
   </p>
   <button type="button" 
           onclick="this.blur(); 
-                   experiment.next();
+                   experiment.instructions();
                                  ">Start</button>
   
   <p class="block-text"><br> <b> Note: you won't be able to preview this HIT before accepting it because it's so short. </b></p>
@@ -73,9 +73,9 @@ function ValidateSliderFormPart1(form){
 }
     
 function ValidateSliderFormPart2(form){ 
-    for (var i=3 ; i < NUM_SLIDERS2+3; i++)
+    for (var i=0 ; i < 2; i++)
     {
-      var sliderVar = "slider" + i;
+      var sliderVar = "sliderpractice" + i;
       if (document.getElementById(sliderVar).style.background == "") {
         alert ( "Please answer all the questions." );
         return false;
@@ -83,6 +83,7 @@ function ValidateSliderFormPart2(form){
     }
     return true;
 }
+    
     
 function ValidateStar(form) {
 		var judgment = $(".rating-stars").attr("style");
@@ -204,6 +205,93 @@ function pressEnter(e) {
 </script>
 
 </script>
+
+
+<!--##############    -->
+    
+<div class="slide" id="instructions2">
+        <br><br><p class="block-text"> In this task, you will be asked to think about the characters in some stories. First, you will answer some practice questions. Please read the scenarios and answer some questions about them.</p><br>
+
+        <table align="center"><tr><td> <button type="button" onClick="this.blur(); experiment.practice()">Next</button> </td> </tr>
+      </td></tr><tr><td align="center"><div id = "counter"></div> </td> </tr>
+  	  </table>
+<br>
+      <p class="additional"> Click 'Next' to see the practice questions. </p>
+    </div>
+
+    <div class="slide" id="practice">
+        <br><br>
+<br>
+<p id="question_practice">{{}}</p>
+         <br><br>       
+<span id= "form_practice">
+<form name= "practiceform">
+    <input type="hidden" name="hSliderpractice0" id="hiddenSliderValuepractice0" />
+    <input type="hidden" name="hSliderpractice1" id="hiddenSliderValuepractice1" />
+<!--    <input type="hidden" name="hSliderpractice2" id="hiddenSliderValue2" />-->
+<!--    <input type="hidden" name="hSlider3" id="hiddenSliderValue3" />-->
+
+<!--    <p id="question"></p>-->
+
+    <table width= "500" cellspacing="0" cellpadding="0" border="0" align="center"><tbody>
+    <tr>
+      <td></td>
+        <td align="center"><span id="scorepractice0">{{}}</span></td>
+      <td align="center"><span id="scorepractice10">{{}}</span></td>
+<!--      <td align="center"><span id="score20">{{}}</span></td>-->
+    </tr>
+    <tr>
+      <td align="right" height="48">
+        Definitely YES &#8210;<br>
+      </td>
+      <td rowspan="5" width="150" align="center"><div id="sliderpractice0">&nbsp;</div></td>
+      <td rowspan="5" width="150" align="center"><div id="sliderpractice1">&nbsp;</div></td>
+<!--      <td rowspan="5" width="150" align="center"><div id="slider3">&nbsp;</div></td>-->
+
+    </tr>
+    <tr>
+      <td align="right" height="48">
+        Probably yes &#8210;<br>
+      </td>
+    </tr>
+    </tr>
+    <tr>
+      <td align="right" height="48">
+        Neutral &#8210;<br>
+      </td>
+    </tr>
+    <tr>
+      <td align="right" height="48">
+        Probably no &#8210;<br>
+      </td>
+    </tr>
+    <tr>
+      <td align="right" height="48">
+        Definitely NO &#8210;<br>
+      </td>
+    </tr>
+      
+    </tbody></table>
+    </form>
+</span>
+    <br>         
+        <br><table align="center"><tr><td> <button type="button" onClick="this.blur(); if (ValidateSliderFormPart2(document.practiceform)) {experiment.practice()}">Next</button> </td> </tr>
+      </td></tr><tr><td align="center"><div id = "counter"></div> </td> </tr>
+  	  </table>
+    </div>    
+ 
+<div class="slide" id="instructions3">
+        <br><br><p align="center"> Now you will read stories about what different people did and said about those things.</p>
+<br>
+
+        <table align="center"><tr><td> <button type="button" onClick="this.blur(); experiment.next()">Next</button> </td> </tr>
+      </td></tr><tr><td align="center"><div id = "counter"></div> </td> </tr>
+  	  </table>
+<br>
+      <p class="additional"> Click 'Next' to read the stories. </p>
+    </div>
+
+<!--End of Practice-->
 
 
 <div class="slide" id="stage">
