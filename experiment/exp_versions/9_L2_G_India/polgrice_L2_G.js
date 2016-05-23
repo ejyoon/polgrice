@@ -248,9 +248,6 @@ var goals =
     var allConditions = 
 shuffle(
     [
-    
-shuffle(
-    [
 {"domain": domains[0],
  "state": states[0],
  "utterance": utterances[0],
@@ -401,15 +398,39 @@ shuffle(
  "people": "people25",
  "goal": goals[24],
 }
-    ])
-]); 
+    ]); 
 //}
+
+practiceOrder = shuffle([["honest_practice", "heart1"], ["nice_practice", "heart4"], ["mean_practice", "heart3"]]);
+
+practiceTest = 
+[{"domain": domains[10],
+ "state": practiceOrder[0][1],
+ "utterance": practiceOrder[0][0],
+ "people": "people26",
+ "goal": goals[24],
+},
+{"domain": domains[16],
+ "state": practiceOrder[1][1],
+ "utterance": practiceOrder[1][0],
+ "people": "people27",
+ "goal": goals[24],
+},
+{"domain": domains[23],
+ "state": practiceOrder[2][1],
+ "utterance": practiceOrder[2][0],
+ "people": "people28",
+ "goal": goals[24],
+}];
+
+allConditions.splice.apply(allConditions, [0, 0].concat(practiceTest));
 
 speakers = shuffle([["Ankit","Manoj",], ["Sneha", "Gayatri"], ["Vani", "Priyanka"], ["Rahul", "Ankur"], ["Kumar", "Deepak"],
                     ["Sakshi", "Varsha"], ["Vinay", "Neeraj"], ["Nikita", "Shivangi"], ["Rohan", "Vivek"], ["Pavithra", "Suhani"],
                     ["Soham", "Raj"], ["Pranav", "Arjun"], ["Aswini", "Ira"], ["Ayushi", "Radhika"], ["Sanjay", "Mohit"],
                     ["Arun", "Raju"], ["Vishal", "Dhruv"], ["Prachi", "Aastha"], ["Rutuja", "Akansha"], ["Rhea", "Kalyani"],
-                    ["Anil", "Vikas"], ["Abdul", "Sanchit"], ["Kartik", "Prashant"], ["Kamalika", "Nisha"], ["Swati", "Lavanya"]]);
+                    ["Anil", "Vikas"], ["Abdul", "Sanchit"], ["Kartik", "Prashant"], ["Kamalika", "Nisha"], ["Swati", "Lavanya"],
+                   ["Kavya", "Niti"], ["Jatin", "Deep"], ["Sasashy", "Juvina"]]);
 
 speakers1 = shuffle(speakers[0]);
 speakers2 = shuffle(speakers[1]);
@@ -436,6 +457,9 @@ speakers22 = shuffle(speakers[21]);
 speakers23 = shuffle(speakers[22]);
 speakers24 = shuffle(speakers[23]);
 speakers25 = shuffle(speakers[24]);
+speakers26 = shuffle(speakers[25]);
+speakers27 = shuffle(speakers[26]);
+speakers28 = shuffle(speakers[27]);
 
 var sents = {
     states: {
@@ -469,7 +493,17 @@ var sents = {
             sent_utterance: " <b>\"Your BB was good,\"</b> SP said to LS." 
         },
         amazing: {
-            sent_utterance: " <b>\"Your BB was amazing,\"</b> SP said to LS."         },
+            sent_utterance: " <b>\"Your BB was amazing,\"</b> SP said to LS."         
+        },
+        honest_practice: {
+            sent_utterance: " <b>\"Your BB was pretty bad, and I'm saying this because I want to tell you the truth.\"</b> SP said to LS.  "
+        },        
+        nice_practice: {
+            sent_utterance: " <b>\"Your BB was really good and I liked it so much!\"</b> SP said to LS.  "
+        },        
+        mean_practice: {
+            sent_utterance: " <b>\"Your BB was really bad and I hate everything that you do!\"</b> SP said to LS.  "
+        },        
     },
     
     domains: {
@@ -681,6 +715,18 @@ var sents = {
             SP: speakers25[0],
             LS: speakers25[1],
         },
+        people26: {
+            SP: speakers26[0],
+            LS: speakers26[1],
+        },
+        people27: {
+            SP: speakers27[0],
+            LS: speakers27[1],
+        },
+        people28: {
+            SP: speakers28[0],
+            LS: speakers28[1],
+        },
     }
 };
 
@@ -722,11 +768,21 @@ function doSentSubs (sents, polite, domain, utterance, people, goal)
     return [utterance, context, state, precontext, question, question2, question3, knowledge, goal, feeling, context2];
 }
 
-var numConditions = allConditions.length;
-var chooseCondition = random(0, numConditions-1);
-var allTrialOrders = allConditions[chooseCondition];
+//var numConditions = allConditions.length;
+//var chooseCondition = random(0, numConditions-1);
+var allTrialOrders = allConditions;
 var numTrials = allTrialOrders.length;
-var shuffledOrder = shuffledSampleArray(allTrialOrders.length, numTrials);
+
+function range(start, end) {
+    var foo = [];
+    for (var i = start; i <= end; i++) {
+        foo.push(i);
+    }
+    return foo;
+}
+
+var shuffledOrder = range(0, numTrials-1);
+//var shuffledOrder = [28];
 var currentTrialNum = 0;
 var trial;
 var numComplete = 0;
@@ -820,7 +876,7 @@ var experiment = {
         showSlide("instructions3");
     } else {
       showSlide('practice');      
-      var question_practice = ["There was a girl named Pritika. <b>Pritika gave her friend a beautiful gift.</b>", "There was a boy named Jawan. <b>Jawan hit his friend really hard.</b>", "Kamal broke his mom's cup, and he told his mom the truth that he broke it.", "Purti ate five cakes, but Purti told her mom a lie that she didn't eat any cake."];
+      var question_practice = ["There was a girl named Pritika. <b>Pritika gave her friend a beautiful gift.</b>", "There was a boy named Jawan. <b>Jawan hit his friend really hard.</b>", "Kamal broke his mom's cup, and <b>he told his mom the truth that he broke it.</b>", "Purti ate five cakes, but <b>Purti told her mom a lie that she didn't eat any cake.</b>"];
       var scorepractice0 = ["Was Pritika <b>nice</b>?", "Was Jawan <b>nice</b>?","Was Kamal honest?","Was Purti honest?"]
       var scorepractice10 = ["Was Pritika <b>mean</b>?", "Was Jawan <b>mean</b>?","Was Kamal lying?","Was Purti lying?"]
       $("#question_practice").html(question_practice[practiceComplete]); 

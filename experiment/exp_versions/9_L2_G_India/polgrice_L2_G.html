@@ -297,7 +297,28 @@ function pressEnter(e) {
     <p id="context" class="block-text"></p>
 
 <span id="form2">
-<p id="question2"></p>   
+<p id="question2"></p>  
+<!--
+  ###############################################################
+  Star-ratings
+  http://www.jqueryscript.net/other/Simple-jQuery-Star-Rating-System-For-Bootstrap-3.html
+  -->
+  <div id="test" name= "star" align="center">
+    <input id="rating-system" type="number" class="rating" 
+    	min="0" max="5" step="1" 
+    	data-showCaption="true" showClear="false" hoverEnabled="false">
+  </div>
+<!--
+  <div align="center" class="star-rating rating-sm rating-active">
+    <div class="rating-container rating-gly-star" data-content="">
+      <div class="rating-stars" data-content="">
+      </div>
+    </div>
+  </div>
+-->
+  <!--star-ratings
+  ###############################################################
+  -->  
 <br>
 <p id="context2"></p>
 
@@ -316,7 +337,7 @@ function pressEnter(e) {
     <table width= "500" cellspacing="0" cellpadding="0" border="0" align="center"><tbody>
     <tr>
       <td align="right" height="48">
-        Extremely likely &#8210;<br>
+        Definitely YES &#8210;<br>
       </td>
       <td rowspan="5" width="150" align="center"><div id="slider0">&nbsp;</div></td>
       <td rowspan="5" width="150" align="center"><div id="slider1">&nbsp;</div></td>
@@ -326,7 +347,7 @@ function pressEnter(e) {
     </tr>
     <tr>
       <td align="right" height="48">
-        Very Likely &#8210;<br>
+        Probably yes &#8210;<br>
       </td>
     </tr>
     </tr>
@@ -337,12 +358,12 @@ function pressEnter(e) {
     </tr>
     <tr>
       <td align="right" height="48">
-        Not very likely &#8210;<br>
+        Probably no &#8210;<br>
       </td>
     </tr>
     <tr>
       <td align="right" height="48">
-        Impossible &#8210;<br>
+        Definitely NO &#8210;<br>
       </td>
     </tr>
     <tr>
