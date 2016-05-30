@@ -176,10 +176,10 @@ function getRadioCheckedValue(formNum, radio_name)
 
 // CONDITION ASSIGNMENT
 // var cond = random(3)+1;
-var expt = "polgrice_uttJudg";
+var expt = "polgrice_L2_G";
 //var cond = random(2)+1;
 //var cond = 1;
-var cond = "uttJudg"
+var cond = "L2_G"
 
 // call the maker getter to get the cond variable 
 //var xmlHttp = null;
@@ -425,12 +425,12 @@ practiceTest =
 
 allConditions.splice.apply(allConditions, [0, 0].concat(practiceTest));
 
-speakers = shuffle([["Ankit","Manoj",], ["Sneha", "Gayatri"], ["Vani", "Priyanka"], ["Rahul", "Ankur"], ["Kumar", "Deepak"],
-                    ["Sakshi", "Varsha"], ["Vinay", "Neeraj"], ["Nikita", "Shivangi"], ["Rohan", "Vivek"], ["Pavithra", "Suhani"],
-                    ["Soham", "Raj"], ["Pranav", "Arjun"], ["Aswini", "Ira"], ["Ayushi", "Radhika"], ["Sanjay", "Mohit"],
-                    ["Arun", "Raju"], ["Vishal", "Dhruv"], ["Prachi", "Aastha"], ["Rutuja", "Akansha"], ["Rhea", "Kalyani"],
-                    ["Anil", "Vikas"], ["Abdul", "Sanchit"], ["Kartik", "Prashant"], ["Kamalika", "Nisha"], ["Swati", "Lavanya"],
-                   ["Kavya", "Niti"], ["Jatin", "Deep"], ["Sasashy", "Juvina"]]);
+speakers = shuffle([["Minjun","Jiho",], ["Hayoon", "Jia"], ["Haeun", "Jiyoon"], ["Shinwoo", "Joowon"], ["Jihoon", "Sungmin"],
+                    ["Jiyoung", "Eunju"], ["Donghyun", "Minho"], ["Eunjung", "Jiyeon"], ["Hyunwoo", "Junyoung"], ["Eunyoung", "Soojin"],
+                    ["Minkyu", "Kunwoo"], ["Youngho", "Jongsoo"], ["Miyoung", "Jihye"], ["Hyunjoo", "Sunyoung"], ["Jihoon", "Youngjin"],
+                    ["Youngsoo", "Sungho"], ["Junseo", "Hyunjun"], ["Jimin", "Suyeon"], ["Mikyung", "Hyejin"], ["Jieun", "Hyunjung"],
+                    ["Joonho", "Youngchul"], ["Sungsoo", "Minjun"], ["Woojin", "Minjae"], ["Haeun", "Jihyun"], ["Sunyoung", "Kyunghee"],
+                   ["Minji", "Hyunjung"], ["Junghoon", "Yunho"], ["Eunji", "Youngmi"]]);
 
 speakers1 = shuffle(speakers[0]);
 speakers2 = shuffle(speakers[1]);
@@ -789,6 +789,8 @@ var numComplete = 0;
 var practiceComplete = 0;
 var practiceTrials = 3;
 var buyer;
+var currentdate = new Date()
+var month = currentdate.getMonth() +  1
 
 showSlide("instructions");
 $("#trial-num").html(numComplete);
@@ -800,6 +802,9 @@ var experiment = {
     data: {
     expt: expt,
 //    cond: cond,
+    subid: [],
+    email: [],
+    time: [],
     site: "Korea",
     order: [],
     knowledge: state_knowledge,
@@ -825,6 +830,8 @@ var experiment = {
 //    predictedProb0: [],
 //    predictedProb1: [],
     language: [],
+    age: [],
+    proficiency: [],
     abroad: [],
     religion: [],
     expt_aim: [],
@@ -834,15 +841,12 @@ var experiment = {
     },
     
   end: function() {	
-    experiment.data.language.push(document.getElementById("homelang").value);	
+            experiment.data.language.push(document.getElementById("homelang").value);	
+            experiment.data.age.push(document.getElementById("age_num").value);	
+            experiment.data.proficiency.push(getRadioCheckedValue(2, "proficiency"));
+            experiment.data.abroad.push(document.getElementById("abroad").value);	
             experiment.data.expt_aim.push(document.getElementById("expthoughts").value);		
             experiment.data.expt_gen.push(document.getElementById("expcomments").value);
-            
-            if(getRadioCheckedValue(2, "abroad") == "other" || getRadioCheckedValue(2, "abroad") == "") {
-                experiment.data.abroad.push(document.getElementById("abroad_other").value);
-            } else {
-                experiment.data.abroad.push(getRadioCheckedValue(2, "abroad"));
-            }
             
             if(getRadioCheckedValue(2, "religion") == "other" || getRadioCheckedValue(2, "religion") == "") {
                 experiment.data.religion.push(document.getElementById("religion_other").value);
@@ -863,27 +867,16 @@ var experiment = {
 //    setTimeout(function() {turk.submit(experiment.data) }, 1500);
               var dataforTrial = experiment.data.email  + "," + experiment.data.subid + ","
         + experiment.data.time + "," + experiment.data.site  + "," 
-        + experiment.data.cond + "," + experiment.data.order + "," 
-        + experiment.data.practice1_nice + "," + experiment.data.practice1_mean + "," 
-        + experiment.data.practice2_nice + "," + experiment.data.practice2_mean + "," 
-        + experiment.data.practice3_truth + "," + experiment.data.practice4_truth + "," 
-        + experiment.data.trial1_comp_like + "," + experiment.data.trial1_comp_tell + "," 
-        + experiment.data.trial1_SWhy + "," + experiment.data.trial1_LFeel + "," 
-        + experiment.data.trial1_nice + "," + experiment.data.trial1_mean + "," + experiment.data.trial1_truth + "," 
-        + experiment.data.trial2_comp_like + "," + experiment.data.trial2_comp_tell + "," 
-        + experiment.data.trial2_SWhy + "," + experiment.data.trial2_LFeel + "," 
-        + experiment.data.trial2_nice + "," + experiment.data.trial2_mean + "," + experiment.data.trial2_truth + "," 
-        + experiment.data.trial1_2_play + "," + experiment.data.trial1_2_playWhy + "," 
-        + experiment.data.trial3_comp_like + "," + experiment.data.trial3_comp_tell + "," 
-        + experiment.data.trial3_SWhy + "," + experiment.data.trial3_LFeel + "," 
-        + experiment.data.trial3_nice + "," + experiment.data.trial3_mean + "," + experiment.data.trial3_truth + "," 
-        + experiment.data.trial4_comp_like + "," + experiment.data.trial4_comp_tell + "," 
-        + experiment.data.trial4_SWhy + "," + experiment.data.trial4_LFeel + "," 
-        + experiment.data.trial4_nice + "," + experiment.data.trial4_mean + "," + experiment.data.trial4_truth + "," 
-        + experiment.data.trial3_4_play + "," + experiment.data.trial3_4_playWhy + "," 
-        + experiment.data.language + "," + experiment.data.expt_aim + "," 
-        + experiment.data.expt_gen + "," + experiment.data.religion + "," 
-        + experiment.data.age_num + "," + experiment.data.abroad
+        + experiment.data.expt + "," + experiment.data.order + "," 
+        + experiment.data.knowledge + "," + experiment.data.domain + "," 
+        + experiment.data.state + "," + experiment.data.utterance + "," 
+        + experiment.data.people + "," + experiment.data.practiceprob0 + "," 
+        + experiment.data.practiceprob1 + "," + experiment.data.goal0 + "," 
+        + experiment.data.goal1 + "," + experiment.data.goal2 + "," 
+        + experiment.data.goalProb0 + "," + experiment.data.goalProb1 + "," + experiment.data.goalProb2 + "," 
+        + experiment.data.language + "," + experiment.data.abroad + "," 
+        + experiment.data.religion + "," + experiment.data.expt_aim + "," 
+        + experiment.data.expt_gen + "," + experiment.data.goal_thoughts + "," + experiment.data.numTrials
         + "\n";
         $.post("https://langcog.stanford.edu/cgi-bin/EJY/polgrice/polgricestudysave.php", {postresult_string : dataforTrial});	
 
@@ -918,9 +911,9 @@ var experiment = {
         showSlide("instructions3");
     } else {
       showSlide('practice');      
-      var question_practice = ["There was a girl named Pritika. <b>Pritika gave her friend a beautiful gift.</b>", "There was a boy named Jawan. <b>Jawan hit his friend really hard.</b>", "Kamal broke his mom's cup, and <b>he told his mom the truth that he broke it.</b>", "Purti ate five cakes, but <b>Purti told her mom a lie that she didn't eat any cake.</b>"];
-      var scorepractice0 = ["Was Pritika <b>nice</b>?", "Was Jawan <b>nice</b>?","Was Kamal honest?","Was Purti honest?"]
-      var scorepractice10 = ["Was Pritika <b>mean</b>?", "Was Jawan <b>mean</b>?","Was Kamal lying?","Was Purti lying?"]
+      var question_practice = ["There was a girl named Younghee. <b>Younghee gave her friend a beautiful gift.</b>", "There was a boy named Taeho. <b>Taeho hit his friend really hard.</b>", "Jaejoong broke his mom's cup, and <b>he told his mom the truth that he broke it.</b>", "Sarang ate five cakes, but <b>Sarang told her mom a lie that she didn't eat any cake.</b>"];
+      var scorepractice0 = ["Was Younghee <b>nice</b>?", "Was Taeho <b>nice</b>?","Was Jaejoong honest?","Was Sarang honest?"]
+      var scorepractice10 = ["Was Younghee <b>mean</b>?", "Was Taeho <b>mean</b>?","Was Jaejoong lying?","Was Sarang lying?"]
       $("#question_practice").html(question_practice[practiceComplete]); 
       $("#scorepractice0").html(scorepractice0[practiceComplete]); 
       $("#scorepractice10").html(scorepractice10[practiceComplete]); 

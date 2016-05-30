@@ -56,6 +56,11 @@ button[disabled] {
   cursor: not-allowed;
 }
 
+input[type="radio"] {
+  margin-top: -1px;
+  vertical-align: middle;
+}
+
 #logo-text {
   font-weight: bold;
 }
