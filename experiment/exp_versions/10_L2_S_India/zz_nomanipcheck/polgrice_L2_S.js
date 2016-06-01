@@ -68,54 +68,6 @@ function clearForm(oForm) {
   }
 }
 
-function clearFormPractice(oForm) {
-  var sliderVar = "";
-  for(var i=0; i<2; i++)
-  {
-    sliderVar = "#sliderpractice" + i;
-    $(sliderVar).slider("value", 20);
-    $(sliderVar).css({"background":"#FFFFFF"});
-    $(sliderVar + " .ui-slider-handle").css({
-        "background":"#FAFAFA",
-        "border-color": "#CCCCCC" });
-    sliderVar = "sliderpractice" + i;
-    document.getElementById(sliderVar).style.background = "";
-  }
-  
-  var elements = oForm.elements; 
-  
-  oForm.reset();
-
-  for(var i=0; i<elements.length; i++) {
-    field_type = elements[i].type.toLowerCase();
-    switch(field_type) {
-    
-      case "text": 
-      case "password": 
-      case "textarea":
-            case "hidden":	
-        
-        elements[i].value = ""; 
-        break;
-          
-      case "radio":
-      case "checkbox":
-          if (elements[i].checked) {
-            elements[i].checked = false; 
-        }
-        break;
-  
-      case "select-one":
-      case "select-multi":
-                  elements[i].selectedIndex = -1;
-        break;
-  
-      default: 
-        break;
-    }
-  }
-}
-
 Array.prototype.random = function() {
   return this[random(this.length)];
 }
@@ -687,8 +639,6 @@ var currentTrialNum = 0;
 var trial;
 var numComplete = 0;
 var buyer;
-var practiceComplete = 0;
-var practiceTrials = 3;
 
 showSlide("instructions");
 $("#trial-num").html(numComplete);
@@ -717,9 +667,6 @@ var experiment = {
 //    goalProb0: [],
 //    goalProb1: [],
 //    goalProb2: [],
-    practicetrial: [],
-    practiceprob0: [],
-    practiceprob1: [],
     judgment: [],
 //    stateProb: [],
 //    predictedProb0: [],
@@ -738,16 +685,16 @@ var experiment = {
             experiment.data.expt_aim.push(document.getElementById("expthoughts").value);		
             experiment.data.expt_gen.push(document.getElementById("expcomments").value);
             
-            if(getRadioCheckedValue(2, "region") == "other" || getRadioCheckedValue(2, "region") == "") {
+            if(getRadioCheckedValue(1, "region") == "other" || getRadioCheckedValue(1, "region") == "") {
                 experiment.data.region.push(document.getElementById("region_other").value);
             } else {
-                experiment.data.region.push(getRadioCheckedValue(2, "region"));
+                experiment.data.region.push(getRadioCheckedValue(1, "region"));
             }
             
-            if(getRadioCheckedValue(2, "religion") == "other" || getRadioCheckedValue(2, "religion") == "") {
+            if(getRadioCheckedValue(1, "religion") == "other" || getRadioCheckedValue(1, "religion") == "") {
                 experiment.data.religion.push(document.getElementById("religion_other").value);
             } else {
-                experiment.data.religion.push(getRadioCheckedValue(2, "religion"));
+                experiment.data.religion.push(getRadioCheckedValue(1, "religion"));
             }
 	experiment.data.goal_thoughts.push(document.getElementById("goal_thoughts").value);
 	
@@ -761,40 +708,6 @@ var experiment = {
   
     setTimeout(function() {turk.submit(experiment.data) }, 1500);
   },
-    
-  instructions:function() {
-    showSlide('instructions2')
-  },
-    
-    practice: function () {
-    if (practiceComplete > practiceTrials) {
-      var practiceprob0 = getRadioCheckedValue(0, "practiceprob0");
-      var practiceprob1 = getRadioCheckedValue(0, "practiceprob1");
-      experiment.data.practiceprob0.push(practiceprob0);
-      experiment.data.practiceprob1.push(practiceprob1);
-      experiment.data.practicetrial.push(practiceComplete);
-
-        showSlide("instructions3");
-    } else {
-      showSlide('practice');      
-      var question_practice = ["There was a girl named Pritika. <b>Pritika gave her friend a beautiful gift.</b>", "There was a boy named Jawan. <b>Jawan hit his friend really hard.</b>", "Kamal broke his mom's cup, and <b>he told his mom the truth that he broke it.</b>", "Purti ate five cakes, but <b>Purti told her mom a lie that she didn't eat any cake.</b>"];
-      var scorepractice0 = ["Was Pritika <b>nice</b>?", "Was Jawan <b>nice</b>?","Was Kamal honest?","Was Purti honest?"]
-      var scorepractice10 = ["Was Pritika <b>mean</b>?", "Was Jawan <b>mean</b>?","Was Kamal lying?","Was Purti lying?"]
-      $("#question_practice").html(question_practice[practiceComplete]); 
-      $("#scorepractice0").html(scorepractice0[practiceComplete]); 
-      $("#scorepractice10").html(scorepractice10[practiceComplete]); 
-
-    if (practiceComplete > 0) {
-      var practiceprob0 = getRadioCheckedValue(0, "practiceprob0");
-      var practiceprob1 = getRadioCheckedValue(0, "practiceprob1");
-      experiment.data.practiceprob0.push(practiceprob0);
-      experiment.data.practiceprob1.push(practiceprob1);
-      experiment.data.practicetrial.push(practiceComplete);
-    } 
-      clearForm(document.forms[0]);
-      practiceComplete++;    
-        
-    }    },
     
   next: function() {
     // Allow experiment to start if it's a turk worker OR if it's a test run
@@ -828,8 +741,8 @@ var experiment = {
       experiment.data.goal.push(goal);
       experiment.data.judgment.push(judgment);
       
+      clearForm(document.forms[0]);
       clearForm(document.forms[1]);
-      clearForm(document.forms[2]);
 
       //Clear stars
       $(".rating-stars").attr({"style":"width: 0%"});

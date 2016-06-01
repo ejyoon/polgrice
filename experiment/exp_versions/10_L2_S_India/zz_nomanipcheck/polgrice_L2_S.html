@@ -36,7 +36,7 @@
   </p>
   <button type="button" 
           onclick="this.blur(); 
-                   experiment.instructions();
+                   experiment.next();
                    document.getElementById('form1').hidden=true;
                    document.getElementById('form2').hidden=false;
                    document.getElementById('next1').hidden=true;
@@ -209,68 +209,6 @@ function pressEnter(e) {
 
 </script>
 
-<div class="slide" id="instructions2">
-        <br><br><p class="block-text"> In this task, you will be asked to think about characters in some stories. First, you will answer some practice questions. Please read the scenarios and answer some questions about them.</p><br>
-
-        <table align="center"><tr><td> <button type="button" onClick="this.blur(); experiment.practice()">Next</button> </td> </tr>
-      </td></tr><tr><td align="center"><div id = "counter"></div> </td> </tr>
-  	  </table>
-<br>
-      <p class="additional"> Click 'Next' to see the practice questions. </p>
-    </div>
-
-
-
-<div class="slide" id="practice">
-        <br><br>
-<br>
-<p id="question_practice">{{}}</p>
-         <br><br>       
-<span id= "form_practice">
-
-<form name="practiceform">
-<p><span id="scorepractice0">{{}}</span></p>
-<table align = "center"><tr>
-<td width=50 align="center">
-  <tr>
-  	<td>No</td>
-    <td>Yes</td>    
-  </tr>
-  	<td><input type="radio" name="practiceprob0" value = "0"></td>
-    <td><input type="radio" name="practiceprob0" value = "1"></td>
-  </tr>
-</table>
-<br><br>
-    
-<p><span id="scorepractice10">{{}}</span></p>
-<table align = "center"><tr>
-<td width=50 align="center">
-  <tr>
-  	<td>No</td>
-    <td>Yes</td>    
-  </tr>
-  	<td><input type="radio" name="practiceprob1" value = "0"></td>
-    <td><input type="radio" name="practiceprob1" value = "1"></td>
-  </tr>
-</table>
-</form>
-</span>
-    <br>         
-        <br><table align="center"><tr><td> <button type="button" onClick="this.blur(); if (ValidateForm(document.practiceform)) {experiment.practice()}">Next</button> </td> </tr>
-      </td></tr><tr><td align="center"><div id = "counter"></div> </td> </tr>
-  	  </table>
-    </div>    
- 
-<div class="slide" id="instructions3">
-        <br><br><p align="center"> Now you will read stories about what different people did and what others said about those things.</p>
-<br>
-
-        <table align="center"><tr><td> <button type="button" onClick="this.blur(); experiment.next()">Next</button> </td> </tr>
-      </td></tr><tr><td align="center"><div id = "counter"></div> </td> </tr>
-  	  </table>
-<br>
-      <p class="additional"> Click 'Next' to read the stories. </p>
-    </div>
 
 <div class="slide" id="stage">
     <div id="form">
