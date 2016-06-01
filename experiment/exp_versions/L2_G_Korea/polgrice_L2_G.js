@@ -865,7 +865,7 @@ var experiment = {
 //			xmlHttp.send(null)
       
 //    setTimeout(function() {turk.submit(experiment.data) }, 1500);
-              var dataforTrial = experiment.data.email  + "," + experiment.data.subid + ","
+              var dataforTrial = "\n" + experiment.data.email  + "," + experiment.data.subid + ","
         + experiment.data.time + "," + experiment.data.site  + "," 
         + experiment.data.expt + "," + experiment.data.order + "," 
         + experiment.data.knowledge + "," + experiment.data.domain + "," 
@@ -875,9 +875,10 @@ var experiment = {
         + experiment.data.goal1 + "," + experiment.data.goal2 + "," 
         + experiment.data.goalProb0 + "," + experiment.data.goalProb1 + "," + experiment.data.goalProb2 + "," 
         + experiment.data.language + "," + experiment.data.abroad + "," 
+        + experiment.data.age + "," + experiment.data.proficiency + "," 
         + experiment.data.religion + "," + experiment.data.expt_aim + "," 
-        + experiment.data.expt_gen + "," + experiment.data.goal_thoughts + "," + experiment.data.numTrials
-        + "\n";
+        + experiment.data.expt_gen + "," + experiment.data.goal_thoughts + "," + experiment.data.numTrials + "\n";
+        
         $.post("https://langcog.stanford.edu/cgi-bin/EJY/polgrice/polgricestudysave.php", {postresult_string : dataforTrial});	
 
   },
