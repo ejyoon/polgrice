@@ -1,0 +1,174 @@
+%\usepackage{fullpage}
+\usepackage{amsthm}
+%\usepackage[varg]{txfonts}
+\usepackage{mathptmx}
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage{wrapfig}
+\usepackage{xspace}
+\usepackage{booktabs}
+\usepackage{natbib}
+\usepackage{amssymb}
+\usepackage{colortbl}
+%\usepackage[figbotcap,loose,TABBOTCAP]{subfigure}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[raggedright]{sidecap}
+
+%\usepackage{amsmath} % WW: Added for technical results.
+%\usepackage{amsthm} % WW: Added for technical results.
+%\usepackage[mathscr]{eucal} % WW: Added for technical results.
+%\usepackage[compact]{titlesec}
+%\usepackage{smallhead}
+%\usepackage{floatflt}
+%\usepackage{fancyhdr}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+\bibpunct[; ]{(}{)}{;}{a}{}{,}  % natbib citation style
+
+\setlength{\oddsidemargin}{-0.0in}  % 1.25in left margin
+\setlength{\evensidemargin}{-0.0in} % 1.25in left margin (even pages)
+\setlength{\topmargin}{0in}         % 1in top margin
+\setlength{\textwidth}{6.5in}       % 6.0in text - 1.25in rt margin
+\setlength{\textheight}{9in}        % Body ht for 1in margins
+\addtolength{\topmargin}{-\headheight}  % No header, so compensate
+\addtolength{\topmargin}{-\headsep} % for header height and separation
+%\renewcommand{\baselinestretch}{1.1}
+%\setlength{\parskip}{-4mm}
+
+%%%%%%%% A BUNCH OF COMPACTION STUFF
+\usepackage[compact]{titlesec}
+\titlespacing*{\section}{0pt}{1ex}{.5ex}
+\titlespacing*{\subsection}{0pt}{.5ex}{.5ex}
+\titlespacing*{\subsubsection}{0pt}{.3ex}{.5ex}
+\titlespacing*{\paragraph}{\parindent}{0ex}{.5ex}
+\titleformat{\section}{\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{\thesubsubsection}{1em}{}[.]
+\titleformat{\paragraph}[runin]{\normalsize\bfseries}{\thesubsubsection}{1em}{}[.]
+\usepackage{enumitem}
+\setlist{topsep=2pt,itemsep=0pt,parsep=0pt}
+
+\setlength{\parskip}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\headsep}{0pt}
+\setlength{\topskip}{0pt}
+\setlength{\topmargin}{0pt}
+\setlength{\topsep}{0pt}
+\setlength{\partopsep}{0pt}
+
+
+
+\newcommand{\hdr}[1]{\subsection{#1}}
+\newcommand{\subhdr}[1]{\paragraph{#1}}
+\newcommand{\xhdr}[1]{\vspace{2mm}\noindent{\bf{#1}.}}
+\newcommand{\note}[1]{{\textsf{\textcolor{red}{\ \ #1 \ }}}}
+\newcommand{\rev}[1]{{\textbf{**{#1}**}}}
+\newcommand{\hide}[1]{}
+\newcommand{\denselist}{ \itemsep -3pt\topsep-8pt\partopsep-8pt }
+\newcommand{\eg}{e.g.}
+\newcommand{\ie}{i.e.}
+\newcommand{\word}[1]{\emph{#1}}
+\newcommand{\tech}[1]{\emph{#1}}
+
+% In text citations
+\newcommand{\posscitet}[1]{\citeauthor{#1}'s~(\citeyear{#1})}
+\newcommand{\sposscitet}[1]{\citeauthor{#1}'~(\citeyear{#1})}
+\newcommand{\possciteauthor}[1]{\citeauthor{#1}'s}
+\newcommand{\spossciteauthor}[1]{\citeauthor{#1}'}
+\newcommand{\pgposscitet}[2]{\citeauthor{#1}'s~(\citeyear{#1}:~#2)}
+\newcommand{\secposscitet}[2]{\citeauthor{#1}'s~(\citeyear{#1}:~$\S$#2)}
+\newcommand{\pgcitealt}[2]{\citealt{#1}:~#2}
+\newcommand{\seccitealt}[2]{\citealt{#1}:~$\S$#2}
+\newcommand{\pgcitep}[2]{(\citealt{#1}:~#2)}
+\newcommand{\seccitep}[2]{(\citealt{#1}:~$\S$#2)}
+\newcommand{\pgcitet}[2]{\citeauthor{#1}~(\citeyear{#1}:~#2)}
+\newcommand{\seccitet}[2]{\citeauthor{#1}~(\citeyear{#1}:~$\S$#2)}
+
+\newcommand{\Secref}[1]{Sec.\,\ref{#1}}
+\newcommand{\secref}[1]{sec.\,\ref{#1}}
+\newcommand{\dashsecref}[2]{secs.\,\ref{#1}--\ref{#2}}
+
+\newcommand{\Defref}[1]{Def.\,\ref{#1}}
+\newcommand{\defref}[1]{def.\,\ref{#1}}
+\newcommand{\Defrefc}[2]{\Defref{#1}, clause\,\ref{#2}}
+\newcommand{\defrefc}[2]{\defref{#1}, clause\,\ref{#2}}
+
+\newcommand{\Figref}[1]{Fig.\,\ref{#1}}
+\newcommand{\figref}[1]{fig.\,\ref{#1}}
+\newcommand{\dashfigref}[2]{figs.\,\ref{#1}--\ref{#2}}
+\newcommand{\Tabref}[1]{Tab.\,\ref{#1}}
+\newcommand{\tabref}[1]{tab.\,\ref{#1}}
+
+\newcommand{\Clauseref}[1]{Clause\,\ref{#1}}
+\newcommand{\clauseref}[1]{clause\,\ref{#1}}
+\newcommand{\clauserefs}[2]{clauses\,\ref{#1}--\ref{#2}}
+
+\newcommand{\True}{\texttt{T}}
+\newcommand{\False}{\texttt{F}}
+
+\newcommand{\States}{T}
+\newcommand{\state}{t}
+\newcommand{\Messages}{M}
+\newcommand{\msg}{m}
+\newcommand{\Costs}{C}
+\newcommand{\Prior}{P}
+\newcommand{\Cgame}{(\States, \Messages, \Lex, \Prior, \Costs)}
+
+\newcommand{\Lex}{\mathcal{L}}
+\newcommand{\LexStar}{\Lex^{\ast}}
+\newcommand{\Context}{\mathbf{C}}
+
+\newcommand{\GenericListener}{L}
+\newcommand{\GenericSpeaker}{S}
+
+\newcommand{\Lcontext}{\mathbb{L}}
+
+\newcommand{\listenerZero}{l_{0}}
+\newcommand{\speakerOne}{s_{1}}
+\newcommand{\listenerOne}{l_{1}}
+\newcommand{\ListenerOne}{L_{1}}
+\newcommand{\SpeakerK}[1][k]{S_{#1}}
+\newcommand{\ListenerK}[1][k]{L_{#1}}
+
+\newcommand{\mglasses}{\text{`glasses'}}
+\newcommand{\mhat}{\text{`hat'}}
+\newcommand{\mstache}{\text{`mustache'}}
+
+\newcommand{\Reals}{\mathbb{R}}
+\newcommand{\given}{\mid}
+\newcommand{\Indicator}{\mathbb{I}}
+\newcommand{\br}{\text{br}}
+\newcommand{\SpeakerIBR}{\SpeakerBR^{\br}}
+\newcommand{\ListenerIBR}{\ListenerBR^{\br}}
+\newcommand{\set}[1]{\ensuremath{\left\{ #1 \right\}}}
+\newcommand{\setp}[2]{\ensuremath{\set{#1 \mid #2\right.}}}
+\newcommand{\tuple}[1]{\ensuremath{\left< #1 \right>}}
+
+\newcommand{\ch}[1]{{\cellcolor[gray]{.8}#1}}
+
+\newcounter{Experiment}
+\setcounter{Experiment}{0}
+
+\newcommand{\expt}[1]{\protect\refstepcounter{Experiment}\arabic{Experiment}\label{#1}}
+\newcommand{\exptref}[1]{expt.\,\ref{#1}}
+\newcommand{\Exptref}[1]{Expt.\,\ref{#1}}
+\newcommand{\exptrefrange}[2]{expts.\,\ref{#1}--\ref{#2}}
+\newcommand{\Exptrefrange}[2]{Expts.\,\ref{#1}--\ref{#2}}
+\newcommand{\exptrefnoexpt}[1]{\ref{#1}}
+
+\newcommand{\ourtitletext}{Doctoral Dissertation Research: Modeling polite speech: \\ Developmental and cross-cultural investigations}
+
+\newcommand{\ourtitle}{
+\begin{center}
+{\parbox[c]{0.7\textwidth}{\centering\textbf{\ourtitletext}}} \\[1ex]
+Michael C.~Frank and Erica J.~Yoon 
+\end{center}}
+
+\newcommand{\ourtitleslim}[1]{
+{\noindent{\textbf{\ourtitletext\\[0.25ex] #1}}}\\[-2ex]}
+
