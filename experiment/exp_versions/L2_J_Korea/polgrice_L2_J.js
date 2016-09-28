@@ -405,11 +405,13 @@ shuffle(
 ]); 
 //}
 
-speakers = shuffle([["Ankit","Manoj",], ["Sneha", "Gayatri"], ["Vani", "Priyanka"], ["Rahul", "Ankur"], ["Kumar", "Deepak"],
-                    ["Sakshi", "Varsha"], ["Vinay", "Neeraj"], ["Nikita", "Shivangi"], ["Rohan", "Vivek"], ["Pavithra", "Suhani"],
-                    ["Soham", "Raj"], ["Pranav", "Arjun"], ["Aswini", "Ira"], ["Ayushi", "Radhika"], ["Sanjay", "Mohit"],
-                    ["Arun", "Raju"], ["Vishal", "Dhruv"], ["Prachi", "Aastha"], ["Rutuja", "Akansha"], ["Rhea", "Kalyani"],
-                    ["Anil", "Vikas"], ["Abdul", "Sanchit"], ["Kartik", "Prashant"], ["Kamalika", "Nisha"], ["Swati", "Lavanya"]]);
+speakers = shuffle([["Minjun","Jiho",], ["Hayoon", "Jia"], ["Haeun", "Jiyoon"], ["Shinwoo", "Joowon"], ["Jihoon", "Sungmin"],
+                    ["Jiyoung", "Eunju"], ["Donghyun", "Minho"], ["Eunjung", "Jiyeon"], ["Hyunwoo", "Junyoung"], ["Eunyoung", "Soojin"],
+                    ["Minkyu", "Kunwoo"], ["Youngho", "Jongsoo"], ["Miyoung", "Jihye"], ["Hyunjoo", "Sunyoung"], ["Jihoon", "Youngjin"],
+                    ["Youngsoo", "Sungho"], ["Junseo", "Hyunjun"], ["Jimin", "Suyeon"], ["Mikyung", "Hyejin"], ["Jieun", "Hyunjung"],
+                    ["Joonho", "Youngchul"], ["Sungsoo", "Minjun"], ["Woojin", "Minjae"], ["Haeun", "Jihyun"], ["Sunyoung", "Kyunghee"],
+                   ["Minji", "Hyunjung"], ["Junghoon", "Yunho"], ["Eunji", "Youngmi"]]);
+
 speakers1 = shuffle(speakers[0]);
 speakers2 = shuffle(speakers[1]);
 speakers3 = shuffle(speakers[2]);
@@ -772,30 +774,33 @@ var experiment = {
 //    predictedProb0: [],
 //    predictedProb1: [],
     language: [],
-    region: [],
+    age: [],
+    proficiency: [],
+    abroad: [],
     religion: [],
     expt_aim: [],
     expt_gen: [],
+	goal_thoughts: [],
     numTrials: numTrials
     },
     
   end: function() {	
             experiment.data.language.push(document.getElementById("homelang").value);	
+            experiment.data.age.push(document.getElementById("age_num").value);	
+            experiment.data.proficiency.push(getRadioCheckedValue(2, "proficiency"));
+            experiment.data.abroad.push(document.getElementById("abroad").value);	
             experiment.data.expt_aim.push(document.getElementById("expthoughts").value);		
             experiment.data.expt_gen.push(document.getElementById("expcomments").value);
-            
-            if(getRadioCheckedValue(2, "region") == "other" || getRadioCheckedValue(2, "region") == "") {
-                experiment.data.region.push(document.getElementById("region_other").value);
-            } else {
-                experiment.data.region.push(getRadioCheckedValue(2, "region"));
-            }
             
             if(getRadioCheckedValue(2, "religion") == "other" || getRadioCheckedValue(2, "religion") == "") {
                 experiment.data.religion.push(document.getElementById("religion_other").value);
             } else {
                 experiment.data.religion.push(getRadioCheckedValue(2, "religion"));
             }
-    showSlide("finished");
+
+      experiment.data.goal_thoughts.push(document.getElementById("goal_thoughts").value);
+
+      showSlide("finished");
       
 //    			//Decrement			
 //			var xmlHttp = null;
@@ -809,10 +814,7 @@ var experiment = {
         + experiment.data.expt + "," + experiment.data.order + "," 
         + experiment.data.knowledge + "," + experiment.data.domain + "," 
         + experiment.data.state + "," + experiment.data.utterance + "," 
-        + experiment.data.people + "," + experiment.data.practiceprob0 + "," 
-        + experiment.data.practiceprob1 + "," + experiment.data.goal0 + "," 
-        + experiment.data.goal1 + "," + experiment.data.goal2 + "," 
-        + experiment.data.goalProb0 + "," + experiment.data.goalProb1 + "," + experiment.data.goalProb2 + "," 
+        + experiment.data.people + "," + experiment.data.judgment + "," 
         + experiment.data.language + "," + experiment.data.abroad + "," 
         + experiment.data.age + "," + experiment.data.proficiency + "," 
         + experiment.data.religion + "," + experiment.data.expt_aim + "," 

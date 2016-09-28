@@ -300,11 +300,21 @@ document.getElementById('form2').hidden=false;}">Next</button>
   Star-ratings
   http://www.jqueryscript.net/other/Simple-jQuery-Star-Rating-System-For-Bootstrap-3.html
   -->
+  <div align="center" class="star-rating rating-sm rating-active">
+   <div class="rating-container rating-gly-star" data-content="&#xe005;&#xe005;&#xe005;&#xe005;&#xe005;">
+      <div class="rating-stars" data-content="&#xe005;&#xe005;&#xe005;&#xe005;&#xe005;">
+        </div>
+    </div>
+    </div>
+
+<!--
   <div id="test" name= "star" align="center">
     <input id="rating-system" type="number" class="rating" 
     	min="0" max="5" step="1" 
     	data-showCaption="true" showClear="false" hoverEnabled="false">
   </div>
+-->
+
 <!--
   <div align="center" class="star-rating rating-sm rating-active">
     <div class="rating-container rating-gly-star" data-content="">
@@ -348,8 +358,70 @@ experiment.next();
 	<p> What is your native/first language (i.e., the language that was primarily spoken at home when you were a child)? </p>
    <p>
 	<input type="text" id="homelang" name="lg" style="width:40%" value=""></textarea>
-<br><br>
-   </p>
+   </p><br><br>
+
+<p> How would you rate your proficiency in English? </p>
+   <p>
+    <table cellspacing="0" cellpadding="0" border="0">
+          <col width="20">
+          <col width="470">
+        <tr>
+            <td><input type="radio" name="proficiency" value="1" /></td>
+            <td><span>Poor (understood ~50% of instructions or less)</span></td>
+        </tr>
+        <tr>
+            <td><input type="radio" name="proficiency" value="2" /></td>
+            <td><span>Moderate (understood ~75% of instructions)</span></td>
+        </tr>
+        <tr>
+            <td><input type="radio" name="proficiency" value="3" /></td>
+            <td><span>Proficient (understood 90% of instructions)</span></td>
+        </tr>
+        <tr>
+            <td><input type="radio" name="proficiency" value="4" /></td>
+            <td><span>Fluent (understood all)</span></td>
+        </tr>
+    </table>
+   </p><br><br>
+
+<p> What is your age? </p>
+   <p>
+	<input type="text" id="age_num" name="old" style="width:40%" value=""></textarea>
+   </p><br><br>
+
+<p> How long (in years) have you spent time abroad, outside of Korea? </p>
+   <p>
+	<input type="text" id="abroad" name="year" style="width:40%" value=""></textarea>
+   </p><br><br>
+
+<p> What is your religion? </p>
+   <p>
+    <table cellspacing="0" cellpadding="0" border="0">
+          <col width="20">
+          <col width="470">
+
+        <tr>
+            <td><input type="radio" name="religion" value="protestant" /></td>
+            <td><span>Christianity (prostestantism)</span></td>
+        </tr>
+        <tr>
+            <td><input type="radio" name="religion" value="catholic" /></td>
+            <td><span>Christianity (catholicism)</span></td>
+        </tr>
+        <tr>
+            <td><input type="radio" name="religion" value="buddh" /></td>
+            <td><span>Buddhism</span></td>
+        </tr>
+        <tr>
+            <td><input type="radio" name="religion" value="none" /></td>
+            <td><span>No religion</span></td>
+        </tr>
+        <tr>
+            <td><input type="radio" name="religion" value="other" /></td>
+            <td><span>Other  <input type="text" id="religion_other" value=""/></span></td>
+        </tr>
+    </table>
+   </p><br><br>
 
 <p> What do you think this experiment was about? </p>
    <p>
@@ -357,73 +429,21 @@ experiment.next();
    </p>
 <br><br>
 
+   <p> Other than goals to be nice, mean or honest, did you think the people in this experiment had any other goals in mind? </p>
+   <p>
+   <textarea type="textarea" id="goal_thoughts" style="width:100%" name="expgen"></textarea>
+   </p>
+<br><br>
+
+
    <p> Any general comments about the experiment? </p>
    <p>
    <textarea type="textarea" id="expcomments" style="width:100%" name="expgen"></textarea>
    </p>
 <br><br>
 
-<p> What is your religion?</p>
-    <p><table width="300" cellspacing="0" cellpadding="0" border="0">
-        <tr>
-            <td><input type="radio" name="religion" value="hindu" /></td>
-            <td><span>Hinduism</span></td>
-        </tr>
-        <tr>
-            <td><input type="radio" name="religion" value="islam" /></td>
-            <td><span>Islam</span></td>
-        </tr>
-        <tr>
-            <td><input type="radio" name="religion" value="christian" /></td>
-            <td><span>Christianity</span></td>
-        </tr>
-        <tr>
-            <td><input type="radio" name="religion" value="sikh" /></td>
-            <td><span>Sikhism</span></td>
-        </tr>
-        <tr>
-            <td><input type="radio" name="religion" value="buddh" /></td>
-            <td><span>Buddhism</span></td>
-        </tr>
-        <tr>
-            <td><input type="radio" name="religion" value="other" /></td>
-            <td><span>Other  <input type="text" id="religion_other" value=""/></span></td>
-        </tr>
-    </table></p>
 
-<br><br>
-
-	<p> Which region of India do you live in? (the largest city in each region is indicated in brackets for your reference)</p>
-    <p><table width="300" cellspacing="0" cellpadding="0" border="0">
-        <tr>
-            <td><input type="radio" name="region" value="east" /></td>
-            <td><span>East India (Kolkata)</span></td>
-        </tr>
-        <tr>
-            <td><input type="radio" name="region" value="north" /></td>
-            <td><span>North India (Delhi)</span></td>
-        </tr>
-        <tr>
-            <td><input type="radio" name="region" value="northeast" /></td>
-            <td><span>Northeast India (Guwahati)</span></td>
-        </tr>
-        <tr>
-            <td><input type="radio" name="region" value="south" /></td>
-            <td><span>South India (Chennai)</span></td>
-        </tr>
-        <tr>
-            <td><input type="radio" name="region" value="west" /></td>
-            <td><span>West India (Mumbai)</span></td>
-        </tr>
-        <tr>
-            <td><input type="radio" name="region" value="other" /></td>
-            <td><span>Other  <input type="text" id="region_other" value=""/></span></td>
-        </tr>
-</table></p>
-<br><br>
-
-
-</form>
+	</form>
 	
 	<div align="center">
 	
@@ -432,8 +452,11 @@ experiment.next();
 </div>
 
 <div class="slide" id="finished">
-  You're finished - thanks for participating! Submitting to Mechanical Turk...
+      You're finished - thanks for participating!
+      <br><br>참가해주셔서 감사합니다! 며칠 이내로 참가 사례에 대한 이메일을 받으실 수 있습니다. 
+      <br>궁금한 점이 있으시면 ejyoon@stanford.edu로 문의바랍니다.
 </div>
+
 <script src="polgrice_L2_J.js"></script>
 
 </body>

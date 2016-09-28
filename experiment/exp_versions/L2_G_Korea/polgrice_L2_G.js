@@ -879,7 +879,7 @@ var experiment = {
         + experiment.data.religion + "," + experiment.data.expt_aim + "," 
         + experiment.data.expt_gen + "," + experiment.data.goal_thoughts + "," + experiment.data.numTrials + "\n";
         
-        $.post("https://langcog.stanford.edu/cgi-bin/EJY/polgrice/polgricestudysave.php", {postresult_string : dataforTrial});	
+        $.post("https://langcog.stanford.edu/cgi-bin/EJY/polgrice/polgricestudysave_G.php", {postresult_string : dataforTrial});	
 
   },
     
