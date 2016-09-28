@@ -10,6 +10,7 @@
     <link href="star-rating.css" media="all" rel="stylesheet" type="text/css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="star-rating.js" type="text/javascript"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" />
     <!--Star-ratings-->   
     <!--Slider-ratings-->   
     <link type="text/css" rel="stylesheet" href="sliders/jquery-ui.css" />
@@ -34,9 +35,9 @@
   <img src="images/stanford.png" alt="Stanford University">
   <p id='logo-text'>Stanford Language and Cognition Lab</p>
   <p class="block-text">             
-            본 연구는 한국인 참가자 대상입니다. 
-            간단한 영어 이야기를 읽고 이야기 인물들에 대해서 평가하는 내용입니다.
-            끝까지 진행하실 경우 실험자에게 이메일 정보가 전달되며 참가 사례를 받으실 수 있습니다.
+            본 연구는 <b>한국인 참가자</b> 대상입니다. 
+            <b>간단한 영어 이야기</b>를 읽고 이야기 인물들에 대해서 평가하는 내용입니다.
+            끝까지 진행하실 경우 실험자에게 이메일 정보가 전달되며 참가 사례(아마존 기프트 카드)를 받으실 수 있습니다.
 
   </p>
         <br><b>This study is for Korean participants only.</b>
@@ -213,7 +214,7 @@ function pressEnter(e) {
 </script>
     
 <div class="slide" id="instructions2">
-        <br><br><p class="block-text"> In this task, you will be asked to think about characters in some stories. The task will take approx. 5-10 minutes. For your participation, you will receive a $3 gift credit on Amazon.com. 
+        <br><br><p class="block-text"> In this task, you will be asked to think about characters in some stories. The task will take 5-10 minutes. For your participation, you will receive a $3 gift credit on Amazon.com. 
     <br><br>First, you will answer some practice questions. Please read the scenarios and answer some questions about them.</p><br>
 
         <table align="center"><tr><td> <button type="button" onClick="this.blur(); experiment.practice()">Next</button> </td> </tr>
@@ -310,11 +311,19 @@ function pressEnter(e) {
   Star-ratings
   http://www.jqueryscript.net/other/Simple-jQuery-Star-Rating-System-For-Bootstrap-3.html
   -->
+  <div align="center" class="star-rating rating-sm rating-active">
+   <div class="rating-container rating-gly-star" data-content="&#xe005;&#xe005;&#xe005;&#xe005;&#xe005;">
+      <div class="rating-stars" data-content="&#xe005;&#xe005;&#xe005;&#xe005;&#xe005;">
+        </div>
+    </div>
+    </div>
+<!--
   <div id="test" name= "star" align="center">
     <input id="rating-system" type="number" class="rating" 
     	min="0" max="5" step="1" 
     	data-showCaption="true" showClear="false" hoverEnabled="false">
   </div>
+-->
 <!--
   <div align="center" class="star-rating rating-sm rating-active">
     <div class="rating-container rating-gly-star" data-content="">
