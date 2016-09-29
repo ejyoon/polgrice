@@ -689,6 +689,8 @@ var currentTrialNum = 0;
 var trial;
 var numComplete = 0;
 var buyer;
+var currentdate = new Date()
+var month = currentdate.getMonth() +  1
 var practiceComplete = 0;
 var practiceTrials = 3;
 
@@ -702,6 +704,10 @@ var experiment = {
     data: {
     expt: expt,
 //    cond: cond,
+    subid: [],
+    email: [],
+    time: [],
+    site: "Korea",
     order: [],
     knowledge: state_knowledge,
     domain: [],
@@ -727,7 +733,9 @@ var experiment = {
 //    predictedProb0: [],
 //    predictedProb1: [],
     language: [],
-    region: [],
+    age: [],
+    proficiency: [],
+    abroad: [],
     religion: [],
     expt_aim: [],
     expt_gen: [],
@@ -736,22 +744,20 @@ var experiment = {
     },
     
   end: function() {	
-    experiment.data.language.push(document.getElementById("homelang").value);	
+            experiment.data.language.push(document.getElementById("homelang").value);	
+            experiment.data.age.push(document.getElementById("age_num").value);	
+            experiment.data.proficiency.push(getRadioCheckedValue(2, "proficiency"));
+            experiment.data.abroad.push(document.getElementById("abroad").value);	
             experiment.data.expt_aim.push(document.getElementById("expthoughts").value);		
             experiment.data.expt_gen.push(document.getElementById("expcomments").value);
-            
-            if(getRadioCheckedValue(2, "region") == "other" || getRadioCheckedValue(2, "region") == "") {
-                experiment.data.region.push(document.getElementById("region_other").value);
-            } else {
-                experiment.data.region.push(getRadioCheckedValue(2, "region"));
-            }
             
             if(getRadioCheckedValue(2, "religion") == "other" || getRadioCheckedValue(2, "religion") == "") {
                 experiment.data.religion.push(document.getElementById("religion_other").value);
             } else {
                 experiment.data.religion.push(getRadioCheckedValue(2, "religion"));
             }
-	experiment.data.goal_thoughts.push(document.getElementById("goal_thoughts").value);
+
+      experiment.data.goal_thoughts.push(document.getElementById("goal_thoughts").value);
 	
       
 //    			//Decrement			
@@ -761,10 +767,39 @@ var experiment = {
 //			xmlHttp.send(null)
     showSlide("finished");
   
-    setTimeout(function() {turk.submit(experiment.data) }, 1500);
+        var dataforTrial = "\n" + experiment.data.email  + "," + experiment.data.subid + ","
+        + experiment.data.time + "," + experiment.data.site  + "," 
+        + experiment.data.expt + "," + experiment.data.order + "," 
+        + experiment.data.practicetrial + "," + experiment.data.practiceprob0 + "," 
+        + experiment.data.practiceprob1 + "," + experiment.data.people + ","
+        + experiment.data.knowledge + "," + experiment.data.domain + "," 
+        + experiment.data.state + "," + experiment.data.utterance + "," 
+        + experiment.data.goal + "," + experiment.data.judgment + "," 
+        + experiment.data.language + "," + experiment.data.abroad + "," 
+        + experiment.data.age + "," + experiment.data.proficiency + "," 
+        + experiment.data.religion + "," + experiment.data.expt_aim + "," 
+        + experiment.data.expt_gen + "," + experiment.data.goal_thoughts + "," + experiment.data.numTrials + "\n";
+        
+        $.post("https://langcog.stanford.edu/cgi-bin/EJY/polgrice/polgricestudysave_S.php", {postresult_string : dataforTrial});	
   },
-    
-  instructions:function() {
+
+
+    confirm: function () {
+
+            if (document.getElementById("email").value) {
+            experiment.data.email.push(document.getElementById("email").value);
+            experiment.data.subid.push(Math.floor((Math.random() * 1000000) + 1));
+            experiment.data.time.push(currentdate.getDate() + "-" + month + " " + 
+                currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds());
+                
+            
+            experiment.instructions();
+        } else {
+			$("#emailfield").html('<font color="red">Please answer this question.</font>');  
+        }
+    },    
+
+    instructions:function() {
     showSlide('instructions2')
   },
     
@@ -797,7 +832,27 @@ var experiment = {
       practiceComplete++;    
         
     }    },
+
+    confirm: function () {
+
+            if (document.getElementById("email").value) {
+            experiment.data.email.push(document.getElementById("email").value);
+            experiment.data.subid.push(Math.floor((Math.random() * 1000000) + 1));
+            experiment.data.time.push(currentdate.getDate() + "-" + month + " " + 
+                currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds());
+                
+            
+            experiment.instructions();
+        } else {
+			$("#emailfield").html('<font color="red">Please answer this question.</font>');  
+        }
+    },
     
+  instructions:function() {
+    showSlide('instructions2')
+  },
+    
+
   next: function() {
     // Allow experiment to start if it's a turk worker OR if it's a test run
 	if (window.self == window.top | turk.workerId.length > 0) {

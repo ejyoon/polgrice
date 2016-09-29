@@ -1,9 +1,10 @@
 <html>
 <head>
-  <title>A quick study to judge what people mean</title>
+  <title>이야기 속 등장인물의 생각 알아보기</title>
     <script src="jquery-1.11.2.min.js"></script>
     <script src="mmturkey-0.6.js"></script>
     <link rel="stylesheet" href="style.css" />
+    <meta charset='utf-8'>
     <!--Star-ratings-->
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link href="star-rating.css" media="all" rel="stylesheet" type="text/css" />
@@ -32,33 +33,34 @@
   <br>
   <img src="images/stanford.png" alt="Stanford University">
   <p id='logo-text'>Stanford Language and Cognition Lab</p>
-  <p class="block-text">In this experiment, you will read hypothetical interactions between you and someone else. Your job is to judge what their actions or comments mean. You will see something they did or said, and a possible interpretation of that. Then you will be asked to indicate how likely it is that the interpretation is true.
+  <p class="block-text">             
+            본 연구는 <b>한국인 참가자</b>대상입니다. 
+            <b>간단한 영어 이야기</b>를 읽고 이야기에 나오는 인물들의 생각을 알아보는 내용입니다.
+            끝까지 진행하실 경우 실험자에게 이메일 정보가 전달되며 참가 사례(아마존 기프트 카드)를 받으실 수 있습니다.
+
   </p>
+        <br><b>This study is for Korean participants only.</b>
+
+        <br><br><br>
+        <p class="block-text_email">이메일 주소를 입력하여 주십시오.</p>
+        
+        <div>
+        <input type="string" name="email" id="email" size="30">
+        </div>
+        
+        <table cellspacing="2" align="center"><tr> <td id="emailfield"></td></tr></table>
+    <br><br>
+
   <button type="button" 
           onclick="this.blur(); 
-                   experiment.instructions();
-                   document.getElementById('form1').hidden=true;
-                   document.getElementById('form2').hidden=false;
-                   document.getElementById('next1').hidden=true;
-                   document.getElementById('next2').hidden=false;
+                   experiment.confirm();
                                  ">Start</button>
   
-  <p class="block-text"><br> <b> Note: you won't be able to preview this HIT before accepting it because it's so short. </b></p>
-  
-  <p class="block-text" id="legal">By answering the
-  following questions, you are participating in a study being performed by
-  cognitive scientists in the Stanford Department of Psychology. If you have
-  questions about this research, please contact us at 
-  <a href="mailto://languagecoglab@gmail.com.">languagecoglab@gmail.com</a>.
-  You must be  at least 18 years old to participate. Your participation in 
-  this research is voluntary. You may decline to answer any or all of the 
-  following questions. You may decline further participation, at any time, 
-  without adverse consequences. Your anonymity is assured; the researchers 
-  who have requested your participation will not receive any personal information 
-  about you. Note however that we have recently been made aware that your public 
-  Amazon.com profile can be accessed via your worker ID if you do not choose 
-  to opt out. If you would like to opt out of this feature, you may follow instructions available 
-  <a href="http://www.amazon.com/gp/help/customer/display.html?nodeId=16465241">here</a>.</p>
+  <p class="block-text" id="legal">By answering the following questions, you are participating in a study being performed by cognitive scientists in the Stanford Department of Psychology. If you have questions about this research, please contact us at <a href="mailto://langcoglab@stanford.edu.">langcoglab@stanford.edu</a>. You must be at least 18 years old to participate. Your participation in this research is voluntary. You may decline to answer any or all of the following questions. You may decline further participation, at any time, without adverse consequences. Your anonymity is assured; the researchers who have requested your participation will not receive any personal information about you. You can stop the survey at any time, or choose not to answer any question without penalty. For more information, email the Stanford lab at langcoglab@stanford.edu, or call 650-721-9270.  If you are not satisfied with how this study is being conducted, or if you have any concerns, complaints, or general questions about your rights as a participant, please contact the Stanford IRB at irb2-manager@lists.stanford.edu or call (650)-723-2480 or toll free at 1-866-680-2906.  
+
+<br><br>IRB Approval date: 4/8/16
+<br>Expiration date: 3/25/17
+</p>
 </div>
 
 <script LANGUAGE="JavaScript">
@@ -265,7 +267,13 @@ function pressEnter(e) {
         <br><br><p align="center"> Now you will read stories about what different people did and what others said about those things.</p>
 <br>
 
-        <table align="center"><tr><td> <button type="button" onClick="this.blur(); experiment.next()">Next</button> </td> </tr>
+        <table align="center"><tr><td> <button type="button"           onclick="this.blur(); 
+                   experiment.next();
+                   document.getElementById('form1').hidden=true;
+                   document.getElementById('form2').hidden=false;
+                   document.getElementById('next1').hidden=true;
+                   document.getElementById('next2').hidden=false;
+            ">Next</button> </td> </tr>
       </td></tr><tr><td align="center"><div id = "counter"></div> </td> </tr>
   	  </table>
 <br>
@@ -440,8 +448,70 @@ experiment.next();
 	<p> What is your native/first language (i.e., the language that was primarily spoken at home when you were a child)? </p>
    <p>
 	<input type="text" id="homelang" name="lg" style="width:40%" value=""></textarea>
-<br><br>
-   </p>
+   </p><br><br>
+
+<p> How would you rate your proficiency in English? </p>
+   <p>
+    <table cellspacing="0" cellpadding="0" border="0">
+          <col width="20">
+          <col width="470">
+        <tr>
+            <td><input type="radio" name="proficiency" value="1" /></td>
+            <td><span>Poor (understood ~50% of instructions or less)</span></td>
+        </tr>
+        <tr>
+            <td><input type="radio" name="proficiency" value="2" /></td>
+            <td><span>Moderate (understood ~75% of instructions)</span></td>
+        </tr>
+        <tr>
+            <td><input type="radio" name="proficiency" value="3" /></td>
+            <td><span>Proficient (understood 90% of instructions)</span></td>
+        </tr>
+        <tr>
+            <td><input type="radio" name="proficiency" value="4" /></td>
+            <td><span>Fluent (understood all)</span></td>
+        </tr>
+    </table>
+   </p><br><br>
+
+<p> What is your age? </p>
+   <p>
+	<input type="text" id="age_num" name="old" style="width:40%" value=""></textarea>
+   </p><br><br>
+
+<p> How long (in years) have you spent time abroad, outside of Korea? </p>
+   <p>
+	<input type="text" id="abroad" name="year" style="width:40%" value=""></textarea>
+   </p><br><br>
+
+<p> What is your religion? </p>
+   <p>
+    <table cellspacing="0" cellpadding="0" border="0">
+          <col width="20">
+          <col width="470">
+
+        <tr>
+            <td><input type="radio" name="religion" value="protestant" /></td>
+            <td><span>Christianity (prostestantism)</span></td>
+        </tr>
+        <tr>
+            <td><input type="radio" name="religion" value="catholic" /></td>
+            <td><span>Christianity (catholicism)</span></td>
+        </tr>
+        <tr>
+            <td><input type="radio" name="religion" value="buddh" /></td>
+            <td><span>Buddhism</span></td>
+        </tr>
+        <tr>
+            <td><input type="radio" name="religion" value="none" /></td>
+            <td><span>No religion</span></td>
+        </tr>
+        <tr>
+            <td><input type="radio" name="religion" value="other" /></td>
+            <td><span>Other  <input type="text" id="religion_other" value=""/></span></td>
+        </tr>
+    </table>
+   </p><br><br>
 
 <p> What do you think this experiment was about? </p>
    <p>
@@ -449,11 +519,12 @@ experiment.next();
    </p>
 <br><br>
 
-<p> Other than goals to be nice, mean or honest, did you think the people in this experiment had any other goals in mind? </p>
+   <p> Other than goals to be nice, mean or honest, did you think the people in this experiment had any other goals in mind? </p>
    <p>
    <textarea type="textarea" id="goal_thoughts" style="width:100%" name="expgen"></textarea>
    </p>
 <br><br>
+
 
    <p> Any general comments about the experiment? </p>
    <p>
@@ -461,64 +532,7 @@ experiment.next();
    </p>
 <br><br>
 
-<p> What is your religion?</p>
-    <p><table width="300" cellspacing="0" cellpadding="0" border="0">
-        <tr>
-            <td><input type="radio" name="religion" value="hindu" /></td>
-            <td><span>Hinduism</span></td>
-        </tr>
-        <tr>
-            <td><input type="radio" name="religion" value="islam" /></td>
-            <td><span>Islam</span></td>
-        </tr>
-        <tr>
-            <td><input type="radio" name="religion" value="christian" /></td>
-            <td><span>Christianity</span></td>
-        </tr>
-        <tr>
-            <td><input type="radio" name="religion" value="sikh" /></td>
-            <td><span>Sikhism</span></td>
-        </tr>
-        <tr>
-            <td><input type="radio" name="religion" value="buddh" /></td>
-            <td><span>Buddhism</span></td>
-        </tr>
-        <tr>
-            <td><input type="radio" name="religion" value="other" /></td>
-            <td><span>Other  <input type="text" id="religion_other" value=""/></span></td>
-        </tr>
-    </table></p>
 
-<br><br>
-
-	<p> Which region of India do you live in? (the largest city in each region is indicated in brackets for your reference)</p>
-    <p><table width="300" cellspacing="0" cellpadding="0" border="0">
-        <tr>
-            <td><input type="radio" name="region" value="east" /></td>
-            <td><span>East India (Kolkata)</span></td>
-        </tr>
-        <tr>
-            <td><input type="radio" name="region" value="north" /></td>
-            <td><span>North India (Delhi)</span></td>
-        </tr>
-        <tr>
-            <td><input type="radio" name="region" value="northeast" /></td>
-            <td><span>Northeast India (Guwahati)</span></td>
-        </tr>
-        <tr>
-            <td><input type="radio" name="region" value="south" /></td>
-            <td><span>South India (Chennai)</span></td>
-        </tr>
-        <tr>
-            <td><input type="radio" name="region" value="west" /></td>
-            <td><span>West India (Mumbai)</span></td>
-        </tr>
-        <tr>
-            <td><input type="radio" name="region" value="other" /></td>
-            <td><span>Other  <input type="text" id="region_other" value=""/></span></td>
-        </tr>
-</table></p>
-<br><br>
 	</form>
 	
 	<div align="center">
@@ -528,7 +542,9 @@ experiment.next();
 </div>
 
 <div class="slide" id="finished">
-  You're finished - thanks for participating! Submitting to Mechanical Turk...
+      You're finished - thanks for participating!
+      <br><br>참가해주셔서 감사합니다! 며칠 이내로 참가 사례에 대한 이메일을 받으실 수 있습니다. 
+      <br>궁금한 점이 있으시면 ejyoon@stanford.edu로 문의바랍니다.
 </div>
 <script src="polgrice_L2_S.js"></script>
 
