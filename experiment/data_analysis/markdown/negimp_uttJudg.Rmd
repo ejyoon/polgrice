@@ -1,0 +1,90 @@
+---
+title: "polgrice- utterance judgment ana"
+author: "Erica Yoon"
+date: "Dec 1, 2015"
+output: html_document
+---
+
+Expt 4: given true state (represented by heart ratings), did SP think the presentation was 'terrible/bad/okay/good/amazing'?
+
+```{r warning=FALSE, message=FALSE}
+rm(list = ls())
+library(jsonlite)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(binom)
+library(bootstrap)
+library(langcog)
+
+raw.data.path <- "/Users/ericang/Documents/Research/polgrice_GIT/experiment/exp_versions/negimp_prior_v1/production-results/"
+
+## LOOP TO READ IN FILES
+all.data <- data.frame()
+files <- dir(raw.data.path,pattern="*.json")
+
+for (file.name in files) {
+  
+  ## these are the two functions that are most meaningful
+  json_file <- readLines(paste(raw.data.path,file.name,sep=""))
+  json_file_str = paste(json_file, collapse = "")
+  json_file_str = gsub(",}", "}", json_file_str)
+  jso = jsonlite::fromJSON(json_file_str)
+  jso$answers$data$people <- NULL
+  jso1 <- data.frame(jso)
+  jso1$subid <- substring(file.name, 1, 6)
+  
+  ## now here's where data get bound together
+  all.data <- rbind(all.data, jso1)
+}
+```
+
+Filter out participants and clean up.
+
+```{r}
+d <- all.data %>%
+  select(subid, answers.data.order, answers.data.domain, answers.data.state, answers.data.utterance, answers.data.judgment) %>%
+  mutate(subid = as.factor(subid)) %>%
+  mutate(trial = as.numeric(answers.data.order)) %>%
+  mutate(item = as.factor(answers.data.domain)) %>%
+  mutate(state = as.factor(substr(answers.data.state, 6, 6))) %>%
+  mutate(utterance = as.factor(answers.data.utterance)) %>%
+  mutate(judgment = as.numeric(as.character(answers.data.judgment))) %>%
+  mutate(positivity = factor(as.numeric(grepl("yes", utterance)), 
+                        levels = c(0, 1), 
+                        labels = c("negative","positive"))) %>%
+  mutate(utterance = substring(utterance, 5)) %>%
+  select(subid, trial, item, state, positivity, utterance, judgment)
+
+d$utterance <- ordered(d$utterance, levels = c("terrible", "bad", "okay", "good", "amazing"))
+d$positivity <- relevel(d$positivity, ref="positive")
+levels(d$positivity) <- c("it was ___", "it wasn't ___")
+```
+
+```{r, fig.width = 10, fig.height = 4}
+# goal_prob ~ true_state + utterance + goal
+ms <- d %>%
+  group_by(positivity, state, utterance, subid) %>%
+  summarize(
+            judgment = mean(judgment, na.rm=TRUE)
+          ) %>%
+  group_by(positivity, state, utterance) %>%
+  multi_boot_standard(column = "judgment") %>%
+  mutate(judgment = mean)
+```
+
+# judgment ~ state + utterance
+
+```{r echo = FALSE, fig.width = 12, fig.height = 4}
+qplot(state, judgment, 
+      colour = positivity,
+      data=ms) + 
+  geom_line(aes(group=positivity)) +
+  facet_grid(.~utterance) +
+  xlab("state (1=worst)") +
+  ylab("proportion of acceptances") +
+  ggtitle("Literal semantics") +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
+  scale_color_discrete(guide_legend(title=""))
+```
+

@@ -1,0 +1,301 @@
+---
+title: "polgrice L2 S"
+author: "Erica Yoon"
+date: "Dec 3, 2015"
+output: html_document
+---
+
+Given utterance, infer state, and then given utterance and state, infer goals
+
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+rm(list = ls())
+library(jsonlite)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(binom)
+library(bootstrap)
+library(langcog)
+source("/Users/ericang/Documents/Research/polgrice_GIT/experiment/data_analysis/helper/useful.R")
+
+raw.data.path <- "/Users/ericang/Documents/Research/polgrice_GIT/experiment/exp_versions/7_negimp_v1/production-results/"
+
+## LOOP TO READ IN FILES
+all.data <- data.frame()
+files <- dir(raw.data.path,pattern="*.json")
+
+for (file.name in files) {
+  
+  ## these are the two functions that are most meaningful
+  json_file <- readLines(paste(raw.data.path,file.name,sep=""))
+  json_file_str = paste(json_file, collapse = "")
+  json_file_str = gsub(",}", "}", json_file_str)
+  jso = jsonlite::fromJSON(json_file_str)
+  jso$answers$data$people <- NULL
+  jso1 <- data.frame(jso)
+  jso1$subid <- substring(file.name, 1, 6)
+  
+  ## now here's where data get bound together
+  all.data <- rbind(all.data, jso1)
+}
+```
+
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+rearr <- all.data %>%
+  select(subid, num_range("answers.data.goal", 0:1)) %>%
+  distinct(subid) %>%
+  gather(goal_order, goal, num_range("answers.data.goal", 0:1)) %>%
+  mutate(goal_order = substr(goal_order, 18, 18))
+
+d <- all.data %>%
+  select(subid, answers.data.order, answers.data.knowledge, answers.data.domain, answers.data.utterance, answers.data.judgment, answers.data.state, answers.data.threat, num_range("answers.data.goalProb", 0:1)) %>%
+  gather(goal_order, goal_prob, num_range("answers.data.goalProb", 0:1)) %>%
+  mutate(goal_order = substr(goal_order, 22, 22)) %>%
+  left_join(rearr)
+
+
+d <- d %>%
+  mutate(trial = answers.data.order) %>%
+  mutate(item = answers.data.domain) %>%
+  mutate(actual_state = substr(answers.data.state, 6, 6)) %>%
+  mutate(threat = answers.data.threat) %>%
+  mutate(utterance = answers.data.utterance) %>%
+  mutate(knowledge = answers.data.knowledge) %>%
+  mutate(predicted_state = answers.data.judgment) %>%
+  select(subid, trial, knowledge, utterance, threat, goal, predicted_state, actual_state, goal_prob)
+
+d <- d %>%
+  mutate(subid = as.factor(subid),
+         trial = as.numeric(trial),
+         predicted_state = as.numeric(predicted_state)/20,
+         actual_state = as.factor(actual_state),
+         knowledge = as.factor(knowledge),
+         threat = as.factor(threat),
+         utterance = as.factor(utterance),
+         goal = as.factor(goal),
+         goal_prob = as.numeric(goal_prob)) %>%
+  mutate(positivity = factor(as.numeric(grepl("yes", utterance)), 
+                        levels = c(0, 1), 
+                        labels = c("negative","positive"))) %>%
+  mutate(utterance = substring(utterance, 5))
+
+d$utterance <- ordered(d$utterance, levels = c("terrible", "bad", "okay", "good", "amazing"))
+d$goal <- ordered(d$goal, levels = c("informative", "polite"))
+```
+
+# Predicted state given utterance
+
+```{r warning=FALSE, message=FALSE, echo=FALSE, fig.width = 5, fig.height = 4}
+# predicted_state ~ utterance + positivity
+ms <- d %>%
+  group_by(threat, utterance, positivity, subid) %>%
+  summarise(predicted_state = mean(predicted_state)) %>%
+  group_by(threat, utterance, positivity) %>%
+  multi_boot_standard(column = "predicted_state") %>%
+  mutate(predicted_state = mean)
+ms$positivity <- relevel(ms$positivity, ref="positive")
+levels(ms$positivity) <- c("it was ___", "it wasn't ___")
+levels(ms$threat) <- c("no identity", "face threat", "no face threat")
+
+ggplot(ungroup(ms %>% filter(threat != "no face threat")), aes(x=utterance, y = predicted_state, 
+      colour = threat,
+      linetype = positivity)) +
+  geom_line(aes(group = interaction(positivity, threat))) +
+  geom_point(aes(group = threat)) +
+  xlab("utterance") +
+  ylab("inferred state") +
+  ggtitle("Inferred state given utterance and goal") +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
+  scale_linetype_discrete(guides(title="")) +
+  scale_color_discrete(guides(title=""))
+
+# histogram
+ms <- d %>%
+  group_by(threat, utterance, positivity, subid) %>%
+  summarise(predicted_state = mean(predicted_state))
+
+ggplot(ungroup(ms %>% filter(threat != "no_threat")), aes(x=predicted_state,
+      fill = threat)) +
+  geom_histogram(aes(y = ..density..), position = "dodge", binwidth = 1) +
+  facet_grid(utterance~positivity) +
+  xlab("predicted_state") +
+  ggtitle("Inferred state given utterance and goal")
+```
+
+# Goal inferences
+
+```{r warning=FALSE, message=FALSE, echo=FALSE, fig.width = 10, fig.height = 3}
+
+# goal_prob ~ goal + utterance + positivity + actual_state 
+ms <- d %>%
+  group_by(goal, utterance, positivity, actual_state, subid) %>%
+  summarise(goal_prob = mean(goal_prob)) %>%
+  group_by(goal, utterance, positivity, actual_state) %>%
+  multi_boot_standard(column = "goal_prob") %>%
+  mutate(goal_prob = mean)
+
+ms$positivity <- relevel(ms$positivity, ref="positive")
+levels(ms$positivity) <- c("it was ___", "it wasn't ___")
+
+qplot(actual_state, goal_prob, 
+      colour = goal,
+      data=ms) + 
+  geom_line(aes(group=goal)) +
+  facet_grid(positivity~utterance) +
+  xlab("actual_state") +
+  ylab("inferred goal") +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
+  ggtitle("Goal inferences")
+
+qplot(actual_state, goal_prob, 
+      colour = positivity,
+      linetype = goal,
+      data=ms) + 
+  geom_line(aes(group=interaction(positivity, goal))) +
+  facet_grid(.~utterance) +
+  xlab("actual_state") +
+  ylab("inferred goal") +
+  ggtitle("Goal inferences")
+
+```
+
+# Compare threat vs. no threat on goal prob inferences
+
+```{r warning=FALSE, message=FALSE, echo=FALSE, fig.width = 10, fig.height = 5}
+
+# goal_prob ~ goal + utterance + positivity + actual_state 
+ms <- d %>%
+  # filter(threat == "threat") %>%
+#   filter(threat == "threat" | threat == "no_identity") %>%
+  group_by(threat, goal, utterance, positivity, actual_state, subid) %>%
+  summarise(goal_prob = mean(goal_prob)) %>%
+  group_by(threat, goal, utterance, positivity, actual_state) %>%
+  multi_boot_standard(column = "goal_prob") %>%
+  mutate(goal_prob = mean)
+
+qplot(actual_state, goal_prob, 
+      colour = positivity,
+      data=filter(ms, threat == "threat")) + 
+  geom_line(aes(group=positivity)) +
+  facet_grid(goal~utterance) +
+  xlab("actual_state") +
+  ylab("inferred goal") +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
+  ggtitle("threat condition")
+# 
+# qplot(actual_state, goal_prob, 
+#       colour = positivity,
+#       data=filter(ms, threat == "no_threat")) + 
+#   geom_line(aes(group=positivity)) +
+#   facet_grid(goal~utterance) +
+#   xlab("actual_state") +
+#   ylab("inferred goal") +
+#   geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
+#   ggtitle("named-third-party condition")
+
+qplot(actual_state, goal_prob, 
+      colour = goal,
+      data=filter(ms, threat == "no_identity")) + 
+  geom_line(aes(group=goal)) +
+  facet_grid(positivity~utterance) +
+  xlab("actual_state") +
+  ylab("inferred goal") +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
+  ggtitle("How was the X? It was / was not ~")
+
+qplot(actual_state, goal_prob, 
+      colour = goal,
+      data=filter(ms, threat == "threat")) + 
+  geom_line(aes(group=goal)) +
+  facet_grid(positivity~utterance) +
+  xlab("actual_state") +
+  ylab("inferred goal") +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
+  ggtitle("threat condition")
+
+qplot(actual_state, goal_prob, 
+      colour = threat,
+      data=filter(ms, positivity == "positive" & threat != "no_threat")) + 
+  geom_line(aes(group=threat)) +
+  facet_grid(goal~utterance) +
+  xlab("actual_state") +
+  ylab("inferred goal") +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
+  ggtitle("positive: threat vs. no identity condition")
+
+ms$utterance <- factor(ms$utterance, 
+                           labels = c("not terrible", "not bad", "not okay", "not good", "not amazing"))
+qplot(actual_state, goal_prob, 
+      colour = threat,
+      data=filter(ms, positivity == "negative" & threat != "no_threat")) + 
+  geom_line(aes(group=threat)) +
+  facet_grid(goal~utterance) +
+  xlab("actual_state") +
+  ylab("inferred goal") +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
+  ggtitle("negative: threat vs. no identity condition")
+
+
+```
+
+```{r warning=FALSE, message=FALSE, echo=FALSE, fig.width = 10, fig.height = 5}
+ms <- d %>%
+  group_by(threat, goal, utterance, positivity, actual_state, subid) %>%
+  summarise(goal_prob = mean(goal_prob))
+
+qplot(actual_state, goal_prob, 
+      colour = positivity,
+      data=filter(ms, threat == "no_identity")) + 
+  geom_jitter(width = 0.4, height = 0.1) +
+  facet_grid(goal~utterance) +
+  xlab("actual_state") +
+  ylab("inferred goal") +
+  # geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
+  ggtitle("positive: threat vs. no identity condition")
+
+# ms$utterance <- factor(ms$utterance, 
+#                            labels = c("not terrible", "not bad", "not okay", "not good", "not amazing"))
+# qplot(actual_state, goal_prob, 
+#       colour = threat,
+#       data=filter(ms, positivity == "negative" & threat == "no_threat")) + 
+#   geom_jitter(width = 0.4, height = 0.1) +
+#   facet_grid(goal~utterance) +
+#   xlab("actual_state") +
+#   ylab("inferred goal") +
+#   # geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
+#   ggtitle("negative: threat vs. no identity condition")
+
+
+```
+
+histogram.
+
+```{r warning=FALSE, message=FALSE, echo=FALSE, fig.width = 10, fig.height = 5}
+ms <- d %>%
+  filter(threat == "threat") %>%
+#   filter(threat == "threat" | threat == "no_identity") %>%
+  group_by(goal, utterance, positivity, actual_state, subid) %>%
+  summarise(goal_prob = mean(goal_prob))
+
+ggplot(filter(ms, goal == "polite"), 
+       aes(x = goal_prob, 
+           y = ..density..,
+           fill = positivity)) + 
+  geom_histogram(binwidth = .25, position = "dodge") +
+  facet_grid(utterance~actual_state) +
+  xlab("polite goal probability") +
+  # ylab("inferred goal") +
+  # geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
+  ggtitle("polite goal attribution")
+
+```
+
+Number of participants
+
+```{r}
+subj <- d %>%
+  group_by(threat) %>%
+  summarise(count = length(unique(subid))) 
+
+knitr::kable(subj)
+```
