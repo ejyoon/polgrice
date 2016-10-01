@@ -1,11 +1,96 @@
 ---
-title: "polgrice L2 S"
+title: "Negation politeness"
 author: "Erica Yoon"
-date: "Dec 3, 2015"
+date: "Sep 30 2016"
 output: html_document
 ---
 
-Given utterance, infer state, and then given utterance and state, infer goals
+# Literal semantics
+
+load data.
+
+```{r warning=FALSE, message=FALSE}
+rm(list = ls())
+library(jsonlite)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(binom)
+library(bootstrap)
+library(langcog)
+
+raw.data.path <- "/Users/ericang/Documents/Research/polgrice_GIT/experiment/exp_versions/negimp_prior_v1/production-results/"
+
+## LOOP TO READ IN FILES
+all.data <- data.frame()
+files <- dir(raw.data.path,pattern="*.json")
+
+for (file.name in files) {
+  
+  ## these are the two functions that are most meaningful
+  json_file <- readLines(paste(raw.data.path,file.name,sep=""))
+  json_file_str = paste(json_file, collapse = "")
+  json_file_str = gsub(",}", "}", json_file_str)
+  jso = jsonlite::fromJSON(json_file_str)
+  jso$answers$data$people <- NULL
+  jso1 <- data.frame(jso)
+  jso1$subid <- substring(file.name, 1, 6)
+  
+  ## now here's where data get bound together
+  all.data <- rbind(all.data, jso1)
+}
+```
+
+Filter out participants and clean up.
+
+```{r}
+d <- all.data %>%
+  select(subid, answers.data.order, answers.data.domain, answers.data.state, answers.data.utterance, answers.data.judgment) %>%
+  mutate(subid = as.factor(subid)) %>%
+  mutate(trial = as.numeric(answers.data.order)) %>%
+  mutate(item = as.factor(answers.data.domain)) %>%
+  mutate(state = as.factor(substr(answers.data.state, 6, 6))) %>%
+  mutate(utterance = as.factor(answers.data.utterance)) %>%
+  mutate(judgment = as.numeric(as.character(answers.data.judgment))) %>%
+  mutate(positivity = factor(as.numeric(grepl("yes", utterance)), 
+                        levels = c(0, 1), 
+                        labels = c("negative","positive"))) %>%
+  mutate(utterance = substring(utterance, 5)) %>%
+  select(subid, trial, item, state, positivity, utterance, judgment)
+
+d$utterance <- ordered(d$utterance, levels = c("terrible", "bad", "okay", "good", "amazing"))
+d$positivity <- relevel(d$positivity, ref="positive")
+levels(d$positivity) <- c("it was ___", "it wasn't ___")
+```
+
+judgment ~ state + utterance + positivity (was vs. wasn't)
+
+```{r echo = FALSE, fig.width = 12, fig.height = 4}
+ms <- d %>%
+  group_by(positivity, state, utterance, subid) %>%
+  summarize(
+            judgment = mean(judgment, na.rm=TRUE)
+          ) %>%
+  group_by(positivity, state, utterance) %>%
+  multi_boot_standard(column = "judgment") %>%
+  mutate(judgment = mean)
+
+qplot(state, judgment, 
+      colour = positivity,
+      data=ms) + 
+  geom_line(aes(group=positivity)) +
+  facet_grid(.~utterance) +
+  xlab("state (1=worst)") +
+  ylab("proportion of acceptances") +
+  ggtitle("Literal semantics") +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
+  scale_color_discrete(guide_legend(title=""))
+```
+
+# (S & G | U)
+
+Given utterance, infer state, 
+and then given utterance and state, infer goals
 
 ```{r warning=FALSE, message=FALSE, echo=FALSE}
 rm(list = ls())
@@ -40,7 +125,9 @@ for (file.name in files) {
 }
 ```
 
-```{r warning=FALSE, message=FALSE, echo=FALSE}
+clean up.
+
+```{r}
 rearr <- all.data %>%
   select(subid, num_range("answers.data.goal", 0:1)) %>%
   distinct(subid) %>%
@@ -81,11 +168,139 @@ d <- d %>%
 
 d$utterance <- ordered(d$utterance, levels = c("terrible", "bad", "okay", "good", "amazing"))
 d$goal <- ordered(d$goal, levels = c("informative", "polite"))
+
+d_neg <- d
 ```
 
-# Predicted state given utterance
+Number of participants
+
+```{r}
+subj <- d_neg %>%
+  group_by(threat) %>%
+  summarise(count = length(unique(subid))) 
+
+knitr::kable(subj)
+```
+
+
+also load data from original S and G expts (given the other parameter - G or S).
+
+```{r warning=FALSE, message=FALSE}
+### L2_S
+
+raw.data.path <- "/Users/ericang/Documents/Research/polgrice_GIT/experiment/exp_versions/6_L2_S/production-results/"
+
+## LOOP TO READ IN FILES
+all.data <- data.frame()
+files <- dir(raw.data.path,pattern="*.json")
+
+for (file.name in files) {
+  
+  ## these are the two functions that are most meaningful
+  json_file <- readLines(paste(raw.data.path,file.name,sep=""))
+  json_file_str = paste(json_file, collapse = "")
+  json_file_str = gsub(",}", "}", json_file_str)
+  jso = jsonlite::fromJSON(json_file_str)
+  jso$answers$data$people <- NULL
+  jso1 <- data.frame(jso)
+  jso1$subid <- substring(file.name, 1, 6)
+  jso1$site <- "US"
+  
+  ## now here's where data get bound together
+  all.data <- rbind(all.data, jso1)
+}
+
+d <- all.data %>%
+  select(subid, answers.data.order, answers.data.knowledge, answers.data.domain, answers.data.goal, answers.data.utterance, answers.data.judgment)
+
+d <- d %>%
+  mutate(trial = answers.data.order) %>%
+  mutate(item = answers.data.domain) %>%
+  mutate(utterance = answers.data.utterance) %>%
+  mutate(knowledge = answers.data.knowledge) %>%
+  mutate(goal = answers.data.goal) %>%
+  mutate(state = answers.data.judgment) %>%
+  select(subid, trial, knowledge, utterance, goal, state)
+
+d$subid <- as.factor(d$subid)
+d$trial <- as.numeric(d$trial)
+d$state <- as.factor(d$state) 
+d$knowledge <- as.factor(d$knowledge)
+d$utterance <- as.factor(d$utterance)
+d$goal <- as.factor(d$goal)
+d$state <- as.numeric(d$state)
+
+d$utterance <- ordered(d$utterance, levels = c("terrible", "bad", "okay", "good", "amazing"))
+d$goal <- ordered(d$goal, levels = c("honest", "nice", "mean"))
+
+d_S <- d
+
+### L2_G
+
+raw.data.path <- "/Users/ericang/Documents/Research/polgrice_GIT/experiment/exp_versions/5_L2_G/production-results/"
+
+## LOOP TO READ IN FILES
+all.data <- data.frame()
+files <- dir(raw.data.path,pattern="*.json")
+
+for (file.name in files) {
+  
+  ## these are the two functions that are most meaningful
+  json_file <- readLines(paste(raw.data.path,file.name,sep=""))
+  json_file_str = paste(json_file, collapse = "")
+  json_file_str = gsub(",}", "}", json_file_str)
+  jso = jsonlite::fromJSON(json_file_str)
+  jso$answers$data$people <- NULL
+  jso1 <- data.frame(jso)
+  jso1$subid <- substring(file.name, 1, 6)
+  
+  ## now here's where data get bound together
+  all.data <- rbind(all.data, jso1)
+}
+
+rearr <- all.data %>%
+  select(subid, num_range("answers.data.goal", 0:2)) %>%
+  distinct(subid) %>%
+  gather(goal_order, goal, num_range("answers.data.goal", 0:2)) %>%
+  mutate(goal_order = substr(goal_order, 18, 18))
+
+d <- all.data %>%
+  select(subid, answers.data.order, answers.data.knowledge, answers.data.domain, answers.data.state, answers.data.utterance, num_range("answers.data.goalProb", 0:2)) %>%
+  gather(goal_order, goal_prob, num_range("answers.data.goalProb", 0:2)) %>%
+  mutate(goal_order = substr(goal_order, 22, 22))
+
+detach(package:dplyr)
+library(plyr)
+d <- join(d, rearr)
+
+detach(package:plyr)
+library(dplyr)
+d <- d %>%
+  mutate(trial = answers.data.order) %>%
+  mutate(item = answers.data.domain) %>%
+  mutate(true_state = substr(answers.data.state, 6, 6)) %>%
+  mutate(utterance = answers.data.utterance) %>%
+  mutate(knowledge = answers.data.knowledge) %>%
+  select(subid, trial, knowledge, true_state, utterance, goal, goal_prob)
+
+d$subid <- as.factor(d$subid)
+d$trial <- as.numeric(d$trial)
+d$true_state <- as.factor(d$true_state) 
+d$knowledge <- as.factor(d$knowledge)
+d$utterance <- as.factor(d$utterance)
+d$goal <- as.factor(d$goal)
+d$goal_prob <- as.numeric(d$goal_prob)
+
+d$utterance <- ordered(d$utterance, levels = c("terrible", "bad", "okay", "good", "amazing"))
+
+d_G <- d
+```
+
+looking at negation politeness: just no identity condition.
 
 ```{r warning=FALSE, message=FALSE, echo=FALSE, fig.width = 5, fig.height = 4}
+d <- d_neg
+
 # predicted_state ~ utterance + positivity
 ms <- d %>%
   group_by(threat, utterance, positivity, subid) %>%
@@ -97,6 +312,21 @@ ms$positivity <- relevel(ms$positivity, ref="positive")
 levels(ms$positivity) <- c("it was ___", "it wasn't ___")
 levels(ms$threat) <- c("no identity", "face threat", "no face threat")
 
+ggplot(ungroup(ms %>% filter(threat == "no identity")), aes(x=utterance, y = predicted_state, 
+      colour = positivity)) +
+  geom_line(aes(group = positivity)) +
+  geom_point(aes(group = positivity)) +
+  xlab("utterance") +
+  ylab("inferred state") +
+  ggtitle("Inferred state given utterance and goal") +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
+  scale_color_discrete(guides(title=""))
+
+```
+
+no identity vs. face threat.
+
+```{r}
 ggplot(ungroup(ms %>% filter(threat != "no face threat")), aes(x=utterance, y = predicted_state, 
       colour = threat,
       linetype = positivity)) +
@@ -108,26 +338,57 @@ ggplot(ungroup(ms %>% filter(threat != "no face threat")), aes(x=utterance, y = 
   geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
   scale_linetype_discrete(guides(title="")) +
   scale_color_discrete(guides(title=""))
-
-# histogram
-ms <- d %>%
-  group_by(threat, utterance, positivity, subid) %>%
-  summarise(predicted_state = mean(predicted_state))
-
-ggplot(ungroup(ms %>% filter(threat != "no_threat")), aes(x=predicted_state,
-      fill = threat)) +
-  geom_histogram(aes(y = ..density..), position = "dodge", binwidth = 1) +
-  facet_grid(utterance~positivity) +
-  xlab("predicted_state") +
-  ggtitle("Inferred state given utterance and goal")
 ```
 
-# Goal inferences
+compare to original S expt.
 
-```{r warning=FALSE, message=FALSE, echo=FALSE, fig.width = 10, fig.height = 3}
+```{r}
+d_comp <- d %>%
+  mutate(state = predicted_state) %>%
+  filter(positivity == "positive", 
+         threat == "no_identity") %>% # just no identity
+  select(subid, trial, goal, state, utterance) %>%
+  mutate(expt = "new:no_threat")
 
-# goal_prob ~ goal + utterance + positivity + actual_state 
+d_S_honest <- d_S %>%
+  filter(goal == "honest") %>%
+  select(subid, trial, goal, state, utterance) %>%
+  mutate(expt = "original:threat_honest")
+
+d_S_nice <- d_S %>%
+  filter(goal == "nice") %>%
+  select(subid, trial, goal, state, utterance) %>%
+  mutate(expt = "original:threat_nice")
+  
+  
+d_S_comp <- rbind(d_comp, d_S_honest, d_S_nice)
+
+ms <- d_S_comp %>%
+  group_by(expt, utterance, subid) %>%
+  summarise(state = mean(state)) %>%
+  group_by(expt, utterance) %>%
+  multi_boot_standard(column = "state") %>%
+  mutate(state = mean)
+
+ggplot(ms, aes(x=utterance, y = state, 
+      colour = expt)) +
+  geom_line(aes(group = expt)) +
+  geom_point(aes(group = expt)) +
+  xlab("utterance") +
+  ylab("inferred state") +
+  ggtitle("S|G&U (with face threat) vs. S|U (no identity)") +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
+  scale_color_discrete(guides(title=""))
+```
+
+inferred meaning of positive utterance (e.g. it was terrible) in no identity condition looks like honest condition in original expt.
+
+
+goal inferences.
+
+```{r warning=FALSE, message=FALSE, fig.width = 10, fig.height = 3}
 ms <- d %>%
+  filter(threat == "no_identity") %>%
   group_by(goal, utterance, positivity, actual_state, subid) %>%
   summarise(goal_prob = mean(goal_prob)) %>%
   group_by(goal, utterance, positivity, actual_state) %>%
@@ -146,156 +407,39 @@ qplot(actual_state, goal_prob,
   ylab("inferred goal") +
   geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
   ggtitle("Goal inferences")
-
-qplot(actual_state, goal_prob, 
-      colour = positivity,
-      linetype = goal,
-      data=ms) + 
-  geom_line(aes(group=interaction(positivity, goal))) +
-  facet_grid(.~utterance) +
-  xlab("actual_state") +
-  ylab("inferred goal") +
-  ggtitle("Goal inferences")
-
 ```
 
-# Compare threat vs. no threat on goal prob inferences
+Compare with original G experiment.
 
-```{r warning=FALSE, message=FALSE, echo=FALSE, fig.width = 10, fig.height = 5}
+```{r, fig.width = 10, fig.height = 5}
+d_G_comp0 <- d_G %>%
+  select(subid, trial, true_state, utterance, goal, goal_prob) %>%
+  mutate(expt = "new:threat")
 
-# goal_prob ~ goal + utterance + positivity + actual_state 
-ms <- d %>%
-  # filter(threat == "threat") %>%
-#   filter(threat == "threat" | threat == "no_identity") %>%
-  group_by(threat, goal, utterance, positivity, actual_state, subid) %>%
+d_G_comp1 <- d %>%
+  filter(positivity == "positive", 
+         threat == "no_identity") %>% # just no identity
+  mutate(true_state = actual_state) %>%
+  select(subid, trial, true_state, utterance, goal, goal_prob) %>%
+  mutate(expt = "original:no_threat",
+         goal = factor(goal, labels = c("honest", "nice")))
+  
+d_G_comp <- rbind(d_G_comp0, d_G_comp1)
+
+ms <- d_G_comp %>%
+  group_by(expt, goal, utterance, true_state, subid) %>%
   summarise(goal_prob = mean(goal_prob)) %>%
-  group_by(threat, goal, utterance, positivity, actual_state) %>%
+  group_by(expt, goal, utterance, true_state) %>%
   multi_boot_standard(column = "goal_prob") %>%
   mutate(goal_prob = mean)
 
-qplot(actual_state, goal_prob, 
-      colour = positivity,
-      data=filter(ms, threat == "threat")) + 
-  geom_line(aes(group=positivity)) +
+qplot(true_state, goal_prob, 
+      colour = expt,
+      data=filter(ms, goal != "mean")) + 
+  geom_line(aes(group=expt)) +
   facet_grid(goal~utterance) +
   xlab("actual_state") +
   ylab("inferred goal") +
   geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
-  ggtitle("threat condition")
-# 
-# qplot(actual_state, goal_prob, 
-#       colour = positivity,
-#       data=filter(ms, threat == "no_threat")) + 
-#   geom_line(aes(group=positivity)) +
-#   facet_grid(goal~utterance) +
-#   xlab("actual_state") +
-#   ylab("inferred goal") +
-#   geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
-#   ggtitle("named-third-party condition")
-
-qplot(actual_state, goal_prob, 
-      colour = goal,
-      data=filter(ms, threat == "no_identity")) + 
-  geom_line(aes(group=goal)) +
-  facet_grid(positivity~utterance) +
-  xlab("actual_state") +
-  ylab("inferred goal") +
-  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
-  ggtitle("How was the X? It was / was not ~")
-
-qplot(actual_state, goal_prob, 
-      colour = goal,
-      data=filter(ms, threat == "threat")) + 
-  geom_line(aes(group=goal)) +
-  facet_grid(positivity~utterance) +
-  xlab("actual_state") +
-  ylab("inferred goal") +
-  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
-  ggtitle("threat condition")
-
-qplot(actual_state, goal_prob, 
-      colour = threat,
-      data=filter(ms, positivity == "positive" & threat != "no_threat")) + 
-  geom_line(aes(group=threat)) +
-  facet_grid(goal~utterance) +
-  xlab("actual_state") +
-  ylab("inferred goal") +
-  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
-  ggtitle("positive: threat vs. no identity condition")
-
-ms$utterance <- factor(ms$utterance, 
-                           labels = c("not terrible", "not bad", "not okay", "not good", "not amazing"))
-qplot(actual_state, goal_prob, 
-      colour = threat,
-      data=filter(ms, positivity == "negative" & threat != "no_threat")) + 
-  geom_line(aes(group=threat)) +
-  facet_grid(goal~utterance) +
-  xlab("actual_state") +
-  ylab("inferred goal") +
-  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
-  ggtitle("negative: threat vs. no identity condition")
-
-
-```
-
-```{r warning=FALSE, message=FALSE, echo=FALSE, fig.width = 10, fig.height = 5}
-ms <- d %>%
-  group_by(threat, goal, utterance, positivity, actual_state, subid) %>%
-  summarise(goal_prob = mean(goal_prob))
-
-qplot(actual_state, goal_prob, 
-      colour = positivity,
-      data=filter(ms, threat == "no_identity")) + 
-  geom_jitter(width = 0.4, height = 0.1) +
-  facet_grid(goal~utterance) +
-  xlab("actual_state") +
-  ylab("inferred goal") +
-  # geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
-  ggtitle("positive: threat vs. no identity condition")
-
-# ms$utterance <- factor(ms$utterance, 
-#                            labels = c("not terrible", "not bad", "not okay", "not good", "not amazing"))
-# qplot(actual_state, goal_prob, 
-#       colour = threat,
-#       data=filter(ms, positivity == "negative" & threat == "no_threat")) + 
-#   geom_jitter(width = 0.4, height = 0.1) +
-#   facet_grid(goal~utterance) +
-#   xlab("actual_state") +
-#   ylab("inferred goal") +
-#   # geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
-#   ggtitle("negative: threat vs. no identity condition")
-
-
-```
-
-histogram.
-
-```{r warning=FALSE, message=FALSE, echo=FALSE, fig.width = 10, fig.height = 5}
-ms <- d %>%
-  filter(threat == "threat") %>%
-#   filter(threat == "threat" | threat == "no_identity") %>%
-  group_by(goal, utterance, positivity, actual_state, subid) %>%
-  summarise(goal_prob = mean(goal_prob))
-
-ggplot(filter(ms, goal == "polite"), 
-       aes(x = goal_prob, 
-           y = ..density..,
-           fill = positivity)) + 
-  geom_histogram(binwidth = .25, position = "dodge") +
-  facet_grid(utterance~actual_state) +
-  xlab("polite goal probability") +
-  # ylab("inferred goal") +
-  # geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
-  ggtitle("polite goal attribution")
-
-```
-
-Number of participants
-
-```{r}
-subj <- d %>%
-  group_by(threat) %>%
-  summarise(count = length(unique(subid))) 
-
-knitr::kable(subj)
+  ggtitle("Compare new (no threat) vs. original (threat)")
 ```
