@@ -322,243 +322,280 @@ speakers7 = shuffle(speakers[6]);
 speakers8 = shuffle(speakers[7]);
 speakers9 = shuffle(speakers[8]);
 speakers10 = shuffle(speakers[9]);
-
 var sents = {
     utterances: {
-        terrible: {
-            sent_utterance: " <b>\"Your BB was terrible,\"</b> SP said to LS."
+        yes_terrible: {
+            sent_utterance: " <b>\"It was terrible,\"</b> SP said."
         },        
-        bad: {
-            sent_utterance: " <b>\"Your BB was bad,\"</b> SP said to LS."
+        yes_bad: {
+            sent_utterance: " <b>\"It was bad,\"</b> SP said."
         },        
-        okay: {
-            sent_utterance: " <b>\"Your BB was okay,\"</b> SP said to LS."
+        yes_okay: {
+            sent_utterance: " <b>\"It was okay,\"</b> SP said."
+        },        
+        yes_good: {
+            sent_utterance: " <b>\"It was good,\"</b> SP said."
+        },        
+        yes_amazing: {
+            sent_utterance: " <b>\"It was amazing,\"</b> SP said."
         },
-        good: {
-            sent_utterance: " <b>\"Your BB was good,\"</b> SP said to LS."
-        },
-        amazing: {
-            sent_utterance: " <b>\"Your BB was amazing,\"</b> SP said to LS."
+        not_terrible: {
+            sent_utterance: " <b>\"It wasn't terrible,\"</b> SP said."
+        },        
+        not_bad: {
+            sent_utterance: " <b>\"It wasn't bad,\"</b> SP said."
+        },        
+        not_okay: {
+            sent_utterance: " <b>\"It wasn't okay,\"</b> SP said."
+        },        
+        not_good: {
+            sent_utterance: " <b>\"It wasn't good,\"</b> SP said."
+        },        
+        not_amazing: {
+            sent_utterance: " <b>\"It wasn't amazing,\"</b> SP said."
         },
     },
-    
     domains: {
        presentation: {
             sent_precontext: "Imagine that LS just gave a presentation, ", 
             sent_context: " LS approached SP, who had just seen LS's presentation, and asked \"How was my presentation?\"",
+            sent_precontext_TP: "Imagine that TP just gave a presentation. LS didn't see it, so", 
+            sent_context_TP: " LS approached SP, who had just seen TP's presentation, and asked \"How was TP's presentation?\"",
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just seen a presentation, and asked \"How was the presentation?\"",
             BB: "presentation",
 	},
 	   cookie: {
             sent_precontext: "Imagine that LS baked some cookies, ", 
             sent_context: " LS approached SP, who had just tasted LS's cookie, and asked \"How did my cookie taste?\"", 
+            sent_precontext_TP: "Imagine that TP baked some cookies. LS didn't taste it, so", 
+            sent_context_TP: " LS approached SP, who had just tasted TP's cookie, and asked \"How did TP's cookie taste?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just tasted a cookie, and asked \"How did the cookie taste?\"", 
             BB: "cookie",
 	},
 	   poem: {
             sent_precontext: "Imagine that LS wrote a poem, ", 
             sent_context: " LS approached SP, who had just read LS's poem, and asked \"How was my poem?\"", 
+            sent_precontext_TP: "Imagine that TP wrote a poem. LS didn't read it, so", 
+            sent_context_TP: " LS approached SP, who had just read TP's poem, and asked \"How was TP's poem?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just read a poem, and asked \"How was the poem?\"", 
             BB: "poem",
 	},        
 	   cake: {
             sent_precontext: "Imagine that LS baked a cake, ", 
             sent_context: " LS approached SP, who had just tasted LS's cake, and asked \"How did my cake taste?\"", 
+            sent_precontext_TP: "Imagine that TP baked a cake. LS didn't taste it, so", 
+            sent_context_TP: " LS approached SP, who had just tasted TP's cake, and asked \"How did TP's cake taste?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just tasted a cake, and asked \"How did the cake taste?\"", 
             BB: "cake",
 	},
 	   song: {
             sent_precontext: "Imagine that LS composed a song, ", 
             sent_context: " LS approached SP, who had just heard LS's song, and asked \"How was my song?\"", 
+            sent_precontext_TP: "Imagine that TP composed a song. LS didn't hear it, so", 
+            sent_context_TP: " LS approached SP, who had just heard TP's song, and asked \"How was TP's song?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just heard a song, and asked \"How was the song?\"", 
             BB: "song",
 	},
 	   film: {
             sent_precontext: "Imagine that LS filmed a movie, ", 
             sent_context: " LS approached SP, who had just seen LS's movie, and asked \"How was my movie?\"", 
+            sent_precontext_TP: "Imagine that TP filmed a movie. LS didn't see it, so", 
+            sent_context_TP: " LS approached SP, who had just seen TP's movie, and asked \"How was TP's movie?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just seen a movie, and asked \"How was the movie?\"", 
             BB: "movie",
 	},
 	   solo: {
             sent_precontext: "Imagine that LS played a cello solo part at a concert, ", 
             sent_context: " LS approached SP, who had just heard LS's solo, and asked \"How was my solo?\"", 
+            sent_precontext_TP: "Imagine that TP played a cello solo part at a concert. LS didn't hear it, so", 
+            sent_context_TP: " LS approached SP, who had just heard TP's solo, and asked \"How was TP's solo?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just heard a cello solo, and asked \"How was the solo?\"", 
             BB: "solo",
 	},        
 	   dance: {
             sent_precontext: "Imagine that LS gave a tap dance performance, ", 
             sent_context: " LS approached SP, who had just seen LS's dance, and asked \"How was my dance?\"", 
+            sent_precontext_TP: "Imagine that TP gave a tap dance performance. LS didn't see it, so", 
+            sent_context_TP: " LS approached SP, who had just seen TP's dance, and asked \"How was TP's dance?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just seen a tap dance performance, and asked \"How was the dance?\"", 
             BB: "dance",
 	},   
 	   painting: {
             sent_precontext: "Imagine that LS drew a painting, ", 
             sent_context: " LS approached SP, who had just seen LS's painting, and asked \"How was my painting?\"", 
+            sent_precontext_TP: "Imagine that TP drew a painting. LS didn't see it, so", 
+            sent_context_TP: " LS approached SP, who had just seen TP's painting, and asked \"How was TP's painting?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just seen a painting, and asked \"How was the painting?\"", 
             BB: "painting",
 	}, 
 	   monologue: {
             sent_precontext: "Imagine that LS gave a monologue during a school play, ", 
-            sent_context: " LS approached SP, who had just heard LS's monologue, and asked \"How was my monologue?\"", 
+            sent_context: " LS approached SP, who had just heard LS's monologue and asked \"How was my monologue?\"", 
+            sent_precontext_TP: "Imagine that TP gave a monologue during a school play. LS didn't hear it, so", 
+            sent_context_TP: " LS approached SP, who had just heard TP's monologue, and asked \"How was TP's monologue?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just heard a monologue during a school play, and asked \"How was the monologue?\"", 
             BB: "monologue",
 	},
 	   app: {
             sent_precontext: "Imagine that LS designed a mobile app, ", 
             sent_context: " LS approached SP, who looked at LS's mobile app, and asked \"How was my app?\"", 
+            sent_precontext_TP: "Imagine that TP designed a mobile app. LS didn't see it, so", 
+            sent_context_TP: " LS approached SP, who looked at TP's mobile app, and asked \"How was TP's app?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who looked at a mobile app, and asked \"How was the app?\"", 
             BB: "app",
 	},
 	   review: {
             sent_precontext: "Imagine that LS wrote a review for a book, ", 
             sent_context: " LS approached SP, who had just read LS's review, and asked \"How was my review?\"", 
+            sent_precontext_TP: "Imagine that TP wrote a review for a book. LS didn't read it, so", 
+            sent_context_TP: " LS approached SP, who had just read TP's review, and asked \"How was TP's review?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just read a review for a book, and asked \"How was the review?\"", 
             BB: "review",
 	},
 	   recital: {
             sent_precontext: "Imagine that LS had a piano recital, ", 
             sent_context: " LS approached SP, who had just attended LS's recital, and asked \"How was my recital performance?\"", 
+            sent_precontext_TP: "Imagine that TP had a piano recital, ", 
+            sent_context_TP: " LS approached SP, who had just attended TP's recital, and asked \"How was TP's recital performance?\"", 
+            sent_precontext_NI: "Imagine that", 
+            sent_context_NI: " LS approached SP, who had just attended a piano recital, and asked \"How was the recital performance?\"", 
             BB: "recital performance",
 	},
     },
     states: {
-        terrible: {
-            state: " <b>everyone thought LS's BB was terrible</b>,"        
+        heart1: {
+            state: "20"
         },
-        bad: {
-            state: " <b>everyone thought LS's BB was bad</b>,"        
+        heart2: {
+            state: "40"
         },
-        okay: {
-            state: " <b>everyone thought LS's BB was just okay</b>,"        
+        heart3: {
+            state: "60"
         },
-        good: {
-            state: " <b>everyone thought LS's BB was good</b>,"        
+        heart4: {
+            state: "80"
         },
-        amazing: {
-            state: " <b>everyone thought LS's BB was amazing</b>,"        
-        },
-    },
-    goals: {
-        nice: {
-            goal: " <b>SP wanted to be nice: "
-        },
-        honest: {
-            goal: " <b>SP wanted to be honest: "            
-        },
-        mean: {
-            goal: " <b>SP wanted to be mean: "            
-        }  
+        heart5: {
+            state: "100"
+        }
     },
     people: {
         people1: {
             SP: speakers1[0],
             LS: speakers1[1],
+            TP: speakers1[2],
         },
         people2: {
             SP: speakers2[0],
             LS: speakers2[1],
+            TP: speakers2[2],
         },
         people3: {
             SP: speakers3[0],
             LS: speakers3[1],
+            TP: speakers3[2],
         },
         people4: {
             SP: speakers4[0],
             LS: speakers4[1],
-        },
+            TP: speakers4[2],
+       },
         people5: {
             SP: speakers5[0],
             LS: speakers5[1],
+            TP: speakers5[2],
         },
         people6: {
             SP: speakers6[0],
             LS: speakers6[1],
+            TP: speakers6[2],
         },
         people7: {
             SP: speakers7[0],
             LS: speakers7[1],
+            TP: speakers7[2],
         },
         people8: {
             SP: speakers8[0],
             LS: speakers8[1],
+            TP: speakers8[2],
         },
         people9: {
             SP: speakers9[0],
             LS: speakers9[1],
+            TP: speakers9[2],
         },
         people10: {
             SP: speakers10[0],
             LS: speakers10[1],
-        },
-        people11: {
-            SP: speakers11[0],
-            LS: speakers11[1],
-        },
-        people12: {
-            SP: speakers12[0],
-            LS: speakers12[1],
-        },
-        people13: {
-            SP: speakers13[0],
-            LS: speakers13[1],
-        },
-        people14: {
-            SP: speakers14[0],
-            LS: speakers14[1],
-        },
-        people15: {
-            SP: speakers15[0],
-            LS: speakers15[1],
-        },
-        people16: {
-            SP: speakers16[0],
-            LS: speakers16[1],
-        },
-        people17: {
-            SP: speakers17[0],
-            LS: speakers17[1],
-        },
-        people18: {
-            SP: speakers18[0],
-            LS: speakers18[1],
-        },
-        people19: {
-            SP: speakers19[0],
-            LS: speakers19[1],
-        },
-        people20: {
-            SP: speakers20[0],
-            LS: speakers20[1],
-        },
-        people21: {
-            SP: speakers21[0],
-            LS: speakers21[1],
-        },
-        people22: {
-            SP: speakers22[0],
-            LS: speakers22[1],
-        },
-        people23: {
-            SP: speakers23[0],
-            LS: speakers23[1],
-        },
-        people24: {
-            SP: speakers24[0],
-            LS: speakers24[1],
-        },
-        people25: {
-            SP: speakers25[0],
-            LS: speakers25[1],
+            TP: speakers10[2],
         },
     }
 };
-
-function doSentSubs (sents, polite, domain, utterance, people, goal)
+function doSentSubs (sents, polite, domain, utterance, people)
 {
     utterance = sents["utterances"][utterance]["sent_utterance"];
-    precontext = sents["domains"][domain]["sent_precontext"];
-    context = sents["domains"][domain]["sent_context"];
-    state = sents["states"][state]["state"]
-    goal = sents["goals"][goal]["goal"]
-    if (state_knowledge == "known") {
+//    precontext = sents["domains"][domain]["sent_precontext"];
+    if (threat == "threat") {
+        precontext = sents["domains"][domain]["sent_precontext"];
+        context = sents["domains"][domain]["sent_context"];
+            if (state_knowledge == "known") {
         knowledge = " <b>and LS knew it</b>."
     } else if (state_knowledge == "unknown") {
         knowledge = " but had no idea what people thought about it."
     }
+
+    } else if (threat == "no_threat") {
+        precontext = sents["domains"][domain]["sent_precontext_TP"];
+        context = sents["domains"][domain]["sent_context_TP"];
+        if (state_knowledge == "known") {
+        knowledge = " <b>and LS knew it</b>."
+    } else if (state_knowledge == "unknown") {
+        knowledge = ""
+    }
+
+    } else if (threat == "no_identity") {
+        precontext = sents["domains"][domain]["sent_precontext_NI"];
+        context = sents["domains"][domain]["sent_context_NI"];
+        if (state_knowledge == "known") {
+        knowledge = " <b>and LS knew it</b>."
+    } else if (state_knowledge == "unknown") {
+        knowledge = ""
+    }
+
+    }
+//    context = sents["domains"][domain]["sent_context"];
+    state = sents["states"][state]["state"]
     
     question = "Based on what SP said, how likely do you think that <b>SP's goal</b> was to be:";
     
 //    if (prediction[0] == "ask") {
-    question2 = "How do you think SP <b>actually</b> felt about LS's BB?";
-    question3 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
+    if (threat == "threat") {
+    question2 = "How do you think SP actually felt about LS's BB?";
+    summary = "Here's what you thought SP felt about LS's BB:";
+    prequestion3 = "Here's how SP <b>actually</b> felt about LS's BB:";
+    } else if (threat == "no_threat") {
+    question2 = "How do you think SP actually felt about TP's BB?";
+    summary = "Here's what you thought SP felt about TP's BB:";
+    prequestion3 = "Here's how SP <b>actually</b> felt about TP's BB:";        
+    } else {
+    question2 = "How do you think SP actually felt about the BB?";
+    summary = "Here's what you thought SP felt about the BB:";
+    prequestion3 = "Here's how SP <b>actually</b> felt about the BB:";        
+    }
+//    question3 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
 //    } else if (prediction[0] == "like") {
 //    question3 = "Based on what SP said, how likely is it for you to <b>ask for SP's opinion on your own BB</b>?";
 //    question2 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
@@ -566,26 +603,28 @@ function doSentSubs (sents, polite, domain, utterance, people, goal)
     BB = sents["domains"][domain]["BB"]; //Item 2
     SP = sents["people"][people]["SP"]; //speaker
     LS = sents["people"][people]["LS"]; //addressee
+    TP = sents["people"][people]["TP"]; //third party (target)
  
-    utterance = utterance.replace("BB",BB).replace("SP",SP).replace("LS",LS);
-    context = context.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);
-    precontext = precontext.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);
+    utterance = utterance.replace("BB",BB).replace("SP",SP);
+    context = context.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS).replace("TP",TP).replace("TP",TP).replace("TP",TP);
+    precontext = precontext.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS).replace("TP",TP).replace("TP",TP).replace("TP",TP);
     state = state.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);
     question = question.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
-    question2 = question2.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
-    question3 = question3.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
+    question2 = question2.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS).replace("TP",TP);   
+    prequestion3 = prequestion3.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS).replace("TP",TP);  
     knowledge = knowledge.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
-    goal = goal.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
+    summary = summary.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS).replace("TP",TP);   
 
     
-    return [utterance, context, state, precontext, question, question2, question3, knowledge, goal];
+    return [utterance, context, state, precontext, question, question2, prequestion3, knowledge, summary];
 }
 
 var numConditions = allConditions.length;
 var chooseCondition = random(0, numConditions-1);
 var allTrialOrders = allConditions[chooseCondition];
 var numTrials = allTrialOrders.length;
-var shuffledOrder = shuffledSampleArray(allTrialOrders.length, numTrials);
+//var shuffledOrder = shuffledSampleArray(allTrialOrders.length, numTrials);
+var shuffledOrder = drawnum;
 var currentTrialNum = 0;
 var trial;
 var numComplete = 0;
