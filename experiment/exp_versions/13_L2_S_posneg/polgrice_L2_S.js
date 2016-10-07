@@ -128,14 +128,14 @@ function getRadioCheckedValue(formNum, radio_name)
 
 // CONDITION ASSIGNMENT
 var expt = "polgrice_statePos";
-//var cond = random(3)+1;
-var cond = 3;
+var cond = random(2)+1;
+//var cond = 1;
 var expt = "statePosterior_v2";
 
 if (cond == 1) {
     var threat = "threat";
-} else if (cond == 2) {
-    var threat = "no_threat";   
+//} else if (cond == 2) {
+//    var threat = "no_threat";   
 } else {
     var threat = "no_identity"
 }
@@ -639,14 +639,15 @@ var experiment = {
     
     data: {
     expt: expt,
-//    cond: cond,
+    cond: cond,
     order: [],
-    knowledge: state_knowledge,
+    threat: threat,
+//   knowledge: state_knowledge,
     domain: [],
 //    state: [],
     utterance: [],
     people: [],
-    goal: [],
+//    goal: [],
 //    context: [],
 //    goal0: score[0],
 //    goal1: score[1],
@@ -713,7 +714,7 @@ var experiment = {
 //      experiment.data.stateProb.push(prob3);
 //      experiment.data.predictedProb0.push(prob3);
 //      experiment.data.predictedProb1.push(prob4);
-      experiment.data.goal.push(goal);
+//      experiment.data.goal.push(goal);
       experiment.data.judgment.push(judgment);
       
       clearForm(document.forms[0]);
@@ -742,7 +743,7 @@ var experiment = {
         goal = trial.goal;
         sent_materials = doSentSubs(sents, state, domain, utterance, people, goal);
       showSlide("stage");
-      $("#context").html(sent_materials[3] + sent_materials[7] + sent_materials[1] + sent_materials[8] + sent_materials[0]);  
+      $("#context").html(sent_materials[3] + sent_materials[7] + sent_materials[1] + sent_materials[0]);  
       $("#question").html(sent_materials[4]); 
       $("#rating-stars").on("click", 
 			    	function(event) {
