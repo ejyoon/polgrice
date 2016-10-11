@@ -11,7 +11,8 @@ library(jsonlite)
 knitr::opts_chunk$set(echo = TRUE)
 
 # set path to working dir
-local.path <- "~/Documents/research/polgrice/"
+# local.path <- "~/Documents/research/polgrice/"
+local.path <- "~/Documents/Research/polgrice_GIT/"
 ```
 
 In this model, you can change the utterances, experimental condition, etc. and see model predictions.
