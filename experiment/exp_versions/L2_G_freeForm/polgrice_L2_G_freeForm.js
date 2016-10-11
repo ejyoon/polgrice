@@ -148,19 +148,21 @@ var domains2 =
 var domains = domains1.concat(domains2)
 
 
-var states1 = ["heart1", "heart2", "heart3", "heart4", "heart5"];
-var states2 = ["heart2", "heart3", "heart4", "heart5", "heart1"];
-var states3 = ["heart3", "heart4", "heart5", "heart1", "heart2"];
-var states4 = ["heart4", "heart5", "heart1", "heart2", "heart3"];
-var states5 = ["heart5", "heart1", "heart2", "heart3", "heart4"];
-var states = states1.concat(states2, states3, states4, states5)
+var states1 = shuffle(["heart1", "heart2", "heart3", "heart4", "heart5"]);
+//var states2 = ["heart2", "heart3", "heart4", "heart5", "heart1"];
+//var states3 = ["heart3", "heart4", "heart5", "heart1", "heart2"];
+//var states4 = ["heart4", "heart5", "heart1", "heart2", "heart3"];
+//var states5 = ["heart5", "heart1", "heart2", "heart3", "heart4"];
+//var states = states1.concat(states2, states3, states4, states5)
+var states = states1
 
-var utterances1 = ["terrible", "bad", "okay", "good", "amazing"];
-var utterances2 = ["terrible", "bad", "okay", "good", "amazing"];
-var utterances3 = ["terrible", "bad", "okay", "good", "amazing"];
-var utterances4 = ["terrible", "bad", "okay", "good", "amazing"];
-var utterances5 = ["terrible", "bad", "okay", "good", "amazing"];
-var utterances = utterances1.concat(utterances2, utterances3, utterances4, utterances5)
+var utterances1 = shuffle(["terrible", "bad", "okay", "good", "amazing"]);
+//var utterances2 = ["terrible", "bad", "okay", "good", "amazing"];
+//var utterances3 = ["terrible", "bad", "okay", "good", "amazing"];
+//var utterances4 = ["terrible", "bad", "okay", "good", "amazing"];
+//var utterances5 = ["terrible", "bad", "okay", "good", "amazing"];
+//var utterances = utterances1.concat(utterances2, utterances3, utterances4, utterances5)
+var utterances = utterances1
 
 var goals = ["nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean"];
 
@@ -205,146 +207,146 @@ shuffle(
                         "people": "people5",
                         "goal": goals[4],
 },
-                    {
-                        "domain": domains[5],
-                        "state": states[5],
-                        "utterance": utterances[5],
-                        "people": "people6",
-                        "goal": goals[5],
-},
-                    {
-                        "domain": domains[6],
-                        "state": states[6],
-                        "utterance": utterances[6],
-                        "people": "people7",
-                        "goal": goals[6],
-},
-                    {
-                        "domain": domains[7],
-                        "state": states[7],
-                        "utterance": utterances[7],
-                        "people": "people8",
-                        "goal": goals[7],
-},
-                    {
-                        "domain": domains[8],
-                        "state": states[8],
-                        "utterance": utterances[8],
-                        "people": "people9",
-                        "goal": goals[8],
-},
-                    {
-                        "domain": domains[9],
-                        "state": states[9],
-                        "utterance": utterances[9],
-                        "people": "people10",
-                        "goal": goals[9],
-},
-                    {
-                        "domain": domains[10],
-                        "state": states[10],
-                        "utterance": utterances[10],
-                        "people": "people11",
-                        "goal": goals[10],
-},
-                    {
-                        "domain": domains[11],
-                        "state": states[11],
-                        "utterance": utterances[11],
-                        "people": "people12",
-                        "goal": goals[11],
-},
-                    {
-                        "domain": domains[12],
-                        "state": states[12],
-                        "utterance": utterances[12],
-                        "people": "people13",
-                        "goal": goals[12],
-},
-                    {
-                        "domain": domains[13],
-                        "state": states[13],
-                        "utterance": utterances[13],
-                        "people": "people14",
-                        "goal": goals[13],
-},
-                    {
-                        "domain": domains[14],
-                        "state": states[14],
-                        "utterance": utterances[14],
-                        "people": "people15",
-                        "goal": goals[14],
-},
-                    {
-                        "domain": domains[15],
-                        "state": states[15],
-                        "utterance": utterances[15],
-                        "people": "people16",
-                        "goal": goals[15],
-},
-                    {
-                        "domain": domains[16],
-                        "state": states[16],
-                        "utterance": utterances[16],
-                        "people": "people17",
-                        "goal": goals[16],
-},
-                    {
-                        "domain": domains[17],
-                        "state": states[17],
-                        "utterance": utterances[17],
-                        "people": "people18",
-                        "goal": goals[17],
-},
-                    {
-                        "domain": domains[18],
-                        "state": states[18],
-                        "utterance": utterances[18],
-                        "people": "people19",
-                        "goal": goals[18],
-},
-                    {
-                        "domain": domains[19],
-                        "state": states[19],
-                        "utterance": utterances[19],
-                        "people": "people20",
-                        "goal": goals[19],
-},
-                    {
-                        "domain": domains[20],
-                        "state": states[20],
-                        "utterance": utterances[20],
-                        "people": "people21",
-                        "goal": goals[20],
-},
-                    {
-                        "domain": domains[21],
-                        "state": states[21],
-                        "utterance": utterances[21],
-                        "people": "people22",
-                        "goal": goals[21],
-},
-                    {
-                        "domain": domains[22],
-                        "state": states[22],
-                        "utterance": utterances[22],
-                        "people": "people23",
-                        "goal": goals[22],
-},
-                    {
-                        "domain": domains[23],
-                        "state": states[23],
-                        "utterance": utterances[23],
-                        "people": "people24",
-                        "goal": goals[23],
-},
-                    {
-                        "domain": domains[24],
-                        "state": states[24],
-                        "utterance": utterances[24],
-                        "people": "people25",
-                        "goal": goals[24],
-}
+//                    {
+//                        "domain": domains[5],
+//                        "state": states[5],
+//                        "utterance": utterances[5],
+//                        "people": "people6",
+//                        "goal": goals[5],
+//},
+//                    {
+//                        "domain": domains[6],
+//                        "state": states[6],
+//                        "utterance": utterances[6],
+//                        "people": "people7",
+//                        "goal": goals[6],
+//},
+//                    {
+//                        "domain": domains[7],
+//                        "state": states[7],
+//                        "utterance": utterances[7],
+//                        "people": "people8",
+//                        "goal": goals[7],
+//},
+//                    {
+//                        "domain": domains[8],
+//                        "state": states[8],
+//                        "utterance": utterances[8],
+//                        "people": "people9",
+//                        "goal": goals[8],
+//},
+//                    {
+//                        "domain": domains[9],
+//                        "state": states[9],
+//                        "utterance": utterances[9],
+//                        "people": "people10",
+//                        "goal": goals[9],
+//},
+//                    {
+//                        "domain": domains[10],
+//                        "state": states[10],
+//                        "utterance": utterances[10],
+//                        "people": "people11",
+//                        "goal": goals[10],
+//},
+//                    {
+//                        "domain": domains[11],
+//                        "state": states[11],
+//                        "utterance": utterances[11],
+//                        "people": "people12",
+//                        "goal": goals[11],
+//},
+//                    {
+//                        "domain": domains[12],
+//                        "state": states[12],
+//                        "utterance": utterances[12],
+//                        "people": "people13",
+//                        "goal": goals[12],
+//},
+//                    {
+//                        "domain": domains[13],
+//                        "state": states[13],
+//                        "utterance": utterances[13],
+//                        "people": "people14",
+//                        "goal": goals[13],
+//},
+//                    {
+//                        "domain": domains[14],
+//                        "state": states[14],
+//                        "utterance": utterances[14],
+//                        "people": "people15",
+//                        "goal": goals[14],
+//},
+//                    {
+//                        "domain": domains[15],
+//                        "state": states[15],
+//                        "utterance": utterances[15],
+//                        "people": "people16",
+//                        "goal": goals[15],
+//},
+//                    {
+//                        "domain": domains[16],
+//                        "state": states[16],
+//                        "utterance": utterances[16],
+//                        "people": "people17",
+//                        "goal": goals[16],
+//},
+//                    {
+//                        "domain": domains[17],
+//                        "state": states[17],
+//                        "utterance": utterances[17],
+//                        "people": "people18",
+//                        "goal": goals[17],
+//},
+//                    {
+//                        "domain": domains[18],
+//                        "state": states[18],
+//                        "utterance": utterances[18],
+//                        "people": "people19",
+//                        "goal": goals[18],
+//},
+//                    {
+//                        "domain": domains[19],
+//                        "state": states[19],
+//                        "utterance": utterances[19],
+//                        "people": "people20",
+//                        "goal": goals[19],
+//},
+//                    {
+//                        "domain": domains[20],
+//                        "state": states[20],
+//                        "utterance": utterances[20],
+//                        "people": "people21",
+//                        "goal": goals[20],
+//},
+//                    {
+//                        "domain": domains[21],
+//                        "state": states[21],
+//                        "utterance": utterances[21],
+//                        "people": "people22",
+//                        "goal": goals[21],
+//},
+//                    {
+//                        "domain": domains[22],
+//                        "state": states[22],
+//                        "utterance": utterances[22],
+//                        "people": "people23",
+//                        "goal": goals[22],
+//},
+//                    {
+//                        "domain": domains[23],
+//                        "state": states[23],
+//                        "utterance": utterances[23],
+//                        "people": "people24",
+//                        "goal": goals[23],
+//},
+//                    {
+//                        "domain": domains[24],
+//                        "state": states[24],
+//                        "utterance": utterances[24],
+//                        "people": "people25",
+//                        "goal": goals[24],
+//}
     ])
 ]);
 //}
