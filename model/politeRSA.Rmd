@@ -6,190 +6,25 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
+rm(list = ls())
 library(rwebppl)
 library(jsonlite)
 library(dplyr)
 library(tidyr)
 library(langcog)
 library(ggplot2)
+library(shiny)
 knitr::opts_chunk$set(echo = TRUE)
 
 # set path to working dir
 # local.path <- "~/Documents/research/polgrice/"
 local.path <- "~/Documents/Research/polgrice_GIT/"
+setwd("~/Documents/Research/polgrice_GIT/experiment/data_analysis/markdown/")
 ```
 
 In this model, you can change the utterances, experimental condition, etc. and see model predictions.
 
-
-```{r model}
-pRSA <- '
-var states = [1,2,3,4,5]
-var weightBins = [0.1,0.3,0.5,0.7,0.9]
-
-var utterances = ["yes_terrible","yes_bad","yes_okay","yes_good","yes_amazing",
-                  "not_terrible","not_bad","not_okay","not_good","not_amazing",
-                  "nullUtt"]
-
-var cost = {
- "not_amazing": 2,
-  "not_bad": 2,
-  "not_good": 2,
-  "not_okay": 2,
-  "not_terrible": 2,
-  "yes_amazing": 1,
-  "yes_bad": 1,
-  "yes_good": 1,
-  "yes_okay": 1,
-  "yes_terrible": 1,
-  "nullUtt":0
-};
-
-var statePrior = function(){
-  return uniformDraw(states)
-}
-
-var utterancePrior = function(){
-//  return uniformDraw(utterances)
-  return utterances[discrete(map(function(u) {return Math.exp(-cost[u]);}, utterances))];
-}
-
-// model parameters
-var alpha = 1.25
-var speakerOptimality = 10
-
-// measured in Experiment 1
-var literalSemanticsFromR = dataFromR.literalSemantics
-
-var literalSemanticsNoNull = _.object(map(function(lst){
-  [lst.utterance, [lst[1], lst[2], lst[3], lst[4], lst[5]] ]
-}, literalSemanticsFromR))
-
-
-// var literalSemantics = literalSemanticsNoNull
-// to include null utterance
- var literalSemantics = _.extend(literalSemanticsNoNull,
-                            {nullUtt: [1, 1, 1, 1, 1]})
-
-display(literalSemantics)
-
-var meaning = function(words, state){
-    return flip(literalSemantics[words][state-1])
-} 
-
-var listener0 = cache(function(utterance) {
-  Infer({method: "enumerate"}, function(){
-    var state = statePrior()
-    var m = meaning(utterance, state)
-    condition(m)
-    return state
-  })
-})
-
-var speaker1 = cache(function(state, speakerGoals) {
-  Infer({method: "enumerate"}, function(){
-    var utterance = utterancePrior()
-
-    var L0 = listener0(utterance)
-
-    var epistemicUtility = L0.score(state)
-    var socialUtility = expectation(L0, function(s){return alpha*s})
-
-    var eUtility = speakerGoals.honesty*epistemicUtility 
-    var sUtility = speakerGoals.kindness*socialUtility
-
-    var speakerUtility = eUtility+sUtility
-
-    factor(speakerOptimality*speakerUtility)
-
-    return utterance
-  })
-})
-
-var listener1 = function(exptCondition) {
-  Infer({method: "enumerate"}, function(){
-
-    var utterance = exptCondition["utterance"][0]
-    var trueState = exptCondition["state"][0]
-    var knownGoalsWeights = exptCondition.goalWeights
-
-    var state = statePrior()
-
-    // Expt 2. goal weights are known (e.g. "speaker is trying to be nice")
-    var speakerGoals = knownGoalsWeights ?
-      {
-        honesty: knownGoalsWeights["honesty"][0],
-        kindness: knownGoalsWeights["kindness"][0]
-      } : 
-      {
-        honesty: uniformDraw(weightBins),
-        kindness: uniformDraw(weightBins)
-      }
-
-    // Expt 3. trueState is known.
-    condition(trueState ? trueState == state : true)
-
-    var S1 = speaker1(state, speakerGoals)
-
-    observe(S1, utterance)
-
-    return {
-      state: state,
-      goals: speakerGoals
-    }
-  })
-}
-// listener1(dataFromR.exptCond)
-var expectations_nice = {
-  "yes_terrible": listener1(dataFromR.exptCond1),
-  "yes_bad": listener1(dataFromR.exptCond2),
-  "yes_okay": listener1(dataFromR.exptCond3),
-  "yes_good": listener1(dataFromR.exptCond4),
-  "yes_amazing": listener1(dataFromR.exptCond5),
-  "not_terrible": listener1(dataFromR.exptCond16),
-  "not_bad": listener1(dataFromR.exptCond17),
-  "not_okay": listener1(dataFromR.exptCond18),
-  "not_good": listener1(dataFromR.exptCond19),
-  "not_amazing": listener1(dataFromR.exptCond20),
-}
-var expectations_mean = {
-  "yes_terrible": listener1(dataFromR.exptCond6),
-  "yes_bad": listener1(dataFromR.exptCond7),
-  "yes_okay": listener1(dataFromR.exptCond8),
-  "yes_good": listener1(dataFromR.exptCond9),
-  "yes_amazing": listener1(dataFromR.exptCond10),
-  "not_terrible": listener1(dataFromR.exptCond21),
-  "not_bad": listener1(dataFromR.exptCond22),
-  "not_okay": listener1(dataFromR.exptCond23),
-  "not_good": listener1(dataFromR.exptCond24),
-  "not_amazing": listener1(dataFromR.exptCond25),
-  
-}
-var expectations_honest = {
-  "yes_terrible": listener1(dataFromR.exptCond11),
-  "yes_bad": listener1(dataFromR.exptCond12),
-  "yes_okay": listener1(dataFromR.exptCond13),
-  "yes_good": listener1(dataFromR.exptCond14),
-  "yes_amazing": listener1(dataFromR.exptCond15),
-  "not_terrible": listener1(dataFromR.exptCond26),
-  "not_bad": listener1(dataFromR.exptCond27),
-  "not_okay": listener1(dataFromR.exptCond28),
-  "not_good": listener1(dataFromR.exptCond29),
-  "not_amazing": listener1(dataFromR.exptCond30),
-  
-}
-var expectations = {
-  "honest": expectations_honest,
-  "nice": expectations_nice, 
-  "mean": expectations_mean
-}
-expectations
-//print(literalSemanticsNoNull)
-'
-
-```
-
-## Analyze the literal semantics data
+# Analyze the literal semantics data
 
 ```{r literalSemantics}
 d.ls <- read.csv(paste(local.path, "experiment/data_analysis/data/literalSemantics_wNeg.csv", sep=""))
@@ -204,204 +39,126 @@ ls.toWppl <- ls.summary %>%
   spread(state, mean)
 ```
 
-## Run pRSA (passing data from R)
+# PRSA with no negatives
+
+Begin by debugging the original.
 
 ```{r run_pRSA}
-exptCond1 <- list(utterance = "yes_terrible",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.3,
-                        kindness = 0.9))
-exptCond2 <- list(utterance = "yes_bad",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.3,
-                        kindness = 0.9))
-exptCond3 <- list(utterance = "yes_okay",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.3,
-                        kindness = 0.9))
-exptCond4 <- list(utterance = "yes_good",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.3,
-                        kindness = 0.9))
-exptCond5 <- list(utterance = "yes_amazing",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.3,
-                        kindness = 0.9))
-exptCond6 <- list(utterance = "yes_terrible",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.3,
-                        kindness = 0.1))
-exptCond7 <- list(utterance = "yes_bad",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.3,
-                        kindness = 0.1))
-exptCond8 <- list(utterance = "yes_okay",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.3,
-                        kindness = 0.1))
-exptCond9 <- list(utterance = "yes_good",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.3,
-                        kindness = 0.1))
-exptCond10 <- list(utterance = "yes_amazing",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.3,
-                        kindness = 0.1))
-exptCond11 <- list(utterance = "yes_terrible",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.9,
-                        kindness = 0.4))
-exptCond12 <- list(utterance = "yes_bad",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.9,
-                        kindness = 0.1))
-exptCond13 <- list(utterance = "yes_okay",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.9,
-                        kindness = 0.1))
-exptCond14 <- list(utterance = "yes_good",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.9,
-                        kindness = 0.1))
-exptCond15 <- list(utterance = "yes_amazing",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.9,
-                        kindness = 0.1))
-exptCond16 <- list(utterance = "not_terrible",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.3,
-                        kindness = 0.9))
-exptCond17 <- list(utterance = "not_bad",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.3,
-                        kindness = 0.9))
-exptCond18 <- list(utterance = "not_okay",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.3,
-                        kindness = 0.9))
-exptCond19 <- list(utterance = "not_good",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.3,
-                        kindness = 0.9))
-exptCond20 <- list(utterance = "not_amazing",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.3,
-                        kindness = 0.9))
-exptCond21 <- list(utterance = "not_terrible",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.3,
-                        kindness = 0.1))
-exptCond22 <- list(utterance = "not_bad",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.3,
-                        kindness = 0.1))
-exptCond23 <- list(utterance = "not_okay",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.3,
-                        kindness = 0.1))
-exptCond24 <- list(utterance = "not_good",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.3,
-                        kindness = 0.1))
-exptCond25 <- list(utterance = "not_amazing",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.3,
-                        kindness = 0.1))
-exptCond26 <- list(utterance = "not_terrible",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.9,
-                        kindness = 0.4))
-exptCond27 <- list(utterance = "not_bad",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.9,
-                        kindness = 0.1))
-exptCond28 <- list(utterance = "not_okay",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.9,
-                        kindness = 0.1))
-exptCond29 <- list(utterance = "not_good",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.9,
-                        kindness = 0.1))
-exptCond30 <- list(utterance = "not_amazing",
-                 state = FALSE,
-                 goalWeights = 
-                   list(honesty = 0.9,
-                        kindness = 0.1))
+utts <- c("yes_terrible", "yes_bad", "yes_okay", "yes_good","yes_amazing")
+honesty <- c(0.1, 0, .9)
+niceness <- c(0.8, 0, 0)
 
-dataToWppl <- list(
-                   exptCond1 = exptCond1,
-                   exptCond2 = exptCond2,
-                   exptCond3 = exptCond3,
-                   exptCond4 = exptCond4,
-                   exptCond5 = exptCond5,
-                   exptCond6 = exptCond6,
-                   exptCond7 = exptCond7,
-                   exptCond8 = exptCond8,
-                   exptCond9 = exptCond9,
-                   exptCond10 = exptCond10,
-                   exptCond11 = exptCond11,
-                   exptCond12 = exptCond12,
-                   exptCond13 = exptCond13,
-                   exptCond14 = exptCond14,
-                   exptCond15 = exptCond15,
-                   exptCond16 = exptCond16,
-                   exptCond17 = exptCond17,
-                   exptCond18 = exptCond18,
-                   exptCond19 = exptCond19,
-                   exptCond20 = exptCond20,
-                   exptCond21 = exptCond21,
-                   exptCond22 = exptCond22,
-                   exptCond23 = exptCond23,
-                   exptCond24 = exptCond24,
-                   exptCond25 = exptCond25,
-                   exptCond26 = exptCond26,
-                   exptCond27 = exptCond27,
-                   exptCond28 = exptCond28,
-                   exptCond29 = exptCond29,
-                   exptCond30 = exptCond30,
-                   literalSemantics = ls.toWppl)
+shinyApp(
+  ui = fluidPage(
+      sliderInput("nice_honesty", label = "honesty", min = 0, max = 1, value = .5),
+      sliderInput("nice_niceness", label = "niceness", min = 0, max = 1, value = .5),
+      plotOutput("rsaPlot")
+  ),
+  
+  server = function(input, output) {
+    dataToWppl <- list()
+    
+    rsa.output.av <- reactive({
+    i <- 1
+    for (g in 1:3) {
+      for (u in utts) {
+        
+        if (g == 1) {
+          this_cond <- list(utterance = u,
+                            state = FALSE,
+                            goalWeights = 
+                              list(honesty = input$nice_honesty,
+                                   kindness = input$nice_niceness))      
+          
+        } else {
+          this_cond <- list(utterance = u,
+                            state = FALSE,
+                            goalWeights = 
+                              list(honesty = honesty[g],
+                                   kindness = niceness[g]))
+        }
+        dataToWppl[[paste0("exptCond",as.character(i))]] <- this_cond
+        i <- i + 1
+      }
+    }
+    
+    dataToWppl[["literalSemantics"]] <- ls.toWppl
+    
+    rsa.output <- webppl(program_file = "politeRSA_nonegs.js", 
+                         data = dataToWppl,
+                         data_var = "dataFromR")
+    rsa.output <- 
+      data.frame(rsa.output) %>%
+      mutate(state = honest.yes_terrible.support.state) %>%
+      select(-contains("kindness"), -contains("honesty"), -contains("support")) 
+    
+    rsa.output.dist <- rsa.output %>%
+      gather(utterance, prob, honest.yes_terrible.probs:mean.yes_amazing.probs) %>%
+      mutate(utterance = substr(utterance, 1, nchar(utterance)-6)) %>%
+      separate(utterance, into = c("goal", "utterance"), sep = "\\.") %>%
+      separate(utterance, into = c("posneg", "utterance"), sep = "\\_") %>%
+      mutate(utterance = factor(utterance, 
+                                levels = c("terrible", "bad", "okay", 
+                                           "good", "amazing")),
+             goal = factor(goal, levels = c("honest", "nice", "mean")))
+    
+    rsa.output.dist %>% 
+      mutate(prob_mult = prob*state) %>%
+      group_by(goal, posneg, utterance) %>%
+      summarise(state = sum(prob_mult))
+  })
+  
+    output$rsaPlot <- renderPlot({
+      ggplot(data = rsa.output.av(),
+           aes(x=utterance, y=state, col=goal)) +
+      geom_line(aes(group=goal)) +
+      facet_grid(.~posneg)
+    })
+  }
+)
+```
+
+
+# PRSA with negatives
+
+```{r run_pRSA_neg}
+utts <- c("yes_terrible", "yes_bad", "yes_okay", "yes_good","yes_amazing",
+          "not_terrible","not_bad","not_okay","not_good","not_amazing")
+
+# nice mean honest
+honesty <- c(.01, .5, .9)
+niceness <- c(.9, .5, .01)
+
+dataToWppl <- list()
+
+i <- 1
+for (g in 1:3) {
+  for (u in utts) {
+    this_cond <- list(utterance = u,
+                      state = FALSE,
+                      goalWeights = 
+                        list(honesty = honesty[g],
+                             kindness = niceness[g]))
+    dataToWppl[[paste0("exptCond",as.character(i))]] <- this_cond
+    i <- i + 1
+  }
+}
+
+dataToWppl[["literalSemantics"]] <- ls.toWppl
+```
 
 # to see what dataToWppl will look like in WebPPL
 # toJSON(dataToWppl, pretty = T)
 
-rsa.output <- webppl(pRSA, 
-       data = dataToWppl,
-       data_var = "dataFromR")
+```{r}
+rsa.output <- webppl(program_file = "politeRSA.js", 
+                     data = dataToWppl,
+                     data_var = "dataFromR")
 rsa.output <- 
   data.frame(rsa.output) %>%
   mutate(state = honest.yes_terrible.support.state) %>%
   select(-contains("kindness"), -contains("honesty"), -contains("support")) 
-  
+
 rsa.output.dist <- rsa.output %>%
   gather(utterance, prob, honest.yes_terrible.probs:mean.not_amazing.probs) %>%
   mutate(utterance = substr(utterance, 1, nchar(utterance)-6)) %>%
@@ -409,13 +166,13 @@ rsa.output.dist <- rsa.output %>%
   separate(utterance, into = c("posneg", "utterance"), sep = "\\_") %>%
   mutate(utterance = factor(utterance, levels = c("terrible", "bad", "okay", "good", "amazing")),
          goal = factor(goal, levels = c("honest", "nice", "mean")))
-  
+
 rsa.output.av <- rsa.output.dist %>% 
   mutate(prob_mult = prob*state) %>%
   group_by(goal, posneg, utterance) %>%
   summarise(state = sum(prob_mult))
 
-rsa.output.av
+knitr::kable(rsa.output.av)
 ```
 
 ## ggplot
@@ -425,11 +182,11 @@ ggplot(data = rsa.output.av,
        aes(x=utterance, y=state, col=goal)) +
   geom_line(aes(group=goal)) +
   facet_grid(.~posneg)
+```
 
+```{r}
 ggplot(data = rsa.output.dist,
        aes(x=factor(state), y=prob, fill=posneg)) +
   geom_bar(stat="identity", position=position_dodge()) +
   facet_grid(goal~utterance)
-
-
 ```
