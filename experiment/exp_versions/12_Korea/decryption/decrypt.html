@@ -1,0 +1,27 @@
+<html>
+<head>
+  <title>Decryption</title>
+<script src="aes.js"></script> 
+<script src="cipher-core-min.js"></script> 
+    </head>
+<body>
+        <p class="block-text_email">Enter the encrypted email address.</p>
+        
+        <div>
+        <input type="string" name="email" id="email" size="30">
+        </div>
+        
+        <table cellspacing="2" align="center"><tr> <td id="emailfield"></td></tr></table>
+    <br><br>
+
+  <button type="button" 
+          onclick="this.blur(); 
+                   experiment.confirm();
+                                 ">Check</button>
+    
+        <p id="answer"></p>
+
+<script src="decrypt.js"></script>
+
+</body>
+</html>
