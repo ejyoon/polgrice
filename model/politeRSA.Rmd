@@ -17,9 +17,7 @@ library(shiny)
 knitr::opts_chunk$set(echo = TRUE)
 
 # set path to working dir
-# local.path <- "~/Documents/research/polgrice/"
 local.path <- "~/Documents/Research/polgrice_GIT/"
-setwd("~/Documents/Research/polgrice_GIT/experiment/data_analysis/markdown/")
 ```
 
 In this model, you can change the utterances, experimental condition, etc. and see model predictions.
@@ -39,6 +37,34 @@ ls.toWppl <- ls.summary %>%
   spread(state, mean)
 ```
 
+# PRSA with negatives
+
+```{r run_pRSA_neg}
+utts <- c("yes_terrible", "yes_bad", "yes_okay", "yes_good","yes_amazing",
+          "not_terrible","not_bad","not_okay","not_good","not_amazing")
+
+# nice mean honest
+honesty <- c(.01, .5, .9)
+niceness <- c(.9, .5, .01)
+
+dataToWppl <- list()
+
+i <- 1
+for (g in 1:3) {
+  for (u in utts) {
+    this_cond <- list(utterance = u,
+                      state = FALSE,
+                      goalWeights = 
+                        list(honesty = honesty[g],
+                             kindness = niceness[g]))
+    dataToWppl[[paste0("exptCond",as.character(i))]] <- this_cond
+    i <- i + 1
+  }
+}
+
+dataToWppl[["literalSemantics"]] <- ls.toWppl
+```
+
 # PRSA with no negatives
 
 Begin by debugging the original.
@@ -50,8 +76,12 @@ niceness <- c(0.8, 0, 0)
 
 shinyApp(
   ui = fluidPage(
-      sliderInput("nice_honesty", label = "honesty", min = 0, max = 1, value = .5),
-      sliderInput("nice_niceness", label = "niceness", min = 0, max = 1, value = .5),
+      sliderInput("nice_honesty", label = "Nice speaker honesty", min = 0, max = 1, value = .01),
+      sliderInput("nice_niceness", label = "Nice speaker niceness", min = 0, max = 1, value = .9),
+      sliderInput("mean_honesty", label = "Mean speaker honesty", min = 0, max = 1, value = .5),
+      sliderInput("mean_niceness", label = "Mean speaker niceness", min = 0, max = 1, value = .5),
+      sliderInput("honest_honesty", label = "Honest speaker honesty", min = 0, max = 1, value = .9),
+      sliderInput("honest_niceness", label = "Honest speaker niceness", min = 0, max = 1, value = .01),
       plotOutput("rsaPlot")
   ),
   
@@ -84,7 +114,7 @@ shinyApp(
     
     dataToWppl[["literalSemantics"]] <- ls.toWppl
     
-    rsa.output <- webppl(program_file = "politeRSA_nonegs.js", 
+    rsa.output <- webppl(program_file = paste(local.path, "model/politeRSA_nonegs.js", sep=""),
                          data = dataToWppl,
                          data_var = "dataFromR")
     rsa.output <- 
@@ -118,42 +148,11 @@ shinyApp(
 )
 ```
 
-
-# PRSA with negatives
-
-```{r run_pRSA_neg}
-utts <- c("yes_terrible", "yes_bad", "yes_okay", "yes_good","yes_amazing",
-          "not_terrible","not_bad","not_okay","not_good","not_amazing")
-
-# nice mean honest
-honesty <- c(.01, .5, .9)
-niceness <- c(.9, .5, .01)
-
-dataToWppl <- list()
-
-i <- 1
-for (g in 1:3) {
-  for (u in utts) {
-    this_cond <- list(utterance = u,
-                      state = FALSE,
-                      goalWeights = 
-                        list(honesty = honesty[g],
-                             kindness = niceness[g]))
-    dataToWppl[[paste0("exptCond",as.character(i))]] <- this_cond
-    i <- i + 1
-  }
-}
-
-dataToWppl[["literalSemantics"]] <- ls.toWppl
-```
-
-# to see what dataToWppl will look like in WebPPL
-# toJSON(dataToWppl, pretty = T)
-
 ```{r}
-rsa.output <- webppl(program_file = "politeRSA.js", 
+rsa.output <- webppl(program_file = paste(local.path, "model/politeRSA.js", sep=""),
                      data = dataToWppl,
                      data_var = "dataFromR")
+
 rsa.output <- 
   data.frame(rsa.output) %>%
   mutate(state = honest.yes_terrible.support.state) %>%
