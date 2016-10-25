@@ -1,15 +1,15 @@
 var states = [1,2,3,4,5];
 var weightBins = [0.1,0.3,0.5,0.7,0.9];
 
-var utterances = ["yes_terrible","yes_bad","yes_okay","yes_good","yes_amazing"];
+var utterances = ["yes_terrible","yes_bad","yes_okay","yes_good","yes_amazing", "nullUtt"];
 
 var cost = {
-  "yes_amazing": 1,
-  "yes_bad": 1,
-  "yes_good": 1,
-  "yes_okay": 1,
-  "yes_terrible": 1,
-  // "nullUtt":0
+  "yes_amazing": 100,
+  "yes_bad": 100,
+  "yes_good": 100,
+  "yes_okay": 100,
+  "yes_terrible": 100,
+  "nullUtt":0
 };
 
 var statePrior = function(){
@@ -27,15 +27,16 @@ var speakerOptimality = 10;
 
 // measured in Experiment 1
 var literalSemanticsFromR = dataFromR.literalSemantics;
+
 var literalSemanticsNoNull = _.object(map(function(lst){
   [lst.utterance, [lst[1], lst[2], lst[3], lst[4], lst[5]] ];
 }, literalSemanticsFromR));
 
 
-var literalSemantics = literalSemanticsNoNull
+//var literalSemantics = literalSemanticsNoNull
 // to include null utterance
-// var literalSemantics = _.extend(literalSemanticsNoNull,
-//                                                               {nullUtt: [1, 1, 1, 1, 1]})
+ var literalSemantics = _.extend(literalSemanticsNoNull,
+                                                               {nullUtt: [1, 1, 1, 1, 1]})
 
 display(literalSemantics);
 

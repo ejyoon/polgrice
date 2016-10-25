@@ -42,7 +42,101 @@ ls.toWppl <- ls.summary %>%
 Begin by debugging the original.
 
 ```{r run_pRSA}
-utts <- c("yes_terrible", "yes_bad", "yes_okay", "yes_good","yes_amazing")
+honesty <- c(0.1, 0, 0.9)
+niceness <- c(0.8, 0, 0)
+utts_woNull <- c("yes_terrible", "yes_bad", "yes_okay", "yes_good","yes_amazing")
+utts_wNull <- c("yes_terrible", "yes_bad", "yes_okay", "yes_good","yes_amazing", "nullUtt")
+
+shinyApp(
+  ui = fluidPage(
+    title = "Goal Weights",
+    fluidRow(
+      column(4,
+             h4("Nice speaker goal weights"),
+      sliderInput("nice_honesty", label = "honesty", min = 0, max = 1, value = honesty[1]),
+      sliderInput("nice_niceness", label = "niceness", min = 0, max = 1, value = niceness[1]),
+      selectInput("utterances", "Utterances",
+             choices = c("Spoken utterances", "Spoken utterances + null"))
+      )),
+      plotOutput("rsaPlot")
+  ),
+  
+  server = function(input, output) {
+    dataToWppl <- list()
+    
+    rsa.output.av <- reactive({
+
+    # utterance set
+    utts <- ifelse(input$utterances == "Spoken utterances", utts_woNull, utts_wNull)
+
+          i <- 1
+    for (g in 1:3) {
+      for (u in utts_woNull) {
+        
+        if (g == 1) {
+          this_cond <- list(utterance = u,
+                            state = FALSE,
+                            goalWeights = 
+                              list(honesty = input$nice_honesty,
+                                   kindness = input$nice_niceness))      
+          
+        } else {
+          this_cond <- list(utterance = u,
+                            state = FALSE,
+                            goalWeights = 
+                              list(honesty = honesty[g],
+                                   kindness = niceness[g]))
+        }
+        dataToWppl[[paste0("exptCond",as.character(i))]] <- this_cond
+        i <- i + 1
+      }
+    }
+    
+    
+    dataToWppl[["literalSemantics"]] <- ls.toWppl
+    
+    rsa.output <- webppl(
+      program_file = ifelse(input$utterances == "Spoken utterances",
+             paste(local.path, "model/politeRSA_nonegs.js", sep=""), 
+             paste(local.path, "model/politeRSA_nonegs_wNull.js", sep="")),
+                         data = dataToWppl,
+                         data_var = "dataFromR")
+    rsa.output <- 
+      data.frame(rsa.output) %>%
+      mutate(state = honest.yes_terrible.support.state) %>%
+      select(-contains("kindness"), -contains("honesty"), -contains("support")) 
+    
+    rsa.output.dist <- rsa.output %>%
+      gather(utterance, prob, honest.yes_terrible.probs:mean.yes_amazing.probs) %>%
+      mutate(utterance = substr(utterance, 1, nchar(utterance)-6)) %>%
+      separate(utterance, into = c("goal", "utterance"), sep = "\\.") %>%
+      separate(utterance, into = c("posneg", "utterance"), sep = "\\_") %>%
+      mutate(utterance = factor(utterance, 
+                                levels = c("terrible", "bad", "okay", 
+                                           "good", "amazing")),
+             goal = factor(goal, levels = c("honest", "nice", "mean")))
+    
+    rsa.output.dist %>% 
+      mutate(prob_mult = prob*state) %>%
+      group_by(goal, posneg, utterance) %>%
+      summarise(state = sum(prob_mult))
+  })
+  
+    output$rsaPlot <- renderPlot({
+      ggplot(data = rsa.output.av(),
+           aes(x=utterance, y=state, col=goal)) +
+      geom_line(aes(group=goal)) +
+      facet_grid(.~posneg)
+    })
+  }
+)
+```
+
+# PRSA with negatives
+
+```{r run_pRSA}
+utts <- c("yes_terrible", "yes_bad", "yes_okay", "yes_good","yes_amazing",
+          "not_terrible","not_bad","not_okay","not_good","not_amazing")
 honesty <- c(0.1, 0, 0.9)
 niceness <- c(0.8, 0, 0)
 
@@ -86,7 +180,7 @@ shinyApp(
     
     dataToWppl[["literalSemantics"]] <- ls.toWppl
     
-    rsa.output <- webppl(program_file = paste(local.path, "model/politeRSA_nonegs.js", sep=""),
+    rsa.output <- webppl(program_file = paste(local.path, "model/politeRSA.js", sep=""),
                          data = dataToWppl,
                          data_var = "dataFromR")
     rsa.output <- 
@@ -118,6 +212,8 @@ shinyApp(
     })
   }
 )
+
+
 ```
 
 # PRSA with negatives
