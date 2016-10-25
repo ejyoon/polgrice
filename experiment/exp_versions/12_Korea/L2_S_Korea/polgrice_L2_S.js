@@ -787,7 +787,9 @@ var experiment = {
     confirm: function () {
 
             if (document.getElementById("email").value) {
-            experiment.data.email.push(document.getElementById("email").value);
+//            experiment.data.email.push(document.getElementById("email").value);
+            var encrypted = CryptoJS.AES.encrypt(document.getElementById("email").value, "ejyoon");
+            experiment.data.email.push(encrypted);                
             experiment.data.subid.push(Math.floor((Math.random() * 1000000) + 1));
             experiment.data.time.push(currentdate.getDate() + "-" + month + " " + 
                 currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds());
@@ -832,25 +834,6 @@ var experiment = {
       practiceComplete++;    
         
     }    },
-
-    confirm: function () {
-
-            if (document.getElementById("email").value) {
-            experiment.data.email.push(document.getElementById("email").value);
-            experiment.data.subid.push(Math.floor((Math.random() * 1000000) + 1));
-            experiment.data.time.push(currentdate.getDate() + "-" + month + " " + 
-                currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds());
-                
-            
-            experiment.instructions();
-        } else {
-			$("#emailfield").html('<font color="red">Please answer this question.</font>');  
-        }
-    },
-    
-  instructions:function() {
-    showSlide('instructions2')
-  },
     
 
   next: function() {
