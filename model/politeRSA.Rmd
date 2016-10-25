@@ -46,6 +46,8 @@ honesty <- c(0.1, 0, 0.9)
 niceness <- c(0.8, 0, 0)
 utts_woNull <- c("yes_terrible", "yes_bad", "yes_okay", "yes_good","yes_amazing")
 utts_wNull <- c("yes_terrible", "yes_bad", "yes_okay", "yes_good","yes_amazing", "nullUtt")
+utts_wNeg <- c("yes_terrible", "yes_bad", "yes_okay", "yes_good","yes_amazing",
+          "not_terrible","not_bad","not_okay","not_good","not_amazing")
 
 shinyApp(
   ui = fluidPage(
@@ -56,27 +58,29 @@ shinyApp(
       sliderInput("nice_honesty", label = "honesty", min = 0, max = 1, value = honesty[1]),
       sliderInput("nice_niceness", label = "niceness", min = 0, max = 1, value = niceness[1]),
       selectInput("utterances", "Utterances",
-             choices = c("Spoken utterances", "Spoken utterances + null"))
+             choices = c("Original", "Original + null", "Original + negation"))
       )),
       plotOutput("rsaPlot")
   ),
   
   server = function(input, output) {
-    dataToWppl <- list()
+    dataToWpplOrig <- list()
+    dataToWpplNeg <- list()
     
     rsa.output.av <- reactive({
 
     # utterance set
-    utts <- ifelse(input$utterances == "Spoken utterances", utts_woNull, utts_wNull)
-
-          i <- 1
+    utts <- ifelse(input$utterances == "Original", utts_woNull,
+                   ifelse(input$utterances == "Original + negation", utts_wNeg,
+                          utts_wNull))
+    i <- 1
     for (g in 1:3) {
       for (u in utts_woNull) {
         
         if (g == 1) {
           this_cond <- list(utterance = u,
                             state = FALSE,
-                            goalWeights = 
+                            goalWeights =
                               list(honesty = input$nice_honesty,
                                    kindness = input$nice_niceness))      
           
@@ -87,18 +91,47 @@ shinyApp(
                               list(honesty = honesty[g],
                                    kindness = niceness[g]))
         }
-        dataToWppl[[paste0("exptCond",as.character(i))]] <- this_cond
+        dataToWpplOrig[[paste0("exptCond",as.character(i))]] <- this_cond
+        i <- i + 1
+      }
+    }
+
+    i <- 1
+    for (g in 1:3) {
+      for (u in utts_wNeg) {
+        
+        if (g == 1) {
+          this_cond <- list(utterance = u,
+                            state = FALSE,
+                            goalWeights =
+                              list(honesty = input$nice_honesty,
+                                   kindness = input$nice_niceness))      
+          
+        } else {
+          this_cond <- list(utterance = u,
+                            state = FALSE,
+                            goalWeights = 
+                              list(honesty = honesty[g],
+                                   kindness = niceness[g]))
+        }
+        dataToWpplNeg[[paste0("exptCond",as.character(i))]] <- this_cond
         i <- i + 1
       }
     }
     
-    
+    if (input$utterances == "Original + negation") {
+      dataToWppl <- dataToWpplNeg
+    } else {
+        dataToWppl <- dataToWpplOrig
+        }
     dataToWppl[["literalSemantics"]] <- ls.toWppl
     
     rsa.output <- webppl(
-      program_file = ifelse(input$utterances == "Spoken utterances",
+      program_file = ifelse(input$utterances == "Original",
              paste(local.path, "model/politeRSA_nonegs.js", sep=""), 
-             paste(local.path, "model/politeRSA_nonegs_wNull.js", sep="")),
+             ifelse(input$utterances == "Original + null", 
+                    paste(local.path, "model/politeRSA_nonegs_wNull.js", sep=""),
+                    paste(local.path, "model/politeRSA.js", sep=""))),
                          data = dataToWppl,
                          data_var = "dataFromR")
     rsa.output <- 
@@ -138,7 +171,7 @@ shinyApp(
 utts <- c("yes_terrible", "yes_bad", "yes_okay", "yes_good","yes_amazing",
           "not_terrible","not_bad","not_okay","not_good","not_amazing")
 honesty <- c(0.1, 0, 0.9)
-niceness <- c(0.8, 0, 0)
+niceness <- c(0.8, 0, 0.1)
 
 shinyApp(
   ui = fluidPage(
