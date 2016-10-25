@@ -45,8 +45,8 @@ Begin by debugging the original.
 honesty <- c(0.1, 0, 0.9)
 niceness <- c(0.8, 0, 0)
 utts_woNull <- c("yes_terrible", "yes_bad", "yes_okay", "yes_good","yes_amazing")
-utts_wNull <- c("yes_terrible", "yes_bad", "yes_okay", "yes_good","yes_amazing", "nullUtt")
-utts_wNeg <- c("yes_terrible", "yes_bad", "yes_okay", "yes_good","yes_amazing",
+utts_wNull <- c(utts_woNull, "nullUtt")
+utts_wNeg <- c(utts_woNull,
           "not_terrible","not_bad","not_okay","not_good","not_amazing")
 
 shinyApp(
@@ -139,8 +139,15 @@ shinyApp(
       mutate(state = honest.yes_terrible.support.state) %>%
       select(-contains("kindness"), -contains("honesty"), -contains("support")) 
     
+    if (input$utterances == "Original + negation") {
     rsa.output.dist <- rsa.output %>%
-      gather(utterance, prob, honest.yes_terrible.probs:mean.yes_amazing.probs) %>%
+      gather(utterance, prob, honest.yes_terrible.probs:mean.not_amazing.probs)    
+    } else {
+    rsa.output.dist <- rsa.output %>%
+      gather(utterance, prob, honest.yes_terrible.probs:mean.yes_amazing.probs)    
+    }
+rsa.output.dist <- rsa.output.dist %>%
+      # gather(utterance, prob, honest.yes_terrible.probs:mean.yes_amazing.probs) %>%
       mutate(utterance = substr(utterance, 1, nchar(utterance)-6)) %>%
       separate(utterance, into = c("goal", "utterance"), sep = "\\.") %>%
       separate(utterance, into = c("posneg", "utterance"), sep = "\\_") %>%
@@ -222,7 +229,7 @@ shinyApp(
       select(-contains("kindness"), -contains("honesty"), -contains("support")) 
     
     rsa.output.dist <- rsa.output %>%
-      gather(utterance, prob, honest.yes_terrible.probs:mean.yes_amazing.probs) %>%
+      gather(utterance, prob, honest.yes_terrible.probs:mean.not_amazing.probs) %>%
       mutate(utterance = substr(utterance, 1, nchar(utterance)-6)) %>%
       separate(utterance, into = c("goal", "utterance"), sep = "\\.") %>%
       separate(utterance, into = c("posneg", "utterance"), sep = "\\_") %>%
@@ -256,8 +263,8 @@ utts <- c("yes_terrible", "yes_bad", "yes_okay", "yes_good","yes_amazing",
           "not_terrible","not_bad","not_okay","not_good","not_amazing")
 
 # nice mean honest
-honesty <- c(.01, .5, .9)
-niceness <- c(.9, .5, .01)
+honesty <- c(.01, 0, .9)
+niceness <- c(.9, 0, .01)
 
 dataToWppl <- list()
 
