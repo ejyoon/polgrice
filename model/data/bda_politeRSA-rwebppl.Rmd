@@ -1,0 +1,78 @@
+---
+title: "BDA of Polite RSA (RWebPPL)"
+author: "M. H. Tessler"
+date: "November 3, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(rwebppl)
+library(jsonlite)
+knitr::opts_chunk$set(echo = TRUE)
+library(coda)
+estimate_mode <- function(s) {
+  d <- density(s)
+  return(d$x[which.max(d$y)])
+}
+HPDhi<- function(s){
+  m <- HPDinterval(mcmc(s))
+  return(m["var1","upper"])
+}
+HPDlo<- function(s){
+  m <- HPDinterval(mcmc(s))
+  return(m["var1","lower"])
+}
+options("scipen"=10)   
+
+# set path to working dir
+local.path <- "~/Documents/research/polgrice/"
+```
+
+# Literal semantics data
+
+```{r}
+d.lit <- read.csv(paste(local.path,
+                      "experiment/data_analysis/data/literalSemantics_sites.csv",
+                      sep = ""))
+```
+
+## Model
+
+```{r}
+literalSemanticsModel <- '
+var n = data.n[0]
+var k = data.k[0]
+var literalSemantics = function(){
+	var theta = uniform(0,1)
+  observe(Binomial({n: n, p: theta}, k))
+  return {theta: theta}
+}
+'
+```
+
+```{r}
+d.lit.summary <- d.lit %>%
+  group_by(site, state, utterance) %>%
+  summarize(k = sum(judgment),
+            n = n())
+```
+
+
+```{r}
+sites <- levels(d.lit.summary$site)
+states <- levels(factor(d.lit.summary$state))
+utterances <- levels(d.lit.summary$utterance)
+
+for (si in sites){
+  d.site <- filter(d.lit, site == site)
+  for (st in states){
+    for (utt in utterances){
+      d.lit.pass <- d.lit.summary %>% 
+        filter((site == site) && 
+                 (state == to.n(state)) && 
+                 (utterance == utterance))
+    }
+  }
+}
+
+```
