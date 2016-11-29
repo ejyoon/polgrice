@@ -2,8 +2,8 @@ var filename = "EJY_polgrice_goals_v4"
 var condCounts = "1,5;2,5;" //Example: "1,20;2,20;3,20"
 
 // ---------------- HELPER ------------------
-var NUM_SLIDERS = 2;
-var NUM_SLIDERS1 = 2;
+var NUM_SLIDERS = 1;
+var NUM_SLIDERS1 = 1;
 var NUM_SLIDERS2 = 2;
 
 function showSlide(id) {
@@ -128,7 +128,7 @@ function getRadioCheckedValue(formNum, radio_name)
 
 // CONDITION ASSIGNMENT
 //var cond = random(3)+1;
-var cond = 3;
+var cond = 1;
 var expt = "NegImp_v1";
 
 if (cond == 1) {
@@ -160,49 +160,43 @@ var domains1 =
     shuffle(["poem", "cake", "cookie", "presentation", "song", "film", "solo", "monologue", "dance", "painting", "app", "review", "recital"]);
 var domains = domains1.concat(domains1, domains1, domains1)
 
+var goals = 
+    ["nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean"];
+
 var statecond = random(5) + 1;
-if (statecond == 1) {
-    var states1 = 
-        ["heart1", "heart3", "heart2", "heart5", "heart4"];
-    var states2 = 
-        ["heart3", "heart2", "heart5", "heart4", "heart1"];
-    var states = states1.concat(states2);
-} else if (statecond == 2) {
-    var states1 = 
-        ["heart3", "heart2", "heart5", "heart4", "heart1"];
-    var states2 = 
-        ["heart2", "heart5", "heart4", "heart1", "heart3"];
-    var states = states1.concat(states2);
-} else if (statecond == 3) {
-    var states1 = 
-        ["heart2", "heart5", "heart4", "heart1", "heart3"];
-    var states2 = 
-        ["heart5", "heart4", "heart1", "heart3", "heart2"];
-    var states = states1.concat(states2);    
-} else if (statecond == 4) {
-    var states1 = 
-        ["heart5", "heart4", "heart1", "heart3", "heart2"];
-    var states2 = 
-        ["heart4", "heart1", "heart3", "heart2", "heart5"];
-    var states = states1.concat(states2);    
-} else if (statecond == 5) {
-    var states1 = 
-        ["heart4", "heart1", "heart3", "heart2", "heart5"];
-    var states2 = 
-        ["heart1", "heart3", "heart2", "heart5", "heart4"];
-    var states = states1.concat(states2);    
-}
+//if (statecond == 5) {
+//    var statecond = 5;
+//} else {
+//    var statecond = random(5) + 1;
+//}
+
+var states1 = 
+    ["terrible", "bad", "okay", "good", "amazing"];
+var states2 = 
+    ["bad", "okay", "good", "amazing", "terrible"];
+var states3 = 
+    ["okay", "good", "amazing", "terrible", "bad"];
+var states4 = 
+    ["good", "amazing", "terrible", "bad", "okay"];
+var states5 = 
+    ["amazing", "terrible", "bad", "okay", "good"];
+var states = states1.concat(states2, states3, states4, states5)
+
+
 
 var utterances1 = 
-    ["yes_terrible", "not_bad", "yes_okay", "not_good", "yes_amazing"];
+    ["terrible", "bad", "okay", "good", "amazing"];
 var utterances2 = 
-    ["not_terrible", "yes_bad", "not_okay", "yes_good", "not_amazing"];
-var utterances = utterances1.concat(utterances2)
+    ["terrible", "bad", "okay", "good", "amazing"];
+var utterances3 = 
+    ["terrible", "bad", "okay", "good", "amazing"];
+var utterances = utterances1.concat(utterances2, utterances3)
 
 var drawnum1 = shuffle([0, 1, 2, 3, 4]);
 var drawnum2 = shuffle([5, 6, 7, 8, 9]);
-var drawnumdraw = shuffle([drawnum1, drawnum2]);
-var drawnum = drawnumdraw[0].concat(drawnumdraw[1]);
+var drawnum3 = shuffle([10, 11, 12, 13, 14]);
+var drawnumdraw = shuffle([drawnum1, drawnum2, drawnum3]);
+var drawnum = drawnumdraw[0].concat(drawnumdraw[1], drawnumdraw[2]);
 
     var allConditions = 
 //shuffle(
@@ -214,51 +208,91 @@ var drawnum = drawnumdraw[0].concat(drawnumdraw[1]);
  "state": states[0],
  "utterance": utterances[0],
  "people": "people1",
+ "goal": goals[0],
 },
 {"domain": domains[1],
  "state": states[1],
  "utterance": utterances[1],
  "people": "people2",
+ "goal": goals[1],
 },
 {"domain": domains[2],
  "state": states[2],
  "utterance": utterances[2],
  "people": "people3",
+ "goal": goals[2],
 },
 {"domain": domains[3],
  "state": states[3],
  "utterance": utterances[3],
  "people": "people4",
+ "goal": goals[3],
 },
 {"domain": domains[4],
  "state": states[4],
  "utterance": utterances[4],
  "people": "people5",
+ "goal": goals[4],
 },
 {"domain": domains[5],
  "state": states[5],
  "utterance": utterances[5],
  "people": "people6",
+ "goal": goals[5],
 },
 {"domain": domains[6],
  "state": states[6],
  "utterance": utterances[6],
  "people": "people7",
+ "goal": goals[6],
 },
 {"domain": domains[7],
  "state": states[7],
  "utterance": utterances[7],
  "people": "people8",
+ "goal": goals[7],
 },
 {"domain": domains[8],
  "state": states[8],
  "utterance": utterances[8],
  "people": "people9",
+ "goal": goals[8],
 },
 {"domain": domains[9],
  "state": states[9],
  "utterance": utterances[9],
  "people": "people10",
+ "goal": goals[9],
+},
+{"domain": domains[10],
+ "state": states[10],
+ "utterance": utterances[10],
+ "people": "people11",
+ "goal": goals[10],
+},
+{"domain": domains[11],
+ "state": states[11],
+ "utterance": utterances[11],
+ "people": "people12",
+ "goal": goals[11],
+},
+{"domain": domains[12],
+ "state": states[12],
+ "utterance": utterances[12],
+ "people": "people13",
+ "goal": goals[12],
+},
+{"domain": domains[13],
+ "state": states[13],
+ "utterance": utterances[13],
+ "people": "people14",
+ "goal": goals[13],
+},
+{"domain": domains[14],
+ "state": states[14],
+ "utterance": utterances[14],
+ "people": "people15",
+ "goal": goals[14],
 },
     ]
 //        )
@@ -266,12 +300,11 @@ var drawnum = drawnumdraw[0].concat(drawnumdraw[1]);
 //    ); 
 //}
 
-var speakers = shuffle([["John","Bob","Ken"], ["Hailey", "Mika","Sherry"], ["Karen", "Jenny","Pam"], ["Kyle", "James","Derek"], ["Sean", "Chris","Harry"],
-                    ["Lucy", "Sarah","Joanne"], ["Bill", "Tom","Larry"], ["Heather", "Grace","Christine"], ["Jake", "Kevin","Mike"], ["Ann", "Diana","Gina"],
-                    ["George", "Henry","Scott"], ["Nathan", "Patrick","Tyson"], ["Wendy", "Emma","Shirley"], ["Stephanie", "Barbara","Caroline"], ["Oliver", "Robert","Chris"],
-                    ["Matt", "Landon","Bobby"], ["Steven", "Zack","Wayne"], ["Fiona", "Yvonne","Helen"], ["Rebecca", "Cheryl","Tracy"], ["Victoria", "Jasmine","Naomi"],
-                    ["Albert", "Frank","Xavier"], ["Greg", "Colin","Benoit"], ["Ed", "Peter","Lawrence"], ["Molly", "Kara","Sophia"], ["Justine", "Kelly","Irene"]]);
-
+speakers = shuffle([["John","Bob",], ["Hailey", "Mika"], ["Karen", "Jenny"], ["Kyle", "James"], ["Sean", "Chris"],
+                    ["Lucy", "Sarah"], ["Bill", "Tom"], ["Heather", "Grace"], ["Jake", "Kevin"], ["Ann", "Diana"],
+                    ["George", "Henry"], ["Nathan", "Patrick"], ["Wendy", "Emma"], ["Stephanie", "Barbara"], ["Oliver", "Robert"],
+                    ["Matt", "Larry"], ["Steven", "Zack"], ["Fiona", "Yvonne"], ["Rebecca", "Cheryl"], ["Victoria", "Jasmine"],
+                    ["Albert", "Frank"], ["Greg", "Colin"], ["Ed", "Peter"], ["Molly", "Kara"], ["Justine", "Kelly"]]);
 speakers1 = shuffle(speakers[0]);
 speakers2 = shuffle(speakers[1]);
 speakers3 = shuffle(speakers[2]);
@@ -282,38 +315,39 @@ speakers7 = shuffle(speakers[6]);
 speakers8 = shuffle(speakers[7]);
 speakers9 = shuffle(speakers[8]);
 speakers10 = shuffle(speakers[9]);
+speakers11 = shuffle(speakers[10]);
+speakers12 = shuffle(speakers[11]);
+speakers13 = shuffle(speakers[12]);
+speakers14 = shuffle(speakers[13]);
+speakers15 = shuffle(speakers[14]);
+speakers16 = shuffle(speakers[15]);
+speakers17 = shuffle(speakers[16]);
+speakers18 = shuffle(speakers[17]);
+speakers19 = shuffle(speakers[18]);
+speakers20 = shuffle(speakers[19]);
+speakers21 = shuffle(speakers[20]);
+speakers22 = shuffle(speakers[21]);
+speakers23 = shuffle(speakers[22]);
+speakers24 = shuffle(speakers[23]);
+speakers25 = shuffle(speakers[24]);
+
 
 var sents = {
     utterances: {
-        yes_terrible: {
-            sent_utterance: " <b>\"It was terrible,\"</b> SP said."
+        terrible: {
+            sent_utterance: " <b>\"Your BB was terrible,\"</b> SP said to LS."
         },        
-        yes_bad: {
-            sent_utterance: " <b>\"It was bad,\"</b> SP said."
+        bad: {
+            sent_utterance: " <b>\"Your BB was bad,\"</b> SP said to LS."
         },        
-        yes_okay: {
-            sent_utterance: " <b>\"It was okay,\"</b> SP said."
-        },        
-        yes_good: {
-            sent_utterance: " <b>\"It was good,\"</b> SP said."
-        },        
-        yes_amazing: {
-            sent_utterance: " <b>\"It was amazing,\"</b> SP said."
+        okay: {
+            sent_utterance: " <b>\"Your BB was okay,\"</b> SP said to LS."
         },
-        not_terrible: {
-            sent_utterance: " <b>\"It wasn't terrible,\"</b> SP said."
-        },        
-        not_bad: {
-            sent_utterance: " <b>\"It wasn't bad,\"</b> SP said."
-        },        
-        not_okay: {
-            sent_utterance: " <b>\"It wasn't okay,\"</b> SP said."
-        },        
-        not_good: {
-            sent_utterance: " <b>\"It wasn't good,\"</b> SP said."
-        },        
-        not_amazing: {
-            sent_utterance: " <b>\"It wasn't amazing,\"</b> SP said."
+        good: {
+            sent_utterance: " <b>\"Your BB was good,\"</b> SP said to LS."
+        },
+        amazing: {
+            sent_utterance: " <b>\"Your BB was amazing,\"</b> SP said to LS."
         },
     },
     domains: {
@@ -435,6 +469,17 @@ var sents = {
             BB: "recital performance",
 	},
     },
+    goals: {
+        nice: {
+            goal: " <b>SP wanted to be nice: "
+        },
+        honest: {
+            goal: " <b>SP wanted to be honest: "            
+        },
+        mean: {
+            goal: " <b>SP wanted to be mean: "            
+        }  
+    },
     states: {
         heart1: {
             state: "20"
@@ -456,59 +501,111 @@ var sents = {
         people1: {
             SP: speakers1[0],
             LS: speakers1[1],
-            TP: speakers1[2],
         },
         people2: {
             SP: speakers2[0],
             LS: speakers2[1],
-            TP: speakers2[2],
         },
         people3: {
             SP: speakers3[0],
             LS: speakers3[1],
-            TP: speakers3[2],
         },
         people4: {
             SP: speakers4[0],
             LS: speakers4[1],
-            TP: speakers4[2],
-       },
+        },
         people5: {
             SP: speakers5[0],
             LS: speakers5[1],
-            TP: speakers5[2],
         },
         people6: {
             SP: speakers6[0],
             LS: speakers6[1],
-            TP: speakers6[2],
         },
         people7: {
             SP: speakers7[0],
             LS: speakers7[1],
-            TP: speakers7[2],
         },
         people8: {
             SP: speakers8[0],
             LS: speakers8[1],
-            TP: speakers8[2],
         },
         people9: {
             SP: speakers9[0],
             LS: speakers9[1],
-            TP: speakers9[2],
         },
         people10: {
             SP: speakers10[0],
             LS: speakers10[1],
-            TP: speakers10[2],
+        },
+        people11: {
+            SP: speakers11[0],
+            LS: speakers11[1],
+        },
+        people12: {
+            SP: speakers12[0],
+            LS: speakers12[1],
+        },
+        people13: {
+            SP: speakers13[0],
+            LS: speakers13[1],
+        },
+        people14: {
+            SP: speakers14[0],
+            LS: speakers14[1],
+        },
+        people15: {
+            SP: speakers15[0],
+            LS: speakers15[1],
+        },
+        people16: {
+            SP: speakers16[0],
+            LS: speakers16[1],
+        },
+        people17: {
+            SP: speakers17[0],
+            LS: speakers17[1],
+        },
+        people18: {
+            SP: speakers18[0],
+            LS: speakers18[1],
+        },
+        people19: {
+            SP: speakers19[0],
+            LS: speakers19[1],
+        },
+        people20: {
+            SP: speakers20[0],
+            LS: speakers20[1],
+        },
+        people21: {
+            SP: speakers21[0],
+            LS: speakers21[1],
+        },
+        people22: {
+            SP: speakers22[0],
+            LS: speakers22[1],
+        },
+        people23: {
+            SP: speakers23[0],
+            LS: speakers23[1],
+        },
+        people24: {
+            SP: speakers24[0],
+            LS: speakers24[1],
+        },
+        people25: {
+            SP: speakers25[0],
+            LS: speakers25[1],
         },
     }
+
 };
 
-function doSentSubs (sents, polite, domain, utterance, people)
+function doSentSubs (sents, polite, domain, utterance, people, goal)
 {
     utterance = sents["utterances"][utterance]["sent_utterance"];
+    goal = sents["goals"][goal]["goal"]
 //    precontext = sents["domains"][domain]["sent_precontext"];
     if (threat == "threat") {
         precontext = sents["domains"][domain]["sent_precontext"];
@@ -539,9 +636,9 @@ function doSentSubs (sents, polite, domain, utterance, people)
 
     }
 //    context = sents["domains"][domain]["sent_context"];
-    state = sents["states"][state]["state"]
+//    state = sents["states"][state]["state"]
     
-    question = "Based on what SP said, how likely do you think that <b>SP's goal</b> was to be:";
+    question = "Based on what SP said, how likely do you think SP was trying to be ironic:";
     
 //    if (prediction[0] == "ask") {
     if (threat == "threat") {
@@ -567,7 +664,7 @@ function doSentSubs (sents, polite, domain, utterance, people)
     LS = sents["people"][people]["LS"]; //addressee
     TP = sents["people"][people]["TP"]; //third party (target)
  
-    utterance = utterance.replace("BB",BB).replace("SP",SP);
+    utterance = utterance.replace("BB",BB).replace("SP",SP).replace("LS",LS);
     context = context.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS).replace("TP",TP).replace("TP",TP).replace("TP",TP);
     precontext = precontext.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS).replace("TP",TP).replace("TP",TP).replace("TP",TP);
     state = state.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);
@@ -576,9 +673,10 @@ function doSentSubs (sents, polite, domain, utterance, people)
     prequestion3 = prequestion3.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS).replace("TP",TP);  
     knowledge = knowledge.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     summary = summary.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS).replace("TP",TP);   
+    goal = goal.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
 
     
-    return [utterance, context, state, precontext, question, question2, prequestion3, knowledge, summary];
+    return [utterance, context, state, precontext, question, question2, prequestion3, knowledge, summary, goal];
 }
 
 var numConditions = allConditions.length;
@@ -620,14 +718,16 @@ var experiment = {
     utterance: [],
     people: [],
 //    context: [],
-    goal0: score[0],
-    goal1: score[1],
+    goal: [],
+//    goal0: score[0],
+//    goal1: score[1],
 //    goal2: score[2],
 //    goal3: score[3],
 //    prediction0: prediction[0],
 //    prediction1: prediction[1],
-    goalProb0: [],
-    goalProb1: [],
+    ironyProb: [],
+//    goalProb0: [],
+//    goalProb1: [],
 //    goalProb2: [],
 //    stateProb: [],
     judgment: [],
@@ -672,7 +772,7 @@ var experiment = {
     if (numComplete > 0) {
 
       var prob0 = parseInt(document.getElementById("hiddenSliderValue0").value) / 40.00;
-      var prob1 = parseInt(document.getElementById("hiddenSliderValue1").value) / 40.00;
+//      var prob1 = parseInt(document.getElementById("hiddenSliderValue1").value) / 40.00;
 //      var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
         
 //      experiment.stateRatings[currentTrialNum] = getRadioCheckedValue(1, "state");
@@ -681,8 +781,10 @@ var experiment = {
       experiment.data.utterance.push(trial.utterance);
       experiment.data.domain.push(trial.domain);
       experiment.data.state.push(trial.state);
-      experiment.data.goalProb0.push(prob0);
-      experiment.data.goalProb1.push(prob1);
+      experiment.data.goal.push(goal);
+      experiment.data.ironyProb.push(prob0);
+//      experiment.data.goalProb0.push(prob0);
+//      experiment.data.goalProb1.push(prob1);
    
       clearForm(document.forms[0]);
       clearForm(document.forms[1]);
@@ -710,9 +812,10 @@ var experiment = {
         domain = trial.domain;
         context = trial.context;
         people = trial.people;
-        sent_materials = doSentSubs(sents, state, domain, utterance, people);
+        goal = trial.goal;
+        sent_materials = doSentSubs(sents, state, domain, utterance, people, goal);
       showSlide("stage");
-      $("#context").html(sent_materials[3] + sent_materials[7] + sent_materials[1] + sent_materials[0]);  
+      $("#context").html(sent_materials[3] + sent_materials[7] + sent_materials[1] + sent_materials[9] + sent_materials[0]);  
       $("#question").html(sent_materials[4]);    
       
       for (var i = 0; i <= 4; i++)
@@ -720,7 +823,7 @@ var experiment = {
         $("#score" + 10*i).html(score[i]);
       }
       $("#question2").html(sent_materials[5]);    
-      $("#prequestion").html(sent_materials[6]);    
+//      $("#prequestion").html(sent_materials[6]);    
       $("#summary").html(sent_materials[8]);    
       $("#rating-stars").on("click", 
 			    	function(event) {
@@ -738,7 +841,7 @@ var experiment = {
 // scripts for sliders
 $("#slider0").slider({
                animate: true,
-               orientation: "vertical",
+               orientation: "horizontal",
                max: 40 , min: 0, step: 1, value: 20,
                slide: function( event, ui ) {
                    $("#slider0 .ui-slider-handle").css({
