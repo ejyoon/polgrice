@@ -2,8 +2,8 @@ var filename = "EJY_polgrice_goals_v4"
 var condCounts = "1,5;2,5;" //Example: "1,20;2,20;3,20"
 
 // ---------------- HELPER ------------------
-var NUM_SLIDERS = 3;
-var NUM_SLIDERS1 = 3;
+var NUM_SLIDERS = 4;
+var NUM_SLIDERS1 = 4;
 var NUM_SLIDERS2 = 2;
 
 function showSlide(id) {
@@ -746,7 +746,7 @@ var experiment = {
       var prob0 = parseInt(document.getElementById("hiddenSliderValue0").value) / 40.00;
       var prob1 = parseInt(document.getElementById("hiddenSliderValue1").value) / 40.00;
       var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
-//      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
+      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
 //      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
 //      var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
 
@@ -772,7 +772,7 @@ var experiment = {
 //      experiment.data.judgment.push(judgment);
       
       clearForm(document.forms[0]);
-      clearForm(document.forms[1]);
+//      clearForm(document.forms[1]);
 
       //Clear stars
       $(".rating-stars").attr({"style":"width: 0%"});
@@ -889,6 +889,31 @@ $("#slider2").slider({
             "background": "#99D6EB"
         });
         $("#slider2 .ui-slider-handle").css({
+            "background": "#667D94",
+            "border-color": "#001F29"
+        });
+    }
+});
+
+$("#slider3").slider({
+    animate: true,
+    orientation: "horizontal",
+    max: 40,
+    min: 0,
+    step: 1,
+    value: 20,
+    slide: function (event, ui) {
+        $("#slider3 .ui-slider-handle").css({
+            "background": "#E0F5FF",
+            "border-color": "#001F29"
+        });
+    },
+    change: function (event, ui) {
+        $('#hiddenSliderValue3').attr('value', ui.value);
+        $("#slider3").css({
+            "background": "#99D6EB"
+        });
+        $("#slider3 .ui-slider-handle").css({
             "background": "#667D94",
             "border-color": "#001F29"
         });

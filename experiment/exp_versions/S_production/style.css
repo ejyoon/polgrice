@@ -173,21 +173,21 @@ td {
 }
 
 .slider_table .left {
-	display: inline;
+/*	display: inline;*/
 	text-align: left;
-	float: left;
+/*	float: left;*/
 }
 
 .slider_table .right {
-	display: inline;
+/*	display: inline;*/
 	text-align: right;
-	float: right;
+/*	float: right;*/
 }
 
 #slider0 { width: 300px;
                height: 12px;
                position: relative;
-               margin: 5px; }
+               margin: 10px; }
 #slider0 .ui-slider-handle {
                background: #FAFAFA; }
 
@@ -203,14 +203,14 @@ td {
 #slider1 { width: 300px;
                height: 12px;
                position: relative;
-               margin: 5px; }
+               margin: 10px; }
 #slider1 .ui-slider-handle {
                background: #FAFAFA; }
 
 #slider2 { width: 300px;
                height: 12px;
                position: relative;
-               margin: 5px; }
+               margin: 10px; }
 #slider2 .ui-slider-handle {
                background: #FAFAFA; }
 
@@ -227,12 +227,12 @@ td {
 #slider3 { width: 300px;
                height: 12px;
                position: relative;
-               margin: 5px; }
+               margin: 10px; }
 #slider3 .ui-slider-handle {
                background: #FAFAFA; }
 #slider4 { width: 300px;
                height: 12px;
                position: relative;
-               margin: 5px; }
+               margin: 10px; }
 #slider4 .ui-slider-handle {
                background: #FAFAFA; }

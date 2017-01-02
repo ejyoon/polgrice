@@ -223,14 +223,6 @@ function pressEnter(e) {
     	min="0" max="5" step="1" 
     	data-showCaption="true" showClear="false" hoverEnabled="false">
   </div>
-<!--
-  <div align="center" class="star-rating rating-sm rating-active">
-    <div class="rating-container rating-gly-star" data-content="">
-      <div class="rating-stars" data-content="">
-      </div>
-    </div>
-  </div>
--->
   <!--star-ratings
   ###############################################################
   -->  
@@ -244,8 +236,8 @@ function pressEnter(e) {
 <form name= "affectForm1">
     <input type="hidden" name="hSlider0" id="hiddenSliderValue0" />
     <input type="hidden" name="hSlider1" id="hiddenSliderValue1" />
-<!--    <input type="hidden" name="hSlider2" id="hiddenSliderValue2" />-->
-<!--    <input type="hidden" name="hSlider3" id="hiddenSliderValue3" />-->
+    <input type="hidden" name="hSlider2" id="hiddenSliderValue2" />
+    <input type="hidden" name="hSlider3" id="hiddenSliderValue3" />
 
     <p id="question"></p>
 
@@ -254,109 +246,8 @@ function pressEnter(e) {
         <tr class="slider_row"><td class="slider_target" id="sentence1">blah</td><td colspan="2"><div id="slider0" class="slider">&nbsp;</div></td></tr>
         <tr class="slider_row"><td class="slider_target" id="sentence1">blah</td><td colspan="2"><div id="slider1" class="slider">&nbsp;</div></td></tr>
         <tr class="slider_row"><td class="slider_target" id="sentence1">blah</td><td colspan="2"><div id="slider2" class="slider">&nbsp;</div></td></tr>
+        <tr class="slider_row"><td class="slider_target" id="sentence1">blah</td><td colspan="2"><div id="slider3" class="slider">&nbsp;</div></td></tr>
     </table>
-    
-<!--
-    <table cellspacing="0" cellpadding="0" border="0" align="center"><tbody>
-    <tr>
-      <td align="right" height="48" width="100" >
-        Impossible <br>
-      </td>
-      <td rowspan="5" width="150" align="center"><div id="blank">blah</div></td>
-      <td align="right" height="48" width="100">
-         Very likely<br>
-      </td>
-
-    </tr>
-    <tr>
--->
-<!--
-      <td align="right" height="48" width="100">
-      </td>
--->
-<!--      <td rowspan="5" width="150" align="center"><div id="slider0">&nbsp;</div></td>-->
-<!--
-      <td align="right" height="48" width="100">
-      </td>
--->
-
-<!--    </tr>-->
-<!--    <tr>-->
-<!--
-      <td align="right" height="48" width="100">
-      </td>
--->
-<!--      <td rowspan="5" width="150" align="center"><div id="slider1">&nbsp;</div></td>-->
-<!--
-      <td align="right" height="48" width="100">
-      </td>
--->
-
-<!--    </tr>-->
-<!--
-    <tr>
-      <td align="right" height="48">
-        Very Likely &#8210;<br>
-      </td>
-    </tr>
-    </tr>
-    <tr>
-      <td align="right" height="48">
-        Neutral &#8210;<br>
-      </td>
-    </tr>
-    <tr>
-      <td align="right" height="48">
-        Not very likely &#8210;<br>
-      </td>
-    </tr>
-    <tr>
-      <td align="right" height="48">
-        Impossible &#8210;<br>
-      </td>
-    </tr>
-    <tr>
-      <td></td>
-      <td align="center"><span id="score0">{{}}</span></td>
-      <td align="center"><span id="score10">{{}}</span></td>
--->
-<!--      <td align="center"><span id="score20">{{}}</span></td>-->
-<!--      <td align="center"><span id="score30">{{}}</span></td>-->
-<!--
-      <td align="center"><span id="score40">{{}}</span></td>
-      <td align="center"><span id="score50">{{}}</span></td>
-      <td align="center"><span id="score60">{{}}</span></td>
-      <td align="center"><span id="score70">{{}}</span></td>
-      <td align="center"><span id="score80">{{}}</span></td>
-      <td align="center"><span id="score90">{{}}</span></td>
--->
-<!--    </tr>-->
-      
-    </tbody></table>
-    </form></span>
-    <br> 
-
-<!--
-        <button type="button" id="next1" onclick="this.blur(); if (ValidateSliderFormPart1(document.affectForm1)) {
-}">Next</button>
--->
-
-    
-<!--
-<br>
-<form name="judgment">
-<table align = "center"><tr>
-<td align="center">
-  <tr>
-  	<td>No</td>
-    <td>Yes</td>    
-  </tr>
-  	<td><input type="radio" name="judgment" value = "0"></td>
-    <td><input type="radio" name="judgment" value = "1"></td>
-  </tr>
-</table>
-</form>
--->
 
     <button type="button" id="next2" onclick="this.blur(); if
     (ValidateSliderFormPart1(document.affectForm1)) {
