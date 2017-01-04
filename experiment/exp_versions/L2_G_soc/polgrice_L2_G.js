@@ -22,7 +22,7 @@ function random(a,b) {
 
 function clearForm(oForm) {
   var sliderVar = "";
-  for(var i=0; i<NUM_SLIDERS; i++)
+  for(var i=0; i<NUM_SLIDERS +2; i++)
   {
     sliderVar = "#slider" + i;
     $(sliderVar).slider("value", 20);
@@ -128,10 +128,10 @@ function getRadioCheckedValue(formNum, radio_name)
 
 // CONDITION ASSIGNMENT
 // var cond = random(3)+1;
-var expt = "polgrice_uttJudg";
+var expt = "polgrice_L2_G_soc";
 //var cond = random(2)+1;
 //var cond = 1;
-var cond = "uttJudg"
+var cond = "L2_G_soc"
 
 // call the maker getter to get the cond variable 
 //var xmlHttp = null;
@@ -652,8 +652,13 @@ function doSentSubs (sents, polite, domain, utterance, people, goal)
     feeling = "Here's how SP <b>actually</b> felt about LS's BB:"
     question = "Based on what SP said, how likely do you think that <b>SP's goal</b> was to be:"     
     question2 = "How would SP <b>actually</b> rate LS's BB? <br>Please select the number of stars you think SP would actually give:";
+    if (prediction[0] == "ask") {
+    question4 = "Based on what SP said, how likely is it for you to <b>ask for SP's opinion on your own BB</b>?";
     question3 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
-    BB = sents["domains"][domain]["BB"]; //Item 2
+    } else if (prediction[0] == "like") {
+    question3 = "Based on what SP said, how likely is it for you to <b>ask for SP's opinion on your own BB</b>?";
+    question4 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
+    }        BB = sents["domains"][domain]["BB"]; //Item 2
     SP = sents["people"][people]["SP"]; //speaker
     LS = sents["people"][people]["LS"]; //addressee
  
@@ -665,12 +670,13 @@ function doSentSubs (sents, polite, domain, utterance, people, goal)
     question = question.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     question2 = question2.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     question3 = question3.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
+    question4 = question4.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     knowledge = knowledge.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     goal = goal.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     feeling = feeling.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
 
     
-    return [utterance, context, state, precontext, question, question2, question3, knowledge, goal, feeling, context2];
+    return [utterance, context, state, precontext, question, question2, question3, knowledge, goal, feeling, context2, question4];
 }
 
 var numConditions = allConditions.length;
@@ -705,15 +711,15 @@ var experiment = {
     goal1: score[1],
     goal2: score[2],
 //    goal3: score[3],
-//    prediction0: prediction[0],
-//    prediction1: prediction[1],
+    prediction0: prediction[0],
+    prediction1: prediction[1],
     goalProb0: [],
     goalProb1: [],
     goalProb2: [],
 //    judgment: [],
 //    stateProb: [],
-//    predictedProb0: [],
-//    predictedProb1: [],
+    predictedProb0: [],
+    predictedProb1: [],
     language: [],
 	expt_aim: [],
 	goal_thoughts: [],
@@ -746,17 +752,8 @@ var experiment = {
       var prob0 = parseInt(document.getElementById("hiddenSliderValue0").value) / 40.00;
       var prob1 = parseInt(document.getElementById("hiddenSliderValue1").value) / 40.00;
       var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
-//      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
-//      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
-//      var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
-
-//      var prob3 = getRadioCheckedValue(1, "state");
-//      experiment.stateRatings[currentTrialNum] = getRadioCheckedValue(1, "state");    
-//      var judgment = $(".rating-stars").attr("style");
-//      judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
-//      var judgment = getRadioCheckedValue(0, "judgment");
-//      var judgment = document.getElementsByName("judgment");
-//      var judgment = getRadioCheckedValue(1, "judgment");
+      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
+      var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
         
       experiment.data.order.push(numComplete);
       experiment.data.utterance.push(trial.utterance);
@@ -765,12 +762,9 @@ var experiment = {
       experiment.data.goalProb0.push(prob0);
       experiment.data.goalProb1.push(prob1);
       experiment.data.goalProb2.push(prob2);
-//      experiment.data.stateProb.push(prob3);
-//      experiment.data.predictedProb0.push(prob3);
-//      experiment.data.predictedProb1.push(prob4);
-//      experiment.data.goal.push(goal);
-//      experiment.data.judgment.push(judgment);
-      
+      experiment.data.predictedProb0.push(prob3);
+      experiment.data.predictedProb1.push(prob4);
+
       clearForm(document.forms[0]);
       clearForm(document.forms[1]);
 
@@ -801,6 +795,8 @@ var experiment = {
       $("#context2").html(sent_materials[0]);  
       $("#question").html(sent_materials[4]); 
       $("#question2").html(sent_materials[9]); 
+      $("#question3").html(sent_materials[11]); 
+      $("#question4").html(sent_materials[6]); 
       $(".rating-stars").attr("style","width: " +
 							    state + "%");
 
@@ -815,7 +811,6 @@ var experiment = {
         $("#score" + 10*i).html(score[i]);
       }
       $("#question2").html(sent_materials[9]);    
-      $("#question3").html(sent_materials[0]);    
       numComplete++;      
     }}
   }
@@ -873,23 +868,6 @@ $("#slider2").slider({
                      "background":"#667D94",
                      "border-color": "#001F29" });
                }});
-//$("#slider3").slider({
-//               animate: true,
-//               orientation: "vertical",
-//               max: 40 , min: 0, step: 1, value: 20,
-//               slide: function( event, ui ) {
-//                   $("#slider3 .ui-slider-handle").css({
-//                      "background":"#E0F5FF",
-//                      "border-color": "#001F29"
-//                   });
-//               },
-//               change: function( event, ui ) {
-//                   $('#hiddenSliderValue3').attr('value', ui.value);
-//                   $("#slider3").css({"background":"#99D6EB"});
-//                   $("#slider3 .ui-slider-handle").css({
-//                     "background":"#667D94",
-//                     "border-color": "#001F29" });
-//               }});
 
 $("#slider3").slider({
                animate: true,
@@ -924,5 +902,4 @@ $("#slider4").slider({
                      "background":"#667D94",
                      "border-color": "#001F29" });
                }});
-
 

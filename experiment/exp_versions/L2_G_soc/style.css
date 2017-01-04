@@ -194,16 +194,6 @@ td {
 #slider2 .ui-slider-handle {
                background: #FAFAFA; }
 
-/*
-#slider3 { width: 12px;
-               height: 200px;
-               position: relative;
-               margin: 5px; }
-#slider3 .ui-slider-handle {
-               background: #FAFAFA; }
-*/
-
-
 #slider3 { width: 500px;
                height: 12px;
                position: relative;
@@ -216,3 +206,15 @@ td {
                margin: 5px; }
 #slider4 .ui-slider-handle {
                background: #FAFAFA; }
+
+.slider_table .left {
+/*	display: inline;*/
+	text-align: left;
+/*	float: left;*/
+}
+
+.slider_table .right {
+/*	display: inline;*/
+	text-align: right;
+/*	float: right;*/
+}
