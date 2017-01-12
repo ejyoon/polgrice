@@ -134,7 +134,7 @@ var expt = "polgrice_speaker";
 //xmlHttp.send( null );
 //var cond = xmlHttp.responseText;
 
-var score = shuffle(["nice", "honest", "nice_honest"]);
+var score = shuffle(["nice", "honest", "both"]);
 var prediction = shuffle(["ask", "like"])
 
 //if (cond == 1) {
@@ -155,6 +155,32 @@ var states1 = ["heart1", "heart2", "heart3", "heart4", "heart5"];
 //var states2 = ["heart2", "heart3", "heart4", "heart5", "heart1"];
 //var states3 = ["heart3", "heart4", "heart5", "heart1", "heart2"];
 var states = states1.concat(states1, states1)
+
+var posneg1 = ["was", "wasn't"];
+var posneg_code1 = ["no_neg", "neg"];
+var posneg2 = ["wasn't", "was"];
+var posneg_code2 = ["neg", "no_neg"];
+
+var keywords1 = ["terrible", "bad", "okay", "good", "amazing"];
+var keywords2 = ["amazing", "good", "okay", "bad", "terrible"];
+
+if (cond == 1) {
+    var posneg = posneg1
+    var posneg_code = posneg_code1
+    var keywords = keywords1
+} else if (cond == 2) {
+    var posneg = posneg1
+    var posneg_code = posneg_code1
+    var keywords = keywords2
+} else if (cond == 3) {
+    var posneg = posneg2
+    var posneg_code = posneg_code2
+    var keywords = keywords1
+} else {
+    var posneg = posneg2
+    var posneg_code = posneg_code2
+    var keywords = keywords2
+}
 
 var utterances1 = 
     ["yes_terrible", "yes_bad", "yes_okay", "yes_good", "yes_amazing"];
@@ -179,13 +205,13 @@ var utterances = utterances_mixed.concat(utterances_mixed, utterances_mixed)
 
 var blank_utterances = "universal"
 
-var goals = ["nice", "honest", "nice_honest", 
+var goals = ["nice", "honest", "both", 
              "nice", "honest", 
-             "nice_honest", 
-             "nice", "honest", "nice_honest", 
+             "both", 
+             "nice", "honest", "both", 
              "nice", 
-             "honest", "nice_honest", 
-             "nice", "honest", "nice_honest"];
+             "honest", "both", 
+             "nice", "honest", "both"];
 
 var allConditions =
     shuffle(
@@ -581,7 +607,7 @@ var sents = {
         honest: {
             goal: " <b>honest, but not necessarily nice</b>"
         },
-        nice_honest: {
+        both: {
             goal: " <b>both nice and honest</b>"
         }
     },
@@ -754,7 +780,9 @@ var experiment = {
         knowledge: state_knowledge,
         domain: [],
         state: [],
-        utterance: [],
+        posneg: [],
+        keyword:[],
+//        utterance: [],
         people: [],
         goal: [],
         //    context: [],
@@ -836,7 +864,8 @@ var experiment = {
 //                experiment.data.goalProb7.push(prob7);
 //                experiment.data.goalProb8.push(prob8);
 //                experiment.data.goalProb9.push(prob9);
-                experiment.data.utterance.push($("#utterance_choice").val()),
+                experiment.data.posneg.push($("#posneg_choice").val()),
+                experiment.data.keyword.push($("#posneg_choice").val()),
 
                 clearForm(document.forms[0]);
                 //      clearForm(document.forms[1]);
@@ -879,8 +908,14 @@ var experiment = {
                 //			});
 
 
-                for (var i = 0; i <= NUM_SLIDERS; i++) {
-                    $("#utterance" + i).html(sents["utterances"][utterances[i]]["sent_utterance"]);
+//                for (var i = 0; i <= NUM_SLIDERS; i++) {
+//                    $("#utterance" + i).html(sents["utterances"][utterances[i]]["sent_utterance"]);
+//                }
+                for (var i = 0; i < 2; i++) {
+                    $("#posneg" + i).html(posneg[i]);
+                }
+                for (var i = 0; i < 5; i++) {
+                    $("#keyword" + i).html(keywords[i]);
                 }
                 $("#question2").html(sent_materials[9]);
                 $("#question3").html(sent_materials[11]);
