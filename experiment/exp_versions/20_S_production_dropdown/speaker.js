@@ -602,13 +602,13 @@ var sents = {
     //    },
     goals: {
         nice: {
-            goal: " <b>nice, but not necessarily honest</b>"
+            goal: " <b>nice, but not necessarily honest or informative</b>"
         },
         honest: {
-            goal: " <b>honest, but not necessarily nice</b>"
+            goal: " <b>honest and informative, but not necessarily nice</b>"
         },
         both: {
-            goal: " <b>both nice and honest</b>"
+            goal: " <b>as nice, honest and informative as possible at the same time</b>"
         }
     },
     people: {
@@ -735,7 +735,7 @@ function doSentSubs(sents, polite, domain, utterance, people, goal, blank_uttera
     question2 = "How would SP <b>actually</b> rate LS's BB? <br>Please select the number of stars you think SP would actually give:";
     question3 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
     BB = sents["domains"][domain]["BB"]; //Item 2
-    SP = sents["people"][people]["SP"]; //speaker
+    SP = "you"; //speaker
     LS = sents["people"][people]["LS"]; //addressee
 
     utterance = utterance.replace("BB", BB).replace("SP", SP).replace("LS", LS);
