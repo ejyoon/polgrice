@@ -11,11 +11,11 @@ library(jsonlite)
 library(readr)
 knitr::opts_chunk$set(echo = TRUE)
 library(coda)
-source(paste(local.path, "experiment/data_analysis/markdown/polgrice_S.R", sep=""))
 
 # set path to working dir
 # local.path <- "~/Documents/research/polgrice/"
 local.path <- "~/Documents/Research/polgrice_GIT/"
+source(paste(local.path, "experiment/data_analysis/markdown/polgrice_S.R", sep=""))
 
 estimate_mode <- function(s) {
   d <- density(s)
@@ -47,7 +47,6 @@ Summarize behavioral data (in terms of number of "yes"es)
 
 ```{r}
 d.lit.summary <- d.lit %>%
-  # filter(!is.na(judgment)) %>% # why is there an NA in korea data?
   group_by(state, utterance) %>%
   summarize(k = sum(judgment),
             n = n())
@@ -88,7 +87,7 @@ litSemantics.results <- data.frame()
                    data_var = "data",
                    inference_opts = list(
                      method = "rejection",
-                     samples = 5
+                     samples = 20
                    ),
                    model_var = "literalSemantics",
                    output_format = "samples")
@@ -105,6 +104,13 @@ litSemantics.results <- data.frame()
     }
     print(st)
   }
+```
+
+Load literal semantics BDA results
+
+```{r}
+litSemantics.results <- read.csv(paste(local.path, "model/data/literal_semantics_wNeg_20samples.csv",
+                                       sep = ""))
 ```
 
 ```{r}
@@ -222,7 +228,6 @@ var speaker1 = cache(function(state, speakerGoals, rsaParameters) {
 }, 10)
 
 var listener1 = cache(function(utterance, rsaParameters) {
-// var listener1 = cache(function(exptCondition, rsaParameters) {
   Infer({method: "enumerate"}, function(){
       var speakerGoals = {
       honesty: [0.1, 0.3, 0.5, 0.7, 0.9][discrete(honestyWeights)],
