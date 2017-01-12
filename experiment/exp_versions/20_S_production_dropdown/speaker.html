@@ -172,6 +172,16 @@
             return valid;
         }
 
+        function ValidateText2(field) {
+            valid = true;
+
+            if (field.value == "") {
+                alert("Please answer the question.");
+                valid = false;
+            }
+
+            return valid;
+        }
 
 
         function pressEnter(e) {
@@ -197,12 +207,12 @@
   Star-ratings
   http://www.jqueryscript.net/other/Simple-jQuery-Star-Rating-System-For-Bootstrap-3.html
   -->
-  <div align="center" class="star-rating rating-sm rating-active">
-   <div class="rating-container rating-gly-star" data-content="&#xe005;&#xe005;&#xe005;&#xe005;&#xe005;">
-      <div class="rating-stars" data-content="&#xe005;&#xe005;&#xe005;&#xe005;&#xe005;">
-        </div>
-    </div>
-    </div>
+            <div align="center" class="star-rating rating-sm rating-active">
+                <div class="rating-container rating-gly-star" data-content="&#xe005;&#xe005;&#xe005;&#xe005;&#xe005;">
+                    <div class="rating-stars" data-content="&#xe005;&#xe005;&#xe005;&#xe005;&#xe005;">
+                    </div>
+                </div>
+            </div>
             <!--star-ratings
   ###############################################################
   -->
@@ -212,6 +222,7 @@
 
             <span id="form1">
 <form name= "affectForm1">
+<!--
     <input type="hidden" name="hSlider0" id="hiddenSliderValue0" />
     <input type="hidden" name="hSlider1" id="hiddenSliderValue1" />
     <input type="hidden" name="hSlider2" id="hiddenSliderValue2" />
@@ -222,11 +233,10 @@
     <input type="hidden" name="hSlider7" id="hiddenSliderValue7" />
     <input type="hidden" name="hSlider8" id="hiddenSliderValue8" />
     <input type="hidden" name="hSlider9" id="hiddenSliderValue9" />
+-->
 
-    <p id="question"></p>
-
-    <table id="multi_slider_table" class="slider_table" cellspacing="0" cellpadding="0" border="0" align="center">
-      <tr><td></td><td class="left">very unlikely</td><td class="right">very likely</td></tr>
+<!--
+    <table id="multi_slider_table" class="slider_table" cellspacing="0" cellpadding="0" border="0" align="center"><tr><td></td><td class="left">very unlikely</td><td class="right">very likely</td></tr>
         <tr class="slider_row"><td class="slider_target"><span id="utterance0">{{}}</span></td>
             <td colspan="2">
                 <div id="slider0" class="slider">&nbsp;</div>
@@ -287,9 +297,26 @@
                 </td>
             </tr>
             </table>
+            -->
 
-            <button type="button" id="next2" onclick="this.blur(); if
-    (ValidateSliderFormPart1(document.affectForm1)) {
+            <p id="question">
+                <select id="utterance_choice" name="choose_utterance">
+          <label><option id= "null" value=""/></label>
+          <label><option id= "utterance0" value="utterance0"/>{{}}</label>
+          <label><option id= "utterance1" value="utterance1"/>{{}}</label>
+          <label><option id= "utterance2" value="utterance2"/>{{}}</label>
+          <label><option id= "utterance3" value="utterance3"/>{{}}</label>
+          <label><option id= "utterance4" value="utterance4"/>{{}}</label>
+          <label><option id= "utterance5" value="utterance5"/>{{}}</label>
+          <label><option id= "utterance6" value="utterance6"/>{{}}</label>
+          <label><option id= "utterance7" value="utterance7"/>{{}}</label>
+          <label><option id= "utterance8" value="utterance8"/>{{}}</label>
+          <label><option id= "utterance9" value="utterance9"/>{{}}</label>
+        </select>
+            </p>
+
+
+            <button type="button" id="next2" onclick="this.blur(); {
 experiment.next();                                                       
 }">Next</button>
             </form>

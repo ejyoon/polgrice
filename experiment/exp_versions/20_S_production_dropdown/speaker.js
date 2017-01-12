@@ -21,20 +21,20 @@ function random(a, b) {
 }
 
 function clearForm(oForm) {
-    var sliderVar = "";
-    for (var i = 0; i < NUM_SLIDERS; i++) {
-        sliderVar = "#slider" + i;
-        $(sliderVar).slider("value", 20);
-        $(sliderVar).css({
-            "background": "#FFFFFF"
-        });
-        $(sliderVar + " .ui-slider-handle").css({
-            "background": "#FAFAFA",
-            "border-color": "#CCCCCC"
-        });
-        sliderVar = "slider" + i;
-        document.getElementById(sliderVar).style.background = "";
-    }
+//    var sliderVar = "";
+//    for (var i = 0; i < NUM_SLIDERS; i++) {
+//        sliderVar = "#slider" + i;
+//        $(sliderVar).slider("value", 20);
+//        $(sliderVar).css({
+//            "background": "#FFFFFF"
+//        });
+//        $(sliderVar + " .ui-slider-handle").css({
+//            "background": "#FAFAFA",
+//            "border-color": "#CCCCCC"
+//        });
+//        sliderVar = "slider" + i;
+//        document.getElementById(sliderVar).style.background = "";
+//    }
 
     var elements = oForm.elements;
 
@@ -59,9 +59,14 @@ function clearForm(oForm) {
                 }
                 break;
 
+//            case "select":
+//                elements[i].value = "";
+//                break;
+                
             case "select-one":
             case "select-multi":
                 elements[i].selectedIndex = -1;
+//                elements[i].value = "";
                 break;
 
             default:
@@ -700,7 +705,7 @@ function doSentSubs(sents, polite, domain, utterance, people, goal, blank_uttera
 
     feeling = "Here's how SP <b>actually</b> felt about LS's BB:"
     question0 = "If SP wanted to be GOAL, <br>"
-    question = "how likely would SP be to say each of the following?"
+    question = "what would SP be most likely to say?"
     question2 = "How would SP <b>actually</b> rate LS's BB? <br>Please select the number of stars you think SP would actually give:";
     question3 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
     BB = sents["domains"][domain]["BB"]; //Item 2
@@ -744,12 +749,12 @@ var experiment = {
 
     data: {
         expt: expt,
-        //    cond: cond,
+        cond: cond,
         order: [],
         knowledge: state_knowledge,
         domain: [],
         state: [],
-        utterance: utterances_mixed,
+        utterance: [],
         people: [],
         goal: [],
         //    context: [],
@@ -759,16 +764,16 @@ var experiment = {
         //    goal3: score[3],
         //    prediction0: prediction[0],
         //    prediction1: prediction[1],
-        goalProb0: [],
-        goalProb1: [],
-        goalProb2: [],
-        goalProb3: [],
-        goalProb4: [],
-        goalProb5: [],
-        goalProb6: [],
-        goalProb7: [],
-        goalProb8: [],
-        goalProb9: [],
+//        goalProb0: [],
+//        goalProb1: [],
+//        goalProb2: [],
+//        goalProb3: [],
+//        goalProb4: [],
+//        goalProb5: [],
+//        goalProb6: [],
+//        goalProb7: [],
+//        goalProb8: [],
+//        goalProb9: [],
         //    judgment: [],
         //    stateProb: [],
         //    predictedProb0: [],
@@ -805,32 +810,33 @@ var experiment = {
 
             if (numComplete > 0) {
 
-                var prob0 = parseInt(document.getElementById("hiddenSliderValue0").value) / 40.00;
-                var prob1 = parseInt(document.getElementById("hiddenSliderValue1").value) / 40.00;
-                var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
-                var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
-                var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
-                var prob5 = parseInt(document.getElementById("hiddenSliderValue5").value) / 40.00;
-                var prob6 = parseInt(document.getElementById("hiddenSliderValue6").value) / 40.00;
-                var prob7 = parseInt(document.getElementById("hiddenSliderValue7").value) / 40.00;
-                var prob8 = parseInt(document.getElementById("hiddenSliderValue8").value) / 40.00;
-                var prob9 = parseInt(document.getElementById("hiddenSliderValue9").value) / 40.00;
+//                var prob0 = parseInt(document.getElementById("hiddenSliderValue0").value) / 40.00;
+//                var prob1 = parseInt(document.getElementById("hiddenSliderValue1").value) / 40.00;
+//                var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
+//                var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
+//                var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
+//                var prob5 = parseInt(document.getElementById("hiddenSliderValue5").value) / 40.00;
+//                var prob6 = parseInt(document.getElementById("hiddenSliderValue6").value) / 40.00;
+//                var prob7 = parseInt(document.getElementById("hiddenSliderValue7").value) / 40.00;
+//                var prob8 = parseInt(document.getElementById("hiddenSliderValue8").value) / 40.00;
+//                var prob9 = parseInt(document.getElementById("hiddenSliderValue9").value) / 40.00;
 
                 experiment.data.order.push(numComplete);
                 experiment.data.goal.push(trial.goal);
 //                experiment.data.utterance.push(trial.utterance);
                 experiment.data.domain.push(trial.domain);
                 experiment.data.state.push(trial.state);
-                experiment.data.goalProb0.push(prob0);
-                experiment.data.goalProb1.push(prob1);
-                experiment.data.goalProb2.push(prob2);
-                experiment.data.goalProb3.push(prob3);
-                experiment.data.goalProb4.push(prob4);
-                experiment.data.goalProb5.push(prob5);
-                experiment.data.goalProb6.push(prob6);
-                experiment.data.goalProb7.push(prob7);
-                experiment.data.goalProb8.push(prob8);
-                experiment.data.goalProb9.push(prob9);
+//                experiment.data.goalProb0.push(prob0);
+//                experiment.data.goalProb1.push(prob1);
+//                experiment.data.goalProb2.push(prob2);
+//                experiment.data.goalProb3.push(prob3);
+//                experiment.data.goalProb4.push(prob4);
+//                experiment.data.goalProb5.push(prob5);
+//                experiment.data.goalProb6.push(prob6);
+//                experiment.data.goalProb7.push(prob7);
+//                experiment.data.goalProb8.push(prob8);
+//                experiment.data.goalProb9.push(prob9);
+                experiment.data.utterance.push($("#utterance_choice").val()),
 
                 clearForm(document.forms[0]);
                 //      clearForm(document.forms[1]);
