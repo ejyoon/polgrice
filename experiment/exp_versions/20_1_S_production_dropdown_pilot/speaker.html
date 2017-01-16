@@ -121,22 +121,6 @@
             return true;
         }
 
-        function ValidateSelect2(form) {
-            if (form.choose_posneg.selectedIndex == 0 || form.choose_posneg.selectedIndex == -1) {
-                alert("Please answer this question.");
-                return false;
-            }
-            return true;
-        }
-
-        function ValidateSelect3(form) {
-            if (form.choose_keyword.selectedIndex == 0 || form.choose_keyword.selectedIndex == -1) {
-                alert("Please answer this question.");
-                return false;
-            }
-            return true;
-        }
-
         function ValidateNumber(field) {
             valid = true;
             if (field.value == "") {
@@ -238,8 +222,84 @@
 
             <span id="form1">
 <form name= "affectForm1">
+<!--
+    <input type="hidden" name="hSlider0" id="hiddenSliderValue0" />
+    <input type="hidden" name="hSlider1" id="hiddenSliderValue1" />
+    <input type="hidden" name="hSlider2" id="hiddenSliderValue2" />
+    <input type="hidden" name="hSlider3" id="hiddenSliderValue3" />
+    <input type="hidden" name="hSlider4" id="hiddenSliderValue4" />
+    <input type="hidden" name="hSlider5" id="hiddenSliderValue5" />
+    <input type="hidden" name="hSlider6" id="hiddenSliderValue6" />
+    <input type="hidden" name="hSlider7" id="hiddenSliderValue7" />
+    <input type="hidden" name="hSlider8" id="hiddenSliderValue8" />
+    <input type="hidden" name="hSlider9" id="hiddenSliderValue9" />
+-->
 
-    <p id="question">"It
+<!--
+    <table id="multi_slider_table" class="slider_table" cellspacing="0" cellpadding="0" border="0" align="center"><tr><td></td><td class="left">very unlikely</td><td class="right">very likely</td></tr>
+        <tr class="slider_row"><td class="slider_target"><span id="utterance0">{{}}</span></td>
+            <td colspan="2">
+                <div id="slider0" class="slider">&nbsp;</div>
+            </td>
+            </tr>
+            <tr class="slider_row">
+                <td class="slider_target"><span id="utterance1">{{}}</span></td>
+                <td colspan="2">
+                    <div id="slider1" class="slider">&nbsp;</div>
+                </td>
+            </tr>
+            <tr class="slider_row">
+                <td class="slider_target"><span id="utterance2">{{}}</span></td>
+                <td colspan="2">
+                    <div id="slider2" class="slider">&nbsp;</div>
+                </td>
+            </tr>
+            <tr class="slider_row">
+                <td class="slider_target"><span id="utterance3">{{}}</span></td>
+                <td colspan="2">
+                    <div id="slider3" class="slider">&nbsp;</div>
+                </td>
+            </tr>
+            <tr class="slider_row">
+                <td class="slider_target"><span id="utterance4">{{}}</span></td>
+                <td colspan="2">
+                    <div id="slider4" class="slider">&nbsp;</div>
+                </td>
+            </tr>
+            <tr class="slider_row">
+                <td class="slider_target"><span id="utterance5">{{}}</span></td>
+                <td colspan="2">
+                    <div id="slider5" class="slider">&nbsp;</div>
+                </td>
+            </tr>
+            <tr class="slider_row">
+                <td class="slider_target"><span id="utterance6">{{}}</span></td>
+                <td colspan="2">
+                    <div id="slider6" class="slider">&nbsp;</div>
+                </td>
+            </tr>
+            <tr class="slider_row">
+                <td class="slider_target"><span id="utterance7">{{}}</span></td>
+                <td colspan="2">
+                    <div id="slider7" class="slider">&nbsp;</div>
+                </td>
+            </tr>
+            <tr class="slider_row">
+                <td class="slider_target"><span id="utterance8">{{}}</span></td>
+                <td colspan="2">
+                    <div id="slider8" class="slider">&nbsp;</div>
+                </td>
+            </tr>
+            <tr class="slider_row">
+                <td class="slider_target"><span id="utterance9">{{}}</span></td>
+                <td colspan="2">
+                    <div id="slider9" class="slider">&nbsp;</div>
+                </td>
+            </tr>
+            </table>
+            -->
+
+            <p id="question">"It
                 <select id="posneg_choice" name="choose_posneg">
           <label><option id= "null" value=""/></label>
           <label><option id= "posneg0" value="posneg0"/>{{}}</label>
@@ -256,7 +316,9 @@
             "</p>
 
 
-            <button type="button" id="next2" onclick="this.blur(); if (ValidateSelect2(document.affectForm1) && ValidateSelect3(document.affectForm1)) {experiment.next();}">Next</button>
+            <button type="button" id="next2" onclick="this.blur(); {
+experiment.next();                                                       
+}">Next</button>
             </form>
             </span>
         </div>

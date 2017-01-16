@@ -154,7 +154,7 @@ var domains = domains1.concat(domains2)
 var states1 = ["heart1", "heart2", "heart3", "heart4", "heart5"];
 //var states2 = ["heart2", "heart3", "heart4", "heart5", "heart1"];
 //var states3 = ["heart3", "heart4", "heart5", "heart1", "heart2"];
-var states = states1.concat(states1, states1)
+var states = states1.concat(states1, states1, states1)
 
 var posneg1 = ["was", "wasn't"];
 var posneg_code1 = ["no_neg", "neg"];
@@ -205,13 +205,20 @@ var utterances = utterances_mixed.concat(utterances_mixed, utterances_mixed)
 
 var blank_utterances = "universal"
 
-var goals = ["nice", "honest", "both", 
-             "nice", "honest", 
-             "both", 
-             "nice", "honest", "both", 
-             "nice", 
-             "honest", "both", 
-             "nice", "honest", "both"];
+//var goals = ["nice", "honest", "both", 
+//             "nice", "honest", 
+//             "both", 
+//             "nice", "honest", "both", 
+//             "nice", 
+//             "honest", "both", 
+//             "nice", "honest", "both"];
+var goals = [
+    "no_goal", "both", "informative", "social",
+    "no_goal", "both", "informative", "social",
+    "no_goal", "both", "informative", "social",
+    "no_goal", "both", "informative", "social",
+    "no_goal", "both", "informative", "social"
+];
 
 var allConditions =
     shuffle(
@@ -324,41 +331,41 @@ shuffle(
  "goal": goals[14],
  "blank_utterance": blank_utterances,
 },
-//{"domain": domains[15],
-// "state": states[15],
-// "utterance": utterances[15],
-// "people": "people16",
-// "goal": goals[15],
-// "blank_utterance": blank_utterances,
-//},
-//{"domain": domains[16],
-// "state": states[16],
-// "utterance": utterances[16],
-// "people": "people17",
-// "goal": goals[16],
-// "blank_utterance": blank_utterances,
-//},
-//{"domain": domains[17],
-// "state": states[17],
-// "utterance": utterances[17],
-// "people": "people18",
-// "goal": goals[17],
-// "blank_utterance": blank_utterances,
-//},
-//{"domain": domains[18],
-// "state": states[18],
-// "utterance": utterances[18],
-// "people": "people19",
-// "goal": goals[18],
-// "blank_utterance": blank_utterances,
-//},
-//{"domain": domains[19],
-// "state": states[19],
-// "utterance": utterances[19],
-// "people": "people20",
-// "goal": goals[19],
-// "blank_utterance": blank_utterances,
-//},
+{"domain": domains[15],
+ "state": states[15],
+ "utterance": utterances[15],
+ "people": "people16",
+ "goal": goals[15],
+ "blank_utterance": blank_utterances,
+},
+{"domain": domains[16],
+ "state": states[16],
+ "utterance": utterances[16],
+ "people": "people17",
+ "goal": goals[16],
+ "blank_utterance": blank_utterances,
+},
+{"domain": domains[17],
+ "state": states[17],
+ "utterance": utterances[17],
+ "people": "people18",
+ "goal": goals[17],
+ "blank_utterance": blank_utterances,
+},
+{"domain": domains[18],
+ "state": states[18],
+ "utterance": utterances[18],
+ "people": "people19",
+ "goal": goals[18],
+ "blank_utterance": blank_utterances,
+},
+{"domain": domains[19],
+ "state": states[19],
+ "utterance": utterances[19],
+ "people": "people20",
+ "goal": goals[19],
+ "blank_utterance": blank_utterances,
+},
 //{"domain": domains[20],
 // "state": states[20],
 // "utterance": utterances[20],
@@ -601,15 +608,18 @@ var sents = {
     //        },
     //    },
     goals: {
-        nice: {
-            goal: " <b>nice, but not necessarily honest or informative</b>"
-        },
-        honest: {
-            goal: " <b>honest and informative, but not necessarily nice</b>"
+        no_goal: {
+            goal: ""
         },
         both: {
-            goal: " <b>as nice, honest and informative as possible at the same time</b>"
-        }
+            goal: " <b>If SP wanted to make LS feel good and give accurate and informative feedback</b>, <br>"
+        },
+        informative: {
+            goal: " <b>If SP wanted to give as accurate and informative feedback as possible</b>, <br>"
+        },
+        social: {
+            goal: " <b>If SP wanted to make LS feel good</b>, <br>"
+        },
     },
     people: {
         people1: {
@@ -730,12 +740,12 @@ function doSentSubs(sents, polite, domain, utterance, people, goal, blank_uttera
     }
 
     feeling = "Here's how SP <b>actually</b> felt about LS's BB:"
-    question0 = "If SP wanted to be GOAL, <br>"
-    question = "what would SP be most likely to say?"
+    question0 = "GOAL"
+    question = "What would SP be most likely to say?"
     question2 = "How would SP <b>actually</b> rate LS's BB? <br>Please select the number of stars you think SP would actually give:";
     question3 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
     BB = sents["domains"][domain]["BB"]; //Item 2
-    SP = "you"; //speaker
+    SP = sents["people"][people]["SP"]; //speaker
     LS = sents["people"][people]["LS"]; //addressee
 
     utterance = utterance.replace("BB", BB).replace("SP", SP).replace("LS", LS);
@@ -745,7 +755,7 @@ function doSentSubs(sents, polite, domain, utterance, people, goal, blank_uttera
     precontext = precontext.replace("BB", BB).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("LS", LS).replace("LS", LS).replace("LS", LS);
     state = state.replace("BB", BB).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("LS", LS).replace("LS", LS).replace("LS", LS);
     question = question.replace("BB", BB).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("LS", LS).replace("LS", LS).replace("LS", LS);
-    question0 = question0.replace("BB", BB).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("LS", LS).replace("LS", LS).replace("LS", LS).replace("GOAL", goal);    
+    question0 = question0.replace("BB", BB).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("LS", LS).replace("LS", LS).replace("LS", LS).replace("GOAL", goal).replace("LS", LS).replace("SP", SP);    
     question2 = question2.replace("BB", BB).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("LS", LS).replace("LS", LS).replace("LS", LS);
     question3 = question3.replace("BB", BB).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("LS", LS).replace("LS", LS).replace("LS", LS);
     knowledge = knowledge.replace("BB", BB).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("SP", SP).replace("LS", LS).replace("LS", LS).replace("LS", LS);
@@ -865,7 +875,7 @@ var experiment = {
 //                experiment.data.goalProb8.push(prob8);
 //                experiment.data.goalProb9.push(prob9);
                 experiment.data.posneg.push($("#posneg_choice").val()),
-                experiment.data.keyword.push($("#posneg_choice").val()),
+                experiment.data.keyword.push($("#keyword_choice").val()),
 
                 clearForm(document.forms[0]);
                 //      clearForm(document.forms[1]);
