@@ -87,7 +87,7 @@ litSemantics.results <- data.frame()
                    data_var = "data",
                    inference_opts = list(
                      method = "rejection",
-                     samples = 20
+                     samples = 10000
                    ),
                    model_var = "literalSemantics",
                    output_format = "samples")
@@ -109,7 +109,7 @@ litSemantics.results <- data.frame()
 Load literal semantics BDA results
 
 ```{r}
-litSemantics.results <- read.csv(paste(local.path, "model/data/literal_semantics_wNeg_20samples.csv",
+litSemantics.results <- read.csv(paste(local.path, "model/data/literal_semantics_wNeg_10000samples.csv",
                                        sep = ""))
 ```
 
@@ -333,7 +333,7 @@ var dataAnalysis = function(){
 
     var postPred = map(function(state){
 
-      var utteranceData = _.pluck(_.where(data, {state: state, goal: goal}), "utterance"); // how to specify utterance with both utterance x utterance_prob from the data?
+      var utteranceData = _.pluck(_.where(data, {true_state: state, goal: goal}), "utterance"); // how to specify utterance with both utterance x utterance_prob from the data?
   
       var exptConditionInfo = {
         state: state, 
@@ -342,9 +342,12 @@ var dataAnalysis = function(){
       };
 
       var RSApredictions = speaker2(exptConditionInfo, RSAparameters);
+
+      var linkedRSA = linkingFunction(RSApredictions);
       
 
       mapData({data: utteranceData}, function(d){ observe(RSApredictions, d) });
+      mapData({data: utteranceData}, function(d){ observe(linkedRSA, d) });
 
       var postPred = expectation(RSApredictions)
 
