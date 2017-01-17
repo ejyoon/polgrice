@@ -166,16 +166,20 @@ var states5 =
 var states = states1.concat(states2, states3, states4, states5, states1, states2, states3)
 
 var utterances1 = 
-    ["yes_terrible", "not_bad", "yes_okay", 
-     "not_good", "yes_amazing","not_terrible", 
-     "yes_bad", "not_okay", "yes_good", 
-     "not_amazing"];
+    ["yes_terrible", "yes_bad", "yes_okay","yes_good", 
+     "yes_amazing","not_terrible","not_bad", "not_okay", 
+     "not_good", "not_amazing"];
 var utterances = utterances1.concat(utterances1, utterances1, utterances1)
 
 var goals1 = 
-    ["social", "informative", "both", "no_goal"];
-var goals = goals1.concat(goals1, goals1, goals1, goals1, 
-                          goals1, goals1, goals1, goals1, goals1)
+    ["social", "social", "social", "social", "social", "social", "social", "social", "social", "social"];
+var goals2 = 
+    ["informative", "informative", "informative", "informative", "informative", "informative", "informative", "informative", "informative", "informative"];
+var goals3 = 
+    ["both", "both", "both", "both", "both", "both", "both", "both", "both", "both"];
+var goals4 = 
+    ["no_goal", "no_goal", "no_goal", "no_goal", "no_goal", "no_goal", "no_goal", "no_goal", "no_goal", "no_goal"];
+var goals = goals1.concat(goals2, goals3, goals4)
 
 var speakers_all1 = shuffle([["John","Bob",], ["Hailey", "Mika"], ["Karen", "Jenny"], ["Kyle", "James"], ["Sean", "Chris"],
                     ["Lucy", "Sarah"], ["Bill", "Tom"], ["Heather", "Grace"], ["Jake", "Kevin"], ["Ann", "Diana"],

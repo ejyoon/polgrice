@@ -143,9 +143,6 @@ Polite RSA: production model
 
 ```{r}
 pRSA <- '
-var states = [1,2,3,4,5];
-var weightBins = [0.1,0.3,0.5,0.7,0.9];
-
 var utterances = ["yes_terrible","yes_bad","yes_okay","yes_good","yes_amazing",
                   "not_terrible","not_bad","not_okay","not_good","not_amazing"
                   //                  ,"nullUtt"
@@ -165,6 +162,7 @@ var cost = {
   //  "nullUtt":0
 };
 
+var states = [1,2,3,4,5];
 var statePrior = function(){
   return uniformDraw(states);
 };
@@ -182,7 +180,6 @@ var speakerOptimality = 10;
 var literalSemantics = dataFromR.literalSemantics;
 
 var honestyWeights = [1,1,1,1,1]
-// var kindnessWeights = [1,1,1,1,1,1,1,1,1,1]
 var kindnessWeights = [1,1,1,1,1]
 
 var meaning = function(words, state){
@@ -199,14 +196,10 @@ var listener0 = cache(function(utterance) {
 }, 10);
 
 
-var speaker1 = cache(function(state, speakerGoals, rsaParameters) {
-
+//var speaker1 = cache(function(state, speakerGoals, rsaParameters) {
+  
+var speaker1 = cache(function(state, speakerGoals) {
   Infer({method: "enumerate"}, function(){
-
-    // unpack parameters
-    // var speakerOptimality = rsaParameters.speakerOptimality;
-    // var alpha = rsaParameters.alpha;
-
     var utterance = utterancePrior();
     
     var L0 = listener0(utterance);
@@ -216,11 +209,9 @@ var speaker1 = cache(function(state, speakerGoals, rsaParameters) {
     
     var eUtility = speakerGoals.honesty*epistemicUtility;
     var sUtility = speakerGoals.kindness*socialUtility;
-    // var mUtility = speakerGoals.meanness*socialUtility;
-    
+
     var speakerUtility = eUtility+sUtility;
-   // var speakerUtility = eUtility+sUtility-mUtility;
-    
+
     factor(speakerOptimality*speakerUtility);
     
     return utterance;
@@ -229,10 +220,10 @@ var speaker1 = cache(function(state, speakerGoals, rsaParameters) {
 
 var listener1 = cache(function(utterance, rsaParameters) {
   Infer({method: "enumerate"}, function(){
-      var speakerGoals = {
+    var speakerGoals = {
       honesty: [0.1, 0.3, 0.5, 0.7, 0.9][discrete(honestyWeights)],
       kindness: [0.1, 0.3, 0.5, 0.7, 0.9][discrete(kindnessWeights)]
-      }
+    }
     
     var state = statePrior()
     
@@ -244,52 +235,23 @@ var listener1 = cache(function(utterance, rsaParameters) {
       state: state,
       goals: speakerGoals
     }
-
-    // var utterance = exptCondition.utterance;
-    // var trueState = exptCondition.state;
-    // var knownGoalsWeights = exptCondition.goalWeights;
-    
-    // var state = statePrior()
-
-    // Expt 2. State inference task:
-    // goal weights are known (e.g. "speaker is trying to be nice")
-    // var speakerGoals = knownGoalsWeights ?
-    // {
-    //  honesty: knownGoalsWeights.honesty,
-    //  kindness: knownGoalsWeights.kindness,
-    //  meanness: knownGoalsWeights.meanness
-    // } : // expt 3. goal inference task; listener has uncertainty about weights
-    // {
-    //  honesty: uniformDraw(weightBins),
-    //  kindness: uniformDraw(weightBins),
-    //  meanness: uniformDraw(weightBins)
-    // }
-
-    // Expt 3. goal inference, trueState is known.
-    // condition(trueState ? trueState == state : true)
-    
-    // var S1 = speaker1(state, speakerGoals)
-    
-    // observe(S1, utterance, rsaParameters)
-    
-    // return state 
-
-  })
+      })
 }, 10)
 
 var speaker2 = cache(function(state, intendedGoals, rsaParameters) {
   Enumerate(function(){
-
+    
     var utterance = utterancePrior()
-
+    
     var L1 = listener1(utterance, rsaParameters)
-
+    
     factor(L1.score({"state":state, "goals":intendedGoals}))
-
+    
     return utterance
-
+    
   })
 }, 10)
+
 '
 ```
 
@@ -300,83 +262,84 @@ Data analysis model
 dataAnalysisModel <- '
 // foreach helper function
 var foreach = function(fn, lst) {
-    var foreach_ = function(i) {
-        if (i < lst.length) {
-            fn(lst[i]);
-            foreach_(i + 1);
-        }
-    };
-    foreach_(0);
+  var foreach_ = function(i) {
+    if (i < lst.length) {
+      fn(lst[i]);
+      foreach_(i + 1);
+    }
+  };
+  foreach_(0);
 };
 //
-
-var data = dataFromR.data;
-
-var goals = _.uniq(_.pluck(data, "goal"));
-var states = _.uniq(_.pluck(data, "true_state"));
-// var utterances = _.uniq(_.pluck(data, "utterance"));
-
-var dataAnalysis = function(){
-
-  var RSAparameters = {
-    speakerOptimality: uniform(0, 20),
-    alpha: uniform(0, 5)
-  };
-
-  var goalWeightsAndPostPred = map(function(goal){
-    
-    var goalWeights = {
-      honesty: uniform(0, 1),
-      kindness: uniform(0, 1), // EY: should these be changed to -1 to 1?
-      // meanness: uniform(0, 1)
-    }
-
-    var postPred = map(function(state){
-
-      var utteranceData = _.pluck(_.where(data, {true_state: state, goal: goal}), "utterance"); // how to specify utterance with both utterance x utterance_prob from the data?
   
-      var exptConditionInfo = {
-        state: state, 
-        utterance: false,
-        goalWeights: goalWeights
-      };
-
-      var RSApredictions = speaker2(exptConditionInfo, RSAparameters);
-
-      var linkedRSA = linkingFunction(RSApredictions);
+  var data = dataFromR.data;
+  
+  var goals = _.uniq(_.pluck(data, "goal"));
+  var states = _.uniq(_.pluck(data, "true_state"));
+  // var utterances = _.uniq(_.pluck(data, "utterance"));
+  
+  var dataAnalysis = function(){
+    
+    var RSAparameters = {
+      speakerOptimality: uniform(0, 20),
+      alpha: uniform(0, 5)
+    };
+    
+    var goalWeightsAndPostPred = map(function(goal){
       
-
-      mapData({data: utteranceData}, function(d){ observe(RSApredictions, d) });
-      mapData({data: utteranceData}, function(d){ observe(linkedRSA, d) });
-
-      var postPred = expectation(RSApredictions)
-
-      return {key: "posteriorPredictive", goal: goal, state: state, val: postPred}
-
-    }, states)
-
-
-    return [postPred, 
-      {key: "weightHonest", goal: goal, utt: "NA", val: goalWeights.honesty},
-      {key: "weightKind", goal: goal, utt: "NA", val: goalWeights.kindness},
-      {key: "weightMean", goal: goal, utt: "NA", val: goalWeights.meanness}
-      ]
-
-  }, goals)
-
-
-  var returnList = _.flatten([goalWeightsAndPostPred, 
-        {key: "speakerOptimality", goal: "NA", utt: "NA", val: RSAparameters.speakerOptimality},
-        {key: "alpha", goal: "NA", utt: "NA", val: RSAparameters.alpha}
-  ])
-
-  var returnObj = _.object(map(function(i){
-    [i.key + "_" + i.goal + "_" + i.state, i.val]
-  }, returnList))
-
-  return returnObj
-
-}
+      var goalWeights = {
+        honesty: uniform(0, 1),
+        kindness: uniform(0, 1), // EY: should these be changed to -1 to 1?
+        // meanness: uniform(0, 1)
+      }
+      
+      var postPred = map(function(state){
+        
+        var utteranceData = _.pluck(_.where(data, {true_state: state, goal: goal}), "utterance"); // how to specify utterance with both utterance x utterance_prob from the data?
+        
+        var exptConditionInfo = {
+          state: state, 
+          utterance: false,
+          goalWeights: goalWeights
+        };
+        
+        var RSApredictions = speaker2(exptConditionInfo, RSAparameters);
+        
+        // var linkedRSA = linkingFunction(RSApredictions);
+        
+        
+        mapData({data: utteranceData}, function(d){ observe(RSApredictions, d) });
+        // mapData({data: utteranceData}, function(d){ observe(linkedRSA, d) });
+        
+        var postPred = expectation(RSApredictions)
+        
+        return {key: "posteriorPredictive", goal: goal, state: state, val: postPred}
+        
+      }, states)
+      
+      
+      return [postPred, 
+              {key: "weightHonest", goal: goal, utt: "NA", val: goalWeights.honesty},
+              {key: "weightKind", goal: goal, utt: "NA", val: goalWeights.kindness}
+              // {key: "weightMean", goal: goal, utt: "NA", val: goalWeights.meanness}
+              ]
+      
+    }, goals)
+    
+    
+    var returnList = _.flatten([goalWeightsAndPostPred, 
+                                {key: "speakerOptimality", goal: "NA", utt: "NA", val: RSAparameters.speakerOptimality},
+                                {key: "alpha", goal: "NA", utt: "NA", val: RSAparameters.alpha}
+                                ])
+    
+    var returnObj = _.object(map(function(i){
+      [i.key + "_" + i.goal + "_" + i.state, i.val]
+    }, returnList))
+    
+    return returnObj
+    
+  }
+    
 '
 ```
 
@@ -405,6 +368,10 @@ fullModel <- paste(pRSA, dataAnalysisModel, sep = "\n")
   
   # toJSON(as.list(litSemantics.toPass), pretty = T)
   
+  # rsa.output <- webppl(pRSA,
+  #                    data = dataToWebPPL,
+  #                    data_var = "dataFromR")
+  # 
   bda.utterance.results <- webppl(fullModel,
                               data = dataToWebPPL,
                               data_var = "dataFromR",

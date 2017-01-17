@@ -1,0 +1,124 @@
+---
+title: "polite RSA speaker"
+author: "mht, ejy"
+date: "Jan 17 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+# rm(list = ls())
+library(rwebppl)
+library(jsonlite)
+library(dplyr)
+library(tidyr)
+library(langcog)
+library(ggplot2)
+library(shiny)
+knitr::opts_chunk$set(echo = TRUE)
+
+# set path to working dir
+local.path <- "~/Documents/Research/polgrice_GIT/"
+source(paste(local.path, "experiment/data_analysis/markdown/L2_S_us.R", sep=""))
+local.path <- "~/Documents/Research/polgrice_GIT/"
+source(paste(local.path, "experiment/data_analysis/markdown/L2_S_posneg.R", sep=""))
+```
+
+In this model, you can change the utterances, experimental condition, etc. and see model predictions.
+
+# Analyze the literal semantics data
+
+```{r literalSemantics}
+local.path <- "~/Documents/Research/polgrice_GIT/"
+# d.ls <- read.csv(paste(local.path, "experiment/data_analysis/data/literalSemantics_sites.csv", sep=""))
+d.ls <- read.csv(paste(local.path, "experiment/data_analysis/data/literalSemantics_wNeg.csv", sep=""))
+
+ls.summary <- d.ls %>%
+  group_by(state, utterance) %>%
+  # group_by(site, state, utterance) %>%
+  multi_boot_standard(column = "judgment", na.rm=TRUE)
+
+# ls.summary <- ls.summary %>%
+#   filter(site == "US") %>%
+#   # filter(site == "India") %>%
+#   # filter(site == "Korea") %>%
+#   ungroup() %>%
+#   select(-site)
+#   
+
+ls.toWppl <- ls.summary %>%
+  select(state, utterance, mean) %>%
+  mutate(mean = ifelse(mean == 0, 0.01, mean)) %>% # to avoid 0 probabilities
+  spread(state, mean)
+
+# ls.toWppl$utterance <- ordered(ls.toWppl$utterance, levels=c("terrible", "bad", "okay", "good", "amazing"))
+# levels(ls.toWppl$utterance) <- c("yes_terrible", "yes_bad", "yes_okay", "yes_good","yes_amazing")
+# levels(ls.toWppl$utterance) <- c("yes_terrible", "yes_bad", "yes_okay", "yes_good","yes_amazing", "not_terrible","not_bad","not_okay","not_good","not_amazing")
+
+```
+
+# speaker
+
+```{r non-shiny}
+utts <- c("yes_terrible", "yes_bad", "yes_okay", "yes_good","yes_amazing",
+          "not_terrible","not_bad","not_okay","not_good","not_amazing")
+
+dataToWppl <- list()
+dataToWppl[["literalSemantics"]] <- ls.toWppl
+```
+
+```{r}
+rsa.output <- webppl(program_file = paste(local.path, "model/politeRSA_s2.js", sep=""),
+                     data = dataToWppl,
+                     data_var = "dataFromR")
+
+# nice&honest, honest, vs. nice
+rsa.output <- 
+  data.frame(rsa.output) %>%
+  mutate(utterance = honest.heart1.support) %>%
+  select(-contains("support")) 
+
+rsa.output.dist <- rsa.output %>%
+  gather(state, prob, nicehonest.heart1.probs:seminice.heart5.probs) %>%
+  separate(state, into = c("goal", "state", "probs"), sep = "\\.") %>%
+  select(-probs) %>%
+  separate(utterance, into = c("posneg", "utterance"), sep = "\\_") %>%
+  mutate(utterance = factor(utterance, levels =c("terrible", "bad", "okay", "good", "amazing")),
+         posneg = factor(posneg, labels = c("neg", "no_neg"))) 
+
+rsa.output.dist$goal <- factor(rsa.output.dist$goal, levels = c("honest", "semihonest", "nice", "seminice", "nicehonest"))
+
+ggplot(data=rsa.output.dist, aes(x=posneg, y=prob, fill=utterance)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_grid(goal~state) +
+  xlab("neg (it wasn't ~) vs. no neg (it was ~)") +
+  ggtitle("speaker1 model predictions by goal")
+
+# s1 vs. s2
+# rsa.output <- 
+#   data.frame(rsa.output) %>%
+#   mutate(utterance = s1.heart1.support) %>%
+#   select(-contains("support")) 
+# 
+# rsa.output.dist <- rsa.output %>%
+#   gather(state, prob, s1.heart1.probs:s2.heart5.probs) %>%
+#   mutate(speaker = substr(state, 1, 2),
+#          state = substr(state, 9, 9)) %>%
+#   separate(utterance, into = c("posneg", "utterance"), sep = "\\_") %>%
+#   mutate(utterance = factor(utterance, levels =c("terrible", "bad", "okay", "good", "amazing")),
+#          posneg = factor(posneg, labels = c("neg", "no_neg")),
+#          state = factor(state, labels = c("1 heart", "2 heart", "3 heart", "4 heart", "5 heart")))
+# 
+# ggplot(data=rsa.output.dist, aes(x=posneg, y=prob, fill=utterance)) +
+#   geom_bar(stat="identity", position="dodge") +
+#   facet_grid(state~speaker) +
+#   xlab("neg (it wasn't ~) vs. no neg (it was ~)") +
+#   ggtitle("speaker1 vs. 2 model predictions")
+# 
+# ggplot(data=filter(rsa.output.dist, speaker =="s1"), aes(x=posneg, y=prob, fill=utterance)) +
+#   geom_bar(stat="identity", position="dodge") +
+#   facet_grid(.~state) +
+#   xlab("neg (it wasn't ~) vs. no neg (it was ~)") +
+#   ggtitle("speaker1 model predictions")
+
+```
+
