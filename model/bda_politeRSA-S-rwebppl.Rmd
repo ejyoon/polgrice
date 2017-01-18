@@ -198,8 +198,10 @@ var listener0 = cache(function(utterance) {
 
 //var speaker1 = cache(function(state, speakerGoals, rsaParameters) {
   
-var speaker1 = cache(function(state, speakerGoals) {
+var speaker1 = cache(function(exptCondInfo) {
   Infer({method: "enumerate"}, function(){
+    var state = exptCondInfo.state;
+    var speakerGoals = exptCondInfo.goalWeights;
     var utterance = utterancePrior();
     
     var L0 = listener0(utterance);
@@ -218,39 +220,40 @@ var speaker1 = cache(function(state, speakerGoals) {
   })
 }, 10)
 
-var listener1 = cache(function(utterance, rsaParameters) {
-  Infer({method: "enumerate"}, function(){
-    var speakerGoals = {
-      honesty: [0.1, 0.3, 0.5, 0.7, 0.9][discrete(honestyWeights)],
-      kindness: [0.1, 0.3, 0.5, 0.7, 0.9][discrete(kindnessWeights)]
-    }
-    
-    var state = statePrior()
-    
-    var S1 = speaker1(state, speakerGoals, rsaParameters)
-    
-    observe(S1, utterance)
-    
-    return {
-      state: state,
-      goals: speakerGoals
-    }
-      })
-}, 10)
-
-var speaker2 = cache(function(state, intendedGoals, rsaParameters) {
-  Enumerate(function(){
-    
-    var utterance = utterancePrior()
-    
-    var L1 = listener1(utterance, rsaParameters)
-    
-    factor(L1.score({"state":state, "goals":intendedGoals}))
-    
-    return utterance
-    
-  })
-}, 10)
+//var listener1 = cache(function(utterance, rsaParameters) {
+//  Infer({method: "enumerate"}, function(){
+//    var speakerGoals = {
+//      honesty: [0.1, 0.3, 0.5, 0.7, 0.9][discrete(honestyWeights)],
+//      kindness: [0.1, 0.3, 0.5, 0.7, 0.9][discrete(kindnessWeights)]
+//    }
+//    
+//    var state = statePrior()
+//    
+//    var S1 = speaker1(state, speakerGoals, rsaParameters)
+//    
+//    observe(S1, utterance)
+//    
+//    return {
+//      state: state,
+//      goals: speakerGoals
+//    }
+//      })
+//}, 10)
+//
+//var speaker2 = cache(function(exptCondInfo, rsaParameters) {
+//  Enumerate(function(){
+//    var state = exptCondInfo.state;
+//    var intendedGoals = exptCondInfo.goalWeights;
+//    var utterance = utterancePrior()
+//    
+//    var L1 = listener1(utterance, rsaParameters)
+//
+//    factor(L1.score({"state":state, "goals":intendedGoals}))
+//    return utterance
+//        display(d)
+//    
+//  })
+//}, 10)
 
 '
 ```
@@ -288,14 +291,14 @@ var foreach = function(fn, lst) {
     var goalWeightsAndPostPred = map(function(goal){
       
       var goalWeights = {
-        honesty: uniform(0, 1),
-        kindness: uniform(0, 1), // EY: should these be changed to -1 to 1?
-        // meanness: uniform(0, 1)
-      }
-      
+      honesty: uniformDraw([0.1, 0.3, 0.5, 0.7, 0.9]),
+      kindness: uniformDraw([0.1, 0.3, 0.5, 0.7, 0.9])
+    }
+
+
       var postPred = map(function(state){
         
-        var utteranceData = _.pluck(_.where(data, {true_state: state, goal: goal}), "utterance"); // how to specify utterance with both utterance x utterance_prob from the data?
+        var utteranceData = _.pluck(_.where(data, {true_state: state, goal: goal}), "utterance"); 
         
         var exptConditionInfo = {
           state: state, 
@@ -303,12 +306,17 @@ var foreach = function(fn, lst) {
           goalWeights: goalWeights
         };
         
-        var RSApredictions = speaker2(exptConditionInfo, RSAparameters);
-        
+        var RSApredictions = speaker1(exptConditionInfo, RSAparameters);
+        //RSApredictions.support()
+
         // var linkedRSA = linkingFunction(RSApredictions);
         
         
-        mapData({data: utteranceData}, function(d){ observe(RSApredictions, d) });
+        mapData({data: utteranceData}, 
+            function(d){ 
+                display(RSApredictions.score(d))
+                observe(RSApredictions, d) 
+            });
         // mapData({data: utteranceData}, function(d){ observe(linkedRSA, d) });
         
         var postPred = expectation(RSApredictions)
@@ -339,6 +347,7 @@ var foreach = function(fn, lst) {
     return returnObj
     
   }
+
     
 '
 ```
@@ -381,7 +390,8 @@ fullModel <- paste(pRSA, dataAnalysisModel, sep = "\n")
                                                     verbose = TRUE),
                               model_var = "dataAnalysis",
                               output_format = "samples",
-                              chains = 2,
-                              cores = 2)
+                              chains = 1,
+                              cores = 1)
+  #dataToWebPPL
   
 ```

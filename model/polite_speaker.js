@@ -53,8 +53,10 @@ var listener0 = cache(function(utterance) {
 
 //var speaker1 = cache(function(state, speakerGoals, rsaParameters) {
   
-var speaker1 = cache(function(state, speakerGoals) {
+var speaker1 = cache(function(exptCondInfo) {
   Infer({method: "enumerate"}, function(){
+    var state = exptCondInfo.state;
+    var speakerGoals = exptCondInfo.goalWeights;
     var utterance = utterancePrior();
     
     var L0 = listener0(utterance);
@@ -73,36 +75,37 @@ var speaker1 = cache(function(state, speakerGoals) {
   })
 }, 10)
 
-var listener1 = cache(function(utterance, rsaParameters) {
-  Infer({method: "enumerate"}, function(){
-    var speakerGoals = {
-      honesty: [0.1, 0.3, 0.5, 0.7, 0.9][discrete(honestyWeights)],
-      kindness: [0.1, 0.3, 0.5, 0.7, 0.9][discrete(kindnessWeights)]
-    }
-    
-    var state = statePrior()
-    
-    var S1 = speaker1(state, speakerGoals, rsaParameters)
-    
-    observe(S1, utterance)
-    
-    return {
-      state: state,
-      goals: speakerGoals
-    }
-      })
-}, 10)
-
-var speaker2 = cache(function(state, intendedGoals, rsaParameters) {
-  Enumerate(function(){
-    
-    var utterance = utterancePrior()
-    
-    var L1 = listener1(utterance, rsaParameters)
-    
-    factor(L1.score({"state":state, "goals":intendedGoals}))
-    
-    return utterance
-    
-  })
-}, 10)
+//var listener1 = cache(function(utterance, rsaParameters) {
+//  Infer({method: "enumerate"}, function(){
+//    var speakerGoals = {
+//      honesty: [0.1, 0.3, 0.5, 0.7, 0.9][discrete(honestyWeights)],
+//      kindness: [0.1, 0.3, 0.5, 0.7, 0.9][discrete(kindnessWeights)]
+//    }
+//    
+//    var state = statePrior()
+//    
+//    var S1 = speaker1(state, speakerGoals, rsaParameters)
+//    
+//    observe(S1, utterance)
+//    
+//    return {
+//      state: state,
+//      goals: speakerGoals
+//    }
+//      })
+//}, 10)
+//
+//var speaker2 = cache(function(exptCondInfo, rsaParameters) {
+//  Enumerate(function(){
+//    var state = exptCondInfo.state;
+//    var intendedGoals = exptCondInfo.goalWeights;
+//    var utterance = utterancePrior()
+//    
+//    var L1 = listener1(utterance, rsaParameters)
+//
+//    factor(L1.score({"state":state, "goals":intendedGoals}))
+//    return utterance
+//        display(d)
+//    
+//  })
+//}, 10)
