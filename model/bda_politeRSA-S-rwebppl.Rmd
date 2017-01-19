@@ -136,7 +136,8 @@ d.utterance <- read.csv(paste(
   local.path, 
   "experiment/data_analysis/data/speaker.csv"
   , sep="")
-)
+)  %>%
+    filter(utterance != "NA_NA")
 ```
 
 Polite RSA: production model
@@ -193,7 +194,7 @@ var listener0 = cache(function(utterance) {
     condition(m);
     return state;
   });
-}, 10);
+}, 10000);
 
 
 //var speaker1 = cache(function(state, speakerGoals, rsaParameters) {
@@ -218,7 +219,7 @@ var speaker1 = cache(function(exptCondInfo) {
     
     return utterance;
   })
-}, 10)
+}, 10000)
 
 //var listener1 = cache(function(utterance, rsaParameters) {
 //  Infer({method: "enumerate"}, function(){
@@ -291,14 +292,14 @@ var foreach = function(fn, lst) {
     var goalWeightsAndPostPred = map(function(goal){
       
       var goalWeights = {
-      honesty: uniformDraw([0.1, 0.3, 0.5, 0.7, 0.9]),
-      kindness: uniformDraw([0.1, 0.3, 0.5, 0.7, 0.9])
+      honesty: uniformDraw([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]),
+      kindness: uniformDraw([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
     }
 
 
       var postPred = map(function(state){
         
-        var utteranceData = _.pluck(_.where(data, {true_state: state, goal: goal}), "utterance"); 
+      var utteranceData = _.pluck(_.where(data, {true_state: state, goal: goal}), "utterance"); 
         
         var exptConditionInfo = {
           state: state, 
@@ -306,7 +307,7 @@ var foreach = function(fn, lst) {
           goalWeights: goalWeights
         };
         
-        var RSApredictions = speaker1(exptConditionInfo, RSAparameters);
+        var RSApredictions = speaker1(exptConditionInfo);
         //RSApredictions.support()
 
         // var linkedRSA = linkingFunction(RSApredictions);
@@ -314,34 +315,46 @@ var foreach = function(fn, lst) {
         
         mapData({data: utteranceData}, 
             function(d){ 
-                display(RSApredictions.score(d))
+                // display(RSApredictions.score(d))
+                // display("d = " + d +  " ___ scr = " + RSApredictions.score(d) )
                 observe(RSApredictions, d) 
             });
         // mapData({data: utteranceData}, function(d){ observe(linkedRSA, d) });
         
-        var postPred = expectation(RSApredictions)
+        var postSupport = RSApredictions.support(); // all utterances in the posterior
+
+
+        var postPredictive = map(function(u){
+          return {
+            key: "posteriorPredictive",
+            goal: goal,
+            state: state,
+            utt: u,
+            val: Math.exp(RSApredictions.score(u))
+          }
+        }, postSupport)
         
-        return {key: "posteriorPredictive", goal: goal, state: state, val: postPred}
+        return postPredictive
         
       }, states)
       
       
       return [postPred, 
-              {key: "weightHonest", goal: goal, utt: "NA", val: goalWeights.honesty},
-              {key: "weightKind", goal: goal, utt: "NA", val: goalWeights.kindness}
-              // {key: "weightMean", goal: goal, utt: "NA", val: goalWeights.meanness}
+              {key: "weightHonest", goal: goal, state: "NA", utt: "NA", val: goalWeights.honesty},
+              {key: "weightKind", goal: goal, state: "NA", utt: "NA", val: goalWeights.kindness}
+              // {key: "weightMean", goal: goal, state: "NA", utt: "NA", val: goalWeights.meanness}
               ]
       
     }, goals)
     
     
     var returnList = _.flatten([goalWeightsAndPostPred, 
-                                {key: "speakerOptimality", goal: "NA", utt: "NA", val: RSAparameters.speakerOptimality},
-                                {key: "alpha", goal: "NA", utt: "NA", val: RSAparameters.alpha}
+                                {key: "speakerOptimality", goal: "NA", utt: "NA", state: "NA", val: RSAparameters.speakerOptimality},
+                                {key: "alpha", goal: "NA", utt: "NA", state: "NA", val: RSAparameters.alpha}
                                 ])
     
     var returnObj = _.object(map(function(i){
-      [i.key + "_" + i.goal + "_" + i.state, i.val]
+      [i.key + "_" + i.goal + "_" + i.state + "_" + i.utt, i.val]
     }, returnList))
     
     return returnObj
@@ -385,13 +398,45 @@ fullModel <- paste(pRSA, dataAnalysisModel, sep = "\n")
                               data = dataToWebPPL,
                               data_var = "dataFromR",
                               inference_opts = list(method = "MCMC", 
-                                                    samples = 10,
-                                                    burn = 5,
+                                                    samples = 2000,
+                                                    burn = 1000,
                                                     verbose = TRUE),
                               model_var = "dataAnalysis",
                               output_format = "samples",
-                              chains = 1,
-                              cores = 1)
+                              chains = 2,
+                              cores = 2)
   #dataToWebPPL
   
 ```
+
+```{r}
+bda.state.tidy <- bda.utterance.results %>% 
+    select(contains("posteriorPredictive")) %>%
+    gather(key, val) %>% 
+    separate(key, into = c("param", "goal", "state", "positivity", "utterance")) %>%
+  mutate(utterance = factor(utterance, levels = c("terrible", "bad", "okay", "good", "amazing")),
+         positivity = factor(positivity, labels = c("neg", "no_neg"), 
+         positivity = factor(positivity, levels = c("no_neg", "neg"))) %>%
+    group_by(goal, state, positivity, utterance) %>%
+  summarise(val = mean(val))
+   # multi_boot_standard(column = "val") %>%
+  # mutate(val = mean)
+
+ggplot(data=bda.state.tidy, aes(x=positivity, y=val, fill=utterance)) +
+  geom_bar(stat="identity", position=position_dodge()) +
+  facet_grid(goal~state) +
+  xlab("no neg (it was ~) vs neg (it wasn't ~) ") +
+  ylab("proportion chosen") +
+  ggtitle("What would the speaker say given their goals?") +
+  # geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper),position="dodge") +
+  geom_hline(yintercept=.1, lty=2)
+
+bda.state.tidy2 <- bda.utterance.results %>% 
+    select(contains("weight")) %>%
+    gather(key, val) %>% 
+    separate(key, into = c("param", "goal", "state", "utterance")) %>%
+  group_by(goal, param) %>%
+  summarize(val = mean(val))
+
+```
+      
