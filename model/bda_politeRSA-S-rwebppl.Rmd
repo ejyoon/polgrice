@@ -174,8 +174,8 @@ var utterancePrior = function(){
 };
 
 // model parameters
-var alpha = 1.25;
-var speakerOptimality = 10;
+// var alpha = 1.25;
+// var speakerOptimality = 10;
 
 // measured in Experiment 1
 var literalSemantics = dataFromR.literalSemantics;
@@ -199,11 +199,16 @@ var listener0 = cache(function(utterance) {
 
 //var speaker1 = cache(function(state, speakerGoals, rsaParameters) {
   
-var speaker1 = cache(function(exptCondInfo) {
+var speaker1 = cache(function(exptCondInfo, rsaParameters) {
   Infer({method: "enumerate"}, function(){
     var state = exptCondInfo.state;
     var speakerGoals = exptCondInfo.goalWeights;
     var utterance = utterancePrior();
+    
+    var speakerOptimality = rsaParameters.speakerOptimality;
+    var alpha = rsaParameters.alpha;
+    //display("so = " + speakerOptimality)
+    //display("alpha = " + alpha)
     
     var L0 = listener0(utterance);
     
@@ -292,8 +297,10 @@ var foreach = function(fn, lst) {
     var goalWeightsAndPostPred = map(function(goal){
       
       var goalWeights = {
-      honesty: uniformDraw([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]),
-      kindness: uniformDraw([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
+	      honesty: uniform(0,1), 
+	      kindness: uniform(0,1)
+      //honesty: uniformDraw([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]),
+      //kindness: uniformDraw([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
     }
 
 
@@ -307,7 +314,7 @@ var foreach = function(fn, lst) {
           goalWeights: goalWeights
         };
         
-        var RSApredictions = speaker1(exptConditionInfo);
+        var RSApredictions = speaker1(exptConditionInfo, RSAparameters);
         //RSApredictions.support()
 
         // var linkedRSA = linkingFunction(RSApredictions);
@@ -410,12 +417,15 @@ fullModel <- paste(pRSA, dataAnalysisModel, sep = "\n")
 ```
 
 ```{r}
+summary(bda.utterance.results$speakerOptimality_NA_NA_NA)
+summary(bda.utterance.results$alpha_NA_NA_NA)
+
 bda.state.tidy <- bda.utterance.results %>% 
     select(contains("posteriorPredictive")) %>%
     gather(key, val) %>% 
     separate(key, into = c("param", "goal", "state", "positivity", "utterance")) %>%
   mutate(utterance = factor(utterance, levels = c("terrible", "bad", "okay", "good", "amazing")),
-         positivity = factor(positivity, labels = c("neg", "no_neg"), 
+         positivity = factor(positivity, labels = c("neg", "no_neg")), 
          positivity = factor(positivity, levels = c("no_neg", "neg"))) %>%
     group_by(goal, state, positivity, utterance) %>%
   summarise(val = mean(val))
@@ -438,5 +448,6 @@ bda.state.tidy2 <- bda.utterance.results %>%
   group_by(goal, param) %>%
   summarize(val = mean(val))
 
+bda.state.tidy2
 ```
       

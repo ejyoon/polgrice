@@ -1,0 +1,106 @@
+---
+title: "Summary of expts so far"
+author: "Erica Yoon"
+date: "Dec 3, 2015"
+output: html_document
+---
+
+# Three expts
+(1) infer goals given utterance and word-scale state
+(2) infer goals given utterance and heart-scale state 
+(3) accept word (feeling) given heart-scale state
+
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+# rm(list = ls())
+library(jsonlite)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(binom)
+library(bootstrap)
+library(langcog)
+source("/Users/ericang/Documents/Research/polgrice_GIT/experiment/data_analysis/helper/useful.R")
+
+
+raw.data.path <- "/Users/ericang/Documents/Research/polgrice_GIT/experiment/exp_versions/23_L2_G_wNeg/production-results/"
+
+## LOOP TO READ IN FILES
+all.data <- data.frame()
+files <- dir(raw.data.path,pattern="*.json")
+
+for (file.name in files) {
+  
+  ## these are the two functions that are most meaningful
+  json_file <- readLines(paste(raw.data.path,file.name,sep=""))
+  json_file_str = paste(json_file, collapse = "")
+  json_file_str = gsub(",}", "}", json_file_str)
+  jso = jsonlite::fromJSON(json_file_str)
+  jso$answers$data$people <- NULL
+  jso1 <- data.frame(jso)
+  jso1$subid <- substring(file.name, 1, 6)
+
+  ## now here's where data get bound together
+  all.data <- rbind(all.data, jso1)
+}
+```
+
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+rearr1 <- all.data %>%
+  select(subid, num_range("answers.data.goal", 0:2)) %>%
+  distinct(subid, .keep_all = TRUE) %>%
+  gather(goal_order, goal, num_range("answers.data.goal", 0:2)) %>%
+  mutate(goal_order = substr(goal_order, 18, 18)) %>%
+  mutate(goal_num = "3goals")
+
+d1 <- all.data %>%
+  select(subid, answers.data.order, answers.data.knowledge, answers.data.domain, answers.data.state, answers.data.utterance, num_range("answers.data.goalProb", 0:2)) %>%
+  gather(goal_order, goal_prob, num_range("answers.data.goalProb", 0:2)) %>%
+  mutate(goal_order = substr(goal_order, 22, 22))
+
+d1 <- left_join(d1, rearr1)
+
+d <- d1 %>%
+  mutate(trial = answers.data.order) %>%
+  mutate(item = answers.data.domain) %>%
+  mutate(true_state = substr(answers.data.state, 6, 6)) %>%
+  mutate(knowledge = answers.data.knowledge) %>%
+  mutate(positivity = factor(as.numeric(grepl("yes", answers.data.utterance)), 
+                        levels = c(0, 1), 
+                        labels = c("negative","positive"))) %>%
+  mutate(utterance = substring(answers.data.utterance, 5)) %>%
+  select(subid, goal, true_state, positivity, utterance, goal, goal_prob)
+
+d$subid <- as.factor(d$subid)
+d$true_state <- as.factor(d$true_state) 
+d$utterance <- as.factor(d$utterance)
+d$goal <- as.factor(d$goal)
+d$goal_prob <- as.numeric(d$goal_prob)
+
+# d$utterance <- ordered(d$utterance, levels = c("terrible", "bad", "okay", "good", "amazing"))
+```
+
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+# goal_prob ~ true_state + utterance + goal
+ms <- d %>%
+  group_by(goal, true_state, positivity, utterance, subid) %>%
+  summarize(
+            goal_prob = mean(goal_prob, na.rm=TRUE)
+          ) %>%
+  group_by(goal, true_state, positivity, utterance) %>%
+  multi_boot_standard(column = "goal_prob") %>%
+  mutate(goal_prob = mean)
+```
+
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+# ms$goal <- ordered(ms$goal, levels = c("honest", "nice", "mean"))
+
+qplot(true_state, goal_prob, 
+      colour = goal,
+      data=ms) + 
+  geom_line(aes(group=goal)) +
+  facet_grid(positivity~utterance) +
+  xlab("state") +
+  ylab("likelihood for goal") +
+ # ggtitle("Experiment: goals given heart-state and utterance") +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1))
+```
