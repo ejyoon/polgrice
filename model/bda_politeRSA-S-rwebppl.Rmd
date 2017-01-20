@@ -13,9 +13,9 @@ knitr::opts_chunk$set(echo = TRUE)
 library(coda)
 
 # set path to working dir
-# local.path <- "~/Documents/research/polgrice/"
-local.path <- "~/Documents/Research/polgrice_GIT/"
-source(paste(local.path, "experiment/data_analysis/markdown/polgrice_S.R", sep=""))
+ local.path <- "~/Documents/research/polgrice/"
+#local.path <- "~/Documents/Research/polgrice_GIT/"
+#source(paste(local.path, "experiment/data_analysis/markdown/polgrice_S.R", sep=""))
 
 estimate_mode <- function(s) {
   d <- density(s)
@@ -87,15 +87,15 @@ litSemantics.results <- data.frame()
                    data_var = "data",
                    inference_opts = list(
                      method = "rejection",
-                     samples = 10000
+                     samples = 100
                    ),
                    model_var = "literalSemantics",
                    output_format = "samples")
       
       rs.summary <- rs %>%
-        summarize(MAP = estimate_mode(theta),
-                  cred_low = hdi_lower(theta),
-                  cred_upper = hdi_upper(theta)) %>%
+        # summarize(MAP = estimate_mode(theta),
+        #           cred_low = hdi_lower(theta),
+        #           cred_upper = hdi_upper(theta)) %>%
         mutate(state = st, utterance = utt)
       
       litSemantics.results <- bind_rows(litSemantics.results,
@@ -134,7 +134,7 @@ ggplot(data=litSemantics.results.org,
 ```{r}
 d.utterance <- read.csv(paste(
   local.path, 
-  "experiment/data_analysis/data/speaker.csv"
+  "experiment/data_analysis/data/speaker_new.csv"
   , sep="")
 )  %>%
     filter(utterance != "NA_NA")
@@ -149,28 +149,24 @@ var utterances = ["yes_terrible","yes_bad","yes_okay","yes_good","yes_amazing",
                   //                  ,"nullUtt"
                   ];
 
-var cost = {
-  "not_amazing": 2,
-  "not_bad": 2,
-  "not_good": 2,
-  "not_okay": 2,
-  "not_terrible": 2,
-  "yes_amazing": 1,
-  "yes_bad": 1,
-  "yes_good": 1,
-  "yes_okay": 1,
-  "yes_terrible": 1,
-  //  "nullUtt":0
-};
-
 var states = [1,2,3,4,5];
 var statePrior = function(){
   return uniformDraw(states);
 };
 
-var utterancePrior = function(){
+var isNegation = function(utt){
+  return (utt.split("_") == "not")
+};
+
+var cost_yes = 1;
+var uttCosts = function(cost_neg){
+  map(function(u) {return isNegation(u) ? Math.exp(-cost_neg) : Math.exp(-cost_yes)},
+        utterances)
+}
+
+var utterancePrior = function(cost_neg){
   //  return uniformDraw(utterances)
-  return utterances[discrete(map(function(u) {return Math.exp(-cost[u]);}, utterances))];
+  return  utterances[discrete(uttCosts(cost_neg))];
 };
 
 // model parameters
@@ -179,6 +175,13 @@ var utterancePrior = function(){
 
 // measured in Experiment 1
 var literalSemantics = dataFromR.literalSemantics;
+
+var litSemanticsPosteriorObj = _.object(map(function(u){
+  return [u, _.object(map(function(s){
+    [s, _.pluck(_.where(literalSemantics, {state: s, utterance: u}), "theta")]
+  }, states))]
+}, utterances))
+// e.g. {"amazing": { 1: [w1, w2, ... , wn], 2: [ ... ], ... }, "terrible": {1: [, ...]} }
 
 var honestyWeights = [1,1,1,1,1]
 var kindnessWeights = [1,1,1,1,1]
@@ -203,7 +206,7 @@ var speaker1 = cache(function(exptCondInfo, rsaParameters) {
   Infer({method: "enumerate"}, function(){
     var state = exptCondInfo.state;
     var speakerGoals = exptCondInfo.goalWeights;
-    var utterance = utterancePrior();
+    var utterance = utterancePrior(rsaParameters.cost);
     
     var speakerOptimality = rsaParameters.speakerOptimality;
     var alpha = rsaParameters.alpha;
@@ -284,21 +287,37 @@ var foreach = function(fn, lst) {
   var data = dataFromR.data;
   
   var goals = _.uniq(_.pluck(data, "goal"));
+
   var states = _.uniq(_.pluck(data, "true_state"));
   // var utterances = _.uniq(_.pluck(data, "utterance"));
   
   var dataAnalysis = function(){
     
+    var litSemanticsPosteriorObj
+    var litSemantics = {
+      terrible: [
+          uniformDraw(litSemanticsPosteriorObj[u][1]),
+          uniformDraw(litSemanticsPosteriorObj[u][2]),
+          uniformDraw(litSemanticsPosteriorObj[u][3]),
+          uniformDraw(litSemanticsPosteriorObj[u][4]),
+          uniformDraw(litSemanticsPosteriorObj[u][5])
+      ],
+      bad:
+      ..., 
+    }
+      
+
     var RSAparameters = {
-      speakerOptimality: uniform(0, 20),
-      alpha: uniform(0, 5)
+      speakerOptimality: uniformDrift({a: 0, b: 20, width:2}),
+      alpha: uniformDrift({a: 0, b: 5, width:0.5}),
+      cost: uniformDrift({a: 1, b: 5, width:0.25})
     };
     
     var goalWeightsAndPostPred = map(function(goal){
       
       var goalWeights = {
-	      honesty: uniform(0,1), 
-	      kindness: uniform(0,1)
+	      honesty: uniformDrift({a: 0, b: 1, width:0.2}), 
+	      kindness: uniformDrift({a: 0, b: 1, width:0.2})
       //honesty: uniformDraw([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]),
       //kindness: uniformDraw([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
     }
@@ -357,7 +376,8 @@ var foreach = function(fn, lst) {
     
     var returnList = _.flatten([goalWeightsAndPostPred, 
                                 {key: "speakerOptimality", goal: "NA", utt: "NA", state: "NA", val: RSAparameters.speakerOptimality},
-                                {key: "alpha", goal: "NA", utt: "NA", state: "NA", val: RSAparameters.alpha}
+                                {key: "alpha", goal: "NA", utt: "NA", state: "NA", val: RSAparameters.alpha},
+        {key: "cost", goal: "NA", utt: "NA", state: "NA", val: RSAparameters.cost}
                                 ])
     
     var returnObj = _.object(map(function(i){
@@ -405,8 +425,8 @@ fullModel <- paste(pRSA, dataAnalysisModel, sep = "\n")
                               data = dataToWebPPL,
                               data_var = "dataFromR",
                               inference_opts = list(method = "MCMC", 
-                                                    samples = 2000,
-                                                    burn = 1000,
+                                                    samples = 400,
+                                                    burn = 200,
                                                     verbose = TRUE),
                               model_var = "dataAnalysis",
                               output_format = "samples",
@@ -421,8 +441,9 @@ summary(bda.utterance.results$speakerOptimality_NA_NA_NA)
 summary(bda.utterance.results$alpha_NA_NA_NA)
 
 bda.state.tidy <- bda.utterance.results %>% 
-    select(contains("posteriorPredictive")) %>%
+    select(contains("posteriorPredictive")) %>% 
     gather(key, val) %>% 
+    mutate(key = gsub("value.", "", key)) %>% # for mht
     separate(key, into = c("param", "goal", "state", "positivity", "utterance")) %>%
   mutate(utterance = factor(utterance, levels = c("terrible", "bad", "okay", "good", "amazing")),
          positivity = factor(positivity, labels = c("neg", "no_neg")), 
@@ -440,14 +461,39 @@ ggplot(data=bda.state.tidy, aes(x=positivity, y=val, fill=utterance)) +
   ggtitle("What would the speaker say given their goals?") +
   # geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper),position="dodge") +
   geom_hline(yintercept=.1, lty=2)
+```
 
+
+```{r}
 bda.state.tidy2 <- bda.utterance.results %>% 
     select(contains("weight")) %>%
     gather(key, val) %>% 
+    mutate(key = gsub("value.", "", key)) %>% # for mht
     separate(key, into = c("param", "goal", "state", "utterance")) %>%
-  group_by(goal, param) %>%
-  summarize(val = mean(val))
+  ggplot(., aes(x = val))+
+  geom_histogram()+
+  facet_grid(goal~param)
+  
+
+group_by(goal, param) %>%
+  summarize(MAP = estimate_mode(val),
+            cred_upper = hdi_upper(val),
+            cred_lower = hdi_lower(val))
 
 bda.state.tidy2
 ```
       
+      
+```{r}
+
+bda.utterance.results %>% 
+  select(value.speakerOptimality_NA_NA_NA, value.alpha_NA_NA_NA, value.cost_NA_NA_NA) %>%
+  #select(speakerOptimality_NA_NA_NA, alpha_NA_NA_NA, cost_NA_NA_NA) %>%
+    gather(key, val) %>% 
+    mutate(key = gsub("value.", "", key)) %>% # for mht
+    separate(key, into = c("param", "goal", "state", "utterance")) %>%
+  ggplot(., aes(x = val))+
+  geom_histogram()+
+  facet_wrap(~param)
+  
+```
