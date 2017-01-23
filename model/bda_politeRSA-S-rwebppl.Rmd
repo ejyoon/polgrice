@@ -277,22 +277,24 @@ var speaker1 = cache(function(literalSemantics, exptCondInfo, rsaParameters) {
   Infer({method: "enumerate"}, function(){
     var state = exptCondInfo.state;
     var speakerGoals = exptCondInfo.goalWeights;
+    //var speakerGoals = exptCondInfo.goalWeights;
     var utterance = utterancePrior(rsaParameters.cost);
     
     var speakerOptimality = rsaParameters.speakerOptimality;
     var alpha = rsaParameters.alpha;
-    //display("so = " + speakerOptimality)
-    //display("alpha = " + alpha)
-    
+
     var L0 = listener0(literalSemantics, utterance);
     
     var epistemicUtility = L0.score(state);
     var socialUtility = expectation(L0, function(s){return alpha*s});
     
-    var eUtility = speakerGoals.honesty*epistemicUtility;
-    var sUtility = speakerGoals.kindness*socialUtility;
+    //var eUtility = speakerGoals.honesty*epistemicUtility;
+    //var sUtility = speakerGoals.kindness*socialUtility;
+    var eUtility = speakerGoals.phi*epistemicUtility;
+    var sUtility = (1-speakerGoals.phi)*socialUtility;
 
     var speakerUtility = eUtility+sUtility;
+    //var speakerUtility = speakerGoals.phi*eUtility+(1-speakerGoals.phi)*sUtility;
 
     factor(speakerOptimality*speakerUtility);
     
@@ -386,16 +388,17 @@ var foreach = function(fn, lst) {
     var goalWeightsAndPostPred = map(function(goal){
       
       var goalWeights = {
-	      honesty: uniformDrift({a: 0, b: 1, width:0.2}), 
-	      kindness: uniformDrift({a: 0, b: 1, width:0.2})
+	      phi: uniformDrift({a: 0, b: 1, width:0.2})
+	      //honesty: uniformDrift({a: 0, b: 1, width:0.2}), 
+	      //kindness: uniformDrift({a: 0, b: 1, width:0.2})
       //honesty: uniformDraw([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]),
       //kindness: uniformDraw([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
     }
 
-
       var postPred = map(function(state){
         
       var utteranceData = _.pluck(_.where(data, {true_state: state, goal: goal}), "utterance"); 
+      //display(utteranceData)
         
         var exptConditionInfo = {
           state: state, 
@@ -438,8 +441,9 @@ var foreach = function(fn, lst) {
       
       
       return [postPred, 
-              {key: "weightHonest", goal: goal, state: "NA", utt: "NA", val: goalWeights.honesty},
-              {key: "weightKind", goal: goal, state: "NA", utt: "NA", val: goalWeights.kindness}
+              {key: "phi", goal: goal, state: "NA", utt: "NA", val: goalWeights.phi},
+              //{key: "weightHonest", goal: goal, state: "NA", utt: "NA", val: goalWeights.honesty},
+              //{key: "weightKind", goal: goal, state: "NA", utt: "NA", val: goalWeights.kindness}
               // {key: "weightMean", goal: goal, state: "NA", utt: "NA", val: goalWeights.meanness}
               ]
       
@@ -501,38 +505,68 @@ fullModel <- paste(pRSA, dataAnalysisModel, sep = "\n")
                               data = dataToWebPPL,
                               data_var = "dataFromR",
                               inference_opts = list(method = "MCMC", 
-                                                    samples = 100000,
-                                                    burn = 50000,
+                                                    samples = 800,
+                                                    burn = 400,
                                                     verbose = TRUE),
                               model_var = "dataAnalysis",
                               output_format = "samples",
                               chains = 2,
                               cores = 2)
   #dataToWebPPL
-  
+# write.csv(bda.utterance.results,paste(local.path,
+#                       "model/results/bda-politeRSA-speaker1GivenStateGoal-100000burn50000.csv",sep=""), # CHANGE FILE NAME AS NEEDED
+#           row.names=FALSE)
+
 ```
 
 ```{r}
-summary(bda.utterance.results$speakerOptimality_NA_NA_NA)
-summary(bda.utterance.results$alpha_NA_NA_NA)
-
-bda.state.tidy <- bda.utterance.results %>% 
-    select(contains("posteriorPredictive")) %>% 
-    gather(key, val) %>% 
-    mutate(key = gsub("value.", "", key)) %>% # for mht
+# bda.utterance.results <- read.csv(paste(local.path,
+#                         "model/results/bda-politeRSA-speaker1GivenStateGoal-80000burn40000.csv",
+#                         sep = ""))
+# bda.utterance.results <- fread(paste(local.path,
+#                         "model/results/bda-politeRSA-speaker1GivenStateGoal-80000burn40000.csv",
+#                         sep = ""))
+# 
+# summary(bda.utterance.results$speakerOptimality_NA_NA_NA)
+# summary(bda.utterance.results$alpha_NA_NA_NA)
+# 
+bda.state.tidy <- bda.utterance.results %>%
+    select(contains("posteriorPredictive")) %>%
+    gather(key, val) %>%
+    # mutate(key = gsub("value.", "", key)) %>% # for mht
     separate(key, into = c("param", "goal", "state", "positivity", "utterance")) %>%
   mutate(utterance = factor(utterance, levels = c("terrible", "bad", "okay", "good", "amazing")),
-         positivity = factor(positivity, labels = c("neg", "no_neg")), 
+         positivity = factor(positivity, labels = c("neg", "no_neg")),
          positivity = factor(positivity, levels = c("no_neg", "neg"))) %>%
     group_by(goal, state, positivity, utterance) %>%
   # summarise(val = mean(val))
   summarize(MAP = estimate_mode(val),
             ci_lower = hdi_upper(val),
             ci_upper = hdi_lower(val))
-   # multi_boot_standard(column = "val") %>%
+
+  # multi_boot_standard(column = "val") %>%
   # mutate(val = mean)
 
-ggplot(data=bda.state.tidy, aes(x=positivity, y=MAP, fill=utterance)) +
+# bda.utterance.tidy <- fread(paste(local.path,
+#                         "model/results/bda-politeRSA-speaker1GivenStateGoal-postLongForm.csv",
+#                         sep = ""))
+
+bda.state.tidy2 <- bda.state.tidy %>%
+  filter(!is.na(val)) %>%
+  group_by(goal, state, positivity, utterance) %>%
+  distinct(val, .keep_all = TRUE)
+
+bda.state.tidy3 <- bda.state.tidy2 %>%     
+  group_by(goal, state, positivity, utterance) %>%
+  # summarise(val = mean(val)) %>%
+  filter(!is.na(val)) %>%
+  summarize(
+    MAP = estimate_mode(val),
+            ci_lower = hdi_upper(val),
+            ci_upper = hdi_lower(val))
+
+
+ggplot(data=bda.state.tidy3, aes(x=positivity, y=MAP, fill=utterance)) +
   geom_bar(stat="identity", position=position_dodge()) +
   facet_grid(goal~state) +
   xlab("no neg (it was ~) vs neg (it wasn't ~) ") +
@@ -541,11 +575,81 @@ ggplot(data=bda.state.tidy, aes(x=positivity, y=MAP, fill=utterance)) +
   geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper),position="dodge") +
   geom_hline(yintercept=.1, lty=2)
 ```
+```{r}
+bda.state.tidy4 <- bda.state.tidy2 %>%     
+  group_by(goal, state, positivity) %>%
+  filter(!is.na(val)) %>%
+  summarize(
+    MAP = estimate_mode(val),
+            ci_lower = hdi_upper(val),
+            ci_upper = hdi_lower(val))
+
+ggplot(data=bda.state.tidy4, aes(x=state, y=MAP, col=positivity, group=positivity)) +
+  # geom_bar(stat="identity", position=position_dodge()) +
+  geom_line(stat="identity", position=position_dodge()) +
+  facet_grid(goal~.) +
+  xlab("true state") +
+  ylab("proportion chosen") +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper), position=position_dodge(width=.05)) +
+  # ggtitle("negation (indirect remark) vs. no negation (white lie)")
+  scale_colour_discrete(guide = guide_legend(title = "utterance type"))
+```
+
+```{r}
+ms_data <- ms.all
+levels(ms_data$goal)
+levels(ms_data$goal) <- c("both", "informative", "social")
+ms_data <- ms_data %>%
+    mutate(MAP = as.numeric(as.character(mean)),
+    ci_upper = as.numeric(as.character(ci_upper)),
+    ci_lower = as.numeric(as.character(ci_lower))) %>%
+  select(-mean) %>%
+  mutate(goal = as.factor(goal),
+         true_state = as.factor(true_state),
+         positivity = as.factor(positivity),
+         utterance = as.factor(utterance))
+
+levels(ms_data$true_state) <- c(1:5)
+levels(ms_data$positivity) <- c("neg", "no_neg")
+
+
+ms_model <- bda.state.tidy3 %>%
+  mutate(true_state = state) %>%
+  ungroup() %>%
+  select(-state) %>%
+  mutate(
+    model_MAP = as.numeric(as.character(MAP)),
+    model_ci_upper = as.numeric(as.character(ci_upper)),
+    model_ci_lower = as.numeric(as.character(ci_lower))) %>%
+  select(-MAP, -ci_upper, -ci_lower) %>%
+  mutate(goal = as.factor(goal),
+         true_state = as.factor(true_state),
+         positivity = as.factor(positivity),
+         utterance = as.factor(utterance))
+ms_all <- left_join(ms_data, ms_model) %>%
+  mutate(goal =factor(goal, levels=c("informative", "social", "both")))
+```
+
+```{r}
+ggplot(ms_all, aes(x = model_MAP, y = MAP, col=goal)) +
+  geom_point() +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper)) +
+  geom_errorbarh(aes(xmin=model_ci_lower,xmax=model_ci_upper)) +
+  geom_abline(intercept = 0, slope = 1, linetype = 3) +
+  xlab("Model posterior predictive") +
+  ylab("Human proportion responses") +
+  ylim(0,0.98) +
+  xlim(0,0.98) +
+  coord_fixed()
+
+cor(ms_all$MAP, ms_all$model_MAP)^2
+```
 
 
 ```{r}
 bda.state.tidy2 <- bda.utterance.results %>% 
-    select(contains("weight")) %>%
+    select(contains("phi")) %>%
+    # select(contains("weight")) %>%
     gather(key, val) %>% 
     # mutate(key = gsub("value.", "", key)) %>% # for mht
     separate(key, into = c("param", "goal", "state", "utterance")) %>%
@@ -558,6 +662,20 @@ bda.state.tidy2 <- bda.utterance.results %>%
 #   summarize(MAP = estimate_mode(val),
 #             cred_upper = hdi_upper(val),
 #             cred_lower = hdi_lower(val))
+
+bda.state.tidy2 <- bda.utterance.results %>% 
+    select(contains("weight")) %>%
+    gather(key, val) %>% 
+    # mutate(key = gsub("value.", "", key)) %>% # for mht
+    separate(key, into = c("param", "goal", "state", "utterance")) %>%
+  mutate(weight = factor(param, labels = c("epistemic", "social")),
+         goal = factor(goal, levels = c("informative", "social", "both"))) %>%
+  ggplot(., aes(x=val, fill = weight))+
+  geom_density(alpha=0.5, adjust = 1.5, color ='black', size = 1.1)+
+    facet_grid(goal~., scales='free')+
+  theme_bw()+
+  ylab("posterior density")+
+  xlab("Inferred speaker goal weight")
 
 bda.state.tidy2
 ```
