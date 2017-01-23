@@ -1,0 +1,454 @@
+---
+title: "bda-politeRSA-L2-G-wNeg-rwebppl"
+author: "Erica Yoon"
+date: "1/9/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(binom)
+library(rwebppl)
+library(jsonlite)
+library(readr)
+knitr::opts_chunk$set(echo = TRUE)
+library(coda)
+
+# set path to working dir
+# local.path <- "~/Documents/research/polgrice/"
+local.path <- "~/Documents/Research/polgrice_GIT/"
+# source(paste(local.path, "experiment/data_analysis/markdown/polgrice_S.R", sep=""))
+
+estimate_mode <- function(s) {
+  d <- density(s)
+  return(d$x[which.max(d$y)])
+}
+# HPDhi<- function(s){
+hdi_upper <- function(s){
+  m <- HPDinterval(mcmc(s))
+  return(m["var1","upper"])
+}
+# HPDlo<- function(s){
+hdi_lower <- function(s){
+  m <- HPDinterval(mcmc(s))
+  return(m["var1","lower"])
+}
+options("scipen"=10)   
+
+```
+
+# Literal semantics data
+
+```{r}
+d.lit <- read.csv(paste(local.path,
+                        "experiment/data_analysis/data/literalSemantics_wNeg.csv",
+                        sep = ""))
+```
+
+Summarize behavioral data (in terms of number of "yes"es)
+
+```{r}
+d.lit.summary <- d.lit %>%
+  group_by(state, utterance) %>%
+  summarize(k = sum(judgment),
+            n = n())
+```
+
+## Model
+
+```{r}
+literalSemanticsModel <- '
+var n = data[0]["n"]
+var k = data[0]["k"]
+
+var literalSemantics = function(){
+	var theta = uniform(0,1)
+  observe( Binomial({n: n, p: theta}), k )
+  return {theta: theta}
+}
+'
+```
+
+Run model, for all sites, states, utterances
+
+```{r}
+# sites <- levels(d.lit.summary$site)
+states <- levels(factor(d.lit.summary$state))
+utterances <- levels(d.lit.summary$utterance)
+
+litSemantics.results <- data.frame()
+
+  for (st in states){
+    for (utt in utterances){
+      
+      d.lit.pass <- d.lit.summary %>% 
+        filter((state == st) & (utterance == utt))
+      
+      rs <- webppl(literalSemanticsModel,
+                   data = d.lit.pass,
+                   data_var = "data",
+                   inference_opts = list(
+                     method = "rejection",
+                     samples = 10000
+                   ),
+                   model_var = "literalSemantics",
+                   output_format = "samples")
+      
+      rs.summary <- rs %>%
+        summarize(MAP = estimate_mode(theta),
+                  cred_low = hdi_lower(theta),
+                  cred_upper = hdi_upper(theta)) %>%
+        mutate(state = st, utterance = utt)
+      
+      litSemantics.results <- bind_rows(litSemantics.results,
+                                        rs.summary)
+      print(utt)
+    }
+    print(st)
+  }
+```
+
+Load literal semantics BDA results
+
+```{r}
+litSemantics.results <- read.csv(paste(local.path, "model/data/literal_semantics_wNeg_10000samples.csv",
+                                       sep = ""))
+```
+
+```{r}
+litSemantics.results.org <- litSemantics.results %>%
+    mutate(positivity = factor(as.numeric(grepl("yes", utterance)), 
+                             levels = c(0, 1), 
+                             labels = c("negative","positive"))) %>%
+  mutate(utterance = substring(utterance, 5)) %>%
+  mutate(utterance = ordered(utterance, levels = c("terrible", "bad", "okay", "good", "amazing")))
+
+ggplot(data=litSemantics.results.org, 
+       aes(x=state, y=MAP, col=utterance, group=utterance)) +
+  geom_line() +
+  facet_grid(positivity~utterance) +
+  geom_errorbar(aes(ymin=cred_low,ymax=cred_upper, width=.1))
+
+```
+
+# goal inference data
+
+```{r}
+d.goal <- read.csv(paste(
+  local.path, 
+  "experiment/data_analysis/data/goal_wNeg.csv"
+  , sep="")
+)  %>%
+    filter(utterance != "NA_NA")
+```
+
+Polite RSA: production model
+
+```{r}
+pRSA <- '
+var utterances = ["yes_terrible","yes_bad","yes_okay","yes_good","yes_amazing",
+                  "not_terrible","not_bad","not_okay","not_good","not_amazing"
+                  //                  ,"nullUtt"
+                  ];
+var weightBins = [0.1,0.3,0.5,0.7,0.9];
+
+var cost = {
+  "not_amazing": 2,
+  "not_bad": 2,
+  "not_good": 2,
+  "not_okay": 2,
+  "not_terrible": 2,
+  "yes_amazing": 1,
+  "yes_bad": 1,
+  "yes_good": 1,
+  "yes_okay": 1,
+  "yes_terrible": 1,
+  //  "nullUtt":0
+};
+
+var states = [1,2,3,4,5];
+var statePrior = function(){
+  return uniformDraw(states);
+};
+
+var utterancePrior = function(){
+  //  return uniformDraw(utterances)
+  return utterances[discrete(map(function(u) {return Math.exp(-cost[u]);}, utterances))];
+};
+
+// model parameters
+//var alpha = 1.25;
+//var speakerOptimality = 7;
+
+// measured in Experiment 1
+var literalSemantics = dataFromR.literalSemantics;
+
+var honestyWeights = [1,1,1,1,1]
+var kindnessWeights = [1,1,1,1,1]
+
+var meaning = function(words, state){
+  return flip(literalSemantics[words][state-1]);
+}; 
+
+var listener0 = cache(function(utterance) {
+  Infer({method: "enumerate"}, function(){
+    var state = statePrior();
+    var m = meaning(utterance, state);
+    condition(m);
+    return state;
+  });
+}, 10);
+
+
+//var speaker1 = cache(function(state, speakerGoals, rsaParameters) {
+  
+var speaker1 = cache(function(state, speakerGoals, rsaParameters) {
+  Infer({method: "enumerate"}, function(){
+    var utterance = utterancePrior();
+
+    var speakerOptimality = rsaParameters.speakerOptimality;
+    var alpha = rsaParameters.alpha;
+
+    var L0 = listener0(utterance);
+    
+    var epistemicUtility = L0.score(state);
+    var socialUtility = expectation(L0, function(s){return alpha*s});
+    
+    var eUtility = speakerGoals.honesty*epistemicUtility;
+    var sUtility = speakerGoals.kindness*socialUtility;
+
+    var speakerUtility = eUtility+sUtility;
+
+    factor(speakerOptimality*speakerUtility);
+    
+    return utterance;
+  })
+}, 10)
+
+var listener1 = cache(function(exptCondition, rsaParameters) {
+  Infer({method: "enumerate"}, function(){
+    var utterance = exptCondition.utterance;
+    var trueState = exptCondition.state;
+    var knownGoalsWeights = exptCondition.goalWeights;
+    
+    var state = statePrior()
+    
+    // Expt 2. State inference task:
+    // goal weights are known (e.g. "speaker is trying to be nice")
+    var speakerGoals = knownGoalsWeights ?
+    {
+      honesty: knownGoalsWeights.honesty,
+      kindness: knownGoalsWeights.kindness,
+    } : // expt 3. goal inference task; listener has uncertainty about weights
+    {
+      honesty: uniformDraw(weightBins),
+      kindness: uniformDraw(weightBins),
+    }
+    
+    // Expt 3. goal inference, trueState is known.
+    condition(trueState ? trueState == state : true)
+    
+    var S1 = speaker1(state, speakerGoals, rsaParameters)
+    
+    observe(S1, utterance)
+    
+    return state 
+
+      })
+}, 10)
+
+
+'
+```
+
+
+Data analysis model
+
+```{r}
+dataAnalysisModel <- '
+// foreach helper function
+var foreach = function(fn, lst) {
+  var foreach_ = function(i) {
+    if (i < lst.length) {
+      fn(lst[i]);
+      foreach_(i + 1);
+    }
+  };
+  foreach_(0);
+};
+//
+  
+  var data = dataFromR.data;
+  
+  var goals = _.uniq(_.pluck(data, "goal"));
+  var states = _.uniq(_.pluck(data, "true_state"));
+  var utterances = _.uniq(_.pluck(data, "utterance"));
+  display("goals = " + goals)
+  display("states = " + states)
+  display("utterances = " + utterances)
+
+  var goalDictionary = {
+	"social": "kindness",
+	"informative" : "honesty",
+  }
+  
+  var dataAnalysis = function(){
+    
+    var RSAparameters = {
+      speakerOptimality: uniform(0, 20),
+      alpha: uniform(0, 5)
+    };
+    
+    var goalWeightsAndPostPred = map(function(goal){
+      
+      var goalWeights = {
+	      honesty: uniform(0,1), 
+	      kindness: uniform(0,1)
+      //honesty: uniformDraw([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]),
+      //kindness: uniformDraw([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
+    }
+
+
+      var postPred = map(function(state){
+
+                      map(function(utt) {
+        
+      var goalData = _.pluck(_.where(data, {true_state: state, utterance: utt, goal: goal}), "goal_prob"); 
+      //var utteranceData = _.pluck(_.where(data, {true_state: state, goal: goal}), "utterance"); 
+      //display(goalData)  
+
+        var exptConditionInfo = {
+          state: state, 
+          utterance: utt,
+          goal: goalDictionary[goal],
+          goalWeights: false
+        };
+        
+        var RSApredictions = listener1(exptConditionInfo, RSAparameters);
+        //RSApredictions.support()
+
+        // var linkedRSA = linkingFunction(RSApredictions);
+        
+      mapData({data: goalData}, 
+          function(d){ 
+              display("d = " + d +  " ___ scr = " + RSApredictions.score(d) )
+              observe(RSApredictions, d) 
+          });
+      // observe(dist, val) == factor(dist.score(val)) == condition( sample(dist) == val ) 
+
+      var postPred = expectation(RSApredictions)
+
+      return {key: "posteriorPredictive", goal: goal, state:state, utt: u, val: postPred}
+        
+                     }, utterances)
+        
+      }, states)
+      
+      
+      return [postPred
+              //{key: "weightHonest", goal: goal, state: "NA", utt: "NA", val: goalWeights.honesty},
+              //{key: "weightKind", goal: goal, state: "NA", utt: "NA", val: goalWeights.kindness}
+              // {key: "weightMean", goal: goal, state: "NA", utt: "NA", val: goalWeights.meanness}
+              ]
+      
+    }, goals)
+    
+    
+    var returnList = _.flatten([goalWeightsAndPostPred, 
+                                {key: "speakerOptimality", goal: "NA", utt: "NA", state: "NA", val: RSAparameters.speakerOptimality},
+                                {key: "alpha", goal: "NA", utt: "NA", state: "NA", val: RSAparameters.alpha}
+                                ])
+    
+    var returnObj = _.object(map(function(i){
+      [i.key + "_" + i.goal + "_" + i.state + "_" + i.utt, i.val]
+    }, returnList))
+    
+    return returnObj
+    
+  }
+
+    
+'
+```
+
+
+Run Full BDA model
+
+```{r}
+bda.goal.results <- data.frame()
+
+fullModel <- paste(pRSA, dataAnalysisModel, sep = "\n")
+
+# for (si in sites) {
+
+  # site.data <- filter(d.state, site == si)
+  # litSemantics <- filter(litSemantics.results, site == si)
+  
+  # litSemantics.toPass <- as.list(litSemantics %>%
+  # select(state, utterance, MAP) %>%
+   litSemantics.toPass <- as.list(litSemantics.results %>%
+                                  select(state, utterance, MAP) %>%
+                                   spread(utterance, MAP))
+  
+  dataToWebPPL <- list(literalSemantics = litSemantics.toPass,
+                       # data = site.data)
+                       data = d.goal)
+  
+  # toJSON(as.list(litSemantics.toPass), pretty = T)
+  
+  # rsa.output <- webppl(pRSA,
+  #                    data = dataToWebPPL,
+  #                    data_var = "dataFromR")
+  # 
+  bda.goal.results <- webppl(fullModel,
+                              data = dataToWebPPL,
+                              data_var = "dataFromR",
+                              inference_opts = list(method = "MCMC", 
+                                                    samples = 10,
+                                                    burn = 5,
+                                                    verbose = TRUE),
+                              model_var = "dataAnalysis",
+                              output_format = "samples",
+                              chains = 1,
+                              cores = 1)
+  #dataToWebPPL
+  
+```
+
+```{r}
+summary(bda.utterance.results$speakerOptimality_NA_NA_NA)
+summary(bda.utterance.results$alpha_NA_NA_NA)
+
+bda.state.tidy <- bda.utterance.results %>% 
+    select(contains("posteriorPredictive")) %>%
+    gather(key, val) %>% 
+    separate(key, into = c("param", "goal", "state", "positivity", "utterance")) %>%
+  mutate(utterance = factor(utterance, levels = c("terrible", "bad", "okay", "good", "amazing")),
+         positivity = factor(positivity, labels = c("neg", "no_neg")), 
+         positivity = factor(positivity, levels = c("no_neg", "neg"))) %>%
+    group_by(goal, state, positivity, utterance) %>%
+  summarise(val = mean(val))
+   # multi_boot_standard(column = "val") %>%
+  # mutate(val = mean)
+
+ggplot(data=bda.state.tidy, aes(x=positivity, y=val, fill=utterance)) +
+  geom_bar(stat="identity", position=position_dodge()) +
+  facet_grid(goal~state) +
+  xlab("no neg (it was ~) vs neg (it wasn't ~) ") +
+  ylab("proportion chosen") +
+  ggtitle("What would the speaker say given their goals?") +
+  # geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper),position="dodge") +
+  geom_hline(yintercept=.1, lty=2)
+
+bda.state.tidy2 <- bda.utterance.results %>% 
+    select(contains("weight")) %>%
+    gather(key, val) %>% 
+    separate(key, into = c("param", "goal", "state", "utterance")) %>%
+  group_by(goal, param) %>%
+  summarize(val = mean(val))
+
+bda.state.tidy2
+```
+      
