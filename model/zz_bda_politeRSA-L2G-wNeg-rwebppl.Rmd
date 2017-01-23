@@ -254,7 +254,7 @@ var listener1 = cache(function(exptCondition, rsaParameters) {
     
     observe(S1, utterance)
     
-    return speakerGoals.honesty 
+    return state 
 
       })
 }, 10)
@@ -279,14 +279,7 @@ var foreach = function(fn, lst) {
   foreach_(0);
 };
 //
-
-// marginalize
-var marginalize = function(dist, project) {
-  return Infer({model() {
-    return project(sample(dist));
-  }});
-};
-//
+  
   var data = dataFromR.data;
   
   var goals = _.uniq(_.pluck(data, "goal"));
@@ -305,14 +298,23 @@ var marginalize = function(dist, project) {
       alpha: uniform(0, 5)
     };
     
+    var goalWeightsAndPostPred = map(function(goal){
+      
+      var goalWeights = {
+	      honesty: uniform(0,1), 
+	      kindness: uniform(0,1)
+      //honesty: uniformDraw([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]),
+      //kindness: uniformDraw([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
+    }
+
+
       var postPred = map(function(state){
 
-		//var stateData = subset(df, "true_state", state)
-
                       map(function(utt) {
-
-
-                      map(function(goal) {
+        
+      var goalData = _.pluck(_.where(data, {true_state: state, utterance: utt, goal: goal}), "goal_prob"); 
+      //var utteranceData = _.pluck(_.where(data, {true_state: state, goal: goal}), "utterance"); 
+      //display(goalData)  
 
         var exptConditionInfo = {
           state: state, 
@@ -320,34 +322,38 @@ var marginalize = function(dist, project) {
           goal: goalDictionary[goal],
           goalWeights: false
         };
-
-			//var utteranceData = subset(stateData, "utterance", utterance)
-
-			//var predictiveERP = politeRSA({utterance: utterance, state: stateDictionary[state]},
-			//	RSAparams, weights, semantics, "goals")
-      var RSApredictions = listener1(exptConditionInfo, RSAparameters);
-
-      //var dataPoints = _.pluck(_.where(data, {true_state: state, utterance: utt, goal: goal}), "roundval"); 
-				//var dataPoints = _.pluck(subset(goalData, "goal", goalDictionary[goal]), "roundval")
-				//var goalERP = marginalize(predictiveERP, goalDictionary[goal])
-				//var goalERP = marginalize(RSApredictions, goalDictionary[goal])
-				//display(dataPoints)
-				//var likelihoodOfData = sum(map(function(d){return goalERP.score(d)}, dataPoints))
-
-				//factor(likelihoodOfData)
-        var postPred = expectation(RSApredictions)
-        //return {key: "posteriorPredictive", goal: goal, state:state, utt: utterance, val: expectation(goalERP)}
-        return {key: "posteriorPredictive", goal: goal, state:state, utt: utt, val: postPred}
         
-                    
-				//query.add(["predictive" ,stateDictionary[state], utterance, goal], expectation(goalERP))
+        var RSApredictions = listener1(exptConditionInfo, RSAparameters);
+        //RSApredictions.support()
 
-			}, goals)
-		}, utterances)
-	}, states)
+        // var linkedRSA = linkingFunction(RSApredictions);
+        
+      mapData({data: goalData}, 
+          function(d){ 
+              display("d = " + d +  " ___ scr = " + RSApredictions.score(d) )
+              observe(RSApredictions, d) 
+          });
+      // observe(dist, val) == factor(dist.score(val)) == condition( sample(dist) == val ) 
+
+      var postPred = expectation(RSApredictions)
+
+      return {key: "posteriorPredictive", goal: goal, state:state, utt: u, val: postPred}
+        
+                     }, utterances)
+        
+      }, states)
+      
+      
+      return [postPred
+              //{key: "weightHonest", goal: goal, state: "NA", utt: "NA", val: goalWeights.honesty},
+              //{key: "weightKind", goal: goal, state: "NA", utt: "NA", val: goalWeights.kindness}
+              // {key: "weightMean", goal: goal, state: "NA", utt: "NA", val: goalWeights.meanness}
+              ]
+      
+    }, goals)
     
     
-    var returnList = _.flatten([postPred, 
+    var returnList = _.flatten([goalWeightsAndPostPred, 
                                 {key: "speakerOptimality", goal: "NA", utt: "NA", state: "NA", val: RSAparameters.speakerOptimality},
                                 {key: "alpha", goal: "NA", utt: "NA", state: "NA", val: RSAparameters.alpha}
                                 ])
