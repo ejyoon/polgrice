@@ -239,7 +239,6 @@ var utterancePrior = function(cost_neg){
 var literalSemantics = dataFromR.literalSemantics;
 //display(literalSemantics)
 
-
 var litSemanticsPosteriorObj = _.object(map(function(u){
   return [u, _.object(map(function(s){
     [s, _.pluck(_.where(literalSemantics, {state: s, utterance: u}), "theta")]
@@ -250,6 +249,7 @@ var litSemanticsPosteriorObj = _.object(map(function(u){
 //display(litSemanticsPosteriorObj)
 // e.g. {"amazing": { 1: [w1, w2, ... , wn], 2: [ ... ], ... }, "terrible": {1: [, ...]} }
 
+var phiWeights = [1,1,1,1,1,1,1,1,1]
 var honestyWeights = [1,1,1,1,1]
 var kindnessWeights = [1,1,1,1,1]
 
@@ -271,15 +271,15 @@ var listener0 = cache(function(literalSemantics, utterance) {
     return state;
   });
 
-}, 10000);
+}, 100);
 
 var speaker1 = cache(function(literalSemantics, exptCondInfo, rsaParameters) {
   Infer({method: "enumerate"}, function(){
     var state = exptCondInfo.state;
     var speakerGoals = exptCondInfo.goalWeights;
-    //var speakerGoals = exptCondInfo.goalWeights;
     var utterance = utterancePrior(rsaParameters.cost);
-    
+    //display(speakerGoals)
+
     var speakerOptimality = rsaParameters.speakerOptimality;
     var alpha = rsaParameters.alpha;
 
@@ -298,45 +298,49 @@ var speaker1 = cache(function(literalSemantics, exptCondInfo, rsaParameters) {
 
     factor(speakerOptimality*speakerUtility);
     
-    //display(utterance)
     return utterance;
   })
-}, 10000)
+}, 100)
 
-//var listener1 = cache(function(utterance, rsaParameters) {
-//  Infer({method: "enumerate"}, function(){
-//    var speakerGoals = {
-//      honesty: [0.1, 0.3, 0.5, 0.7, 0.9][discrete(honestyWeights)],
-//      kindness: [0.1, 0.3, 0.5, 0.7, 0.9][discrete(kindnessWeights)]
-//    }
-//    
-//    var state = statePrior()
-//    
-//    var S1 = speaker1(state, speakerGoals, rsaParameters)
-//    
-//    observe(S1, utterance)
-//    
-//    return {
-//      state: state,
-//      goals: speakerGoals
-//    }
-//      })
-//}, 10)
-//
-//var speaker2 = cache(function(exptCondInfo, rsaParameters) {
-//  Enumerate(function(){
-//    var state = exptCondInfo.state;
-//    var intendedGoals = exptCondInfo.goalWeights;
-//    var utterance = utterancePrior()
-//    
-//    var L1 = listener1(utterance, rsaParameters)
-//
-//    factor(L1.score({"state":state, "goals":intendedGoals}))
-//    return utterance
-//        display(d)
-//    
-//  })
-//}, 10)
+var listener1 = cache(function(utterance, literalSemantics, exptCondInfo, rsaParameters) {
+ Infer({method: "enumerate"}, function(){
+   var speakerGoals = {
+     phi: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9][discrete(phiWeights)]
+     //honesty: [0.1, 0.3, 0.5, 0.7, 0.9][discrete(honestyWeights)],
+     //kindness: [0.1, 0.3, 0.5, 0.7, 0.9][discrete(kindnessWeights)]
+   }
+   
+   var state = statePrior()
+   
+   var S1 = speaker1(literalSemantics, exptCondInfo, rsaParameters)
+
+   observe(S1, utterance)
+
+    display(state)
+   
+   return {
+     state: state,
+     goals: speakerGoals
+   }
+     })
+}, 10)
+
+var speaker2 = cache(function(literalSemantics, exptCondInfo, rsaParameters) {
+ Enumerate(function(){
+   var state = exptCondInfo.state;
+   var intendedGoals = exptCondInfo.goalWeights;
+   var utterance = utterancePrior(rsaParameters.cost);
+
+   var L1 = listener1(literalSemantics, exptCondInfo, rsaParameters)
+
+   //FIXME: (1) FACTOR BASED ON STATE AND GOALS (2) FACTOR BASED ON GOALS ONLY
+   factor(L1.score({"state":state, "goals":intendedGoals}))
+   // factor(L1.score({"goals":intendedGoals}))
+   return utterance
+
+ })
+}, 10)
+
 
 '
 ```
@@ -382,6 +386,7 @@ var foreach = function(fn, lst) {
       cost: uniformDrift({a: 1, b: 10, width:0.25})
       //literalSemantics: litSemantics
     };
+    display(RSAparameters.cost)
 
 
     
@@ -408,8 +413,10 @@ var foreach = function(fn, lst) {
 
         var literalSemantics = litSemantics;
         
-        var RSApredictions = speaker1(literalSemantics, exptConditionInfo, RSAparameters);
-        //RSApredictions.support()
+        //var RSApredictions = speaker1(literalSemantics, exptConditionInfo, RSAparameters);
+        var RSApredictions = speaker2(literalSemantics, exptConditionInfo, RSAparameters);
+        //display(RSApredictions)
+       //RSApredictions.support()
 
         // var linkedRSA = linkingFunction(RSApredictions);
         
@@ -451,8 +458,7 @@ var foreach = function(fn, lst) {
           }])
         
       }, states)
-      
-      
+
       return [postPred, 
               {key: "phi", goal: goal, state: "NA", utt: "NA", val: goalWeights.phi},
               //{key: "weightHonest", goal: goal, state: "NA", utt: "NA", val: goalWeights.honesty},
@@ -518,16 +524,16 @@ fullModel <- paste(pRSA, dataAnalysisModel, sep = "\n")
                               data = dataToWebPPL,
                               data_var = "dataFromR",
                               inference_opts = list(method = "MCMC", 
-                                                    samples = 80,
-                                                    burn = 40,
+                                                    samples = 10,
+                                                    burn = 5,
                                                     verbose = TRUE),
                               model_var = "dataAnalysis",
                               output_format = "samples",
-                              chains = 2,
-                              cores = 2)
+                              chains = 1,
+                              cores = 1)
   #dataToWebPPL
 # write.csv(bda.utterance.results,paste(local.path,
-#                       "model/results/bda-politeRSA-speaker1GivenStateGoal_mixtureWeight-80000burn40000.csv",sep=""), # CHANGE FILE NAME AS NEEDED
+#                       "model/results/bda-politeRSA-speaker2GivenStateGoal_mixtureWeight-10000burn5000.csv",sep=""), # CHANGE FILE NAME AS NEEDED
 #           row.names=FALSE)
 
 ```
@@ -539,7 +545,7 @@ fullModel <- paste(pRSA, dataAnalysisModel, sep = "\n")
 #                         "model/results/bda-politeRSA-speaker1GivenStateGoal-80000burn40000.csv",
 #                         sep = ""))
 bda.utterance.results <- fread(paste(local.path,
-                        "model/results/bda-politeRSA-speaker1GivenStateGoal_mixtureWeight-80000burn40000.csv",
+                        "model/results/bda-politeRSA-speaker1GivenStateGoal_mixtureWeight-10000burn5000.csv",
                         sep = ""))
 # 
 # summary(bda.utterance.results$speakerOptimality_NA_NA_NA)
@@ -554,6 +560,7 @@ bda.utterance.tidy <- bda.utterance.results %>%
          positivity = factor(positivity, labels = c("neg", "no_neg")),
          positivity = factor(positivity, levels = c("no_neg", "neg"))) %>%
     group_by(goal, state, positivity, utterance) %>%
+  filter(!is.na(val)) %>%
   # summarise(val = mean(val))
   summarize(MAP = estimate_mode(val),
             ci_lower = hdi_upper(val),
@@ -566,9 +573,9 @@ bda.utterance.tidy <- bda.utterance.results %>%
 #                       "model/results/bda-politeRSA-speaker1GivenStateGoal-mixtureWeight-postLongForm.csv",sep=""), # CHANGE FILE NAME AS NEEDED
 #           row.names=FALSE)
 
-bda.utterance.tidy <- fread(paste(local.path,
-                        "model/results/bda-politeRSA-speaker1GivenStateGoal-mixtureWeight-postLongForm.csv",
-                        sep = ""))
+#bda.utterance.tidy <- fread(paste(local.path,
+#                        "model/results/bda-politeRSA-speaker1GivenStateGoal-mixtureWeight-postLongForm.csv",
+#                        sep = ""))
 ```
 
 ```{r model_predictions_eachUtt}
@@ -595,7 +602,7 @@ bda.utterance.tidy3_org <- bda.utterance.tidy3 %>%
          positivity = factor(positivity, levels = c("no_neg", "neg")),
          positivity = factor(positivity, labels = c("no negation", "negation")))
 
-ggplot(data=bda.utterance.tidy3_org, aes(x=positivity, y=MAP, fill=utterance)) +
+ggplot(data=bda.utterance.tidy, aes(x=positivity, y=MAP, fill=utterance)) +
   geom_bar(stat="identity", position=position_dodge()) +
   facet_grid(goal~state) +
   xlab("no neg (it was ~) vs neg (it wasn't ~) ") +
