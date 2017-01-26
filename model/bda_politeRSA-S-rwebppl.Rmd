@@ -230,6 +230,7 @@ var utterancePrior = function(cost_neg){
 
 // measured in Experiment 1
 var literalSemantics = dataFromR.literalSemantics;
+//display(literalSemantics)
 
 var litSemanticsPosteriorObj = _.object(map(function(u){
   return [u, _.object(map(function(s){
@@ -238,7 +239,8 @@ var litSemanticsPosteriorObj = _.object(map(function(u){
 }, utterances))
 // e.g. {"amazing": { 1: [w1, w2, ... , wn], 2: [ ... ], ... }, "terrible": {1: [, ...]} }
 
-var phiWeights = [1,1,1,1,1,1,1,1,1]
+//var phiWeights = [1,1,1,1,1,1,1,1,1]
+var phiWeights = [1,1,1,1,1]
 var honestyWeights = [1,1,1,1,1]
 var kindnessWeights = [1,1,1,1,1]
 
@@ -254,19 +256,15 @@ var listener0 = cache(function(literalSemantics, utterance) {
     return state;
   });
 
-}, 100);
+}, 10);
 
-var speaker1 = cache(function(literalSemantics, exptCondInfo, rsaParameters) {
-//var speaker1 = cache(function(phi, rsaParameters) {
+var speaker1 = cache(function(literalSemantics, state, speakerGoals, rsaParameters) {
   Infer({method: "enumerate"}, function(){
-    var state = exptCondInfo.state;
-    var speakerGoals = exptCondInfo.goalWeights;
     var utterance = utterancePrior(rsaParameters.cost);
 
     var speakerOptimality = rsaParameters.speakerOptimality;
     var alpha = rsaParameters.alpha;
 
-//    var utterance = utterancePrior(rsaParameters.cost);
     var L0 = listener0(literalSemantics, utterance);
     
     var epistemicUtility = L0.score(state);
@@ -281,20 +279,20 @@ var speaker1 = cache(function(literalSemantics, exptCondInfo, rsaParameters) {
     
     return utterance;
   })
-}, 100)
+}, 10)
 
-var listener1 = cache(function(utterance, literalSemantics, exptCondInfo, rsaParameters) {
+var listener1 = cache(function(literalSemantics, utterance, rsaParameters) {
  Infer({method: "enumerate"}, function(){
    var speakerGoals = {
-     phi: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9][discrete(phiWeights)]
+    // phi: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9][discrete(phiWeights)]
+     phi: [0.1, 0.3, 0.5, 0.7, 0.9][discrete(phiWeights)]
    }
    
    var state = statePrior()
-   
-   var S1 = speaker1(literalSemantics, exptCondInfo, rsaParameters)
 
+   var S1 = speaker1(literalSemantics, state, speakerGoals, rsaParameters)
    observe(S1, utterance)
-
+    
    return {
      state: state,
      goals: speakerGoals
@@ -308,11 +306,12 @@ var speaker2 = cache(function(literalSemantics, exptCondInfo, rsaParameters) {
    var intendedGoals = exptCondInfo.goalWeights;
    var utterance = utterancePrior(rsaParameters.cost);
 
-   var L1 = listener1(utterance, literalSemantics, exptCondInfo, rsaParameters)
+   var L1 = listener1(literalSemantics, utterance, rsaParameters)
 
    //FIXME: (1) FACTOR BASED ON STATE AND GOALS (2) FACTOR BASED ON GOALS ONLY
    factor(L1.score({"state":state, "goals":intendedGoals}))
-   // factor(L1.score({"goals":intendedGoals}))
+   //factor(L1.score({"goals":intendedGoals}))
+
    return utterance
 
  })
@@ -364,7 +363,8 @@ var foreach = function(fn, lst) {
       
       var goalWeights = {
 	      //phi: uniformDrift({a: 0, b: 1, width:0.2})
-      phi: uniformDraw([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
+      //phi: uniformDraw([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
+      phi: uniformDraw([0.1, 0.3, 0.5, 0.7, 0.9])
 	      //honesty: uniformDrift({a: 0, b: 1, width:0.2}), 
 	      //kindness: uniformDrift({a: 0, b: 1, width:0.2})
       //honesty: uniformDraw([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]),
@@ -383,7 +383,7 @@ var foreach = function(fn, lst) {
 
         var literalSemantics = litSemantics;
         
-        //var RSApredictions = speaker1(literalSemantics, exptConditionInfo, RSAparameters);
+        //var RSApredictions = speaker1(literalSemantics, exptConditionInfo.state, exptConditionInfo.goalWeights, RSAparameters);
         var RSApredictions = speaker2(literalSemantics, exptConditionInfo, RSAparameters);
        //RSApredictions.support()
 
@@ -460,31 +460,11 @@ bda.utterance.results <- data.frame()
 
 fullModel <- paste(pRSA, dataAnalysisModel, sep = "\n")
 
-# for (si in sites) {
-
-  # site.data <- filter(d.state, site == si)
-  # litSemantics <- filter(litSemantics.results, site == si)
-  
-  # litSemantics.toPass <- as.list(litSemantics %>%
-  # select(state, utterance, MAP) %>%
-   # litSemantics.toPass <- as.list(litSemantics.results %>%
-   #                                select(state, utterance, MAP) %>%
-   #                                 spread(utterance, MAP))
-   # litSemantics.toPass <- as.list(litSemantics.results) %>%
-   #                                  select(state, utterance, theta) %>%
-   #                                  spread(utterance, theta))
      litSemantics.toPass <- litSemantics.results
 
   dataToWebPPL <- list(literalSemantics = litSemantics.toPass,
-                       # data = site.data)
                        data = d.utterance)
   
-  # toJSON(as.list(litSemantics.toPass), pretty = T)
-  
-  # rsa.output <- webppl(pRSA,
-  #                    data = dataToWebPPL,
-  #                    data_var = "dataFromR")
-  # 
   bda.utterance.results <- webppl(fullModel,
                               data = dataToWebPPL,
                               data_var = "dataFromR",
