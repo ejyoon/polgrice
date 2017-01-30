@@ -78,20 +78,29 @@ rsa.output <-
   select(-contains("support")) 
 
 rsa.output.dist <- rsa.output %>%
-  gather(state, prob, nicehonest.heart1.probs:seminice.heart5.probs) %>%
+  # gather(state, prob, nicehonest.heart1.probs:dataNicehonest.heart5.probs) %>%
+  gather(state, prob, nicehonest.heart1.probs:kindofnice.heart5.probs) %>%
   separate(state, into = c("goal", "state", "probs"), sep = "\\.") %>%
   select(-probs) %>%
   separate(utterance, into = c("posneg", "utterance"), sep = "\\_") %>%
   mutate(utterance = factor(utterance, levels =c("terrible", "bad", "okay", "good", "amazing")),
-         posneg = factor(posneg, labels = c("neg", "no_neg"))) 
+         posneg = factor(posneg, labels = c("neg", "no_neg")),
+         posneg = factor(posneg, levels = c("no_neg", "neg")))
 
-rsa.output.dist$goal <- factor(rsa.output.dist$goal, levels = c("honest", "semihonest", "nice", "seminice", "nicehonest"))
+# rsa.output.dist$goal <- factor(rsa.output.dist$goal, levels = c("honest", "nice", "nicehonest", "dataHonest", "dataNice", "dataNicehonest"))
+rsa.output.dist$goal <- factor(rsa.output.dist$goal, levels = c("honest", "kindofhonest", "nice", "kindofnice", "nicehonest"))
 
 ggplot(data=rsa.output.dist, aes(x=posneg, y=prob, fill=utterance)) +
   geom_bar(stat="identity", position="dodge") +
   facet_grid(goal~state) +
   xlab("neg (it wasn't ~) vs. no neg (it was ~)") +
-  ggtitle("speaker1 model predictions by goal")
+  ggtitle("speaker2 model predictions by goal")
+
+ggplot(data=filter(rsa.output.dist, goal == "honest" | goal == "nice" | goal == "nicehonest"), aes(x=posneg, y=prob, fill=utterance)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_grid(goal~state) +
+  xlab("neg (it wasn't ~) vs. no neg (it was ~)") +
+  ggtitle("speaker2 model predictions by goal")
 
 # s1 vs. s2
 # rsa.output <- 
