@@ -309,12 +309,9 @@ var speaker2 = cache(function(literalSemantics, exptCondInfo, rsaParameters) {
 
    var L1 = listener1(literalSemantics, utterance, rsaParameters)
 
-   //FIXME: (1) FACTOR BASED ON STATE AND GOALS (2) FACTOR BASED ON GOALS ONLY
    factor(rsaParameters.speakerOptimality2 * L1.score({"state":state, "goals":intendedGoals}))
    //factor(rsaParameters.speakerOptimality2 * L1.score({"state":state}))
    //factor(rsaParameters.speakerOptimality2 * L1.score(intendedGoals))
-   //factor(L1.score({"state":state, "goals":intendedGoals}))
-   //factor(L1.score({"goals":intendedGoals}))
 
    return utterance
 
@@ -349,7 +346,9 @@ var foreach = function(fn, lst) {
   var states = _.uniq(_.pluck(data, "true_state"));
   // var utterances = _.uniq(_.pluck(data, "utterance"));
   
-  var dataAnalysis = function(){
+
+
+var dataAnalysis = function(){
     
   var litSemantics = _.object(map(function(u){
 	return [u, _.object(map(function(s){
@@ -358,7 +357,7 @@ var foreach = function(fn, lst) {
 }, utterances))
 
     var RSAparameters = {
-      speakerOptimality: uniformDrift({a: 0, b: 20, width:2}),
+      speakerOptimality: uniformDrift({a: 0, b: 30, width:2}),
      speakerOptimality2: uniformDrift({a:0, b: 5, width: 0.5}),
      alpha: uniformDrift({a: 0, b: 5, width:0.5}),
       cost: uniformDrift({a: 1, b: 10, width:0.25})
@@ -475,16 +474,17 @@ fullModel <- paste(pRSA, dataAnalysisModel, sep = "\n")
                               data = dataToWebPPL,
                               data_var = "dataFromR",
                               inference_opts = list(method = "MCMC", 
-                                                    samples = 10000,
-                                                    burn = 5000,
+                                                    samples = 60000,
+                                                    burn = 30000,
                                                     verbose = TRUE),
                               model_var = "dataAnalysis",
                               output_format = "samples",
-                              chains = 2,
-                              cores = 2)
+                              # output_format = "ggmcmc",
+                              chains = 3,
+                              cores = 3)
   #dataToWebPPL
 write.csv(bda.utterance.results,paste(local.path,
-                      "model/results/bda-politeRSA-speaker2GivenStateGoal_mixtureWeight-10000burn5000-factorStateGoal.csv",sep=""), # CHANGE FILE NAME AS NEEDED
+                      "model/results/bda-politeRSA-speaker2GivenStateGoal_mixtureWeight-60000burn30000-factorStateGoal_ggmcmc.csv",sep=""), # CHANGE FILE NAME AS NEEDED
           row.names=FALSE)
 
 ```
@@ -492,16 +492,10 @@ write.csv(bda.utterance.results,paste(local.path,
 # exp vs. BDA analysis
 
 ```{r callOnData}
-# bda.utterance.results <- read.csv(paste(local.path,
-#                         "model/results/bda-politeRSA-speaker1GivenStateGoal-80000burn40000.csv",
-#                         sep = ""))
 bda.utterance.results <- fread(paste(local.path,
-                        "model/results/bda-politeRSA-speaker2GivenStateGoal_mixtureWeight-10000burn5000.csv",
+                        "model/results/bda-politeRSA-speaker2GivenStateGoal_mixtureWeight-40000burn20000-factorStateGoal.csv",
                         sep = ""))
-# 
-# summary(bda.utterance.results$speakerOptimality_NA_NA_NA)
-# summary(bda.utterance.results$alpha_NA_NA_NA)
-# 
+
 bda.utterance.tidy <- bda.utterance.results %>%
     select(contains("posteriorPredictive"), -contains("negation")) %>%
     gather(key, val) %>%
@@ -517,45 +511,10 @@ bda.utterance.tidy <- bda.utterance.results %>%
             ci_lower = hdi_upper(val),
             ci_upper = hdi_lower(val))
 
-  # multi_boot_standard(column = "val") %>%
-  # mutate(val = mean)
-
-# write.csv(bda.state.tidy,paste(local.path,
-#                       "model/results/bda-politeRSA-speaker1GivenStateGoal-mixtureWeight-postLongForm.csv",sep=""), # CHANGE FILE NAME AS NEEDED
-#           row.names=FALSE)
-
-#bda.utterance.tidy <- fread(paste(local.path,
-#                        "model/results/bda-politeRSA-speaker1GivenStateGoal-mixtureWeight-postLongForm.csv",
-#                        sep = ""))
-```
-
-```{r model_predictions_eachUtt}
-# bda.utterance.tidy2 <- bda.utterance.tidy %>%
-#   filter(!is.na(val)) %>%
-#   group_by(goal, state, positivity, utterance) %>%
-#   distinct(val, .keep_all = TRUE)
-# 
-# bda.utterance.tidy3 <- bda.utterance.tidy %>%     
-#   group_by(goal, state, positivity, utterance) %>%
-#   # summarise(val = mean(val)) %>%
-#   filter(!is.na(val)) %>%
-#   summarize(
-#     MAP = estimate_mode(val),
-#             ci_lower = hdi_lower(val),
-#             ci_upper = hdi_upper(val)) %>%
-#   ungroup() %>%
-#   mutate(goal = factor(goal, levels = c("informative", "social", "both"))) %>%
-#   mutate(goal = factor(goal, labels = c("informative", "social", "Model pred for goal:both")))
-#   
-# bda.utterance.tidy3_org <- bda.utterance.tidy3 %>%
-#   mutate(utterance = factor(utterance, levels = c("terrible", "bad", "okay", "good", "amazing")),
-#          state = factor(state, labels = c("1 heart", "2 hearts", "3 hearts", "4 hearts", "5 hearts")),
-#          positivity = factor(positivity, levels = c("no_neg", "neg")),
-#          positivity = factor(positivity, labels = c("no negation", "negation")))
-
 bda.utterance.tidy3_org <- bda.utterance.tidy %>%
   ungroup() %>%
   mutate(goal = factor(goal, levels = c("informative", "social", "both"))) %>%
+  mutate(goal = factor(goal, labels = c("Model:informative", "Model:social", "Model:both"))) %>%
   # mutate(goal = factor(goal, labels = c("informative", "social", "Model pred for goal:both"))) %>%
   mutate(utterance = factor(utterance, levels = c("terrible", "bad", "okay", "good", "amazing")),
          state = factor(state, labels = c("1 heart", "2 hearts", "3 hearts", "4 hearts", "5 hearts")),
@@ -565,13 +524,35 @@ bda.utterance.tidy3_org <- bda.utterance.tidy %>%
 ggplot(data=bda.utterance.tidy3_org, aes(x=positivity, y=MAP, fill=utterance)) +
   geom_bar(stat="identity", position=position_dodge()) +
   facet_grid(goal~state) +
-  xlab("no neg (it was ~) vs neg (it wasn't ~) ") +
+  xlab("no negation (It was ~) vs negation (It wasn't ~) ") +
   ylab("proportion chosen") +
   ggtitle("Model predictions for speaker2 production (factor on both state and goals)") +
   geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper),position="dodge") +
   geom_hline(yintercept=.1, lty=2) +
   theme_bw()+
   ylim(0,1)
+```
+
+```{r dataModelUttPred}
+
+# run S dropdown file before this
+ms_dataMod <- rbind(
+  ms.all %>% mutate(MAP = mean) %>% select(-mean),
+  bda.utterance.tidy3_org %>% mutate(true_state = state) %>% select(-state)
+) %>%
+  mutate(goal = factor(goal, levels = c("Data:informative", "Model:informative", "Data:social", "Model:social", "Data:both", "Model:both")))
+
+ggplot(data=ms_dataMod, aes(x=positivity, y=MAP, fill=utterance)) +
+  geom_bar(stat="identity", position=position_dodge()) +
+  facet_grid(goal~true_state) +
+  xlab("no negation (It was ~) vs negation (It wasn't ~) ") +
+  ylab("proportion chosen") +
+  # ggtitle("Model predictions for speaker2 production (factor on both state and goals)") +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper),position="dodge") +
+  geom_hline(yintercept=.1, lty=2) +
+  theme_bw()+
+  ylim(0,1)
+
 ```
 
 ```{r model_predictions_negNoneg}
@@ -602,14 +583,76 @@ ggplot(data=bda.utterance.tidy4, aes(x=state, y=MAP, col=positivity, group=posit
   geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper), position=position_dodge(width=.05)) +
   # ggtitle("negation (indirect remark) vs. no negation (white lie)")
   scale_colour_discrete(guide = guide_legend(title = "utterance type")) +
+  geom_hline(yintercept=.5, lty=2) +
+  theme_bw()
+
+bda.utterance.tidy3_org %>%
+  group_by(goal, state, positivity) %>%
+  summarize(MAP = mean(MAP)) %>%
+  ggplot(., aes(x=state, y=MAP, col=positivity, group=positivity)) +
+  geom_line(stat="identity", position=position_dodge()) +
+  facet_grid(goal~.) +
+  xlab("true state") +
+  ylab("proportion chosen") +
+  # ggtitle("negation (indirect remark) vs. no negation (white lie)")
+  scale_colour_discrete(guide = guide_legend(title = "utterance type")) +
+  theme_bw()
+
+# run S dropdown file before this
+levels(ms.all$positivity)
+ms_data <- ms.all %>%
+  ungroup() %>%
+  filter(!is.na(mean)) %>%
+  mutate(goal = factor(goal, levels = c("want to be informative", "want to make listener feel good", "want both")),
+         goal = factor(goal, labels = c("informative", "social", "both")),
+         true_state = factor(true_state, labels = c(1:5)),
+         positivity = factor(positivity, labels = c("no negation", "negation"))
+         # positivity = factor(positivity, labels = c("no_neg", "neg"))
+         ) %>%
+    mutate(MAP = as.numeric(as.character(mean)),
+    ci_upper = as.numeric(as.character(ci_upper)),
+    ci_lower = as.numeric(as.character(ci_lower))) %>%
+  select(-mean) %>%
+  mutate(goal = as.factor(goal),
+         true_state = as.factor(true_state),
+         positivity = as.factor(positivity)) %>%
+  mutate(expt = "expt",
+         expt = as.factor(expt))
+
+
+
+ms_all_positivity <- rbind(as.data.frame(ms_data), 
+                               as.data.frame(bda.utterance.tidy4 %>% 
+                                               ungroup() %>%
+                                               mutate(true_state = state, 
+                                                      expt = "model",
+                                                      expt = as.factor(expt)) %>% 
+                                               select(-state))) %>%
+  mutate(expt = factor(expt, levels = c("model", "expt")),
+         expt = factor(expt, labels = c("Model predictions", "Experimental data")),
+         goal = factor(goal, labels = c("goal:informative", "goal:social", "goal:both")))
+ms_all_positivity %>%
+  ggplot(., aes(x=true_state, y=MAP, col=positivity, group=positivity)) +
+  geom_line(stat="identity", position=position_dodge()) +
+  facet_grid(expt~goal) +
+  xlab("true state") +
+  ylab("proportion chosen") +
+  # ggtitle("negation (indirect remark) vs. no negation (white lie)")
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper), position=position_dodge(width=.05)) +
+  scale_colour_discrete(guide = guide_legend(title = "utterance type")) +
+  geom_hline(yintercept=.5, lty=2) +
   theme_bw()
 ```
 
 ```{r expModelTogether}
-ms_data <- ms.all
-levels(ms_data$goal)
-levels(ms_data$goal) <- c("both", "informative", "social")
-ms_data <- ms_data %>%
+ms_data <- ms.all %>%
+  filter(!is.na(mean)) %>%
+  mutate(goal = factor(goal, levels = c("want to be informative", "want to make listener feel good", "want both")),
+         goal = factor(goal, labels = c("informative", "social", "both")),
+         true_state = factor(true_state, labels = c(1:5)),
+         positivity = factor(positivity, levels = c("no negation", "negation")),
+         positivity = factor(positivity, labels = c("no_neg", "neg"))
+         ) %>%
     mutate(MAP = as.numeric(as.character(mean)),
     ci_upper = as.numeric(as.character(ci_upper)),
     ci_lower = as.numeric(as.character(ci_lower))) %>%
@@ -619,11 +662,9 @@ ms_data <- ms_data %>%
          positivity = as.factor(positivity),
          utterance = as.factor(utterance))
 
-levels(ms_data$true_state) <- c(1:5)
-levels(ms_data$positivity) <- c("neg", "no_neg")
-
-
-ms_model <- bda.state.tidy3 %>%
+ms_model <- bda.utterance.tidy %>%     
+  ungroup() %>%
+  # mutate(goal = factor(goal, levels = c("informative", "social", "both"))) %>%
   mutate(true_state = state) %>%
   ungroup() %>%
   select(-state) %>%
@@ -636,6 +677,7 @@ ms_model <- bda.state.tidy3 %>%
          true_state = as.factor(true_state),
          positivity = as.factor(positivity),
          utterance = as.factor(utterance))
+
 ms_all <- left_join(ms_data, ms_model) %>%
   mutate(goal =factor(goal, levels=c("informative", "social", "both")))
 ```
@@ -739,3 +781,113 @@ bda.utterance.results %>%
             ci_upper = hdi_upper(val))
   
 ```
+
+```{r check_chains_alphaOptimalityCost}
+bda.utterance.results %>%
+  filter(str_detect(Parameter, "speakerOptimality_NA_NA_NA|speakerOptimality2_NA_NA_NA|alpha_NA_NA_NA|cost_NA_NA_NA")) %>%
+    separate(Parameter, into = c("param", "goal", "state", "utterance")) %>%
+  ggplot(., aes(x = value, fill=as.factor(Chain)))+
+  geom_histogram()+
+  facet_grid(as.factor(Chain)~param, scales = "free")
+```
+
+
+```{r check_chains}
+bda.utterance.tidy <- bda.utterance.results %>%
+  filter(str_detect(Parameter, "posteriorPredictive")) %>%
+  filter(!str_detect(Parameter, "negation")) %>%
+    separate(Parameter, into = c("param", "goal", "state", "positivity", "utterance")) %>%
+  mutate(utterance = factor(utterance, levels = c("terrible", "bad", "okay", "good", "amazing")),
+         positivity = factor(positivity, labels = c("neg", "no_neg")),
+         positivity = factor(positivity, levels = c("no_neg", "neg"))) %>%
+    group_by(Chain, goal, state, positivity, utterance) %>%
+  filter(!is.na(value)) %>%
+  # summarise(val = mean(val))
+  summarize(MAP = estimate_mode(value),
+            ci_lower = hdi_upper(value),
+            ci_upper = hdi_lower(value))
+
+ggplot(data=filter(bda.utterance.tidy, Chain == "1"), aes(x=positivity, y=MAP, fill=utterance)) +
+  geom_bar(stat="identity", position=position_dodge()) +
+  facet_grid(goal~state) +
+  xlab("no neg (it was ~) vs neg (it wasn't ~) ") +
+  ylab("proportion chosen") +
+  ggtitle("Model predictions for speaker2 production (factor on both state and goals)") +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper),position="dodge") +
+  geom_hline(yintercept=.1, lty=2) +
+  theme_bw()+
+  ylim(0,1)
+
+ggplot(data=filter(bda.utterance.tidy, Chain == "2"), aes(x=positivity, y=MAP, fill=utterance)) +
+  geom_bar(stat="identity", position=position_dodge()) +
+  facet_grid(goal~state) +
+  xlab("no neg (it was ~) vs neg (it wasn't ~) ") +
+  ylab("proportion chosen") +
+  ggtitle("Model predictions for speaker2 production (factor on both state and goals)") +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper),position="dodge") +
+  geom_hline(yintercept=.1, lty=2) +
+  theme_bw()+
+  ylim(0,1)
+```
+
+```{r checkChains_cor}
+ms_chain1 <- bda.utterance.tidy %>%
+  filter(Chain == "1") %>%
+  mutate(true_state = state) %>%
+  ungroup() %>%
+  select(-state) %>%
+  mutate(
+    chain1_MAP = as.numeric(as.character(MAP)),
+    chain1_ci_upper = as.numeric(as.character(ci_upper)),
+    chain1_ci_lower = as.numeric(as.character(ci_lower))) %>%
+  select(-MAP, -ci_upper, -ci_lower, -Chain) %>%
+  mutate(goal = as.factor(goal),
+         true_state = as.factor(true_state),
+         positivity = as.factor(positivity),
+         utterance = as.factor(utterance))
+
+ms_chain2 <- bda.utterance.tidy %>%
+  filter(Chain == "2") %>%
+  mutate(true_state = state) %>%
+  ungroup() %>%
+  select(-state) %>%
+  mutate(
+    chain2_MAP = as.numeric(as.character(MAP)),
+    chain2_ci_upper = as.numeric(as.character(ci_upper)),
+    chain2_ci_lower = as.numeric(as.character(ci_lower))) %>%
+  select(-MAP, -ci_upper, -ci_lower, -Chain) %>%
+  mutate(goal = as.factor(goal),
+         true_state = as.factor(true_state),
+         positivity = as.factor(positivity),
+         utterance = as.factor(utterance))
+
+ms_chains <- left_join(ms_chain2, ms_chain1) %>%
+  mutate(goal =factor(goal, levels=c("informative", "social", "both")))
+
+ggplot(ms_chains, aes(x = chain2_MAP, y = chain1_MAP, col=goal)) +
+  geom_point() +
+  geom_errorbar(aes(ymin=chain1_ci_lower,ymax=chain1_ci_upper)) +
+  geom_errorbarh(aes(xmin=chain2_ci_lower,xmax=chain2_ci_upper)) +
+  geom_abline(intercept = 0, slope = 1, linetype = 3) +
+  xlab("Model posterior predictive") +
+  ylab("Human proportion responses") +
+  ylim(0,0.95) +
+  xlim(0,0.95) +
+  coord_fixed()
+```
+```{r}
+bda.utterance.results %>%
+  filter(str_detect(Parameter, "posteriorPredictive")) %>%
+  filter(!str_detect(Parameter, "negation")) %>%
+    separate(Parameter, into = c("param", "goal", "state", "positivity", "utterance")) %>%
+  mutate(utterance = factor(utterance, levels = c("terrible", "bad", "okay", "good", "amazing")),
+         positivity = factor(positivity, labels = c("neg", "no_neg")),
+         positivity = factor(positivity, levels = c("no_neg", "neg"))) %>%
+    group_by(Chain, goal, state, positivity, utterance) %>%
+  filter(!is.na(value)) %>%
+    filter(Chain == "2") %>%
+    ggplot(., aes( x = value, fill = goal, group = goal))+
+  geom_histogram(position = position_dodge())+
+  facet_grid(state ~ positivity + utterance, scales = 'free')
+```
+
