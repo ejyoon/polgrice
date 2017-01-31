@@ -15,7 +15,8 @@ library(jsonlite)
 library(readr)
 knitr::opts_chunk$set(echo = TRUE)
 library(coda)
-
+library(magrittr)
+library(forcats)
 # set path to working dir
  local.path <- "~/Documents/research/polgrice/"
 #local.path <- "~/Documents/Research/polgrice_GIT/"
@@ -187,13 +188,15 @@ ms_fake <- expand.grid(true_state=levels(ms$true_state),
 ms.all <- left_join(data.frame(ms_fake),data.frame(ms))
 
 ms.all[is.na(ms.all)] <- 0
-levels(ms.all$true_state) <- c("1 heart", "2 hearts", "3 hearts", "4 hearts", "5 hearts")
-levels(ms.all$goal) <- c("want both", "want to be informative", "want to make listener feel good")
-levels(ms.all$positivity) <- c("negation", "no negation")
+#levels(ms.all$true_state) <- c("1 heart", "2 hearts", "3 hearts", "4 hearts", "5 hearts")
+#levels(ms.all$goal) <- c("want both", "want to be informative", "want to make listener feel good")
+#levels(ms.all$positivity) <- c("negation", "no negation")
 
 ms.all %<>%
-  mutate(utterance = fct_relevel(utterance, "terrible", "bad", "okay", "good", "amazing"),
-         goal = fct_relevel(goal, "want to be informative", "want to make listener feel good", "want both"))
+  mutate(utterance = fct_relevel(utterance, 
+                                 "terrible", "bad", "okay", "good", "amazing"),
+         goal = fct_relevel(goal, 
+                            "informative", "social", "goal"))
 
 ggplot(data=ms.all, aes(x=utterance, y=mean, fill=positivity, group = positivity, color = positivity)) +
   #geom_bar(stat="identity", position=position_dodge()) +
@@ -524,20 +527,49 @@ bda.utterance.results <- webppl(fullModel,
 # summary(bda.utterance.results$alpha_NA_NA_NA)
 # 
 
-bda.utterance.tidy <- bda.utterance.results %>%
-    select(contains("posteriorPredictive"), -contains("negation")) %>%
-    gather(key, val) %>%
-     mutate(key = gsub("value.", "", key)) %>% # for mht
-    separate(key, into = c("param", "goal", "state", "positivity", "utterance")) %>%
-  mutate(utterance = factor(utterance, levels = c("terrible", "bad", "okay", "good", "amazing")),
-         positivity = factor(positivity, labels = c("neg", "no_neg")),
-         positivity = factor(positivity, levels = c("no_neg", "neg"))) %>%
-    group_by(goal, state, positivity, utterance) %>%
-  filter(!is.na(val)) %>%
-  # summarise(val = mean(val))
-  summarize(MAP = estimate_mode(val),
-            ci_lower = hdi_upper(val),
-            ci_upper = hdi_lower(val)) %>% ungroup()
+# bda.utterance.results <- data.frame()
+# numSamples =30000
+# #file.prefix<- "bda-s2-mcmc80000_burn40000_chain"
+# file.prefix <- "bda-s1-mcmc30000_burn15000_chain"
+# for (i in seq(1,4)){
+#   bda.results <- fromJSON(paste(local.path,
+#                                 "model/results/cogsci17/",file.prefix, i,
+#                                 ".json", sep = ""))
+#   bda.utterance.results.i <- get_samples(
+#     cbind(bda.results$support, 
+#           data.frame(prob = bda.results$probs)), 
+#     numSamples)
+#   bda.utterance.results <- bind_rows(bda.utterance.results, bda.utterance.results.i)
+#   print(i)
+# }
+
+#bda.results <- fromJSON("/Users/mht/Documents/research/polgrice/model/results/cogsci17/bda-s1-mcmc100_burn50_chain0.json")
+
+# save(bda.utterance.results, 
+#   file = paste(local.path, "model/results/cogsci17/bda-s1-mcmc30k-x4.RData", sep = ""))
+
+
+## full results, only on MHs machine
+# load(paste(local.path, "model/results/cogsci17/bda-s2-mcmc80k-x4.RData", sep = ""))
+
+# bda.utterance.tidy <- bda.utterance.results %>%
+#     select(contains("posteriorPredictive"), -contains("negation")) %>%
+#     gather(key, val) %>%
+#      mutate(key = gsub("value.", "", key)) %>% # for mht
+#     separate(key, into = c("param", "goal", "state", "positivity", "utterance")) %>%
+#   mutate(utterance = factor(utterance, levels = c("terrible", "bad", "okay", "good", "amazing")),
+#          positivity = factor(positivity, labels = c("neg", "no_neg")),
+#          positivity = factor(positivity, levels = c("no_neg", "neg"))) %>%
+#     group_by(goal, state, positivity, utterance) %>%
+#   filter(!is.na(val)) %>%
+#   # summarise(val = mean(val))
+#   summarize(MAP = estimate_mode(val),
+#             ci_lower = hdi_upper(val),
+#             ci_upper = hdi_lower(val)) %>% ungroup()
+
+#save(bda.utterance.tidy, 
+  #file = paste(local.path, "model/results/cogsci17/bda-s1-mcmc30k-x4-tidy.RData", sep = #""))
+
 
   # multi_boot_standard(column = "val") %>%
   # mutate(val = mean)
@@ -556,47 +588,49 @@ bda.utterance.tidy <- bda.utterance.results %>%
 #### optimalities, cost, value-scaling
 
 ```{r alphaOptimalityCost}
+fig.path  <- paste(local.path, "model/results/cogsci17/fig/", sep = "")
 
-bda.utterance.results %>%
-   select(value.speakerOptimality_NA_NA_NA,value.speakerOptimality2_NA_NA_NA, value.alpha_NA_NA_NA, value.cost_NA_NA_NA) %>%
-  #select(speakerOptimality_NA_NA_NA, speakerOptimality2_NA_NA_NA, alpha_NA_NA_NA, cost_NA_NA_NA) %>%
-    gather(key, val) %>%
-     mutate(key = gsub("value.", "", key)) %>% # for mht
-    separate(key, into = c("param", "goal", "state", "utterance")) %>%
+# bda.params <- bda.utterance.results %>%
+#     select(starts_with("speakerOptimality"), alpha_NA_NA_NA, cost_NA_NA_NA) %>%
+#     gather(key, val) %>%
+#     separate(key, into = c("param", "goal", "state", "utterance"))
+
+# save(bda.params,
+#   file = paste(local.path, "model/results/cogsci17/bda-s2-mcmc80k-x4-params.RData", sep = ""))
+
+# LOAD BDA RESULTS PARAMS
+load(paste(local.path, "model/results/cogsci17/bda-s2-mcmc80k-x4-params.RData", sep = ""))
+
+bda.params %>%
   ggplot(., aes(x = val))+
   geom_histogram()+
   facet_wrap(~param, scales = "free")
 
-bda.utterance.results %>% 
-   select(value.speakerOptimality_NA_NA_NA,value.speakerOptimality2_NA_NA_NA, value.alpha_NA_NA_NA, value.cost_NA_NA_NA) %>%
-  #select(speakerOptimality_NA_NA_NA, speakerOptimality2_NA_NA_NA, alpha_NA_NA_NA, cost_NA_NA_NA) %>%
-    gather(key, val) %>% 
-     mutate(key = gsub("value.", "", key)) %>% # for mht
-    separate(key, into = c("param", "goal", "state", "utterance")) %>%
+bda.params %>%
   group_by(param) %>%
-  summarize(
-    MAP = estimate_mode(val),
+  summarize(MAP = estimate_mode(val),
             ci_lower = hdi_lower(val),
             ci_upper = hdi_upper(val))
   
+#ggsave(paste(fig.path, "s1-parameters-mh30k.pdf", sep =""))
 ```
 
 #### goal weights
 
 ```{r inferredGoalWeight}
-bda.state.tidy2 <- bda.utterance.results %>% 
-    select(contains("phi")) %>%
-    # select(contains("weight")) %>%
-    gather(key, val) %>% 
-    mutate(key = gsub("value.", "", key)) %>% # for mht
-    separate(key, into = c("param", "goal", "state", "utterance")) %>%
-  mutate(epistemic = val,
-         social = 1-val) %>%
-  select(-val) %>%
-  gather(weight, val, epistemic:social) %>%
-  mutate(weight = factor(weight, labels = c("epistemic", "social")),
-         goal = factor(goal, levels = c("informative", "social", "both")))
 
+bda.goalWeights <-  bda.utterance.results %>% 
+    select(contains("phi")) %>%
+    gather(key, val) %>% 
+    separate(key, into = c("param", "goal", "state", "utterance")) %>%
+  select(-state, -utterance) 
+
+
+# save(bda.goalWeights, 
+#      file = paste(local.path, "model/results/cogsci17/bda-s2-mcmc80k-x4-goalWeights.RData", sep = ""))
+
+# LOAD BDA RESULTS GOAL WEIGHTS
+load(paste(local.path, "model/results/cogsci17/bda-s2-mcmc80k-x4-goalWeights.RData", sep = ""))
 
 # group_by(goal, param) %>%
 #   summarize(MAP = estimate_mode(val),
@@ -617,11 +651,10 @@ bda.state.tidy2 <- bda.utterance.results %>%
 #   ylab("posterior density")+
 #   xlab("Inferred speaker goal weight")
 
-ggplot(bda.state.tidy2, aes(x = val, fill = weight))+
+ggplot(bda.goalWeights, aes(x = val, fill = goal))+
   geom_histogram(binwidth=0.01, position = position_dodge())+
-  facet_grid(goal~param) +
   # ylab("posterior density")+
-  xlab("Inferred speaker goal weight")
+  xlab("Inferred speaker informativity weight")
 
 # 
 # ggplot(data=bda.state.tidy2, aes(x=val, fill = weight))+
@@ -637,6 +670,9 @@ ggplot(bda.state.tidy2, aes(x = val, fill = weight))+
     MAP = estimate_mode(val),
             ci_lower = hdi_lower(val),
             ci_upper = hdi_upper(val))
+  
+ggsave(paste(fig.path, "s1-goalWeights-mh30k.pdf", sep =""))
+
 ```
       
       
@@ -644,25 +680,9 @@ ggplot(bda.state.tidy2, aes(x = val, fill = weight))+
 
 #### scatter
 
-```{r dataRenaming}
-ms_data <- ms.all
-levels(ms_data$goal)
-levels(ms_data$goal) <- c("both", "informative", "social")
-ms_data <- ms_data %>%
-    mutate(MAP = as.numeric(as.character(mean)),
-    ci_upper = as.numeric(as.character(ci_upper)),
-    ci_lower = as.numeric(as.character(ci_lower))) %>%
-  select(-mean) %>%
-  mutate(goal = as.factor(goal),
-         true_state = as.factor(true_state),
-         positivity = as.factor(positivity),
-         utterance = as.factor(utterance))
-
-levels(ms_data$true_state) <- c(1:5)
-levels(ms_data$positivity) <- c("neg", "no_neg")
-```
-
 ```{r expModelTogether}
+## tidy results
+load(paste(local.path, "model/results/cogsci17/bda-s2-mcmc80k-x4-tidy.RData", sep = ""))
 
 ms_model <- bda.utterance.tidy %>%     
   ungroup() %>%
@@ -680,39 +700,71 @@ ms_model <- bda.utterance.tidy %>%
          positivity = as.factor(positivity),
          utterance = as.factor(utterance))
 
-ms_all <- left_join(ms_data, ms_model) %>%
-  mutate(goal =factor(goal, levels=c("informative", "social", "both")),
-         diff = (model_MAP - MAP)^2)
+ms_all <- left_join(ms.all,# %>%
+                      # mutate(goal = factor(goal, levels = 
+                      #                        c("want to be informative",
+                      #                          "want both",
+                      #                          "want to make listener feel good"),
+                      #                      labels = c("informative",
+                      #                                 "both",
+                      #                                 "social")),
+                      #        true_state = factor(true_state,
+                      #                            levels = c("1 heart",
+                      #                                       "2 hearts",
+                      #                                       "3 hearts",
+                      #                                       "4 hearts", 
+                      #                                       "5 hearts"),
+                      #                            labels = c(1,2,3,4,5))), 
+                    ms_model %>%
+                      mutate(positivity = 
+                               factor(positivity, 
+                                   levels = c("no_neg", "neg"),
+                                   labels = c("yes","not")))
+                    ) %>%
+  mutate(#goal =factor(goal, levels=c("informative", "social", "both")),
+         diff = (model_MAP - mean)^2)
 ```
 
 ```{r expModelTogether_plot}
-ggplot(ms_all, aes(x = model_MAP, y = MAP, col=goal)) +
-  geom_point() +
-  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper)) +
-  geom_errorbarh(aes(xmin=model_ci_lower,xmax=model_ci_upper)) +
+ggplot(ms_all %<>% 
+         mutate(positivity = forcats::fct_relevel(positivity, "yes", "not")), 
+       aes(x = model_MAP, y = mean, fill = factor(goal), shape = positivity)) +
+  theme_few()+
   geom_abline(intercept = 0, slope = 1, linetype = 3) +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper), alpha = 0.3) +
+  geom_errorbarh(aes(xmin=model_ci_lower,xmax=model_ci_upper), alpha = 0.3) +
+  geom_point(size = 2,color = 'black') +
   xlab("Model posterior predictive") +
   ylab("Human proportion responses") +
   ylim(0,1) +
   xlim(0,1) +
-  coord_fixed()
+  coord_fixed()+
+  scale_shape_manual(values = c(24, 25))+
+  scale_fill_solarized()
 
 # cor.test(ms_all$MAP, ms_all$model_MAP) # 0.8744156 ^2 = 0.7646
-with(ms_all, cor(MAP, model_MAP))^2
+with(ms_all, cor(mean, model_MAP))^2
+
+#ggsave(paste(fig.path, "s1-scatter-mh30k.pdf", sep =""))
+
+#write.csv(ms_all, file = paste(fig.path, "s1-scatter.csv", sep=""))
 ```
 
 
 ```{r expModelTogether_plot2}
-ggplot(ms_all, aes(x = model_MAP, y = MAP, col=goal)) +
-  geom_point() +
-#  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper)) +
- # geom_errorbarh(aes(xmin=model_ci_lower,xmax=model_ci_upper)) +
+ggplot(ms_all, aes(x = model_MAP, y = mean, fill=goal, shape = positivity)) +
+  theme_few()+
   geom_abline(intercept = 0, slope = 1, linetype = 3) +
+  #geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper), alpha = 0.3) +
+  #geom_errorbarh(aes(xmin=model_ci_lower,xmax=model_ci_upper), alpha = 0.3) +
+  geom_point(size = 2,color = 'black') +
   xlab("Model posterior predictive") +
   ylab("Human proportion responses") +
   ylim(0,0.3) +
   xlim(0,0.3) +
-  coord_fixed()
+  coord_fixed()+
+  scale_shape_manual(values = c(24, 25))+
+  scale_fill_solarized()
 
 with(ms_all %>% filter(MAP < 0.3), cor(MAP, model_MAP))^2
 ```
@@ -721,10 +773,10 @@ with(ms_all %>% filter(MAP < 0.3), cor(MAP, model_MAP))^2
 ### Negation vs Positive
 
 ```{r model_predictions_negNoneg}
-bda.utterance.tidy4 <- bda.utterance.results %>%
+bda.negations <- bda.utterance.results %>%
     select(contains("negation")) %>%
     gather(key, val) %>%
-     mutate(key = gsub("value.", "", key)) %>% # for mht
+     #mutate(key = gsub("value.", "", key)) %>% # for mht
     separate(key, into = c("param", "goal", "state", "positivity")) %>%
   mutate(val_noNeg = 1-val) %>%
   gather(posneg, val, val:val_noNeg) %>%
@@ -739,16 +791,23 @@ bda.utterance.tidy4 <- bda.utterance.results %>%
             ci_lower = hdi_upper(val),
             ci_upper = hdi_lower(val))
 
-ggplot(data=bda.utterance.tidy4, aes(x=state, y=MAP, col=positivity, group=positivity)) +
-  # geom_bar(stat="identity", position=position_dodge()) +
+# save(bda.negations,
+#   file = paste(local.path, "model/results/cogsci17/bda-s1-mcmc30k-x4-negations.RData", sep = ""))
+# LOAD BDA NEGATION RESULTS
+load(paste(local.path, "model/results/cogsci17/bda-s1-mcmc30k-x4-negations.RData", sep = ""))
+
+ggplot(data= bda.negations %>%
+         filter(positivity == "negation"), aes(x=state, y=MAP, col=goal, group=goal)) +
   geom_line(stat="identity", position=position_dodge()) +
-  facet_grid(goal~.) +
   xlab("true state") +
-  ylab("proportion chosen") +
-  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper), position=position_dodge(width=.05)) +
-  # ggtitle("negation (indirect remark) vs. no negation (white lie)")
+  ylab("proportion negation") +
+  geom_linerange(aes(ymin=ci_lower,ymax=ci_upper), position=position_dodge(width=.15)) +
   scale_colour_discrete(guide = guide_legend(title = "utterance type")) +
-  theme_bw()
+  theme_few()+
+  scale_color_solarized()
+
+#ggsave(paste(fig.path, "s2-overallNegation-mh80k.pdf", sep =""))
+
 ```
 
 ```{r model_predictions_eachUtt}
@@ -798,6 +857,8 @@ ggplot(data=bda.utterance.tidy3_org, aes(x=utterance, y=MAP, fill=positivity, co
   ggthemes::theme_few()+
   #theme_minimal()+
   theme(axis.text.x = element_text(angle = 90))
+
+ggsave(paste(fig.path, "s1-predictions-mh30k.pdf", sep =""))
 
 #ggsave("~/Desktop/politeModel.pdf", width = 10)
 ```
