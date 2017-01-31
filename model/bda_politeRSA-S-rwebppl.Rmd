@@ -502,8 +502,8 @@ litSemantics.toPass <- d.lit.summary %>% select(-k, -n)
 dataToWebPPL <- list(literalSemantics = litSemantics.toPass,
                      data = d.utterance)
 
-numSamples <- 400
-nChains <- 2
+numSamples <- 40000
+nChains <- 3
 bda.utterance.results <- webppl(fullModel,
                             data = dataToWebPPL,
                             data_var = "dataFromR",
@@ -517,9 +517,9 @@ bda.utterance.results <- webppl(fullModel,
                             chains = nChains,
                             cores = nChains)
 
-# write.csv(bda.utterance.results,paste(local.path,
-          #             "model/results/bda-politeRSA-speaker2GivenStateGoal_60000burn30000.csv",sep=""), # CHANGE FILE NAME AS NEEDED
-          # row.names=FALSE)
+write.csv(bda.utterance.results,paste(local.path,
+            "model/results/bda-politeRSA-speaker2GivenStateGoal_40000burn20000-3chains.csv",sep=""), # CHANGE FILE NAME AS NEEDED
+row.names=FALSE)
 
 
 ```
@@ -532,7 +532,7 @@ bda.utterance.results <- webppl(fullModel,
 #                         "model/results/bda-politeRSA-speaker1GivenStateGoal-80000burn40000.csv",
 #                         sep = ""))
 # bda.utterance.results <- fread(paste(local.path,
-#                         "model/results/bda-politeRSA-speaker2GivenStateGoal_mixtureWeight-40000burn20000-factorStateGoal.csv",
+#                         "model/results/bda-politeRSA-speaker1GivenStateGoal_10000burn5000_test2.csv",
 #                         sep = ""))
 # 
 # summary(bda.utterance.results$speakerOptimality_NA_NA_NA)
@@ -594,7 +594,7 @@ bda.utterance.results %>%
             ci_lower = hdi_lower(val),
             ci_upper = hdi_upper(val))
 
-# ggsave("~/Desktop/politeModelParamS1.pdf", width = 10)
+# ggsave("~/Desktop/politeModelParamS2.pdf", width = 10)
 
   
 ```
@@ -648,7 +648,7 @@ ggplot(bda.state.tidy2, aes(x = val, fill = weight))+
 #   theme_bw()+
 #   ylab("posterior density")+
 #   xlab("Inferred speaker goal weight")
-#   
+# 
   bda.state.tidy2 %>% 
   group_by(param, goal) %>%
   summarize(
@@ -719,7 +719,7 @@ ggplot(ms_all, aes(x = model_MAP, y = MAP, col=goal)) +
   coord_fixed() +
   theme_bw()
 
-# ggsave("~/Desktop/politeModelDataCorS1.pdf", width = 10)
+# ggsave("~/Desktop/politeModelDataCorS2.pdf", width = 10)
 
 
 # cor.test(ms_all$MAP, ms_all$model_MAP) # 0.8744156 ^2 = 0.7646
@@ -844,7 +844,7 @@ ggplot(data=ms_dataModNeg, aes(x=true_state, y=mean, col=positivity, group=posit
   scale_colour_discrete(guide = guide_legend(title = "utterance type")) +
   theme_bw()
 
-ggsave("~/Desktop/politeModelDataNegS1.pdf", width = 6, height=8)
+# ggsave("~/Desktop/politeModelDataNegS2.pdf", width = 6, height=8)
 
 ```
 
@@ -896,7 +896,7 @@ ggplot(data=bda.utterance.tidy3_org, aes(x=utterance, y=MAP, fill=positivity, co
   #theme_minimal()+
   theme(axis.text.x = element_text(angle = 90))
 
-#ggsave("~/Desktop/politeModel.pdf", width = 10)
+# ggsave("~/Desktop/politeModelS1.pdf", width = 10)
 
 ggplot(data=ms.all, aes(x=utterance, y=mean, fill=positivity, color= positivity, group = positivity)) +
   #geom_bar(stat="identity", position=position_dodge()) +
@@ -945,7 +945,7 @@ ggplot(data=ms_dataMod, aes(x=utterance, y=MAP, fill=positivity, color= positivi
   #theme_minimal()+
   theme(axis.text.x = element_text(angle = 90))
 
- ggsave("~/Desktop/politeDataModelS1.pdf", width = 10)
+ # ggsave("~/Desktop/politeDataModelS1.pdf", width = 10)
 
 ```
 
