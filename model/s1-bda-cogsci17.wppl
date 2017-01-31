@@ -1,4 +1,4 @@
-// webppl s2-bda-cogsci17.wppl --require webppl-json
+// webppl s1-bda-cogsci17.wppl --require webppl-json
 // requires webppl package: webppl-json
 
 var index = last(process.argv) // load index as last command line index
@@ -40,25 +40,10 @@ var round = function(x){
 var weightBins = map(round, _.range(0,1, 0.05))
 var phiWeights = repeat(weightBins.length, function(){1})
 
-var goalWeightPrior = Infer({model: function(){
-  return uniformDraw(weightBins)
-}})
-
-var nBins = weightBins.length;
-var kernelWidth = nBins / 4;
-
-var kernelFn = function(prevVal){
-  var i = weightBins.indexOf(prevVal);
-  var upper = (i + kernelWidth) > nBins ? nBins : i + kernelWidth;
-  var lower = (i - kernelWidth) < 0 ? 0 : i - kernelWidth;
-  return Categorical({vs: weightBins.slice(lower,upper),
-                      ps: phiWeights.slice(lower,upper)})
-}
 
 var goals = _.uniq(_.pluck(data, "goal"));
 
 var states = _.uniq(_.pluck(data, "true_state"));
-
 
 var model = function(){
 
@@ -71,7 +56,6 @@ var model = function(){
 
   var RSAparameters = {
     speakerOptimality: uniformDrift({a: 0, b: 20, width:2}),
-    speakerOptimality2: uniformDrift({a:0, b: 5, width: 0.5}),
     alpha: uniformDrift({a: 0, b: 5, width:0.5}),
     cost: uniformDrift({a: 1, b: 10, width:0.25})
   };
@@ -121,44 +105,11 @@ var model = function(){
     })
   }, 10000)
 
-  var listener1 = cache(function(utterance) {
-    Infer({method: "enumerate"}, function(){
-
-      var speakerGoals = {
-        phi:categorical ({vs: weightBins, ps: phiWeights})
-      }
-
-      var state = uniformDraw(states);
-
-      var S1 = speaker1(state, speakerGoals)
-      observe(S1, utterance)
-
-      return {
-        state: state,
-        goals: speakerGoals
-      }
-    })
-  }, 10000)
-
-  var speaker2 = cache(function(exptCondInfo) {
-    Enumerate(function(){
-      var state = exptCondInfo.state;
-      var intendedGoals = exptCondInfo.goalWeights;
-      var utterance = sample(utterancePrior);
-
-      var L1 = listener1(utterance)
-
-      factor(RSAparameters.speakerOptimality2 * L1.score({"state":state, "goals":intendedGoals}))
-
-      return utterance
-
-    })
-  }, 10000)
 
   var goalWeightsAndPostPred = map(function(goal){
 
     var goalWeights = {
-      phi: sample(goalWeightPrior, {kernelFn: kernelFn})
+      phi: uniformDrift({a:0,b:1, width:0.1})
     }
 
     var postPred = map(function(state){
@@ -171,10 +122,8 @@ var model = function(){
         goalWeights: goalWeights
       };
 
-      //       var RSApredictions = speaker1(exptConditionInfo.state,
-      //                                     exptConditionInfo.goalWeights);
-      var RSApredictions = speaker2(exptConditionInfo);
-
+      var RSApredictions = speaker1(exptConditionInfo.state,
+                                      exptConditionInfo.goalWeights);
 
       mapData({data: utteranceData}, function(d){
         observe(RSApredictions, d)
@@ -218,7 +167,7 @@ var model = function(){
     goalWeightsAndPostPred,
     //litSemantics,
     {key: "speakerOptimality", goal: "NA", utt: "NA", state: "NA", val: RSAparameters.speakerOptimality},
-    {key: "speakerOptimality2", goal: "NA", utt: "NA", state: "NA", val: RSAparameters.speakerOptimality2},
+    // {key: "speakerOptimality2", goal: "NA", utt: "NA", state: "NA", val: RSAparameters.speakerOptimality2},
     {key: "alpha", goal: "NA", utt: "NA", state: "NA", val: RSAparameters.alpha},
     {key: "cost", goal: "NA", utt: "NA", state: "NA", val: RSAparameters.cost}
   ])
@@ -231,12 +180,12 @@ var model = function(){
 
 }
 
-var numSamples = 100;
+var numSamples = 1000;
 var method = "MCMC";
 var samples = numSamples;
 var burn = numSamples / 2;
 var posterior = Infer({model, method, samples, burn, verbose: true})
-var filename = 'results/cogsci17/bda-s2-mcmc'+
+var filename = 'results/cogsci17/bda-s1-mcmc'+
 numSamples+'_burn'+burn+'_chain'+index+'.json'
 json.write(filename, posterior)
 
