@@ -289,19 +289,17 @@ var goalWeightPrior = Infer({method: "enumerate"}, function(){
   return uniformDraw(weightBins);
 })
 
-var kernelFn = function(prevVal) {
-  var concentration = 5;
-  var x = prevVal < 0.25 ? 0.25 :
-      prevVal > 0.75 ? 0.75 :
-      prevVal
-  var a = x * concentration;
-  var b = (1 - x) * concentration;
-  var contDist = Beta({a:a,b:b});
-  var discProbs = map(function(bi){
-    Math.exp(contDist.score(bi))
-  }, weightBins)
-  return Categorical({vs: weightBins, ps:discProbs})
-};
+var nBins = weightBins.length;
+var kernelWidth = nBins / 4;
+
+var kernelFn = function(prevVal){
+  var i = weightBins.indexOf(prevVal);
+  var upper = (i + kernelWidth) > nBins ? nBins : i + kernelWidth;
+  var lower = (i - kernelWidth) < 0 ? 0 : i - kernelWidth;
+  return Categorical({vs: weightBins.slice(lower,upper), 
+                      ps: phiWeights.slice(lower,upper)})
+}
+
 
 var data = dataFromR.data;
 
@@ -411,7 +409,9 @@ var dataAnalysis = function(){
     var goalWeightsAndPostPred = map(function(goal){
       
       var goalWeights = {
+        //phi: uniformDraw(weightBins)
         phi: sample(goalWeightPrior, {driftKernel: kernelFn})
+        //phi: uniformDrift({a:0, b:1, width:0.2})
       }
 
     var postPred = map(function(state){
@@ -502,8 +502,8 @@ litSemantics.toPass <- d.lit.summary %>% select(-k, -n)
 dataToWebPPL <- list(literalSemantics = litSemantics.toPass,
                      data = d.utterance)
 
-numSamples <- 10000
-nChains <- 3
+numSamples <- 400
+nChains <- 2
 bda.utterance.results <- webppl(fullModel,
                             data = dataToWebPPL,
                             data_var = "dataFromR",
@@ -517,9 +517,9 @@ bda.utterance.results <- webppl(fullModel,
                             chains = nChains,
                             cores = nChains)
 
-write.csv(bda.utterance.results,paste(local.path,
-                      "model/results/bda-politeRSA-speaker1GivenStateGoal_10000burn5000_test.csv",sep=""), # CHANGE FILE NAME AS NEEDED
-          row.names=FALSE)
+# write.csv(bda.utterance.results,paste(local.path,
+          #             "model/results/bda-politeRSA-speaker2GivenStateGoal_60000burn30000.csv",sep=""), # CHANGE FILE NAME AS NEEDED
+          # row.names=FALSE)
 
 
 ```
@@ -656,7 +656,7 @@ ggplot(bda.state.tidy2, aes(x = val, fill = weight))+
             ci_lower = hdi_lower(val),
             ci_upper = hdi_upper(val))
   
-  ggsave("~/Desktop/politeModelWeightsS1.pdf", width = 10)
+  # ggsave("~/Desktop/politeModelWeightsS1.pdf", width = 10)
 
 ```
       
@@ -716,7 +716,8 @@ ggplot(ms_all, aes(x = model_MAP, y = MAP, col=goal)) +
   ylab("Human proportion responses") +
   ylim(0,1) +
   xlim(0,1) +
-  coord_fixed()
+  coord_fixed() +
+  theme_bw()
 
 # ggsave("~/Desktop/politeModelDataCorS1.pdf", width = 10)
 
@@ -748,7 +749,7 @@ with(ms_all %>% filter(MAP < 0.3), cor(MAP, model_MAP))^2
 bda.utterance.tidy4 <- bda.utterance.results %>%
     select(contains("negation")) %>%
     gather(key, val) %>%
-     mutate(key = gsub("value.", "", key)) %>% # for mht
+     # mutate(key = gsub("value.", "", key)) %>% # for mht
     separate(key, into = c("param", "goal", "state", "positivity")) %>%
   mutate(val_noNeg = 1-val) %>%
   gather(posneg, val, val:val_noNeg) %>%
@@ -774,22 +775,76 @@ ggplot(data=bda.utterance.tidy4, aes(x=state, y=MAP, col=positivity, group=posit
   scale_colour_discrete(guide = guide_legend(title = "utterance type")) +
   theme_bw()
 
-ggsave("~/Desktop/politeModelNegNoneg.pdf", width = 5)
+# ggsave("~/Desktop/politeModelNegNoneg.pdf", width = 5)
 
 ```
 ```{r modelData_negNoneg}
-ms_data2 <- ms.all %>%
-  group_by(goal)
-ms_data2 <- ms_data2 %>%
-    mutate(MAP = as.numeric(as.character(mean)),
-    ci_upper = as.numeric(as.character(ci_upper)),
-    ci_lower = as.numeric(as.character(ci_lower))) %>%
-  select(-mean) %>%
-  mutate(goal = as.factor(goal),
-         true_state = as.factor(true_state),
-         positivity = as.factor(positivity),
-         utterance = as.factor(utterance))
+ms2 <- d %>%
+  filter(!is.na(positivity), !is.na(utterance)) %>% # why is there NA?
+  group_by(true_state, goal) %>%
+  summarise(n.total=n())
 
+ms3 <- d %>%
+  filter(!is.na(positivity), !is.na(utterance)) %>% # why is there NA?
+  group_by(true_state, goal, positivity) %>%
+  summarize(n = n())
+
+ms <- left_join(ms2, ms3) %>%
+  group_by(true_state, goal, positivity) %>%
+  summarize(mean = n / n.total,
+            ci_lower = binom.bayes(n, n.total)$lower,
+            ci_upper = binom.bayes(n, n.total)$upper) 
+  
+ms_fake <- expand.grid(true_state=levels(ms$true_state),
+                             goal=levels(ms$goal),
+                             positivity=levels(ms$positivity))
+
+ms.all2 <- left_join(data.frame(ms_fake),data.frame(ms))
+
+ms.all2[is.na(ms.all2)] <- 0
+levels(ms.all2$true_state) <- c("1 heart", "2 hearts", "3 hearts", "4 hearts", "5 hearts")
+levels(ms.all2$goal) <- c("both", "informative", "social")
+levels(ms.all2$positivity) <- c("negation", "no negation")
+
+ms.all2 %<>%
+  mutate(
+         goal = fct_relevel(goal, "informative", "social", "both"))
+
+ggplot(data=ms.all2, aes(x=true_state, y=mean, col=positivity, group=positivity)) +
+  # geom_bar(stat="identity", position=position_dodge()) +
+  geom_line(stat="identity", position=position_dodge()) +
+  facet_grid(goal~.) +
+  xlab("true state") +
+  ylab("proportion chosen") +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper), position=position_dodge(width=.05)) +
+  # ggtitle("negation (indirect remark) vs. no negation (white lie)")
+  scale_colour_discrete(guide = guide_legend(title = "utterance type")) +
+  theme_bw()
+
+ms_dataModNeg <- rbind(ms.all2 %>%
+                         mutate(expt = "experiment") %>%
+                         mutate(true_state = factor(true_state, labels = c(1:5))),
+                       bda.utterance.tidy4 %>%
+                         ungroup() %>%
+                         mutate(true_state = state) %>%
+                         # mutate(true_state = factor(state, labels = c("1 heart", "2 hearts", "3 hearts", "4 hearts", "5 hearts"))) %>%
+                         select(-state) %>%
+                         mutate(mean = MAP) %>%
+                         select(-MAP) %>%
+                         mutate(expt = "model"))
+
+ggplot(data=ms_dataModNeg, aes(x=true_state, y=mean, col=positivity, group=positivity)) +
+  # geom_bar(stat="identity", position=position_dodge()) +
+  geom_line(stat="identity", position=position_dodge()) +
+  facet_grid(goal~expt) +
+  xlab("true state") +
+  ylab("proportion chosen") +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper), position=position_dodge(width=.05)) +
+  # ggtitle("negation (indirect remark) vs. no negation (white lie)")
+  scale_colour_discrete(guide = guide_legend(title = "utterance type")) +
+  theme_bw()
+
+ggsave("~/Desktop/politeModelDataNegS1.pdf", width = 6, height=8)
 
 ```
 
@@ -890,7 +945,7 @@ ggplot(data=ms_dataMod, aes(x=utterance, y=MAP, fill=positivity, color= positivi
   #theme_minimal()+
   theme(axis.text.x = element_text(angle = 90))
 
-# ggsave("~/Desktop/politeDataModel.pdf", width = 10)
+ ggsave("~/Desktop/politeDataModelS1.pdf", width = 10)
 
 ```
 
