@@ -15,10 +15,12 @@ library(jsonlite)
 library(readr)
 knitr::opts_chunk$set(echo = TRUE)
 library(coda)
-
+library(magrittr)
+library(ggthemes)
+library(forcats)
 # set path to working dir
- local.path <- "~/Documents/research/polgrice/"
-#local.path <- "~/Documents/Research/polgrice_GIT/"
+ # local.path <- "~/Documents/research/polgrice/"
+local.path <- "~/Documents/Research/polgrice_GIT/"
 #source(paste(local.path, "experiment/data_analysis/markdown/polgrice_S.R", sep=""))
 
 estimate_mode <- function(s) {
@@ -146,7 +148,7 @@ ggplot(data=litSemantics.results.org,
 ```{r}
 d.utterance <- read.csv(paste(
   local.path, 
-  "experiment/data_analysis/data/speaker_new.csv"
+  "experiment/data_analysis/data/speaker.csv"
   , sep="")
 )  %>%
     filter(utterance != "NA_NA")
@@ -280,10 +282,26 @@ var round = function(x){
 	return Math.round(x * 100) / 100
 }
 
-var weightBins = map(round, _.range(0,1, 0.05))
+var weightBins = map(round, _.range(0.0001, 1, 0.05))
 var phiWeights = repeat(weightBins.length, function(){1})
   
+var goalWeightPrior = Infer({method: "enumerate"}, function(){
+  return uniformDraw(weightBins);
+})
 
+var kernelFn = function(prevVal) {
+  var concentration = 5;
+  var x = prevVal < 0.25 ? 0.25 :
+      prevVal > 0.75 ? 0.75 :
+      prevVal
+  var a = x * concentration;
+  var b = (1 - x) * concentration;
+  var contDist = Beta({a:a,b:b});
+  var discProbs = map(function(bi){
+    Math.exp(contDist.score(bi))
+  }, weightBins)
+  return Categorical({vs: weightBins, ps:discProbs})
+};
 
 var data = dataFromR.data;
 
@@ -313,11 +331,9 @@ var dataAnalysis = function(){
     var uttCosts = map(function(u) {return isNegation(u) ? Math.exp(-RSAparameters.cost) : Math.exp(-cost_yes)},
             utterances)
     
-    var utterancePrior = Infer({model: function(){
+    var utterancePrior = Infer({method: "enumerate"}, function(){
       return  utterances[discrete(uttCosts)];
-    }});
-
-   factor(rsaParameters.speakerOptimality2 * L1.score({"state":state, "goals":intendedGoals}))
+    });
 
     var meaning = function(words, state){
        //display(litSem[words][state])
@@ -331,7 +347,6 @@ var dataAnalysis = function(){
         condition(m);
         return state;
       });
-    
     }, 10000);
     
     var speaker1 = cache(function(state, speakerGoals) {
@@ -396,7 +411,7 @@ var dataAnalysis = function(){
     var goalWeightsAndPostPred = map(function(goal){
       
       var goalWeights = {
-        phi: uniformDraw(weightBins)
+        phi: sample(goalWeightPrior, {driftKernel: kernelFn})
       }
 
     var postPred = map(function(state){
@@ -410,8 +425,8 @@ var dataAnalysis = function(){
       };
 
 
-      //var RSApredictions = speaker1(exptConditionInfo.state, exptConditionInfo.goalWeights);
       var RSApredictions = speaker2(exptConditionInfo);
+      //var RSApredictions = speaker1(exptConditionInfo.state, exptConditionInfo.goalWeights);
 
 
       mapData({data: utteranceData}, 
@@ -487,8 +502,8 @@ litSemantics.toPass <- d.lit.summary %>% select(-k, -n)
 dataToWebPPL <- list(literalSemantics = litSemantics.toPass,
                      data = d.utterance)
 
-numSamples <- 1000
-nChains <- 2
+numSamples <- 10000
+nChains <- 3
 bda.utterance.results <- webppl(fullModel,
                             data = dataToWebPPL,
                             data_var = "dataFromR",
@@ -502,14 +517,14 @@ bda.utterance.results <- webppl(fullModel,
                             chains = nChains,
                             cores = nChains)
 
-# write.csv(bda.utterance.results,paste(local.path,
-#                       "model/results/bda-politeRSA-speaker2GivenStateGoal_mixtureWeight-10000burn5000-factorStateGoal.csv",sep=""), # CHANGE FILE NAME AS NEEDED
-#           row.names=FALSE)
+write.csv(bda.utterance.results,paste(local.path,
+                      "model/results/bda-politeRSA-speaker1GivenStateGoal_10000burn5000_test.csv",sep=""), # CHANGE FILE NAME AS NEEDED
+          row.names=FALSE)
 
 
 ```
 
-
+›
 # exp vs. BDA analysis
 
 ```{r callOnData}
@@ -517,7 +532,7 @@ bda.utterance.results <- webppl(fullModel,
 #                         "model/results/bda-politeRSA-speaker1GivenStateGoal-80000burn40000.csv",
 #                         sep = ""))
 # bda.utterance.results <- fread(paste(local.path,
-#                         "model/results/bda-politeRSA-speaker2GivenStateGoal_mixtureWeight-10000burn5000.csv",
+#                         "model/results/bda-politeRSA-speaker2GivenStateGoal_mixtureWeight-40000burn20000-factorStateGoal.csv",
 #                         sep = ""))
 # 
 # summary(bda.utterance.results$speakerOptimality_NA_NA_NA)
@@ -527,7 +542,7 @@ bda.utterance.results <- webppl(fullModel,
 bda.utterance.tidy <- bda.utterance.results %>%
     select(contains("posteriorPredictive"), -contains("negation")) %>%
     gather(key, val) %>%
-     mutate(key = gsub("value.", "", key)) %>% # for mht
+   #  mutate(key = gsub("value.", "", key)) %>% # for mht
     separate(key, into = c("param", "goal", "state", "positivity", "utterance")) %>%
   mutate(utterance = factor(utterance, levels = c("terrible", "bad", "okay", "good", "amazing")),
          positivity = factor(positivity, labels = c("neg", "no_neg")),
@@ -558,26 +573,29 @@ bda.utterance.tidy <- bda.utterance.results %>%
 ```{r alphaOptimalityCost}
 
 bda.utterance.results %>%
-   select(value.speakerOptimality_NA_NA_NA,value.speakerOptimality2_NA_NA_NA, value.alpha_NA_NA_NA, value.cost_NA_NA_NA) %>%
-  #select(speakerOptimality_NA_NA_NA, speakerOptimality2_NA_NA_NA, alpha_NA_NA_NA, cost_NA_NA_NA) %>%
+   # select(value.speakerOptimality_NA_NA_NA,value.speakerOptimality2_NA_NA_NA, value.alpha_NA_NA_NA, value.cost_NA_NA_NA) %>%
+  select(speakerOptimality_NA_NA_NA, speakerOptimality2_NA_NA_NA, alpha_NA_NA_NA, cost_NA_NA_NA) %>%
     gather(key, val) %>%
-     mutate(key = gsub("value.", "", key)) %>% # for mht
+     # mutate(key = gsub("value.", "", key)) %>% # for mht
     separate(key, into = c("param", "goal", "state", "utterance")) %>%
   ggplot(., aes(x = val))+
   geom_histogram()+
   facet_wrap(~param, scales = "free")
 
 bda.utterance.results %>% 
-   select(value.speakerOptimality_NA_NA_NA,value.speakerOptimality2_NA_NA_NA, value.alpha_NA_NA_NA, value.cost_NA_NA_NA) %>%
-  #select(speakerOptimality_NA_NA_NA, speakerOptimality2_NA_NA_NA, alpha_NA_NA_NA, cost_NA_NA_NA) %>%
+   # select(value.speakerOptimality_NA_NA_NA,value.speakerOptimality2_NA_NA_NA, value.alpha_NA_NA_NA, value.cost_NA_NA_NA) %>%
+  select(speakerOptimality_NA_NA_NA, speakerOptimality2_NA_NA_NA, alpha_NA_NA_NA, cost_NA_NA_NA) %>%
     gather(key, val) %>% 
-     mutate(key = gsub("value.", "", key)) %>% # for mht
+     # mutate(key = gsub("value.", "", key)) %>% # for mht
     separate(key, into = c("param", "goal", "state", "utterance")) %>%
   group_by(param) %>%
   summarize(
     MAP = estimate_mode(val),
             ci_lower = hdi_lower(val),
             ci_upper = hdi_upper(val))
+
+# ggsave("~/Desktop/politeModelParamS1.pdf", width = 10)
+
   
 ```
 
@@ -588,7 +606,7 @@ bda.state.tidy2 <- bda.utterance.results %>%
     select(contains("phi")) %>%
     # select(contains("weight")) %>%
     gather(key, val) %>% 
-    mutate(key = gsub("value.", "", key)) %>% # for mht
+    # mutate(key = gsub("value.", "", key)) %>% # for mht
     separate(key, into = c("param", "goal", "state", "utterance")) %>%
   mutate(epistemic = val,
          social = 1-val) %>%
@@ -637,6 +655,9 @@ ggplot(bda.state.tidy2, aes(x = val, fill = weight))+
     MAP = estimate_mode(val),
             ci_lower = hdi_lower(val),
             ci_upper = hdi_upper(val))
+  
+  ggsave("~/Desktop/politeModelWeightsS1.pdf", width = 10)
+
 ```
       
       
@@ -697,6 +718,9 @@ ggplot(ms_all, aes(x = model_MAP, y = MAP, col=goal)) +
   xlim(0,1) +
   coord_fixed()
 
+# ggsave("~/Desktop/politeModelDataCorS1.pdf", width = 10)
+
+
 # cor.test(ms_all$MAP, ms_all$model_MAP) # 0.8744156 ^2 = 0.7646
 with(ms_all, cor(MAP, model_MAP))^2
 ```
@@ -749,6 +773,24 @@ ggplot(data=bda.utterance.tidy4, aes(x=state, y=MAP, col=positivity, group=posit
   # ggtitle("negation (indirect remark) vs. no negation (white lie)")
   scale_colour_discrete(guide = guide_legend(title = "utterance type")) +
   theme_bw()
+
+ggsave("~/Desktop/politeModelNegNoneg.pdf", width = 5)
+
+```
+```{r modelData_negNoneg}
+ms_data2 <- ms.all %>%
+  group_by(goal)
+ms_data2 <- ms_data2 %>%
+    mutate(MAP = as.numeric(as.character(mean)),
+    ci_upper = as.numeric(as.character(ci_upper)),
+    ci_lower = as.numeric(as.character(ci_lower))) %>%
+  select(-mean) %>%
+  mutate(goal = as.factor(goal),
+         true_state = as.factor(true_state),
+         positivity = as.factor(positivity),
+         utterance = as.factor(utterance))
+
+
 ```
 
 ```{r model_predictions_eachUtt}
@@ -800,6 +842,56 @@ ggplot(data=bda.utterance.tidy3_org, aes(x=utterance, y=MAP, fill=positivity, co
   theme(axis.text.x = element_text(angle = 90))
 
 #ggsave("~/Desktop/politeModel.pdf", width = 10)
+
+ggplot(data=ms.all, aes(x=utterance, y=mean, fill=positivity, color= positivity, group = positivity)) +
+  #geom_bar(stat="identity", position=position_dodge()) +
+  geom_line()+ 
+  facet_grid(goal~true_state) +
+  xlab("no neg (it was ~) vs neg (it wasn't ~) ") +
+  ylab("proportion chosen") +
+  ggtitle("Model predictions for speaker2 production (factor on both state and goals)") +
+  geom_linerange(aes(ymin=ci_lower,ymax=ci_upper), position="dodge") +
+  geom_hline(yintercept=.1, lty=2) +
+  #theme_bw()+
+  ylim(0,1)+
+  scale_color_solarized()+
+  ggthemes::theme_few()+
+  #theme_minimal()+
+  theme(axis.text.x = element_text(angle = 90))
+
+```
+
+```{r expModelTogether-utt}
+ms_dataMod <- rbind(ms_data %>% 
+                      mutate(expt = "experiment") %>%
+                      mutate(true_state = factor(true_state, labels = c("1 heart", "2 hearts", "3 hearts", "4 hearts", "5 hearts")),
+                             positivity = factor(positivity, labels = c("negation", "no negation")),
+                             goal = factor(goal, labels = c("informative", "social", "both"))), 
+                    bda.utterance.tidy3_org %>% 
+                      mutate(expt = "model") %>%
+                      mutate(true_state = state) %>%
+                      select(-state)) %>%
+  mutate(expt = as.factor(expt)) %>%
+  mutate(goal = factor(goal, levels = c("informative", "social", "both")))
+
+ggplot(data=ms_dataMod, aes(x=utterance, y=MAP, fill=positivity, color= positivity, group = positivity)) +
+  #geom_bar(stat="identity", position=position_dodge()) +
+  geom_line()+ 
+  facet_grid(goal+expt~true_state) +
+  xlab("no neg (it was ~) vs neg (it wasn't ~) ") +
+  ylab("proportion chosen") +
+  # ggtitle("Model predictions for speaker2 production (factor on both state and goals)") +
+  geom_linerange(aes(ymin=ci_lower,ymax=ci_upper), position="dodge") +
+  geom_hline(yintercept=.1, lty=2) +
+  #theme_bw()+
+  ylim(0,1)+
+  scale_color_solarized()+
+  ggthemes::theme_few()+
+  #theme_minimal()+
+  theme(axis.text.x = element_text(angle = 90))
+
+# ggsave("~/Desktop/politeDataModel.pdf", width = 10)
+
 ```
 
 
