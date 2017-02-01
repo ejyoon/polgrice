@@ -179,42 +179,42 @@ In the next section, we explore the model's predictions for speaker productions 
 
 # Schematic model predictions
 
-We initially test our hypotheses on a schematic model, with fixed goal weights and parameters.
+Before describing our experimental data, we derive predictions from the pRSA model. In these initial simulations, we use fixed goal weights and parameters -- in later fits, we will derive these parameters from the data using Bayesian data analysis. Since the model requires measurements of literal semantics (i.e., what "good" means on a given dimension), we first describe these measurements and then give model predictions using them.
 
 ## Semantic measurement
 
-We first probed judgments of literal meanings of the target words assumed by our model and used in all our experiments. We used these judgments to set expected literal meanings of utterances in our initial model predictions, and used them as informative priors to infer literal meaning for the utterances in the experiment for the model fitting.
+We probed judgments of literal meanings of the target words assumed by our model and used in all our experiments. 
+<!-- We used these judgments to set expected literal meanings of utterances in our initial model predictions, and used them as informative priors to infer literal meaning for the utterances in the experiment for the model fitting. -->
 
 ```{r expt1_results, fig.env = "figure*", fig.pos = "t", fig.width=6, fig.height=2, fig.align = "center", fig.cap = "Semantic measurement results. Proportion of acceptances of utterance types (shown in different colors) combined with target words (shown in different facets) given the true state represented on a scale of hearts. Error bars represent 95\\% confidence intervals."}
-img <- png::readPNG("figs/lit_sem.png")
-grid::grid.raster(img)
+# img <- png::readPNG("figs/lit_sem.png")
+# grid::grid.raster(img)
 
-# ms <- read.csv(paste(local.path, "experiment/data_analysis/data/literalSemantics_wNeg.csv", sep="")) %>%
-#   mutate(positivity = factor(as.numeric(grepl("yes", utterance)), 
-#                              levels = c(0, 1), 
-#                              labels = c("it wasn't ~","it was ~"))) %>%
-#   mutate(utterance = substring(utterance, 5)) %>%
-#   mutate(utterance = ordered(utterance, levels = c("terrible", "bad", "okay", "good", "amazing")))  %>%
-#   group_by(positivity, state, utterance, subid) %>%
-#   summarize(
-#             judgment = mean(judgment, na.rm=TRUE)
-#           ) %>%
-#   group_by(positivity, state, utterance) %>%
-#   multi_boot_standard(column = "judgment") %>%
-#   mutate(judgment = mean)
-# 
-# qplot(state, judgment, 
-#       colour = positivity,
-#       data=ms) + 
-#   geom_line(aes(group=positivity)) +
-#   facet_grid(.~utterance) +
-#   xlab("state (1=worst)") +
-#   ylab("proportion acceptances") +
-#   geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
-#   scale_color_discrete(guide_legend(title="")) +
-#   ggthemes::theme_few()
+ms <- read_csv("../../../experiment/data_analysis/data/literalSemantics_wNeg.csv") %>%
+  mutate(positivity = factor(as.numeric(grepl("yes", utterance)),
+                             levels = c(0, 1),
+                             labels = c("it wasn't ~","it was ~"))) %>%
+  mutate(utterance = substring(utterance, 5)) %>%
+  mutate(utterance = ordered(utterance, 
+                             levels = c("terrible", "bad", "okay", "good", "amazing")))  %>%
+  group_by(positivity, state, utterance, subid) %>%
+  summarize(
+            judgment = mean(judgment, na.rm=TRUE)
+          ) %>%
+  group_by(positivity, state, utterance) %>%
+  multi_boot_standard(column = "judgment") %>%
+  mutate(judgment = mean)
 
-
+qplot(state, judgment,
+      colour = positivity,
+      data=ms) +
+  geom_line(aes(group=positivity)) +
+  facet_grid(.~utterance) +
+  xlab("state (1=worst)") +
+  ylab("proportion acceptances") +
+  geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
+  scale_color_solarized(guide_legend(title="")) +
+  ggthemes::theme_few()
 ```
 
 ```{r model_pred_negNoneg, fig.env = "figure*", fig.pos = "t", fig.width=6, fig.height=3, fig.align = "center", fig.cap = "Schematic model predictions (left), experimental results (center) and fitted model predictions (right) for average proportion of negation produced among all utterances, given true states (x-axis) and goals (colors)."}
@@ -222,23 +222,19 @@ img <- png::readPNG("figs/exptModNeg.png")
 grid::grid.raster(img)
 ```
 
-### Materials and methods 
+### Materials, methods, and results 
 
-\ejy{is it okay to use this way of sectioning?} 25 participants with IP addresses in the United States were recruited on Amazon's Mechanical Turk. We used 13 different context items that were previously used in @yoon2016, in which someone evaluated a performance of some kind. For example, in one of the contexts, Bob saw a presentation, and Bob's feelings toward Ann's cake (*true state*) were shown on a scale out of five hearts (e.g., two out of five hearts filled in red color). The question of interest was "Do you think Bob thought the presentation was / wasn't X?" where X could be one of five possible words: *terrible*, *bad*, *okay*, *good*, and *amazing*, giving rise to ten different possible utterances (with negation or no negation). Each participant read 50 scenarios, depicting every possible combination of 5 true states and 10 utterances. Participants indicated their answer to each question by answering "No" or "Yes." The order of context items was randomized, and there were a maximum of four repeats of each context item per participant.
-
-### Results 
-
-For this and next experiments, we analyze the data by collapsing across context items. Meanings of the words as judged by participants were as one would expect (see Figure 1). We used the fraction of participants that endorsed utterance $w$ for state $s$ to set informative priors to infer posterior credible values of the literal meanings from data in the speaker production experiment.
+25 participants with IP addresses in the United States were recruited on Amazon's Mechanical Turk. We used 13 different context items that were previously used in @yoon2016, in which someone evaluated a performance of some kind. For example, in one of the contexts, Bob saw a presentation, and Bob's feelings toward Ann's cake (*true state*) were shown on a scale out of five hearts (e.g., two out of five hearts filled in red color). The question of interest was "Do you think Bob thought the presentation was / wasn't X?" and participants responded by choosing either "no" or "yes." The target could be one of five possible words: *terrible*, *bad*, *okay*, *good*, and *amazing*, giving rise to ten different possible utterances (with negation or no negation). Each participant read 50 scenarios, depicting every possible combination of states and utterances. The order of context items was randomized, and there were a maximum of four repeats of each context item per participant. For this and subsequent experiments, we analyzed the data by collapsing across context items. Meanings of the words as judged by participants were as one would expect (see Figure 1). 
 
 ## Model parameters and predictions
 
-To model what speakers would say given true states and their goals (e.g. wanting to make the listener feel good), we assumed a particular set of speaker's goal-weights {$\beta_{epistemic}$, $\beta_{social}$} to represent three goal conditions that we are interested in: *informative* ($\beta_{epistemic}$ = 0.9; $\beta_{social}$ = 0.1); *social* ($\beta_{epistemic}$ = 0.1; $\beta_{social}$ = 0.9); and *both goals* ($\beta_{epistemic}$ = 0.5; $\beta_{social}$ = 0.5). There are four additional parameters of the model, and for the purposes of generating model predictions a priori, we will assign reasonable parameters based on pilot runs of the model-data fit: the speaker optimality parameter ($\lambda_{S_1}$ assigned to 2); the pragmatic speaker optimality parameter ($\lambda_{S_2}$ to 2); the value scale parameter ($\alpha$ to 1) in the utility function; and the cost parameter ($C(u)$ to 2). 
+To model what speakers would say given true states and their goals (e.g., wanting to make the listener feel good), we assumed a particular set of speaker's goal-weights {$\beta_{epistemic}$, $\beta_{social}$} to represent three goal conditions that we are interested in: *informative* ($\beta_{epistemic}$ = 0.9; $\beta_{social}$ = 0.1); *social* ($\beta_{epistemic}$ = 0.1; $\beta_{social}$ = 0.9); and *both goals* ($\beta_{epistemic}$ = 0.5; $\beta_{social}$ = 0.5). There are four additional parameters of the model, and for the purposes of generating model predictions a priori, we assigned reasonable parameters based on pilot runs of the model-data fit: the speaker optimality parameter ($\lambda_{S_1}$ assigned to 2); the pragmatic speaker optimality parameter ($\lambda_{S_2}$ to 2); the value scale parameter ($\alpha$ to 1) in the utility function; and the cost parameter ($C(u)$ to 2). 
 
-The predictions for the speaker's utterance were consistent with our hypothesis, namely that indirect speech was relatively more preferred given bad true states and speaker's consideration of both epistemic and social goals (Figure 2, left). The model inferred higher likelihood of negation production for the both-goal condition than informative and social conditions when the true state was bad (1 heart). For all goal conditions rate of indirect speech decreased as the true states improved, also as expected; given a good performance, the speaker should produce positive direct remarks (e.g. "It was amazing"). These simplified predictions thus supported our hypothesis that face threat in the true state and both epistemic and social utilities contribute to greater production of indirect speech. Next, we confirm these model predictions in an experiment. 
+The predictions for the speaker's utterance were consistent with our hypothesis, namely that indirect speech was relatively more preferred given bad true states and speaker's consideration of both epistemic and social goals (Figure 2, left). The model inferred higher likelihood of negation production for the both-goal condition than informative and social conditions when the true state was bad (1 heart). For all goal conditions rate of indirect speech decreased as the true states improved, also as expected; given a good performance, the speaker should produce positive direct remarks (e.g. "It was amazing"). These predictions thus supported our hypothesis that both epistemic and social utilities contribute to greater production of indirect speech (i.e., negation). 
 
 # Speaker production experiment
 
-To compare against our model predictions, we examined people's predictions for the most likely utterance produced by the speaker ($u$), given a description of the true state of the world (e.g., the speaker felt that a poem deserved 2 out of 5 hearts) and the speaker's goals (e.g., the speaker wanted to make the listener feel good). Critically, the contexts indicated face threats toward the listener, as the speaker's utterance was an evaluation of the listener's performance. We hypothesized that when there is no tradeoff between informativity and face-threat avoidance (i.e. when the addressee's performance is great), speakers should use truthful and face-saving direct remarks ("[Your talk] was amazing") regardless of their described goals. However, when there is a conflict between the epistemic and social goals (i.e. when the addressee's performance is poor), a speaker who tries to compromise between both goals would use vague indirect remarks more often than direct face-threatening remarks (blunt truth; preferred by an informative speaker) or direct face-saving remarks (i.e. white lies; preferred by face-saving speaker). Our hypothesis and method were pre-registered prior to data collection on the Open Science Framework (\url{http://osf.io/b73dm}). 
+To compare against our model predictions, we measured participants' predictions for the most likely utterance produced by the speaker ($u$), given a description of the true state of the world. For example, given that the speaker wanted to make the listener feel good but felt that a poem deserved 2 out of 5 hearts, what would she say? Critically, the contexts indicated face threats toward the listener, as the speaker's utterance was a direct evaluation of the listener's performance. We hypothesized that when there is no tradeoff between informativity and face-threat avoidance (i.e. when the addressee's performance was great), speakers should use truthful and face-saving direct remarks ("[Your poem] was amazing") regardless of their described goals. However, when there was a conflict between the epistemic and social goals (i.e., when the addressee's performance is poor), a speaker who tried to compromise between both goals would use vague indirect remarks ("[Your poem] wasn't terrible") more often than direct face-threatening remarks ("[Your poem] was bad"; preferred by an informative speaker) or direct face-saving remarks ("[Your poem] was good"; preferred by face-saving speaker). Our hypothesis and method were pre-registered prior to data collection on the Open Science Framework (\url{http://osf.io/b73dm}). 
 
 ## Method
 
@@ -274,7 +270,7 @@ For bad states (1 and 2 hearts), as we predicted, there were more instances of e
 
 ### Model fitting
 
-In this experiment, participants were told true states and what speakers' intentions were (e.g., Bob wanted to make Alice feel good). We assume that the intention descriptions conveyed to the participants a particular set of goal-weights {$\beta_{epi}$, $\beta_{soc}$} that the speaker was using. We put uninformative priors on these weights ($\beta$ ~ Uniform(0,1)) and infer their credible values separately for each goal condition ("wanted to X") using Bayesian data analytic techniques [@LW2014].
+In this experiment, participants were told true states and what speakers' intentions were (e.g., Bob wanted to make Alice feel good). We assume that the intention descriptions conveyed to the participants a particular set of goal-weights {$\beta_{epi}$, $\beta_{soc}$} that the speaker was using. We put uninformative priors on these weights ($\beta$ ~ Uniform(0,1)) and infer their credible values separately for each goal condition ("wanted to X") using Bayesian data analytic techniques [@LW2014]. We also used the fraction of participants that endorsed utterance $w$ for state $s$ to set informative priors to infer posterior credible values of the literal meanings from data.
 
 ```{r model_param}
 load("../../../model/results/cogsci17/bda-s2-mcmc80k-x4-params.RData")
