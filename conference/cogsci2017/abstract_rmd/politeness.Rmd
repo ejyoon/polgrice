@@ -125,7 +125,7 @@ Importantly, we predict it is the interaction between presence of face threat (d
 
 In the current work, we introduce minimal extension to our previous RSA model [pRSA; @yoon2016] to allow for speaker production of indirect remarks using negation. 
 
-## Prior work: Description of pRSA
+## Polite RSA
 
 RSA models assume speakers choose utterances approximately optimally given a utility function [@Goodman2013].
 pRSA posited that the speaker's utility function can be decomposed into two components.
@@ -133,7 +133,8 @@ First, *epistemic utility* ($U_{epi}$) refers to the standard, informative utili
 Second, *social utility* ($U_{soc}$) is the expected subjective utility of the state the listener would infer given the utterance $w$. 
 The expected subjective utility is related to the intrinsic value of the state, and we use a value function ($V$) to map states to subjective utility values.
 This captures the affective consequences for the listener of being in state $s$.
-Thus we defined the overall speaker utility ($U$) to be a weighted combination of epistemic and social utilities.
+Finally, some speech acts might be more costly than others. 
+The utility of an utterance subtracts the cost $c(w)$ from the weighted combination of the social and epistemic utilities.
 
 $$U(w;s;  \hat{\beta}) = \beta_{epi}\cdot \ln(P_{L_0}(s \mid w)) 
 \\+ \beta_{soc} \cdot \mathbb{E}_{P_{L_0}(s \mid w)}[V(s)]- C(w)$$
@@ -142,12 +143,16 @@ The speaker ($S_1$) in pRSA chooses utterances $w$ softmax-optimally given the s
 The pragmatic listener ($L_1$) jointly infers the state $s$ and the utility weights of the speaker, $\beta_{epi}$ and $\beta_{soc}$ [@GoodmanLassiter2015; @Kao2014]. 
 
 \begin{align}
-P_{L_0}(s \mid w) &\propto {w}(s) \cdot P(s) \\ 
+P_{L_1}(s, \hat{\beta} \mid w) &\propto P_{S_1}(w \mid s, \hat{\beta})\cdot P(s) \cdot P( \hat{\beta}) \\
 P_{S_1}(w \mid s, \hat{\beta}) &\propto \mathrm{exp}(\lambda_{1} \cdot \mathbb{E}[U(w; s;  \hat{\beta})]) \\
-P_{L_1}(s,  \hat{\beta} \mid w) &\propto P_{S_1}(w \mid s, \hat{\beta})\cdot P(s) \cdot P( \hat{\beta})
+P_{L_0}(s \mid w) &\propto [[w]](s) \cdot P(s)
 \end{align}
 
-Within our experimental domain, we assumed there were five possible states of the world corresponding to the value placed on a particular referent (e.g., rating deserved by the presentation the speaker is commenting on): $S = \{s_{1}, ...,  s_{5}\}$. We further assume a uniform prior distribution over possible states of the world. The states have subjective numerical values $V(s_{i}) = \alpha \cdot i$, where $\alpha$ is a free parameter.
+Within our experimental domain, we assumed there were five possible states of the world corresponding to the value placed on a particular referent (e.g., rating deserved by the presentation the speaker is commenting on, akin to a Yelp rating): $S = \{s_{1}, ...,  s_{5}\}$. 
+We assume a uniform prior distribution over possible states of the world.
+The states have subjective numerical values $V(s_{i}) = \alpha \cdot i$, where $\alpha$ is a free parameter.
+$[[w]](s)$ corresponds to the lexical meaning of the utterance $w$ (e.g., "good") when applied to state $s$. 
+We gather independent ratings for these literal meanings.
 
 ## Extensions to pRSA
 
