@@ -11,7 +11,7 @@ author-information: >
          Department of Psychology, Stanford University}
 
 abstract: 
-    "Why do people speak politely? Previous work has suggested that people expect others to speak based on their desires to transfer accurate information efficiently (an epistemic goal) and to make the listener feel good (a social goal), sometimes causing them to produce white lies [@yoon2016]. In the current work, we expand on this theory to consider another prominent case of polite speech: indirect remarks with negation (e.g., \"It wasn't amazing\"). With a minimal extension to the previous framework, our formal model suggests that a pragmatic speaker will produce more indirect remarks when the speaker wants to be considerate and informative at the same time. These predictions were borne out in experimental findings for speaker production. This demonstrates that our model generalizes well, and can account for a broader range of polite speech.
+    "Why do people speak politely? Previous work has suggested that people expect others to speak based on their desires to transfer accurate information efficiently (an epistemic goal) and to make the listener feel good (a social goal), sometimes causing them to produce white lies [@yoon2016]. In the current work, we expand on this theory to consider another prominent case of polite speech: indirect remarks using negation (e.g., \"It wasn't amazing\"). With a minimal extension to the previous framework, our formal model suggests that a pragmatic speaker will produce more indirect remarks when the speaker wants to be considerate and informative at the same time. These predictions were borne out in experimental findings for speaker production. This demonstrates that our model generalizes well, and can account for a broader range of polite speech.
     "
 
 keywords:
@@ -20,6 +20,15 @@ keywords:
 output: cogsci2016::cogsci_paper
 ---
 
+\definecolor{Red}{RGB}{255,0,0}
+\definecolor{Green}{RGB}{10,200,100}
+\definecolor{Blue}{RGB}{10,100,200}
+\definecolor{Orange}{RGB}{255,153,0}
+
+\newcommand{\red}[1]{\textcolor{Red}{#1}}  
+\newcommand{\ndg}[1]{\textcolor{Green}{[ndg: #1]}}  
+\newcommand{\mht}[1]{\textcolor{Blue}{[mht: #1]}}  
+\newcommand{\mcf}[1]{\textcolor{Orange}{[mlb: #1]}}
 
 ```{r global_options, include=FALSE}
 rm(list=ls())
@@ -47,8 +56,8 @@ library(magrittr)
 library(ggthemes)
 library(forcats)
 # set path to working dir
- # local.path <- "~/Documents/research/polgrice/"
-local.path <- "~/Documents/Research/polgrice_GIT/"
+ local.path <- "~/Documents/research/polgrice/"
+#local.path <- "~/Documents/Research/polgrice_GIT/"
 #source(paste(local.path, "experiment/data_analysis/markdown/polgrice_S.R", sep=""))
 
 estimate_mode <- function(s) {
@@ -71,7 +80,13 @@ options("scipen"=10)
 
 # Introduction
 
-Language users hear and produce *polite speech* on a daily basis. Adults and even young children spontaneously produce requests in polite forms [@clark1980; @axia1985], and speakers use politeness strategies even while arguing, preventing unnecessary offense to their interactants [@holtgraves1997]. But being polite conflicts with one important goal of cooperative communication: exchanging information efficiently and accurately [@Grice1975]. To be polite, people sometimes tell white lies to make others feel good ("Your new dress is gorgeous!") or produce indirect speech that is longer and more nuanced than the simplest form of their intended message ("I don’t think that dress looks very good on you" as opposed to “That dress looks terrible”). Thus, speakers risk inefficiency and potential loss of intended message (indirect speech) or even intentionally convey wrong information (lies). If information transfer was the only currency in communication, a cooperative speaker would find polite utterances undesirable because they are potentially misleading. 
+Language users hear and produce *polite speech* on a daily basis. 
+Adults and even young children spontaneously produce requests in polite forms [@clark1980; @axia1985], and speakers use politeness strategies even while arguing, preventing unnecessary offense to their interactants [@holtgraves1997]. 
+But being polite conflicts with one important goal of cooperative communication: exchanging information efficiently and accurately [@Grice1975]. 
+People tell white lies ("Your new dress is gorgeous!") and produce indirect speech that is longer and more nuanced than the simplest form of their intended message ("I don’t think that dress looks phenomenal on you" as opposed to “That dress looks terrible”) to make others feel good about themselves. 
+Speakers risk potential loss of their intended message (indirect speech), intentionally convey wrong information (lies), and suffer inefficiencies all in the service of being polite.
+If information transfer was the only currency in communication, a polite speaker would be broke before bedtime. \mht{$\leftarrow$ too much?}
+<!-- a cooperative speaker would find polite utterances undesirable because they are potentially misleading.  -->
 
 One prominent theory recasts the notion of a *cooperative speaker* as one who has an epistemic goal to improve the listener's knowledge state, but also has a social goal to minimize any potential damage to the hearer's (and the speaker's own) self-image, called *face* [@Brown1987]. Thus, if the speaker's intended meaning contains no threat to the speaker or listener's face, then the speaker will choose to convey the meaning in an explicit and efficient manner (putting it *on the record*). As the degree of face-threat becomes more severe, however, a speaker will choose to be polite by producing more indirect utterances. 
 
@@ -126,7 +141,7 @@ img <- png::readPNG("figs/expt1_results.png")
 grid::grid.raster(img)
 ```
 
-```{r model_pred_negNoneg, fig.env = "figure*", fig.pos = "t", fig.width=6, fig.height=3, fig.align = "center", fig.cap = "Schematic model predictions (left), experimental results (center) and fitted model predictions (right) for average proportion of negation produced among all utterances, given true states (x-axis) and goals (colors)."}
+```{r model_pred_negNoneg, fig.env = "figure*", fig.pos = "t", fig.width=6, fig.height=3, fig.align = "center", fig.cap = "Schematic model predictions (left), experimental results (center) and fitted model predictions (right) for average proportion of negation produced among all utterances, given true states (x-axis) and goals (colors).", eval = F}
 img <- png::readPNG("figs/exptModNeg.png")
 grid::grid.raster(img)
 ```
@@ -211,7 +226,7 @@ and There were four additional parameters of the model: the speaker optimality p
 
 ### Results
 
-```{r model_param}
+```{r model_param2}
 load(paste(local.path, "model/results/cogsci17/bda-s2-mcmc80k-x4-goalWeights.RData", sep = ""))
 
 weights_summary <-   bda.goalWeights %>% 
