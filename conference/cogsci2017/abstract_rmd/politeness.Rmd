@@ -171,8 +171,8 @@ For our experiment, we consider the pragmatic speaker ($S_2$) who chooses an utt
 
 $$P_{S_2}(w \mid s, \hat{\beta})\propto \mathrm{exp}(\lambda_{2} \cdot \ln(P_{L_1}(s,  \hat{\beta} \mid w)) - C(w))$$
 
-In addition to these extensions, we simplify from the @yoon2016 model by including only a single mixture parameter $\phi$ governing the extent to which the speaker is being informative vs. face saving: $ \beta_{epi} = phi$, $ \beta_{soc} = 1 - \phi$.
-\mht{note? (or discuss) this model can't have "antisocial" goals}.
+In addition to these extensions, we simplify from the @yoon2016 model by including only a single mixture parameter $\phi$ governing the extent to which the speaker is being informative vs. face saving: $\beta_{epi} = \phi$, $\beta_{soc} = 1 - \phi$.
+\mht{note? (or discuss) this parametrization doesn't have "antisocial" goals}.
 We implemented this model using the probabilisitic programming language WebPPL [@dippl]\footnote{A complete implementation of the model, links to the experiments, raw data and analyses can be found at \url{https://github.com/ejyoon/cogsci2017}.}.
 
 <!-- ($w \sim Unif(1,5)$) from data in each experiment. \ejy{FIXME: phi mixture weight.}  -->
