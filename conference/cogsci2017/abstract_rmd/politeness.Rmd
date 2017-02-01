@@ -177,13 +177,14 @@ In the next section, we explore the model's predictions for speaker productions 
 <!-- We compare these model predictions against empirical data in speaker production experiment, where we examine people's expectations for production of utterances $u$ given a true state and a speaker's goal.  -->
 <!-- We confirm that both the model predictions and empirical findings are broadly consistent with our hypothesis that indirect speech reflects a greater balance between epistemic and social goals.  -->
 
-# Schematic model predictions
+# Model predictions
 
-We initially test our hypotheses on a schematic model, with fixed goal weights and parameters.
+We explore the implications of these extension to the pRSA model and generate predictions about the production of indirect speech acts.
 
 ## Semantic measurement
 
-We first probed judgments of literal meanings of the target words assumed by our model and used in all our experiments. We used these judgments to set expected literal meanings of utterances in our initial model predictions, and used them as informative priors to infer literal meaning for the utterances in the experiment for the model fitting.
+Before we can see what kinds of utterances our speaker model produces, we must determine what the utterances literally mean.
+We do this by experimentally eliciting judgments of literal meanings. 
 
 ```{r expt1_results, fig.env = "figure*", fig.pos = "t", fig.width=6, fig.height=2, fig.align = "center", fig.cap = "Semantic measurement results. Proportion of acceptances of utterance types (shown in different colors) combined with target words (shown in different facets) given the true state represented on a scale of hearts. Error bars represent 95\\% confidence intervals."}
 img <- png::readPNG("figs/lit_sem.png")
@@ -224,17 +225,39 @@ grid::grid.raster(img)
 
 ### Materials and methods 
 
-\ejy{is it okay to use this way of sectioning?} 25 participants with IP addresses in the United States were recruited on Amazon's Mechanical Turk. We used 13 different context items that were previously used in @yoon2016, in which someone evaluated a performance of some kind. For example, in one of the contexts, Bob saw a presentation, and Bob's feelings toward Ann's cake (*true state*) were shown on a scale out of five hearts (e.g., two out of five hearts filled in red color). The question of interest was "Do you think Bob thought the presentation was / wasn't X?" where X could be one of five possible words: *terrible*, *bad*, *okay*, *good*, and *amazing*, giving rise to ten different possible utterances (with negation or no negation). Each participant read 50 scenarios, depicting every possible combination of 5 true states and 10 utterances. Participants indicated their answer to each question by answering "No" or "Yes." The order of context items was randomized, and there were a maximum of four repeats of each context item per participant.
+\ejy{is it okay to use this way of sectioning?} 
+25 participants with IP addresses in the United States were recruited on Amazon's Mechanical Turk. We used 13 different context items that were previously used in @yoon2016, in which someone evaluated a performance of some kind. 
+For example, in one of the contexts, Bob saw a presentation, and Bob's feelings toward Ann's cake (*true state*) were shown on a scale out of five hearts (e.g., two out of five hearts filled in red color). 
+Participants evaluated: "Do you think Bob thought the presentation was / wasn't X?" where X could be one of five possible words: *terrible*, *bad*, *okay*, *good*, and *amazing*, giving rise to ten different possible utterances (with negation or no negation). 
+Each participant read 50 scenarios, depicting every possible combination of 5 true states and 10 utterances. Participants indicated their answer to each question by answering "No" or "Yes." 
+The order of context items was randomized, and there were a maximum of four repeats of each context item per participant.
 
 ### Results 
 
-For this and next experiments, we analyze the data by collapsing across context items. Meanings of the words as judged by participants were as one would expect (see Figure 1). We used the fraction of participants that endorsed utterance $w$ for state $s$ to set informative priors to infer posterior credible values of the literal meanings from data in the speaker production experiment.
+For this and next experiments, we analyze the data by collapsing across context items. 
+For each utterance-state pair, we computed the posterior distribution over the semantic weight (i.e., how consistent X utterance is with Y state) assuming a uniform prior over the weight.
+Meanings of the words as judged by participants were as one would expect (see Figure 1). 
+We used the fraction of participants that endorsed utterance $w$ for state $s$ to set informative priors to infer posterior credible values of the literal meanings from data in the speaker production experiment.
 
 ## Model parameters and predictions
 
-To model what speakers would say given true states and their goals (e.g. wanting to make the listener feel good), we assumed a particular set of speaker's goal-weights {$\beta_{epistemic}$, $\beta_{social}$} to represent three goal conditions that we are interested in: *informative* ($\beta_{epistemic}$ = 0.9; $\beta_{social}$ = 0.1); *social* ($\beta_{epistemic}$ = 0.1; $\beta_{social}$ = 0.9); and *both goals* ($\beta_{epistemic}$ = 0.5; $\beta_{social}$ = 0.5). There are four additional parameters of the model, and for the purposes of generating model predictions a priori, we will assign reasonable parameters based on pilot runs of the model-data fit: the speaker optimality parameter ($\lambda_{S_1}$ assigned to 2); the pragmatic speaker optimality parameter ($\lambda_{S_2}$ to 2); the value scale parameter ($\alpha$ to 1) in the utility function; and the cost parameter ($C(u)$ to 2). 
+We explore pRSA speaker mode predictions by assuming particular values to the parameters.
+Recall that $\phi$ is the parameter governing the mixture of epistemic and social utilities.
+We explore 3 hypothetical speakers (corresponding to 3 different mixture parameter weights): 
+(a) a speaker who wants to maximally convey information ($\phi = 0.9$)
+(b) a speaker who wants to make the listener feel good ($\phi = 0.1$)
+(c) a speaker who wants to *both* convey information and make the listener feel good ($\phi = 0.5$).^[
+In addition, the model has a few parameters not of theoretical interest.
+For the purposes of generating model predictions *a priori*, we assign values to these parameters consistent with the previous litearture with this class of models: the speaker optimality parameter ($\lambda_{1}$ assigned to 2); the pragmatic speaker optimality parameter ($\lambda_{2}$ to 2); the value scale parameter ($\alpha$ to 1) in the utility function; and the parameter governing the cost of producing a negation ($C(u)$ to 2).
+]
 
-The predictions for the speaker's utterance were consistent with our hypothesis, namely that indirect speech was relatively more preferred given bad true states and speaker's consideration of both epistemic and social goals (Figure 2, left). The model inferred higher likelihood of negation production for the both-goal condition than informative and social conditions when the true state was bad (1 heart). For all goal conditions rate of indirect speech decreased as the true states improved, also as expected; given a good performance, the speaker should produce positive direct remarks (e.g. "It was amazing"). These simplified predictions thus supported our hypothesis that face threat in the true state and both epistemic and social utilities contribute to greater production of indirect speech. Next, we confirm these model predictions in an experiment. 
+Figure 2 (left) shows the speaker's production probabilities associated with producing an indirect speech act (i.e., an utterance with negation) for the three different speakers as the true state of the world is varied.
+We see, consistent with our intuition, that indirect speech was relatively more preferred in bad states than in good states.
+As well, we see higher probability of negation production for the speaker who wants to achieve both goals (truthful and informative) relative to each goal independently.
+Indirect speech doesn't convey that much information and so the informative speaker (a) would disprefer it.
+Relatedly, the speaker who only wants to make the listener feel good should signal unambiguously a better state than they are in.
+It is only when the speaker tries to balance both goals that the indirect speech act is preferred.
+ Next, we confirm these model predictions in an experiment. 
 
 # Speaker production experiment
 
