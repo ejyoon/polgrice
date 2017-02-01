@@ -92,8 +92,8 @@ A *cooperative speaker*, however, can be imagined as one who has an epistemic go
 If the speaker's intended meaning contains no threat to the speaker or listener's face, then the speaker will choose to convey the meaning in an explicit and efficient manner (putting it "on the record"). 
 As the degree of face-threat becomes more severe, however, a speaker will choose to be polite by producing more indirect utterances. 
 
-Inspired by this set of ideas, we have argued that language users think about polite speech as reflecting a tradeoff between two goals: information transfer (which we called *epistemic utility*) and face-saving [*social utility*; @yoon2016].
-A speaker with a high weight on social utility will try to save her listener’s face: She hides or risks losing information in her intended message by making her utterance false or indirect to some degree.
+Inspired by this set of ideas, we have argued that listeners think about polite speech as reflecting a tradeoff between two goals: information transfer (which we called *epistemic utility*) and face-saving [*social utility*; @yoon2016].
+A speaker with a high weight on social utility will try to save her listener’s face: She hides or risks losing information in her intended message by making her utterance false to some degree.
 On the other hand, a speaker with a high weight on epistemic utility prioritizes truthfulness and informativity, and she may risk a loss of the listener's (or the speaker's own) face.
 These idaes were formalized in a model of pragmatic language understanding, building on the Rational Speech Act (RSA) theory [for a review, see @goodman2016].
 We tested the polite RSA model (pRSA) by examining white lies.
@@ -107,15 +107,25 @@ But instead of lying, people sometimes try to be polite by being more indirect.
 Through indirect speech, a speaker can express meaning that is different from the literal meaning of the utterance [@searle1975].
 In this work, we focus on negation ("not"), which has the potential to be indirect.
 For instance, "Mark *isn't* the cleanest person I know" may suggest that the speaker thinks Mark is *unclean* (inferred meaning) rather than not being the person Mark knows who has the greatest degree of cleanliness (literal meaning).
-Negation can be used as a hedging or mitigating device to address an undesirable state that is face-threatening to the addressee [@Brown1987; @Grice1975], and can imply that the intended meaning is worse than the vague meaning. 
+Negation can be used as a hedging or mitigating device to address an undesirable state that is face-threatening to the addressee [@Brown1987; @Grice1975]. <!--, and can imply that the intended meaning is worse than the vague meaning.--> 
 
-What may lead a speaker to produce indirect remarks with negation? 
-Following our previous work, we hypothesize that if Alice observes Bob’s terrible presentation and says, "it wasn't amazing", this reflects her attempt to balance between epistemic and social goals.
+What may lead a speaker to produce indirect remarks? 
+An indirect remark may be motivated by the need to convey some face-threatening information, while being seen as the sort of person who avoids threatening others' face.
+In our previous work, we described a pragmatic listener that jointy infered the world state and the goals of the speaker. 
+Building on this model, we describe here a social speaker who's goal is to lead this pragmatic listener to believe the true world state *and* attribute to the speaker certain goals (e.g. avoiding face-threat).
+For instance, "not amazing" does not preclude the possibility that the presentation was bad, and may be pragmatically strenthened to mean this; yet because the speaker does not choose the more direct utterance ("bad") the listener will infer that a face-threat-avoidance goal. 
+Thus "not amazing" can accomplish the dual goals of conveying that the presentation was bad but that the speaker is the sort of person who would not want to make the listener feel bad by saying so.
+On the other hand, if the speaker does not care about being seen as avoiding face-threat, they will produce less indirect speech.
+<!--
 Informationally, "not amazing" does not preclude the possibility that the presentation was bad, so the utterance is not a downright lie.
 And socially, Alice tries to save Bob’s face by not being explicitly critical (e.g., not saying "it was terrible").
-On the other hand, if the presentation was actually good, or even decent, Alice will prefer to produce a directly positive remark ("It was good"). 
+-->
+Further, if the presentation was actually good, or even decent, the speaker will prefer to produce a directly positive remark ("It was good") in either case. 
+Thus we predict more indirect speech when the true state is bad, and an interaction with the speaker's desire to be seen as avoiding face-threat. In what follows, we derive our hypotheses using our formal model and present an empirical test of the hypotheses.
+<!--
 Thus we predict that a speaker who wants to balance between epistemic and social goals would produce indirect speech relatively more, especially when the true state is bad. 
 Importantly, we predict it is the interaction between presence of face threat (due to addressee's poor performance) and speaker's consideration of both epistemic and social goals that is predicted to lead to a greater degree of indirect speech production. In what follows, we derive our hypotheses using our formal model and present an empirical test of the hypotheses.
+-->
 
 # Computational Model
 
