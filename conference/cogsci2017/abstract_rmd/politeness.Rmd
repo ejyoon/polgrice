@@ -97,8 +97,8 @@ Inspired by this set of ideas, we have argued that language users think about po
 A speaker with a high weight on social utility will try to save her listener’s face: She hides or risks losing information in her intended message by making her utterance false or indirect to some degree.
 On the other hand, a speaker with a high weight on epistemic utility prioritizes truthfulness and informativity, and she may risk a loss of the listener's (or the speaker's own) face.
 These idaes were formalized in a model of pragmatic language understanding, building on the Rational Speech Act (RSA) theory [for a review, see @goodman2016].
-We tested the polite RSA model (pRSA) with the case study of *white lies* (\red{def?}).
-The model captured human participants' inferences about a speaker's goals given her utterance (e.g., "the \[*okay*\] talk was "great") and about the world given a speaker's goal and utterance (e.g., the speaker was trying to be nice and she said that talk was "okay").
+We tested the polite RSA model (pRSA) with the case study of *white lies* (\mht{def?}).
+The model captured human participants' inferences about a speaker's goals given her utterance (e.g., "the [*okay*] talk was "great") and about the world given a speaker's goal and utterance (e.g., the speaker was trying to be nice and she said that talk was "okay").
 People attributed the goal to be "nice" increasingly as the speaker's utterance was more positively biased from the true states, and inferred worse true states than the literal meaning when the speaker was described as wanting to be nice.
 
 <!-- We presented a novel computational model that captures the idea that cooperative speakers attempt to balance between the epistemic and social utilities. -->
@@ -123,22 +123,29 @@ Importantly, we predict it is the interaction between presence of face threat (d
 
 # Computational Model
 
-In the current work, we build on our previous RSA model [pRSA; @yoon2016] with minimal extensions to predict a speaker's production of indirect remarks with negation. 
+In the current work, we introduce minimal extension to our previous RSA model [pRSA; @yoon2016] to allow for speaker production of indirect remarks using negation. 
 
 ## Prior work: Description of pRSA
 
-pRSA assumes speaker to choose utterances approximately optimally given a utility function, a standard assumption made in family of RSA models [@Goodman2013]. The model has two utilities considered by the speaker. First, *epistemic utility* ($U_{epi}$) refers to the amount of information a *literal listener* ($L_0$) would still not know about world state $s$ after hearing a speaker's utterance $w$, minus a non-negative cost $C(w)$; Second, *social utility* ($U_{soc}$) is the expected utility of the state the listener would infer given the utterance $w$, which is related to the intrinsic value of the state, where a value function ($V$) maps states to subjective utility values and thus captures the affective consequences for the listener of being in state $s$. Thus we defined the overall speaker utility ($U$) to be a weighted combination of epistemic and social utilities.
+RSA models assume speakers choose utterances approximately optimally given a utility function [@Goodman2013].
+pRSA posited that the speaker's utility function can be decomposed into two components.
+First, *epistemic utility* ($U_{epi}$) refers to the standard, informative utility in RSA: the amount of information a *literal listener* ($L_0$) would still not know about world state $s$ after hearing a speaker's utterance $w$.
+Second, *social utility* ($U_{soc}$) is the expected subjective utility of the state the listener would infer given the utterance $w$. 
+The expected subjective utility is related to the intrinsic value of the state, and we use a value function ($V$) to map states to subjective utility values.
+This captures the affective consequences for the listener of being in state $s$.
+Thus we defined the overall speaker utility ($U$) to be a weighted combination of epistemic and social utilities.
 
 $$U(w;s;  \hat{\beta}) = \beta_{epi}\cdot \ln(P_{L_0}(s \mid w)) 
 \\+ \beta_{soc} \cdot \mathbb{E}_{P_{L_0}(s \mid w)}[V(s)]- C(w)$$
 
-The speaker ($S_1$) in pRSA chooses utterances $w$ softmax-optimally given the state $s$ and his goal weights $\hat{\beta}$. The pragmatic listener ($L_1$) jointly infers the state $s$ and the utility weights of the speaker, $\beta_{epi}$ and $\beta_{soc}$ [@GoodmanLassiter2015; @Kao2014]. 
+The speaker ($S_1$) in pRSA chooses utterances $w$ softmax-optimally given the state $s$ and his goal weights $\hat{\beta}$.
+The pragmatic listener ($L_1$) jointly infers the state $s$ and the utility weights of the speaker, $\beta_{epi}$ and $\beta_{soc}$ [@GoodmanLassiter2015; @Kao2014]. 
 
-$$P_{L_0}(s \mid w)\propto {w}(s) \cdot P(s)$$ 
-
-$$P_{S_1}(w \mid s, \hat{\beta}) \propto \mathrm{exp}(\lambda_{S_1} \cdot \mathbb{E}[U(w; s;  \hat{\beta})])$$
-
-$$P_{L_1}(s,  \hat{\beta} \mid w)\propto P_{S_1}(w \mid s, \hat{\beta})\cdot P(s) \cdot P( \hat{\beta})$$
+\begin{align}
+P_{L_0}(s \mid w) &\propto {w}(s) \cdot P(s) \\ 
+P_{S_1}(w \mid s, \hat{\beta}) &\propto \mathrm{exp}(\lambda_{1} \cdot \mathbb{E}[U(w; s;  \hat{\beta})]) \\
+P_{L_1}(s,  \hat{\beta} \mid w) &\propto P_{S_1}(w \mid s, \hat{\beta})\cdot P(s) \cdot P( \hat{\beta})
+\end{align}
 
 Within our experimental domain, we assumed there were five possible states of the world corresponding to the value placed on a particular referent (e.g., rating deserved by the presentation the speaker is commenting on): $S = \{s_{1}, ...,  s_{5}\}$. We further assume a uniform prior distribution over possible states of the world. The states have subjective numerical values $V(s_{i}) = \alpha \cdot i$, where $\alpha$ is a free parameter.
 
