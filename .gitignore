@@ -10,3 +10,5 @@ model/results/
 *.blg
 reading/
 .Rproj.user
+conference/cogsci2017/abstract_rmd/politeness.pdf
+conference/cogsci2017/abstract_rmd/politeness.tex
