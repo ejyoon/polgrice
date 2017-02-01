@@ -143,9 +143,9 @@ The speaker ($S_1$) in pRSA chooses utterances $w$ softmax-optimally given the s
 The pragmatic listener ($L_1$) jointly infers the state $s$ and the utility weights of the speaker, $\beta_{epi}$ and $\beta_{soc}$ [@GoodmanLassiter2015; @Kao2014]. 
 
 \begin{align}
-P_{L_1}(s, \hat{\beta} \mid w) &\propto P_{S_1}(w \mid s, \hat{\beta})\cdot P(s) \cdot P( \hat{\beta}) \\
-P_{S_1}(w \mid s, \hat{\beta}) &\propto \mathrm{exp}(\lambda_{1} \cdot \mathbb{E}[U(w; s;  \hat{\beta})]) \\
-P_{L_0}(s \mid w) &\propto [[w]](s) \cdot P(s)
+P_{L_1}(s, \hat{\beta} \mid w) &\propto P_{S_1}(w \mid s, \hat{\beta})\cdot P(s) \cdot P( \hat{\beta}) \label{eq:L1}\\
+P_{S_1}(w \mid s, \hat{\beta}) &\propto \mathrm{exp}(\lambda_{1} \cdot \mathbb{E}[U(w; s;  \hat{\beta})]) \label{eq:S1}\\
+P_{L_0}(s \mid w) &\propto [[w]](s) \cdot P(s) \label{eq:L0}
 \end{align}
 
 Within our experimental domain, we assumed there were five possible states of the world corresponding to the value placed on a particular referent (e.g., rating deserved by the presentation the speaker is commenting on, akin to a Yelp rating): $S = \{s_{1}, ...,  s_{5}\}$. 
@@ -156,13 +156,30 @@ We gather independent ratings for these literal meanings.
 
 ## Extensions to pRSA
 
-The current work builds on pRSA by adding three simple but key components to predict indirect remark production. First, we add the pragmatic speaker ($S_2$) who chooses an utterance based on the pragmatic listener model, thinking about the state as well as goal weights that the pragmatic listener will infer.
+The current work builds on pRSA by adding three simple but key components to predict indirect remark production.
 
-$$P_{S_2}(w \mid s, \hat{\beta})\propto \mathrm{exp}(\lambda_{S_2} \cdot \ln(P_{L_1}(s,  \hat{\beta} \mid w)) - C(w))$$
+First, we extend the utterance alternatives to include negation.
+Previously we considered five possible utterances: {It was *terrible*, *bad*, *okay*, *good*, and *amazing*}, all direct assertions of specific states (e.g., "It was amazing" would be true for the state of 5 but untrue for the states of 1 or 2).
+Now the speaker may say, {It *wasn't* terrible, bad, okay, good, and amazing}.
+These utterances indirectly address the referent by negating certain state.
 
-Second, there had previously been five possible utterances: {It was *terrible*, *bad*, *okay*, *good*, and *amazing*}, all direct assertions of specific states (e.g., "It was amazing" would be true for the state of 5 but untrue for the states of 1 or 2). To probe people's inferences about indirect remarks, we added five utterances to the set: {It *wasn't* terrible, bad, okay, good, and amazing}. These utterances indirectly address the referent by negating certain state. Third, we assume that it is more costly to say "It wasn't terrible" than "It was amazing" due to inclusion of negation [@GoodmanLassiter2015]. This cost of utterances with negation was accounted for by holding constant the costs of direct remarks with no negation (e.g., cost = 1) and inferring the posterior credible values of the costs of indirect remarks ($w \sim Unif(1,5)$) from data in each experiment. \ejy{FIXME: phi mixture weight.} We implemented this model using the probabilisitic programming language WebPPL [@dippl]\footnote{A complete implementation of the model, links to the experiments, raw data and analyses can be found at \url{https://github.com/ejyoon/cogsci2017}.}.
+Second, we assume that it is more costly to say utterances with negation \mht{cite costly negation}.
+In our full data analysis, we put a prior on this cost parameters and infer it's likely values from the data.
 
-To confirm our hypotheses, we first generate schematic model predictions on speaker production of indirect speech with negation vs. direct speech with no negation. We compare these model predictions against empirical data in speaker production experiment, where we examine people's expectations for production of utterances $u$ given a true state and a speaker's goal. We confirm that both the model predictions and empirical findings are broadly consistent with our hypothesis that indirect speech reflects a greater balance between epistemic and social goals. 
+Third, we extende the recursive reasoning in the model. 
+For our experiment, we consider the pragmatic speaker ($S_2$) who chooses an utterance based on the pragmatic listener model (Eq. \ref{eq:L1}), thinking about the state as well as goal weights that the pragmatic listener will infer.
+
+$$P_{S_2}(w \mid s, \hat{\beta})\propto \mathrm{exp}(\lambda_{2} \cdot \ln(P_{L_1}(s,  \hat{\beta} \mid w)) - C(w))$$
+
+In addition to these extensions, we simplify from the @yoon2016 model by including only a single mixture parameter $\phi$ governing the extent to which the speaker is being informative vs. face saving: $ \beta_{epi} = phi$, $ \beta_{soc} = 1 - \phi$.
+\mht{note? (or discuss) this model can't have "antisocial" goals}.
+We implemented this model using the probabilisitic programming language WebPPL [@dippl]\footnote{A complete implementation of the model, links to the experiments, raw data and analyses can be found at \url{https://github.com/ejyoon/cogsci2017}.}.
+
+<!-- ($w \sim Unif(1,5)$) from data in each experiment. \ejy{FIXME: phi mixture weight.}  -->
+
+In the next section, we explore the model's predictions for speaker productions of indirect speech with negation vs. direct speech with no negation.
+<!-- We compare these model predictions against empirical data in speaker production experiment, where we examine people's expectations for production of utterances $u$ given a true state and a speaker's goal.  -->
+<!-- We confirm that both the model predictions and empirical findings are broadly consistent with our hypothesis that indirect speech reflects a greater balance between epistemic and social goals.  -->
 
 # Schematic model predictions
 
