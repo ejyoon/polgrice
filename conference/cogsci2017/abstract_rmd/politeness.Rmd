@@ -314,11 +314,8 @@ The *informative* speaker produced direct remarks whose literal meanings mapped 
 
 <!-- The *both-goal* speaker generally produced more indirect remarks with negation than the others ("It was terrible" had the highest likelihood given 1 heart).  -->
 
-<<<<<<< HEAD
-While the model in the *both* condition did produce indirect utterances (e.g. "It was not terrible" given 1 heart) it did so slightly less that the empirical data.
-=======
+
 While the model in the *both* condition did produce indirect utterances (e.g. "It was not terrible" given 1 heart) it did so slightly less than the empirical data.
->>>>>>> c9327526f9d79d927009d6995ad459eba378e0d9
 For this reason, the model did not yield the expected difference for negation production between both-goal and social conditions (Figure 2, right); though the trend was numerically correct, the effect was much smaller in the fit model than the schematic one. 
 There are several possible explanations for this small deviation. 
 In our experimental data, the social speaker placed a higher weight on epistemic utility than in our schematic predictions. Thus, the particular goal descriptions we used in the experiment may have suggested that the social speaker still wanted to be seen as informative. Another possible cause is that participants preferred a *different kind* of indirect speech than the model -- in particular, the both-goal speaker preferred to produce "It wasn't amazing" in the schematic model predictions, whereas participants in our experiment chose "It wasn't terrible." This discrepancy between the two remarks is interesting, because their implied meaning is similar. In a pilot experiment where participants were asked to infer the true state (number of hearts) from an utterance, "It wasn't amazing" and "It wasn't terrible" were very similar (~2 hearts). 
