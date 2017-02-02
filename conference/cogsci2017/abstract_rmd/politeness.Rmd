@@ -205,7 +205,7 @@ qplot(state, judgment,
   ggthemes::theme_few(base_size = 9)
 ```
 
-```{r model_pred_negNoneg, fig.env = "figure*", fig.pos = "t", fig.width=6, fig.height=3, fig.align = "center", fig.cap = "Schematic model predictions (left), experimental results (center) and fitted model predictions (right) for average proportion of negation produced among all utterances, given true states (x-axis) and goals (colors)."}
+```{r model_pred_negNoneg, fig.env = "figure*", fig.pos = "t", fig.width=6.5, fig.height=4, fig.align = "center", fig.cap = "Schematic model predictions (left), experimental results (center) and fitted model predictions (right) for average proportion of negation produced among all utterances, given true states (x-axis) and goals (colors)."}
 img <- png::readPNG("figs/exptModNeg.png")
 grid::grid.raster(img)
 ```
@@ -220,8 +220,8 @@ We used the fraction of participants that endorsed utterance $w$ for state $s$ t
 
 ## Model parameters and predictions
 
-The $S_2$ speaker in our model has the goal to convey the state *and* to be seen as having a particular set of goals.
-We explore the speaker model predictions by assuming particular parameter values (recall that $\phi$ is the parameter governing the mixture of epistemic and social utilities):
+The $S_2$ speaker in our model has the goal to convey the state and to be seen as having a particular set of goals.
+We explore predictions for 3 hypothetical speakers, corresponding to 3 different $\phi$ mixture parameter weights:
 (a) an *informative* speaker who wants to convey high epistemic utility (prioritizing information transfer; $\phi = 0.9$)
 (b) a *social* speaker who wants to convey high social utility (making the listener feel good; $\phi = 0.1$)
 (c) a *both-goal* speaker who wants to convey a balance between the two utilities ($\phi = 0.5$).^[
@@ -248,7 +248,7 @@ To compare against our model predictions, we measured participants' predictions 
 
 ### Stimuli and Procedure
 
-As in the semantics measurements above, we used scenarios in which a person (e.g., Ann) gave some performance and asked for another person (e.g., Bob)'s opinion on the performance. Additionally, we provided information on the speaker Bob's goal -- informative, social, or both -- and the true state -- how Bob actually felt about Ann's performance (e.g., 2 out of 5 hearts). Each participant read 15 scenarios, depicting every possible combination of goals and states. The order of context items was randomized, and there were a maximum of two repeats of each context item per participant.
+As in the semantics measurements above, we used scenarios in which a person (e.g., Ann) gave some performance and asked for another person (e.g., Bob)'s opinion on the performance. Additionally, we provided information on the speaker Bob's goal -- *to make Ann feel good*, or *to give as accurate and informative feedback as possible*, or both -- and the true state -- how Bob actually felt Ann's performance (e.g., 2 out of 5 hearts). Each participant read 15 scenarios, depicting every possible combination of goals and states. The order of context items was randomized, and there were a maximum of two repeats of each context item per participant.
 
 ```{r expt2_screen, fig.env = "figure", fig.pos = "h", fig.width=3.5, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=2, fig.cap = "Example of a trial in Experiment 1."}
 img <- png::readPNG("figs/expt2_screen.png")
@@ -265,9 +265,9 @@ grid::grid.raster(img)
 ```
 
 Our hypotheses for utterance production by speakers with different goals were borne out (see full results in Figure 4).  
-For good states (4-5 hearts), positive direct remarks were judged to be the most likely utterances across all three goal conditions. 
+For good states (4 and 5 hearts), positive direct remarks were judged to be the most likely utterances across all three goal conditions. 
 For less-than-perfect, but still decent states, there was a greater degree of expectation of white lies (e.g., "It was amazing" for 4 hearts) given a social goal. 
-For bad states (1-2 hearts), as predicted, there were more instances of expected indirect remarks overall across all goal conditions given bad states. 
+For bad states (1 and 2 hearts), as predicted, there were more instances of expected indirect remarks overall across all goal conditions given bad states. 
 Critically, speakers with both informative and social goals produced more indirect remarks than were observed in the other two goal conditions (Figure 2, center). 
 
 <!-- Thus, these results indicated that a speaker who considers both informative and social goals, and thus is in want of a compromise between the two, is expected to produce relatively more indirect remarks. -->
@@ -276,7 +276,7 @@ Critically, speakers with both informative and social goals produced more indire
 
 ### Model fitting
 
-In this experiment, participants were told what speakers' intentions were (e.g., wanted to make Alice feel good). We assume that the intention descriptions conveyed the weights {$\beta_{epi}$, $\beta_{soc}$} that the speaker was using. We put uninformative priors on these weights ($\beta$ ~ Uniform(0,1)) and inferred their credible values separately for each goal condition ("wanted to X") using Bayesian data analytic techniques [@LW2014]. We also used the fraction of participants that endorsed utterance $w$ for state $s$ to set informative priors to infer posterior credible values of the literal meanings from data.
+In this experiment, participants were told what speakers' intentions were (e.g., Bob wanted to make Alice feel good). We assume that the intention descriptions conveyed the weights {$\beta_{epi}$, $\beta_{soc}$} that the speaker was using. We put uninformative priors on these weights ($\beta$ ~ Uniform(0,1)) and inferred their credible values separately for each goal condition ("wanted to X") using Bayesian data analytic techniques [@LW2014]. We also used the fraction of participants that endorsed utterance $w$ for state $s$ to set informative priors to infer posterior credible values of the literal meanings from data.
 
 ```{r model_param}
 load("../../../model/results/cogsci17/bda-s2-mcmc80k-x4-params.RData")
@@ -288,7 +288,7 @@ param_summary <- bda.params %>%
             ci_upper = hdi_upper(val))
 ```
 
-There were four additional parameters of the model, on which we put uninformative priors: the speaker optimality parameter ($\lambda_{S_1}$ ~ Unif(0,20)); the pragmatic speaker optimality parameter ($\lambda_{S_2}$ ~ Unif(0,5)); the value scale parameter ($\alpha$ ~ Unif(0,5)) in the utility function; and the cost parameter ($C(u)$ ~ Unif(1,10)). We inferred their posterior credible values from the data. We ran 4 MCMC chains for 80,000 iterations, discarding the first 40,000 for burnin. The Maximum A-Posteriori (MAP) estimate and 95% Highest Probability Density Interval (HDI) were: $\lambda_{S_1}$: `r round(param_summary$MAP[3], 2)` [`r round(param_summary$ci_lower[3], 2)`, `r round(param_summary$ci_upper[3], 2)`]; $\lambda_{S_2}$: `r round(param_summary$MAP[4], 2)` [`r round(param_summary$ci_lower[4], 2)`, `r round(param_summary$ci_upper[4], 2)`]; $\alpha$: `r round(param_summary$MAP[1], 2)` [`r round(param_summary$ci_lower[1], 2)`, `r round(param_summary$ci_upper[1], 2)`]; $C(w)$: `r round(param_summary$MAP[2], 2)` [`r round(param_summary$ci_lower[2], 2)`, `r round(param_summary$ci_upper[2], 2)`]. To generate utterance predictions, given our model and the inferred parameters, we evaluated the posterior predictive distribution, marginalizing out all parameters.
+There were four additional parameters of the model, on which we put uninformative priors: the speaker optimality parameter ($\lambda_{S_1}$ ~ Uniform(0,20)); the pragmatic speaker optimality parameter ($\lambda_{S_2}$ ~ Uniform(0,5)); the value scale parameter ($\alpha$ ~ Uniform(0,5)) in the utility function; and the cost parameter ($C(u)$ ~ Uniform(1,10)). We inferred their posterior credible values from the data. We ran 4 MCMC chains for 80,000 iterations, discarding the first 40,000 for burnin. The Maximum A-Posteriori (MAP) estimate and 95% Highest Probability Density Interval (HDI) were: $\lambda_{S_1}$: `r round(param_summary$MAP[3], 2)` [`r round(param_summary$ci_lower[3], 2)`, `r round(param_summary$ci_upper[3], 2)`]; $\lambda_{S_2}$: `r round(param_summary$MAP[4], 2)` [`r round(param_summary$ci_lower[4], 2)`, `r round(param_summary$ci_upper[4], 2)`]; $\alpha$: `r round(param_summary$MAP[1], 2)` [`r round(param_summary$ci_lower[1], 2)`, `r round(param_summary$ci_upper[1], 2)`]; $C(w)$: `r round(param_summary$MAP[2], 2)` [`r round(param_summary$ci_lower[2], 2)`, `r round(param_summary$ci_upper[2], 2)`]. To generate utterance predictions, given our model and the inferred parameters, we evaluated the posterior predictive distribution, marginalizing out all parameters.
 
 ```{r model_param2}
 load("../../../model/results/cogsci17/bda-s2-mcmc80k-x4-goalWeights.RData")
@@ -304,7 +304,8 @@ weights_summary <-   bda.goalWeights %>%
 
 ### Results
 
-The inferred weights for each goal condition were largely as expected: For the "wanted to give informative feedback" (*informative*) condition, the model put a moderate weight on epistemic utility (`r round(weights_summary$MAP[2], 3)`). For the "wanted to make [listener] feel good" (*social*) condition, the model inferred that the speaker was using a moderate weight on epistemic utility (`r round(weights_summary$MAP[3], 3)`). For the "wanted both" (*both*) condition, the model assigned a weight on epistemic utility between the weights for the other two goal conditions (`r round(weights_summary$MAP[1], 3)`). Overall, the weights tended to be more biased towards prioritizing the epistemic utility. 
+The inferred weights for each goal condition were largely as expected: For the "wanted to give informative feedback" (*informative*) condition, the model put a moderate weight on epistemic utility (`r round(weights_summary$MAP[2], 3)`). For the "wanted to make [listener] feel good" (*social*) condition, the model inferred that the speaker was using a moderate weight on epistemic utility (`r round(weights_summary$MAP[3], 3)`). For the "wanted BOTH to make [the listener]
+feel good and give informative feedback" (*both*) condition, the model assigned a weight on epistemic utility between the weights for the other two goal conditions (`r round(weights_summary$MAP[1], 3)`). Overall, the weights tended to be more biased towards prioritizing the epistemic utility. 
 
 The predictions for the speaker's utterance were broadly consistent with the experimental findings (Figures 4 and 5). The model successfully predicted distinct patterns for each goal condition. The *informative* speaker produced direct remarks whose literal meanings mapped onto the true states (e.g. "It was terrible" given 1 heart). The *social* speaker produced remarks that were positively biased compared to the true states (e.g. "It was okay" given 2 hearts). 
 <!-- The *both-goal* speaker generally produced more indirect remarks with negation than the others ("It was terrible" had the highest likelihood given 1 heart).  -->
@@ -313,7 +314,7 @@ However, when fit to the empirical data, the model did not predict the expected 
 
 Overall, however, the posterior predictions of the fit model explained almost all of the variance in the average data $r^2$(15) = 0.962 (Figure 5). Thus, the model results support our hypothesis that the combination of epistemic and social utilities explain politeness behavior across a wide range of conditions. 
 
-```{r expt2_model, fig.env = "figure", fig.pos = "h", fig.width=3, fig.height=3, fig.align = "center", fig.cap = "Full distribution of human responses vs. model predictions. Error bars represent 95\\% confidence intervals for the data and 95\\% highest density intervals for the model."}
+```{r expt2_model, fig.env = "figure", fig.pos = "h", fig.width=3.5, fig.height=3.5, fig.align = "center", fig.cap = "Full distribution of human responses vs. model predictions. Error bars represent 95\\% confidence intervals for the data and 95\\% highest density intervals for the model."}
 img <- png::readPNG("figs/exptModCor.png")
 grid::grid.raster(img)
 ```
