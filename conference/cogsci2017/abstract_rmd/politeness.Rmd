@@ -11,7 +11,7 @@ author-information: >
          Department of Psychology, Stanford University}
 
 abstract: 
-    "Why are we polite when we talk to one another? One hypothesis is that people expect others to choose what to say based on their goals both to transfer information efficiently (an epistemic goal) and to make the listener feel good (a social goal). In our previous work, we found that when these two goals conflict, they sometimes produce white lies. In the current work, we expand on this theory to consider another prominent case of polite speech: indirect remarks using negation (e.g., \"It wasn't amazing\"). With minimal extensions from our previous framework, our formal model suggests that a pragmatic speaker will produce more indirect remarks when the speaker wants to be considerate and informative at the same time. These predictions were borne out in an experiment on language production. These findings suggest that the conflict between social and epistemic goals can account for a broad range of politeness phenomena."
+    "Why are we polite when we talk to one another? One hypothesis is that people expect others to choose what to say based on their goals both to transfer information efficiently (an epistemic goal) and to make the listener feel good (a social goal). In our previous work, we found that when these two goals conflict, they sometimes produce white lies. In the current work, we expand on this theory to consider another prominent case of polite speech: indirect remarks using negation (e.g., \"It wasn't amazing\"). With minimal extensions from our previous framework, our formal model suggests that a pragmatic speaker will produce more indirect remarks when the speaker wants to be informative and seem considerate at the same time. These predictions were borne out in an experiment on language production. These findings suggest that the conflict between social and epistemic goals can account for a broad range of politeness phenomena."
 
 keywords:
     "Politeness; computational modeling; communicative goals; pragmatics"
@@ -95,37 +95,29 @@ As the degree of face-threat becomes more severe, however, a speaker will choose
 Inspired by this set of ideas, we have argued that listeners think about polite speech as reflecting a tradeoff between two goals: information transfer (which we called *epistemic utility*) and face-saving [*social utility*; @yoon2016].
 A speaker with a high weight on social utility will try to save her listener’s face: She hides or risks losing information in her intended message by making her utterance false to some degree.
 On the other hand, a speaker with a high weight on epistemic utility prioritizes truthfulness and informativity, and she may risk a loss of the listener's (or the speaker's own) face.
-These idaes were formalized in a model of pragmatic language understanding, building on the Rational Speech Act (RSA) theory [for a review, see @goodman2016].
+These ideas were formalized in a model of pragmatic language understanding, building on the Rational Speech Act (RSA) theory [for a review, see @goodman2016].
 We tested the polite RSA model (pRSA) by examining white lies.
-The model captured human participants' inferences about a speaker's goals given her utterance (e.g., saying a *good* talk was "great" implies that she is being nice) and about the world given a speaker's goal (e.g., saying "great" may mean the talk was only *good* or *ok*).
+The model captured human participants' inferences about a speaker's goals given her utterance (e.g., saying a *good* talk was "amazing" implies that she is being nice) and about the world given a speaker's goal (e.g., saying "good" may mean the talk was only *okay* if the speaker wanted to be nice).
 People attributed the goal to be nice increasingly as the speaker's utterance was more positively biased from the true states, and inferred worse true states than the literal meaning when the speaker was described as wanting to be nice.
 
 In the current work, we extend our framework to another polite speech act: *indirect speech*. 
 <!-- White lies are one particular case of polite speech, whereby a speaker tries to save the listener's face through giving false information to some degree. -->
-White lies are when a speaker tries to save the listener's face by stretching the truth.
+White lies are produced when a speaker tries to save the listener's face by stretching the truth.
 But instead of lying, people sometimes try to be polite by being more indirect.
 Through indirect speech, a speaker can express meaning that is different from the literal meaning of the utterance [@searle1975].
 In this work, we focus on negation ("not"), which has the potential to be indirect.
-For instance, "Mark *isn't* the cleanest person I know" may suggest that the speaker thinks Mark is *unclean* (inferred meaning) rather than not being the person Mark knows who has the greatest degree of cleanliness (literal meaning).
+For instance, "Mark *isn't* the cleanest person I know" may suggest that the speaker thinks Mark is *unclean* (inferred meaning) rather than not being the person who has the greatest degree of cleanliness (literal meaning).
 Negation can be used as a hedging or mitigating device to address an undesirable state that is face-threatening to the addressee [@Brown1987; @Grice1975]. <!--, and can imply that the intended meaning is worse than the vague meaning.--> 
 
 What may lead a speaker to produce indirect remarks? 
-An indirect remark may be motivated by the need to convey some face-threatening information, while being seen as the sort of person who avoids threatening others' face.
-In our previous work, we described a pragmatic listener that jointy infered the world state and the goals of the speaker. 
-Building on this model, we describe here a social speaker who's goal is to lead this pragmatic listener to believe the true world state *and* attribute to the speaker certain goals (e.g. avoiding face-threat).
-For instance, "not amazing" does not preclude the possibility that the presentation was bad, and may be pragmatically strenthened to mean this; yet because the speaker does not choose the more direct utterance ("bad") the listener will infer that a face-threat-avoidance goal. 
-Thus "not amazing" can accomplish the dual goals of conveying that the presentation was bad but that the speaker is the sort of person who would not want to make the listener feel bad by saying so.
-On the other hand, if the speaker does not care about being seen as avoiding face-threat, they will produce less indirect speech.
-<!--
-Informationally, "not amazing" does not preclude the possibility that the presentation was bad, so the utterance is not a downright lie.
-And socially, Alice tries to save Bob’s face by not being explicitly critical (e.g., not saying "it was terrible").
--->
+An indirect remark may be motivated by the speaker's goal to convey some face-threatening information, while being seen as a polite person who avoids threatening others' face.
+In our previous work, we described a pragmatic listener that jointly inferred the true state and the goals of the speaker. 
+Building on this model, we describe here a speaker whose goal is to lead this pragmatic listener to infer the true state *and* attribute to the speaker certain goals (e.g. face-saving).
+For instance, "It wasn't amazing" does not preclude the possibility that the presentation was bad, and may in fact be pragmatically strengthened to mean that it was actually bad; yet because the speaker does not choose the more direct utterance ("It was bad") the listener will infer that a face-saving goal. 
+Thus saying "It wasn't amazing" can accomplish the dual goals of conveying that the presentation was bad but that the speaker is seen as not wanting to make the listener feel bad by explicitly saying so.
+On the other hand, if the speaker does not care about being seen as face-saving, she will produce less indirect speech.
 Further, if the presentation was actually good, or even decent, the speaker will prefer to produce a directly positive remark ("It was good") in either case. 
-Thus we predict more indirect speech when the true state is bad, and an interaction with the speaker's desire to be seen as avoiding face-threat. In what follows, we derive our hypotheses using our formal model and present an empirical test of the hypotheses.
-<!--
-Thus we predict that a speaker who wants to balance between epistemic and social goals would produce indirect speech relatively more, especially when the true state is bad. 
-Importantly, we predict it is the interaction between presence of face threat (due to addressee's poor performance) and speaker's consideration of both epistemic and social goals that is predicted to lead to a greater degree of indirect speech production. In what follows, we derive our hypotheses using our formal model and present an empirical test of the hypotheses.
--->
+Thus we predict more indirect speech when the true state is bad, and an interaction with the speaker's desire to both be informative and be seen as wanting to save face. In what follows, we derive our hypotheses using our formal model and present an empirical test of the hypotheses.
 
 # Computational Model
 
@@ -169,34 +161,29 @@ Previously we considered five possible utterances: {It was *terrible*, *bad*, *o
 Now the speaker may say, {It *wasn't* terrible, bad, okay, good, and amazing}.
 These utterances indirectly address the referent by negating certain state.
 
-Second, we assume that it is more costly to say utterances with negation \mht{cite costly negation}.
-In our full data analysis, we put a prior on this cost parameters and infer it's likely values from the data.
+Second, we assume that it is more costly to say utterances with negation, which makes the utterance morphemically longer and is harder to process [@clark1972].
+In our full data analysis, we put a prior on this cost parameters and infer its likely values from the data.
 
-Third, we extende the recursive reasoning in the model. 
+Third, we extended the recursive reasoning in the model. 
 For our experiment, we consider the pragmatic speaker ($S_2$) who chooses an utterance based on the pragmatic listener model (Eq. \ref{eq:L1}), thinking about the state as well as goal weights that the pragmatic listener will infer.
 
 $$P_{S_2}(w \mid s, \hat{\beta})\propto \mathrm{exp}(\lambda_{2} \cdot \ln(P_{L_1}(s,  \hat{\beta} \mid w)) - C(w))$$
 
 In addition to these extensions, we simplify from the @yoon2016 model by including only a single mixture parameter $\phi$ governing the extent to which the speaker is being informative vs. face saving: $\beta_{epi} = \phi$, $\beta_{soc} = 1 - \phi$.
-\mht{note? (or discuss) this parametrization doesn't have "antisocial" goals}.
 We implemented this model using the probabilisitic programming language WebPPL [@dippl]\footnote{A complete implementation of the model, links to the experiments, raw data and analyses can be found at \url{https://github.com/ejyoon/cogsci2017}.}.
 
-<!-- ($w \sim Unif(1,5)$) from data in each experiment. \ejy{FIXME: phi mixture weight.}  -->
-
 In the next section, we explore the model's predictions for speaker productions of indirect speech with negation vs. direct speech with no negation.
-<!-- We compare these model predictions against empirical data in speaker production experiment, where we examine people's expectations for production of utterances $u$ given a true state and a speaker's goal.  -->
-<!-- We confirm that both the model predictions and empirical findings are broadly consistent with our hypothesis that indirect speech reflects a greater balance between epistemic and social goals.  -->
 
 # Model predictions
 
-Before describing our experimental data, we derive predictions from the pRSA model. In these initial simulations, we use fixed goal weights and parameters -- in later fits, we will derive these parameters from the data using Bayesian data analysis. Since the model requires measurements of literal semantics (i.e., what "good" means on a given dimension), we first describe these measurements and then give model predictions using them.
+Before describing our experimental data, we derive predictions from the pRSA model. In these initial simulations, we use fixed goal weights and parameters -- in later fits, we will derive these parameters from the data using Bayesian data analysis. Since the model requires measurements of literal semantics (e.g. what "not good" means on a given dimension), we first describe these measurements and then give model predictions using them.
 
 ## Semantic measurement
 
 We probed judgments of literal meanings of the target words assumed by our model and used in all our experiments. 
 
 
-```{r expt1_results, fig.env = "figure*", fig.pos = "t", fig.width=6, fig.height=2, fig.align = "center", fig.cap = "Semantic measurement results. Proportion of acceptances of utterance types (shown in different colors) combined with target words (shown in different facets) given the true state represented on a scale of hearts. Error bars represent 95\\% confidence intervals."}
+```{r expt1_results, fig.env = "figure*", fig.pos = "t", out.width=5, fig.width=6, fig.height=1.5, fig.align = "center", fig.cap = "Semantic measurement results. Proportion of acceptances of utterance types (shown in different colors) combined with target words (shown in different facets) given the true state represented on a scale of hearts. Error bars represent 95\\% confidence intervals."}
 # img <- png::readPNG("figs/lit_sem.png")
 # grid::grid.raster(img)
 
@@ -221,7 +208,7 @@ qplot(state, judgment,
   geom_line(aes(group=positivity)) +
   facet_grid(.~utterance) +
   xlab("state (1=worst)") +
-  ylab("proportion acceptances") +
+  ylab("proportion \n acceptances") +
   geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
   scale_color_solarized(guide_legend(title="")) +
   ggthemes::theme_few()
@@ -249,7 +236,7 @@ We explore 3 hypothetical speakers (corresponding to 3 different mixture paramet
 (b) a speaker who wants to make the listener feel good ($\phi = 0.1$)
 (c) a speaker who wants to *both* convey information and make the listener feel good ($\phi = 0.5$).^[
 In addition, the model has a few parameters not of theoretical interest.
-For the purposes of generating model predictions *a priori*, we assign values to these parameters consistent with the previous litearture with this class of models: the speaker optimality parameter ($\lambda_{1}$ assigned to 2); the pragmatic speaker optimality parameter ($\lambda_{2}$ to 2); the value scale parameter ($\alpha$ to 1) in the utility function; and the parameter governing the cost of producing a negation ($C(u)$ to 2).
+For the purposes of generating model predictions *a priori*, we assign values to these parameters consistent with the previous literature with this class of models: the speaker optimality parameter ($\lambda_{1}$ assigned to 2); the pragmatic speaker optimality parameter ($\lambda_{2}$ to 2); the value scale parameter ($\alpha$ to 1) in the utility function; and the parameter governing the cost of producing a negation ($C(u)$ to 2).
 ]
 
 Figure 2 (left) shows the speaker's production probabilities associated with producing an indirect speech act (i.e., an utterance with negation) for the three different speakers as the true state of the world is varied.
@@ -261,7 +248,7 @@ It is only when the speaker tries to balance both goals that the indirect speech
 
 # Speaker production experiment
 
-To compare against our model predictions, we measured participants' predictions for the most likely utterance produced by the speaker ($u$), given a description of the true state of the world. For example, given that the speaker wanted to make the listener feel good but felt that a poem deserved 2 out of 5 hearts, what would she say? Critically, the contexts indicated face threats toward the listener, as the speaker's utterance was a direct evaluation of the listener's performance. We hypothesized that when there is no tradeoff between informativity and face-threat avoidance (i.e. when the addressee's performance was great), speakers should use truthful and face-saving direct remarks ("[Your poem] was amazing") regardless of their described goals. However, when there was a conflict between the epistemic and social goals (i.e., when the addressee's performance is poor), a speaker who tried to compromise between both goals would use vague indirect remarks ("[Your poem] wasn't terrible") more often than direct face-threatening remarks ("[Your poem] was bad"; preferred by an informative speaker) or direct face-saving remarks ("[Your poem] was good"; preferred by face-saving speaker). Our hypothesis and method were pre-registered prior to data collection on the Open Science Framework (\url{http://osf.io/b73dm}). 
+To compare against our model predictions, we measured participants' predictions for the most likely utterance produced by the speaker ($u$), given a description of the true state of the world. For example, given that the speaker wanted to make the listener feel good but felt that a poem deserved 2 out of 5 hearts, what would she say? Critically, the contexts indicated face threats toward the listener, as the speaker's utterance was a direct evaluation of the listener's performance. We hypothesized that when there is no tradeoff between informativity and face-threat avoidance (i.e. when the addressee's performance was great), speakers should use truthful and face-saving direct remarks ("[Your poem] was amazing") regardless of their described goals. However, when there was a conflict between the epistemic and social goals (i.e., when the addressee's performance is poor), a speaker who tried to address both goals would use vague indirect remarks ("[Your poem] wasn't terrible") more often than direct face-threatening remarks ("[Your poem] was bad"; preferred by a speaker who only considers the epistemic goal) or direct face-saving remarks ("[Your poem] was good"; preferred by a speaker who only considers the social goal). Our hypothesis and method were pre-registered prior to data collection on the Open Science Framework (\url{http://osf.io/b73dm}). 
 
 ## Method
 
@@ -332,7 +319,7 @@ The inferred weights for each goal condition were largely as expected: For the "
 The predictions for the speaker's utterance were broadly consistent with the experimental findings (Figures 4 and 5). The model successfully predicted distinct patterns for each goal condition. The *informative* speaker produced direct remarks whose literal meanings mapped onto the true states (e.g. "It was terrible" given 1 heart). The *social* speaker produced remarks that were positively biased compared to the true states (e.g. "It was okay" given 2 hearts). 
 <!-- The *both-goal* speaker generally produced more indirect remarks with negation than the others ("It was terrible" had the highest likelihood given 1 heart).  -->
 
-However, when fit to the empirical data, the model did not predict the expected difference for negation production between both-goal and social conditions (Figure 2, right); though the trend was numerically correct, the effect was much smaller in the fit model than the schematic one. There are several possible explanations for this deviation. First, in our experimental data, the social speaker placed a higher weight on epistemic utility than in our schematic predictions. Thus, the particular goal descriptions we used in the experiment may have suggested that the social speaker still wanted to be informative. If this explanation holds, our argument is still valid: a balance between epistemic and social utility, rather than bias toward one utility over the other, is what predicts indirect speech production. Second, another possible cause is that participants preferred a *different kind* of indirect speech than the model -- in particular, the both-goal speaker preferred to produce "It wasn't amazing" in the schematic model predictions, whereas participants in our experiment chose "It wasn't terrible." This discrepancy between the two remarks is interesting, because their implied meaning is similar. In a pilot experiment where participants were asked to infer the true state (number of hearts) from an utterance, "It wasn't amazing" and "It wasn't terrible" were very similar (~2 hearts). 
+However, when fit to the empirical data, the model did not predict the expected difference for negation production between both-goal and social conditions (Figure 2, right); though the trend was numerically correct, the effect was much smaller in the fit model than the schematic one. There are several possible explanations for this deviation. First, in our experimental data, the social speaker placed a higher weight on epistemic utility than in our schematic predictions. Thus, the particular goal descriptions we used in the experiment may have suggested that the social speaker still wanted to be informative. speaker’s consideration of both epistemic and social goals is what predicts indirect speech production. Second, another possible cause is that participants preferred a *different kind* of indirect speech than the model -- in particular, the both-goal speaker preferred to produce "It wasn't amazing" in the schematic model predictions, whereas participants in our experiment chose "It wasn't terrible." This discrepancy between the two remarks is interesting, because their implied meaning is similar. In a pilot experiment where participants were asked to infer the true state (number of hearts) from an utterance, "It wasn't amazing" and "It wasn't terrible" were very similar (~2 hearts). 
 
 Overall, however, the posterior predictions of the fit model explained almost all of the variance in the average data $r^2$(15) = 0.962 (Figure 5). Thus, the model results support our hypothesis that the combination of epistemic and social utilities explain politeness behavior across a wide range of conditions. 
 
@@ -343,9 +330,9 @@ grid::grid.raster(img)
 
 # Discussion
 
-Why are we polite? Here we explored a formal instantiation of the hypothesis that two conflicting speaker goals -- epistemic and social -- can be used to explain a range of polite behavior, including white lies and indirect speech acts using negation. Our model predicted that speakers should produce more indirect remarks in cases of greater face threat (poorer performance) and in cases where speakers wanted to be both informative and nice. Our experimental data confirmed these predictions. The model's overall fit to the data was very strong, although it did not show the predicted dominance of indirect speech for the both-goal speaker at low states. Whether this discrepancy between the initial and data-fitted predictions was due to variation in goal weight based on experimental scenarios or a discrepancy in preferences for paricular utterances is a question for future work.
+Why are we polite? Here we explored a formal instantiation of the hypothesis that two conflicting speaker goals -- epistemic and social -- can be used to explain a range of polite behavior, including white lies and indirect speech acts using negation. Our model predicted that speakers should produce more indirect remarks in cases of greater face threat (poorer performance) and in cases where speakers wanted to be both informative and nice. Our experimental data confirmed these predictions. The model's overall fit to the data was very strong, although it did not show the predicted dominance of indirect speech for the both-goal speaker at low states. Whether this discrepancy between the initial and data-fitted predictions was due to variation in goal weight based on experimental scenarios or a discrepancy in preferences for particular utterances is a question for future work.
 
-An important contribution of this work is in showing the generalizability of our formal model (polite RSSA) to the case of indirect speech acts. Can the model be extended to other polite speech phenomena? One significant factor to take into account will be speakers' self-presentation: Not only do speakers want to save the listener's face, but they also want to save their *own* face. In future work we hope to examine how our model's utilities can be extended to capture the speaker's desire to appear polite, genuine, and modest. Using the model to explore other kinds of polite speech such as indirect requests ["Would you mind closing the window?"; @clark1980], agreeable self-presentations (e.g. modesty; "I didn't do too well on my test"), and manifestations of polite speech in different cultures [e.g., @holtgraves1990] are also important future directions.
+An important contribution of this work is in showing the generalizability of our formal model (pRSA) to the case of indirect speech acts. Can the model be extended to other polite speech phenomena? One significant factor to take into account will be speakers' self-presentation: Not only do speakers want to save the listener's face, but they also want to save their *own* face. In future work we hope to examine how our model's utilities can be extended to capture the speaker's desire to appear polite, genuine, and modest. Using the model to explore other kinds of polite speech such as indirect requests ["Would you mind closing the window?"; @clark1980] and manifestations of polite speech in different cultures [e.g., @holtgraves1990] are also important future directions.
 
 In sum, our formal model and experimental work represent an advance in polite speech understanding. With a minimal extension to our existing model, we were able to capture subtle patterns in people's inferences about indirect speech production. Our empirical findings suggest that neither epistemic nor social motives alone motivate indirect speech; instead, the need for indirect speech results from the conflict between these two. These findings provide strong support for a utility-theoretic framing of politeness, and suggest new directions in understand pragmatic language use in social contexts.
 
