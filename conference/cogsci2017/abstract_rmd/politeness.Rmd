@@ -312,6 +312,12 @@ The posterior predictive of the model explained almost all of the variance in th
 The model successfully predicted distinct patterns for each goal condition. 
 The *informative* speaker produced direct remarks whose literal meanings mapped onto the true states (e.g. "It was terrible" given 1 heart). The *social* speaker produced remarks that were positively biased compared to the true states (e.g. "It was okay" given 2 hearts). 
 
+<<<<<<< HEAD
+=======
+<!-- The *both-goal* speaker generally produced more indirect remarks with negation than the others ("It was terrible" had the highest likelihood given 1 heart).  -->
+
+
+>>>>>>> origin/master
 While the model in the *both* condition did produce indirect utterances (e.g. "It was not terrible" given 1 heart) it did so slightly less than the empirical data.
 For this reason, the model did not yield the expected difference for negation production between both-goal and social conditions (Figure 2, right); though the trend was numerically correct, the effect was much smaller in the fit model than the schematic one. 
 There are several possible explanations for this small deviation. 
