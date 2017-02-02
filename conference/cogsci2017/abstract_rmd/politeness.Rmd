@@ -239,7 +239,7 @@ The both-goal speaker produces indirect remarks to avoid direct remarks that are
 
 # Speaker production experiment
 
-To compare against our model predictions, we measured participants' predictions for the most likely utterance produced by the speaker ($u$), given a description of the true state. For example, given that the speaker wanted to make the listener feel good but felt that a poem deserved 2 out of 5 hearts, what would she say? We hypothesized that when there is no tradeoff between informativity and face-threat avoidance (i.e. when the addressee's performance was great), speakers should use truthful and face-saving direct remarks ("[Your poem] was amazing") regardless of their described goals. However, when there was a conflict between the epistemic and social goals (i.e., when the addressee's performance is poor), a speaker who tried to convey both goals would use vague indirect remarks ("[Your poem] wasn't terrible") more often than direct face-threatening remarks ("[Your poem] was bad"; preferred by a speaker who only considers the epistemic goal) or direct face-saving remarks ("[Your poem] was good"; preferred by a speaker who wants to convey only a social goal). 
+To compare against our model predictions, we measured participants' predictions for the most likely utterance produced by the speaker ($w$), given a description of the true state. For example, given that the speaker wanted to make the listener feel good but felt that a poem deserved 2 out of 5 hearts, what would she say? We hypothesized that when there is no tradeoff between informativity and face-threat avoidance (i.e. when the addressee's performance was great), speakers should use truthful and face-saving direct remarks ("[Your poem] was amazing") regardless of their described goals. However, when there was a conflict between the epistemic and social goals (i.e., when the addressee's performance is poor), a speaker who tried to convey both goals would use vague indirect remarks ("[Your poem] wasn't terrible") more often than direct face-threatening remarks ("[Your poem] was bad"; preferred by a speaker who only considers the epistemic goal) or direct face-saving remarks ("[Your poem] was good"; preferred by a speaker who wants to convey only a social goal). 
 
 ## Method
 
@@ -277,7 +277,7 @@ Critically, speakers with both informative and social goals produced more indire
 
 ### Model fitting
 
-In this experiment, participants were told what speakers' intentions were (e.g., wanted to make Alice feel good). We assume that the intention descriptions conveyed the weights {$\beta_{epi}$, $\beta_{soc}$} that the speaker was using. We put uninformative priors on these weights ($\beta \sim$ Uniform(0,1)) and inferred their credible values separately for each goal condition ("wanted to X") using Bayesian data analytic techniques [@LW2014]. We also used the fraction of participants that endorsed utterance $w$ for state $s$ to set informative priors to infer posterior credible values of the literal meanings from data.
+In this experiment, participants were told what speakers' intentions were (e.g., wanted to make Alice feel good). We assume that the intention descriptions conveyed the weight mixture $\phi$ that the speaker was using. We put uninformative priors on this mixture ($\phi \sim$ Uniform(0,1)) and inferred their credible values separately for each goal condition ("wanted to X") using Bayesian data analytic techniques [@LW2014]. We also used the fraction of participants that endorsed utterance $w$ for state $s$ to set informative priors to infer posterior credible values of the literal meanings from data.
 
 ```{r model_param}
 load("../../../model/results/cogsci17/bda-s2-mcmc80k-x4-params.RData")
@@ -309,7 +309,7 @@ The inferred weights for each goal condition were largely as expected: For the "
 feel good and give informative feedback" (*both*) condition, the model assigned a weight on epistemic utility between the weights for the other two goal conditions (`r round(weights_summary$MAP[1], 3)`). Overall, the weights tended to be more biased towards prioritizing the epistemic utility. 
 
 The predictions for the speaker's utterance were overall highly consistent with the experimental findings (Figure 4). 
-The posterior predictive of the model explained almost all of the variance in the average data $r^2$(15) = 0.962 (Figure 5).
+The posterior predictive of the model explained almost all of the variance in the production data $r^2$(150) = 0.962 (Figure 5).
 The model successfully predicted distinct patterns for each goal condition. 
 The *informative* speaker produced direct remarks whose literal meanings mapped onto the true states (e.g. "It was terrible" given 1 heart). The *social* speaker produced remarks that were positively biased compared to the true states (e.g. "It was okay" given 2 hearts). 
 
