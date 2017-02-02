@@ -109,16 +109,16 @@ Negation can be used as a hedging or mitigating device to address an undesirable
 What may lead a speaker to produce indirect remarks? 
 An indirect remark may be motivated by the speaker's goal to convey some face-threatening information, while being seen as a polite person who avoids threatening others' face.
 In our previous work, we described a pragmatic listener that jointly inferred the true state and the goals of the speaker. 
-Building on this model, we describe here a speaker whose goal is to lead this pragmatic listener to infer the true state *and* attribute to the speaker certain goals (e.g. face-saving).
-For instance, "It wasn't amazing" does not preclude the possibility that the presentation was bad, and may in fact be pragmatically strengthened to mean that it was actually bad; yet because the speaker does not choose the more direct utterance ("It was bad") the listener will infer that a face-saving goal. 
-Thus saying "It wasn't amazing" can accomplish the dual goals of conveying that the presentation was bad but that the speaker is seen as not wanting to make the listener feel bad by explicitly saying so.
+Building on this model, we describe here a speaker whose goal is to lead this pragmatic listener to infer the true state *and* attribute to the speaker certain goals (e.g., face-saving).
+For instance, "It wasn't amazing" does not preclude the possibility that the presentation was bad, and may in fact be pragmatically strengthened to mean that it was actually bad; yet because the speaker does not choose the more direct utterance ("It was bad") the listener will infer a face-saving goal. 
+Thus saying "It wasn't amazing" can accomplish the goal of conveying that the presentation was bad while the speaker is seen as not wanting to make the listener feel bad by explicitly saying so.
 On the other hand, if the speaker does not care about being seen as face-saving, she will produce less indirect speech.
 Further, if the presentation was actually good, or even decent, the speaker will prefer to produce a directly positive remark ("It was good") in either case. 
 Thus we predict more indirect speech when the true state is bad, and an interaction with the speaker's desire to both be informative and be seen as wanting to save face. In what follows, we derive our hypotheses using our formal model and present an empirical test of the hypotheses.
 
 # Computational Model
 
-In the current work, we introduce minimal extension to our previous RSA model [pRSA; @yoon2016] to allow for speaker production of indirect remarks using negation. 
+In the current work, we introduce a minimal extension to our previous RSA model [pRSA; @yoon2016] to allow for speaker production of indirect remarks using negation. 
 
 ## Polite RSA
 
@@ -137,13 +137,13 @@ The pragmatic listener ($L_1$) jointly infers the state $s$ and the utility weig
 \begin{align}
 P_{L_1}(s, \hat{\beta} \mid w) &\propto P_{S_1}(w \mid s, \hat{\beta})\cdot P(s) \cdot P( \hat{\beta}) \label{eq:L1}\\
 P_{S_1}(w \mid s, \hat{\beta}) &\propto \mathrm{exp}(\lambda_{1} \cdot \mathbb{E}[U(w; s;  \hat{\beta})]) \label{eq:S1}\\
-P_{L_0}(s \mid w) &\propto [[w]](s) \cdot P(s) \label{eq:L0}
+P_{L_0}(s \mid w) &\propto [\![w]\!](s) \cdot P(s) \label{eq:L0}
 \end{align}
 
 Within our experimental domain, we assumed there were five possible states of the world corresponding to the value placed on a particular referent (e.g., rating deserved by the presentation the speaker is commenting on, akin to a Yelp rating): $S = \{s_{1}, ...,  s_{5}\}$. 
 We assume a uniform prior distribution over possible states of the world.
 The states have subjective numerical values $V(s_{i}) = \alpha \cdot i$, where $\alpha$ is a free parameter.
-$[[w]](s)$ corresponds to the lexical meaning of the utterance $w$ (e.g., "good") when applied to state $s$. 
+$[\![w]\!](s)$ corresponds to the lexical meaning of the utterance $w$ (e.g., "good") when applied to state $s$. 
 We gather independent ratings for these literal meanings.
 
 ## Extensions to pRSA
@@ -180,8 +180,8 @@ We probed judgments of literal meanings of the target words assumed by our model
 
 ms <- read_csv("../../../experiment/data_analysis/data/literalSemantics_wNeg.csv") %>%
   mutate(positivity = factor(as.numeric(grepl("yes", utterance)),
-                             levels = c(0, 1),
-                             labels = c("it wasn't ~","it was ~"))) %>%
+                             levels = c(1, 0),
+                             labels = c("it was ~", "it wasn't ~"))) %>%
   mutate(utterance = substring(utterance, 5)) %>%
   mutate(utterance = ordered(utterance, 
                              levels = c("terrible", "bad", "okay", "good", "amazing")))  %>%
@@ -201,8 +201,9 @@ qplot(state, judgment,
   xlab("state (1=worst)") +
   ylab("proportion \n acceptances") +
   geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
-  scale_color_solarized(guide_legend(title="")) +
-  ggthemes::theme_few(base_size = 9)
+  scale_color_solarized() +
+  ggthemes::theme_few(base_size = 9)+
+  theme(legend.title = element_blank())
 ```
 
 ```{r model_pred_negNoneg, fig.env = "figure*", fig.pos = "t", fig.width=6.5, fig.height=4, fig.align = "center", fig.cap = "Schematic model predictions (left), experimental results (center) and fitted model predictions (right) for average proportion of negation produced among all utterances, given true states (x-axis) and goals (colors)."}
@@ -312,12 +313,6 @@ The posterior predictive of the model explained almost all of the variance in th
 The model successfully predicted distinct patterns for each goal condition. 
 The *informative* speaker produced direct remarks whose literal meanings mapped onto the true states (e.g. "It was terrible" given 1 heart). The *social* speaker produced remarks that were positively biased compared to the true states (e.g. "It was okay" given 2 hearts). 
 
-<<<<<<< HEAD
-=======
-<!-- The *both-goal* speaker generally produced more indirect remarks with negation than the others ("It was terrible" had the highest likelihood given 1 heart).  -->
-
-
->>>>>>> origin/master
 While the model in the *both* condition did produce indirect utterances (e.g. "It was not terrible" given 1 heart) it did so slightly less than the empirical data.
 For this reason, the model did not yield the expected difference for negation production between both-goal and social conditions (Figure 2, right); though the trend was numerically correct, the effect was much smaller in the fit model than the schematic one. 
 There are several possible explanations for this small deviation. 
