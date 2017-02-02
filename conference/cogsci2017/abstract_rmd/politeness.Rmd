@@ -87,7 +87,7 @@ People tell white lies ("Your new dress is gorgeous!") and produce indirect spee
 Speakers risk potential loss of their intended message (indirect speech), intentionally convey wrong information (lies), and suffer inefficiencies -- all in the service of being polite.
 If information transfer were the only currency in communication, politeness would be both infelicitous and undesirable.  
 
-A *cooperative speaker*, however, can be imagined as one with an epistemic goal to improve the listener's knowledge *as well as* a social goal to minimize potential damage to the hearer's (and the speaker's own) self-image, called *face* [@Brown1987]. 
+A *cooperative speaker*, however, can be imagined as one with both an epistemic goal to improve the listener's knowledge as well as a social goal to minimize potential damage to the hearer's (and the speaker's own) self-image, called *face* [@Brown1987]. 
 If the speaker's intended meaning contains no threat to the speaker or listener's face, then the speaker will choose to convey the meaning in an explicit and efficient manner (putting it "on the record"). 
 As the degree of face-threat becomes more severe, however, a speaker will choose to be polite by producing more indirect utterances. 
 
@@ -103,15 +103,15 @@ White lies are produced when a speaker tries to save the listener's face by stre
 But instead of lying, people sometimes try to be polite by being more indirect.
 Through indirect speech, a speaker can express meaning that is different from the literal meaning of the utterance [@searle1975].
 In this work, we focus on negation ("not"), which has the potential to be indirect.
-For instance, "Mark *isn't* the cleanest person I know" may suggest that the speaker thinks Mark is *unclean* (inferred meaning) rather than not being the person who has the greatest degree of cleanliness (literal meaning).
+For instance, "Mark isn't the cleanest person I know" may suggest that the speaker thinks Mark is *unclean* (inferred meaning) rather than not being the person who has the greatest degree of cleanliness (literal meaning).
 Negation can be used as a hedging or mitigating device to address an undesirable state that is face-threatening to the addressee [@Brown1987; @Grice1975]. <!--, and can imply that the intended meaning is worse than the vague meaning.--> 
 
 What may lead a speaker to produce indirect remarks? 
 An indirect remark may be motivated by the speaker's goal to convey some face-threatening information, while being seen as a polite person who avoids threatening others' face.
 In our previous work, we described a pragmatic listener that jointly inferred the true state and the goals of the speaker. 
 Building on this model, we describe here a speaker whose goal is to lead this pragmatic listener to infer the true state *and* attribute to the speaker certain goals (e.g., face-saving).
-For instance, "It wasn't amazing" does not preclude the possibility that the presentation was bad, and may in fact be pragmatically strengthened to mean that it was actually bad; yet because the speaker does not choose the more direct utterance ("It was bad") the listener will infer a face-saving goal. 
-Thus saying "It wasn't amazing" can accomplish the goal of conveying that the presentation was bad while the speaker is seen as not wanting to make the listener feel bad by explicitly saying so.
+For instance, "It wasn't amazing" does not preclude the possibility that the presentation was bad, and may in fact be pragmatically strengthened to mean that it was actually bad. Yet because the speaker does not choose the more direct "It was bad", the listener will infer a face-saving goal. 
+Thus saying "It wasn't amazing" can accomplish the goal of conveying that the presentation was bad while the speaker is seen as not wanting to make the listener feel bad.
 On the other hand, if the speaker does not care about being seen as face-saving, she will produce less indirect speech.
 Further, if the presentation was actually good, or even decent, the speaker will prefer to produce a directly positive remark ("It was good") in either case. 
 Thus we predict more indirect speech when the true state is bad, and an interaction with the speaker's desire to both be informative and be seen as wanting to save face. In what follows, we derive our hypotheses using our formal model and present an empirical test of the hypotheses.
@@ -162,7 +162,7 @@ $$P_{S_2}(w \mid s, \hat{\beta})\propto \mathrm{exp}(\lambda_{2} \cdot \ln(P_{L_
 This crucially captures the idea that the speaker both wants to convey the state $s$, and to be seen as someone with  goals $\hat{\beta}$.
 We simplify from the @yoon2016 model by including only a single mixture parameter $\phi$ governing the extent to which the speaker is being informative vs. face saving: $\beta_{epi} = \phi$, $\beta_{soc} = 1 - \phi$.
 
-We implemented this model using the probabilisitic programming language WebPPL [@dippl]\footnote{A complete implementation of the model, raw data and analyses, and links to the experiments and pre-registration of hypotheses and method can be found at \url{https://github.com/ejyoon/cogsci2017}.}.
+We implemented this model using the probabilistic programming language WebPPL [@dippl]\footnote{A complete implementation of the model, raw data and analyses, and links to the experiments and pre-registration of hypotheses and method can be found at \url{https://github.com/ejyoon/cogsci2017}.}.
 In the next section, we explore the model's predictions for speaker productions of indirect speech with negation vs. direct speech with no negation.
 
 # Model predictions
