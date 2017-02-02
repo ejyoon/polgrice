@@ -231,9 +231,9 @@ For the purposes of generating model predictions *a priori*, we assign values to
 
 Figure 2 (left) shows the speaker's production probabilities associated with producing an indirect speech act (i.e., an utterance with negation) for the three different speakers as the true state of the world is varied.
 We see, consistent with our intuition, that indirect speech was relatively more preferred in bad states than in good states.
-As well, we see higher probability of negation production for the speaker who wants to achieve both goals (truthful and informative) relative to each goal independently.
+As well, we see higher probability of negation production for the speaker who wants to convey both goals (truthful and informative) relative to each goal independently.
 Indirect speech doesn't convey that much information and so the informative speaker (a) would disprefer it.
-The social speaker who only wants to make the listener feel good would mostly signal unambiguously a better state than they are in through direct positive remarks, also produce some indirect remarks so as to convey the true state relying on implicature. 
+The social speaker (b) who wants convey a face-saving goal would tend to signal a better-that-actual state through direct positive remarks. 
 The both-goal speaker produces indirect remarks to avoid direct remarks that are true but face-threatening or are face-saving but false.
 
 # Speaker production experiment
