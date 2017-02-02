@@ -273,11 +273,11 @@ Critically, speakers with both informative and social goals produced more indire
 
 <!-- Thus, these results indicated that a speaker who considers both informative and social goals, and thus is in want of a compromise between the two, is expected to produce relatively more indirect remarks. -->
 
-## Model predictions
+## Model results
 
 ### Model fitting
 
-In this experiment, participants were told what speakers' intentions were (e.g., wanted to make Alice feel good). We assume that the intention descriptions conveyed the weights {$\beta_{epi}$, $\beta_{soc}$} that the speaker was using. We put uninformative priors on these weights ($\beta$ ~ Uniform(0,1)) and inferred their credible values separately for each goal condition ("wanted to X") using Bayesian data analytic techniques [@LW2014]. We also used the fraction of participants that endorsed utterance $w$ for state $s$ to set informative priors to infer posterior credible values of the literal meanings from data.
+In this experiment, participants were told what speakers' intentions were (e.g., wanted to make Alice feel good). We assume that the intention descriptions conveyed the weights {$\beta_{epi}$, $\beta_{soc}$} that the speaker was using. We put uninformative priors on these weights ($\beta \sim$ Uniform(0,1)) and inferred their credible values separately for each goal condition ("wanted to X") using Bayesian data analytic techniques [@LW2014]. We also used the fraction of participants that endorsed utterance $w$ for state $s$ to set informative priors to infer posterior credible values of the literal meanings from data.
 
 ```{r model_param}
 load("../../../model/results/cogsci17/bda-s2-mcmc80k-x4-params.RData")
@@ -289,7 +289,7 @@ param_summary <- bda.params %>%
             ci_upper = hdi_upper(val))
 ```
 
-There were four additional parameters of the model, on which we put uninformative priors: the speaker optimality parameter ($\lambda_{S_1}$ ~ Unif(0,20)); the pragmatic speaker optimality parameter ($\lambda_{S_2}$ ~ Unif(0,5)); the value scale parameter ($\alpha$ ~ Unif(0,5)) in the utility function; and the cost parameter ($C(u)$ ~ Unif(1,10)). We inferred their posterior credible values from the data. We ran 4 MCMC chains for 80,000 iterations, discarding the first 40,000 for burnin. The Maximum A-Posteriori (MAP) estimate and 95% Highest Probability Density Interval (HDI) were: $\lambda_{S_1}$: `r round(param_summary$MAP[3], 2)` [`r round(param_summary$ci_lower[3], 2)`, `r round(param_summary$ci_upper[3], 2)`]; $\lambda_{S_2}$: `r round(param_summary$MAP[4], 2)` [`r round(param_summary$ci_lower[4], 2)`, `r round(param_summary$ci_upper[4], 2)`]; $\alpha$: `r round(param_summary$MAP[1], 2)` [`r round(param_summary$ci_lower[1], 2)`, `r round(param_summary$ci_upper[1], 2)`]; $C(w)$: `r round(param_summary$MAP[2], 2)` [`r round(param_summary$ci_lower[2], 2)`, `r round(param_summary$ci_upper[2], 2)`]. To generate utterance predictions, given our model and the inferred parameters, we evaluated the posterior predictive distribution, marginalizing out all parameters.
+There were four additional parameters of the model, on which we put uninformative priors: the speaker optimality parameter ($\lambda_{S_1} \sim$ Unif(0,20)); the pragmatic speaker optimality parameter ($\lambda_{S_2} \sim$ Unif(0,5)); the value scale parameter ($\alpha \sim$ Unif(0,5)) in the utility function; and the cost parameter ($C(u) \sim$ Unif(1,10)). We inferred their posterior credible values from the data. We ran 4 MCMC chains for 80,000 iterations, discarding the first 40,000 for burnin. The Maximum A-Posteriori (MAP) estimate and 95% Highest Probability Density Interval (HDI) were: $\lambda_{S_1}$: `r round(param_summary$MAP[3], 2)` [`r round(param_summary$ci_lower[3], 2)`, `r round(param_summary$ci_upper[3], 2)`]; $\lambda_{S_2}$: `r round(param_summary$MAP[4], 2)` [`r round(param_summary$ci_lower[4], 2)`, `r round(param_summary$ci_upper[4], 2)`]; $\alpha$: `r round(param_summary$MAP[1], 2)` [`r round(param_summary$ci_lower[1], 2)`, `r round(param_summary$ci_upper[1], 2)`]; $C(w)$: `r round(param_summary$MAP[2], 2)` [`r round(param_summary$ci_lower[2], 2)`, `r round(param_summary$ci_upper[2], 2)`]. To generate utterance predictions, given our model and the inferred parameters, we evaluated the posterior predictive distribution, marginalizing out all parameters.
 
 ```{r model_param2}
 load("../../../model/results/cogsci17/bda-s2-mcmc80k-x4-goalWeights.RData")
