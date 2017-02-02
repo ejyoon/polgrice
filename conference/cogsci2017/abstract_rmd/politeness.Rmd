@@ -238,7 +238,7 @@ The both-goal speaker produces indirect remarks to avoid direct remarks that are
 
 # Speaker production experiment
 
-To compare against our model predictions, we measured participants' predictions for the most likely utterance produced by the speaker ($u$), given a description of the true state. For example, given that the speaker wanted to make the listener feel good but felt that a poem deserved 2 out of 5 hearts, what would she say? We hypothesized that when there is no tradeoff between informativity and face-threat avoidance (i.e. when the addressee's performance was great), speakers should use truthful and face-saving direct remarks ("[Your poem] was amazing") regardless of their described goals. However, when there was a conflict between the epistemic and social goals (i.e., when the addressee's performance is poor), a speaker who tried to address both goals would use vague indirect remarks ("[Your poem] wasn't terrible") more often than direct face-threatening remarks ("[Your poem] was bad"; preferred by a speaker who only considers the epistemic goal) or direct face-saving remarks ("[Your poem] was good"; preferred by a speaker who only considers the social goal). 
+To compare against our model predictions, we measured participants' predictions for the most likely utterance produced by the speaker ($u$), given a description of the true state. For example, given that the speaker wanted to make the listener feel good but felt that a poem deserved 2 out of 5 hearts, what would she say? We hypothesized that when there is no tradeoff between informativity and face-threat avoidance (i.e. when the addressee's performance was great), speakers should use truthful and face-saving direct remarks ("[Your poem] was amazing") regardless of their described goals. However, when there was a conflict between the epistemic and social goals (i.e., when the addressee's performance is poor), a speaker who tried to convey both goals would use vague indirect remarks ("[Your poem] wasn't terrible") more often than direct face-threatening remarks ("[Your poem] was bad"; preferred by a speaker who only considers the epistemic goal) or direct face-saving remarks ("[Your poem] was good"; preferred by a speaker who wants to convey only a social goal). 
 
 ## Method
 
@@ -265,7 +265,7 @@ grid::grid.raster(img)
 ```
 
 Full results are shown in Figure 4. 
-Our hypotheses for utterance production by speakers with different goals were borne out.  
+Our hypotheses for utterance production by speakers with different goals were borne out.
 For good states (4 and 5 hearts), positive direct remarks were judged to be the most likely utterances across all three goal conditions. 
 For less-than-perfect, but still decent states, there was a greater degree of expectation of white lies (e.g., "It was amazing" for 4 hearts) given a social goal. 
 For bad states (1 and 2 hearts), as we predicted, there were more instances of expected indirect remarks overall across all goal conditions given bad states. 
