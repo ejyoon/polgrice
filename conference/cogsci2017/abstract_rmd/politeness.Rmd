@@ -83,12 +83,11 @@ options("scipen"=10)
 Language users hear and produce *polite speech* on a daily basis. 
 Adults and even young children spontaneously produce requests in polite forms [@clark1980; @axia1985], and speakers use politeness strategies even while arguing, preventing unnecessary offense to their interactants [@holtgraves1997]. 
 But being polite conflicts with one important goal of cooperative communication: exchanging information efficiently and accurately [@Grice1975]. 
-People tell white lies ("Your new dress is gorgeous!") and produce indirect speech that is longer and more nuanced than the simplest form of their intended message ("I don’t think that dress looks phenomenal on you" as opposed to “That dress looks terrible”) to make others feel good about themselves. 
+People tell white lies ("Your new dress is gorgeous!") and produce indirect speech that is longer and more nuanced than the simplest form of their intended message ("I don’t think that dress looks phenomenal on you" as opposed to “It looks terrible”) to make others feel good. 
 Speakers risk potential loss of their intended message (indirect speech), intentionally convey wrong information (lies), and suffer inefficiencies -- all in the service of being polite.
 If information transfer were the only currency in communication, politeness would be both infelicitous and undesirable.  
-<!-- a cooperative speaker would find polite utterances undesirable because they are potentially misleading.  -->
 
-A *cooperative speaker*, however, can be imagined as one who has an epistemic goal to improve the listener's knowledge state *as well as* a social goal to minimize any potential damage to the hearer's (and the speaker's own) self-image, called *face* [@Brown1987]. 
+A *cooperative speaker*, however, can be imagined as one with an epistemic goal to improve the listener's knowledge *as well as* a social goal to minimize potential damage to the hearer's (and the speaker's own) self-image, called *face* [@Brown1987]. 
 If the speaker's intended meaning contains no threat to the speaker or listener's face, then the speaker will choose to convey the meaning in an explicit and efficient manner (putting it "on the record"). 
 As the degree of face-threat becomes more severe, however, a speaker will choose to be polite by producing more indirect utterances. 
 
@@ -98,10 +97,8 @@ On the other hand, a speaker with a high weight on epistemic utility prioritizes
 These ideas were formalized in a model of pragmatic language understanding, building on the Rational Speech Act (RSA) theory [for a review, see @goodman2016].
 We tested the polite RSA model (pRSA) by examining white lies.
 The model captured human participants' inferences about a speaker's goals given her utterance (e.g., saying a *good* talk was "amazing" implies that she is being nice) and about the world given a speaker's goal (e.g., saying "good" may mean the talk was only *okay* if the speaker wanted to be nice).
-People attributed the goal to be nice increasingly as the speaker's utterance was more positively biased from the true states, and inferred worse true states than the literal meaning when the speaker was described as wanting to be nice.
 
 In the current work, we extend our framework to another polite speech act: *indirect speech*. 
-<!-- White lies are one particular case of polite speech, whereby a speaker tries to save the listener's face through giving false information to some degree. -->
 White lies are produced when a speaker tries to save the listener's face by stretching the truth.
 But instead of lying, people sometimes try to be polite by being more indirect.
 Through indirect speech, a speaker can express meaning that is different from the literal meaning of the utterance [@searle1975].
@@ -128,10 +125,10 @@ In the current work, we introduce minimal extension to our previous RSA model [p
 RSA models assume speakers choose utterances approximately optimally given a utility function [@Goodman2013].
 pRSA posited that the speaker's utility function can be decomposed into two components.
 First, *epistemic utility* ($U_{epi}$) refers to the standard, informative utility in RSA: the amount of information a *literal listener* ($L_0$) would still not know about world state $s$ after hearing a speaker's utterance $w$.
-Second, *social utility* ($U_{soc}$) is the expected subjective utility of the state the listener would infer given the utterance $w$. 
+Second, *social utility* ($U_{soc}$) is the expected subjective utility of the state inferred given the utterance $w$. 
 The expected subjective utility is related to the intrinsic value of the state, and we use a value function ($V$) to map states to subjective utility values.
 This captures the affective consequences for the listener of being in state $s$.
-Finally, some speech acts might be more costly than others. 
+Finally, some utterances might be costlier than others. 
 The utility of an utterance subtracts the cost $c(w)$ from the weighted combination of the social and epistemic utilities.
 
 $$U(w;s;  \hat{\beta}) = \beta_{epi}\cdot \ln(P_{L_0}(s \mid w)) 
@@ -170,7 +167,7 @@ For our experiment, we consider the pragmatic speaker ($S_2$) who chooses an utt
 $$P_{S_2}(w \mid s, \hat{\beta})\propto \mathrm{exp}(\lambda_{2} \cdot \ln(P_{L_1}(s,  \hat{\beta} \mid w)) - C(w))$$
 
 In addition to these extensions, we simplify from the @yoon2016 model by including only a single mixture parameter $\phi$ governing the extent to which the speaker is being informative vs. face saving: $\beta_{epi} = \phi$, $\beta_{soc} = 1 - \phi$.
-We implemented this model using the probabilisitic programming language WebPPL [@dippl]\footnote{A complete implementation of the model, links to the experiments, raw data and analyses can be found at \url{https://github.com/ejyoon/cogsci2017}.}.
+We implemented this model using the probabilisitic programming language WebPPL [@dippl]\footnote{A complete implementation of the model, raw data and analyses, and links to the experiments and pre-registration of hypotheses and method can be found at \url{https://github.com/ejyoon/cogsci2017}.}.
 
 In the next section, we explore the model's predictions for speaker productions of indirect speech with negation vs. direct speech with no negation.
 
@@ -183,7 +180,7 @@ Before describing our experimental data, we derive predictions from the pRSA mod
 We probed judgments of literal meanings of the target words assumed by our model and used in all our experiments. 
 
 
-```{r expt1_results, fig.env = "figure*", fig.pos = "t", out.width=5, fig.width=6, fig.height=1.5, fig.align = "center", fig.cap = "Semantic measurement results. Proportion of acceptances of utterance types (shown in different colors) combined with target words (shown in different facets) given the true state represented on a scale of hearts. Error bars represent 95\\% confidence intervals."}
+```{r expt1_results, fig.env = "figure*", fig.pos = "t", fig.width=6, fig.height=1.5, fig.align = "center", fig.cap = "Semantic measurement results. Proportion of acceptances of utterance types (colors) combined with target words (facets) given the true state represented on a scale of hearts. Error bars represent 95\\% confidence intervals."}
 # img <- png::readPNG("figs/lit_sem.png")
 # grid::grid.raster(img)
 
@@ -211,7 +208,7 @@ qplot(state, judgment,
   ylab("proportion \n acceptances") +
   geom_errorbar(aes(ymin=ci_lower,ymax=ci_upper,width=.1)) +
   scale_color_solarized(guide_legend(title="")) +
-  ggthemes::theme_few()
+  ggthemes::theme_few(base_size = 9)
 ```
 
 ```{r model_pred_negNoneg, fig.env = "figure*", fig.pos = "t", fig.width=6, fig.height=3, fig.align = "center", fig.cap = "Schematic model predictions (left), experimental results (center) and fitted model predictions (right) for average proportion of negation produced among all utterances, given true states (x-axis) and goals (colors)."}
@@ -230,11 +227,11 @@ We used the fraction of participants that endorsed utterance $w$ for state $s$ t
 ## Model parameters and predictions
 
 We explore pRSA speaker mode predictions by assuming particular values to the parameters.
-Recall that $\phi$ is the parameter governing the mixture of epistemic and social utilities.
-We explore 3 hypothetical speakers (corresponding to 3 different mixture parameter weights): 
-(a) a speaker who wants to maximally convey information ($\phi = 0.9$)
-(b) a speaker who wants to make the listener feel good ($\phi = 0.1$)
-(c) a speaker who wants to *both* convey information and make the listener feel good ($\phi = 0.5$).^[
+A speaker in our model have the goal to convey the state *and* to be seen as having a particular set of goals 
+(recall that $\phi$ is the parameter governing the mixture of epistemic and social utilities):
+(a) an *informative* speaker who wants to convey high epistemic utility (prioritizing information transfer; $\phi = 0.9$)
+(b) a *social* speaker who wants to convey high social utility (making the listener feel good; $\phi = 0.1$)
+(c) a *both-goal* speaker who wants to convey a balance between the two utilities ($\phi = 0.5$).^[
 In addition, the model has a few parameters not of theoretical interest.
 For the purposes of generating model predictions *a priori*, we assign values to these parameters consistent with the previous literature with this class of models: the speaker optimality parameter ($\lambda_{1}$ assigned to 2); the pragmatic speaker optimality parameter ($\lambda_{2}$ to 2); the value scale parameter ($\alpha$ to 1) in the utility function; and the parameter governing the cost of producing a negation ($C(u)$ to 2).
 ]
@@ -243,12 +240,12 @@ Figure 2 (left) shows the speaker's production probabilities associated with pro
 We see, consistent with our intuition, that indirect speech was relatively more preferred in bad states than in good states.
 As well, we see higher probability of negation production for the speaker who wants to achieve both goals (truthful and informative) relative to each goal independently.
 Indirect speech doesn't convey that much information and so the informative speaker (a) would disprefer it.
-Relatedly, the speaker who only wants to make the listener feel good should signal unambiguously a better state than they are in.
-It is only when the speaker tries to balance both goals that the indirect speech act (i.e., negation) is preferred.
+The social speaker who only wants to make the listener feel good would mostly signal unambiguously a better state than they are in through direct positive remarks, also produce some indirect remarks so as to convey the true state relying on implicature. 
+The both-goal speaker produces indirect remarks to avoid direct remarks that are true but face-threatening or are face-saving but false.
 
 # Speaker production experiment
 
-To compare against our model predictions, we measured participants' predictions for the most likely utterance produced by the speaker ($u$), given a description of the true state of the world. For example, given that the speaker wanted to make the listener feel good but felt that a poem deserved 2 out of 5 hearts, what would she say? Critically, the contexts indicated face threats toward the listener, as the speaker's utterance was a direct evaluation of the listener's performance. We hypothesized that when there is no tradeoff between informativity and face-threat avoidance (i.e. when the addressee's performance was great), speakers should use truthful and face-saving direct remarks ("[Your poem] was amazing") regardless of their described goals. However, when there was a conflict between the epistemic and social goals (i.e., when the addressee's performance is poor), a speaker who tried to address both goals would use vague indirect remarks ("[Your poem] wasn't terrible") more often than direct face-threatening remarks ("[Your poem] was bad"; preferred by a speaker who only considers the epistemic goal) or direct face-saving remarks ("[Your poem] was good"; preferred by a speaker who only considers the social goal). Our hypothesis and method were pre-registered prior to data collection on the Open Science Framework (\url{http://osf.io/b73dm}). 
+To compare against our model predictions, we measured participants' predictions for the most likely utterance produced by the speaker ($u$), given a description of the true state. For example, given that the speaker wanted to make the listener feel good but felt that a poem deserved 2 out of 5 hearts, what would she say? We hypothesized that when there is no tradeoff between informativity and face-threat avoidance (i.e. when the addressee's performance was great), speakers should use truthful and face-saving direct remarks ("[Your poem] was amazing") regardless of their described goals. However, when there was a conflict between the epistemic and social goals (i.e., when the addressee's performance is poor), a speaker who tried to address both goals would use vague indirect remarks ("[Your poem] wasn't terrible") more often than direct face-threatening remarks ("[Your poem] was bad"; preferred by a speaker who only considers the epistemic goal) or direct face-saving remarks ("[Your poem] was good"; preferred by a speaker who only considers the social goal). 
 
 ## Method
 
@@ -258,9 +255,9 @@ To compare against our model predictions, we measured participants' predictions 
 
 ### Stimuli and Procedure
 
-As in the semantics measurements above, we used scenarios in which a person (e.g., Ann) gave some performance and asked for another person (e.g., Bob)'s opinion on the performance. Additionally, we provided information on the speaker Bob's goal -- *to make Ann feel good*, or *to give as accurate and informative feedback as possible*, or both -- and the true state -- how Bob actually felt Ann's performance (e.g., 2 out of 5 hearts). Each participant read 15 scenarios, depicting every possible combination of goals and states. The order of context items was randomized, and there were a maximum of two repeats of each context item per participant.
+As in the semantics measurements above, we used scenarios in which a person (e.g., Ann) gave some performance and asked for another person (e.g., Bob)'s opinion on the performance. Additionally, we provided information on the speaker Bob's goal -- informative, social, or both -- and the true state -- how Bob actually felt about Ann's performance (e.g., 2 out of 5 hearts). Each participant read 15 scenarios, depicting every possible combination of goals and states. The order of context items was randomized, and there were a maximum of two repeats of each context item per participant.
 
-```{r expt2_screen, fig.env = "figure", fig.pos = "H", fig.width=3.5, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=2, fig.cap = "Example of a trial in Experiment 1."}
+```{r expt2_screen, fig.env = "figure", fig.pos = "h", fig.width=3.5, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=2, fig.cap = "Example of a trial in Experiment 1."}
 img <- png::readPNG("figs/expt2_screen.png")
 grid::grid.raster(img)
 ```
@@ -269,7 +266,7 @@ Each scenario was followed by a question that read, "If Bob wanted *to make Ann 
 
 ## Behavioral results
 
-```{r expt2_results, fig.env = "figure*", fig.pos = "t", fig.width=7, fig.height=6, fig.align = "center", fig.cap = "Experimental results (\"experiment\" rows) and model predictions (\"model\" rows) for speaker production. Proportion of utterances chosen (utterance type -- direct vs. indirect -- on x-axis and words shown in different colors) given the true state (columns) and speaker goals (rows). Error bars represent 95\\% confidence intervals for the data and 95\\% highest density intervals for the model."}
+```{r expt2_results, fig.env = "figure*", fig.pos = "t", fig.width=7, fig.height=6, fig.align = "center", fig.cap = "Experimental results (solid lines) and fitted model predictions (dashed lines) for speaker production. Proportion of utterances chosen (utterance type -- direct vs. indirect -- in different colors and words shown on x-axis) given the true state (columns) and speaker goals (rows). Error bars represent 95\\% confidence intervals for the data and 95\\% highest density intervals for the model."}
 img <- png::readPNG("figs/exptModUtt.png")
 grid::grid.raster(img)
 ```
