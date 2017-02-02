@@ -130,13 +130,10 @@ The expected subjective utility is related to the intrinsic value of the state, 
 This captures the affective consequences for the listener of being in state $s$.
 Finally, some utterances might be costlier than others. 
 The utility of an utterance subtracts the cost $c(w)$ from the weighted combination of the social and epistemic utilities.
-
 $$U(w;s;  \hat{\beta}) = \beta_{epi}\cdot \ln(P_{L_0}(s \mid w)) 
 \\+ \beta_{soc} \cdot \mathbb{E}_{P_{L_0}(s \mid w)}[V(s)]- C(w)$$
-
 The speaker ($S_1$) in pRSA chooses utterances $w$ softmax-optimally given the state $s$ and his goal weights $\hat{\beta}$.
 The pragmatic listener ($L_1$) jointly infers the state $s$ and the utility weights of the speaker, $\beta_{epi}$ and $\beta_{soc}$ [@GoodmanLassiter2015; @Kao2014]. 
-
 \begin{align}
 P_{L_1}(s, \hat{\beta} \mid w) &\propto P_{S_1}(w \mid s, \hat{\beta})\cdot P(s) \cdot P( \hat{\beta}) \label{eq:L1}\\
 P_{S_1}(w \mid s, \hat{\beta}) &\propto \mathrm{exp}(\lambda_{1} \cdot \mathbb{E}[U(w; s;  \hat{\beta})]) \label{eq:S1}\\
@@ -151,24 +148,21 @@ We gather independent ratings for these literal meanings.
 
 ## Extensions to pRSA
 
-The current work builds on pRSA by adding three simple but key components to predict indirect remark production.
-
+We build on pRSA by adding negative utterances and modeling a more sophisticated speaker.
 First, we extend the utterance alternatives to include negation.
 Previously we considered five possible utterances: {It was *terrible*, *bad*, *okay*, *good*, and *amazing*}, all direct assertions of specific states (e.g., "It was amazing" would be true for the state of 5 but untrue for the states of 1 or 2).
 Now the speaker may say, {It *wasn't* terrible, bad, okay, good, and amazing}.
 These utterances indirectly address the referent by negating certain state.
+We assume that it is more costly to say utterances with negation, which makes the utterance morphemically longer and is harder to process [@clark1972].
+In our full data analysis, we put a prior on this negation cost parameters and infer its likely values from the data.
 
-Second, we assume that it is more costly to say utterances with negation, which makes the utterance morphemically longer and is harder to process [@clark1972].
-In our full data analysis, we put a prior on this cost parameters and infer its likely values from the data.
-
-Third, we extended the recursive reasoning in the model. 
+Most importantly, we extended the recursive reasoning in the model. 
 For our experiment, we consider the pragmatic speaker ($S_2$) who chooses an utterance based on the pragmatic listener model (Eq. \ref{eq:L1}), thinking about the state as well as goal weights that the pragmatic listener will infer.
-
 $$P_{S_2}(w \mid s, \hat{\beta})\propto \mathrm{exp}(\lambda_{2} \cdot \ln(P_{L_1}(s,  \hat{\beta} \mid w)) - C(w))$$
+This crucially captures the idea that the speaker both wants to convey the state $s$, and to be seen as someone with  goals $\hat{\beta}$.
+We simplify from the @yoon2016 model by including only a single mixture parameter $\phi$ governing the extent to which the speaker is being informative vs. face saving: $\beta_{epi} = \phi$, $\beta_{soc} = 1 - \phi$.
 
-In addition to these extensions, we simplify from the @yoon2016 model by including only a single mixture parameter $\phi$ governing the extent to which the speaker is being informative vs. face saving: $\beta_{epi} = \phi$, $\beta_{soc} = 1 - \phi$.
 We implemented this model using the probabilisitic programming language WebPPL [@dippl]\footnote{A complete implementation of the model, raw data and analyses, and links to the experiments and pre-registration of hypotheses and method can be found at \url{https://github.com/ejyoon/cogsci2017}.}.
-
 In the next section, we explore the model's predictions for speaker productions of indirect speech with negation vs. direct speech with no negation.
 
 # Model predictions
@@ -226,9 +220,8 @@ We used the fraction of participants that endorsed utterance $w$ for state $s$ t
 
 ## Model parameters and predictions
 
-We explore pRSA speaker mode predictions by assuming particular values to the parameters.
-A speaker in our model have the goal to convey the state *and* to be seen as having a particular set of goals 
-(recall that $\phi$ is the parameter governing the mixture of epistemic and social utilities):
+The $S_2$ speaker in our model has the goal to convey the state *and* to be seen as having a particular set of goals.
+We explore the speaker model predictions by assuming particular parameter values (recall that $\phi$ is the parameter governing the mixture of epistemic and social utilities):
 (a) an *informative* speaker who wants to convey high epistemic utility (prioritizing information transfer; $\phi = 0.9$)
 (b) a *social* speaker who wants to convey high social utility (making the listener feel good; $\phi = 0.1$)
 (c) a *both-goal* speaker who wants to convey a balance between the two utilities ($\phi = 0.5$).^[
