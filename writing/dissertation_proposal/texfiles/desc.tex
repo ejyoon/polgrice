@@ -1,0 +1,53 @@
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+
+\usepackage{fancyvrb}
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{fontshape=sl}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{}
+\DefineVerbatimEnvironment{Scode}{Verbatim}{fontshape=sl}
+\newenvironment{Schunk}{}{}
+\DefineVerbatimEnvironment{Code}{Verbatim}{}
+\DefineVerbatimEnvironment{CodeInput}{Verbatim}{fontshape=sl}
+\DefineVerbatimEnvironment{CodeOutput}{Verbatim}{}
+\newenvironment{CodeChunk}{}{}
+
+%fixme: chec`k all figure labels and references, expt numbers
+
+\input{pre-nsf}
+
+\begin{document}
+
+\ourtitle
+
+\thispagestyle{empty}
+\setcounter{page}{1}
+
+\input{desc-intro}
+\input{desc-backg}
+\input{desc-prior}
+
+\input{desc-proposed-intro}
+\input{desc-proposed-other}
+\input{desc-proposed-child}
+\input{desc-proposed-culture}
+
+%\input{desc-impacts}
+
+\newpage
+
+\setcounter{page}{1}
+
+\bibliographystyle{apalike}
+\bibliography{polite_nsf}
+
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
+
+
