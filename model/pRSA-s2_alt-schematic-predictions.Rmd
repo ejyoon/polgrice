@@ -1,0 +1,238 @@
+---
+title: "Politeness S2 predictions"
+output: html_notebook
+---
+
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(rwebppl)
+library(jsonlite)
+library(magrittr)
+library(ggthemes)
+library(forcats)
+# set path to working dir
+# local.path <- "~/Documents/research/polgrice/"
+local.path <- "~/Documents/Research/polgrice_GIT/"
+```
+
+```{r}
+rsaModel <-'
+var utterances = [
+  "yes_terrible","yes_bad","yes_okay","yes_good","yes_amazing",
+  "not_terrible","not_bad","not_okay","not_good","not_amazing"
+  ];
+
+var states = [1,2,3,4,5];
+
+var statePrior = function(){
+  return uniformDraw(states);
+};
+
+var isNegation = function(utt){
+  return (utt.split("_")[0] == "not")
+};
+
+var marginalize = function(dist, key){
+	return Infer({method: "enumerate"}, function(){ sample(dist)[key] })
+}
+
+var cost_yes = 1;
+var cost_neg = 2;
+var speakerOptimality = 2;
+var speakerOptimality2 = 2;
+var alpha = 1;
+
+var s = inputData.state[0];
+var w1 = inputData.weight1[0];
+var w2 = inputData.weight2[0];
+
+var round = function(x){
+	return Math.round(x * 100) / 100
+}
+
+// var phiWeights = [1, 1, 1, 1, 1, 1, 1, 1, 1]
+// var weightBins = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+
+var weightBins = map(round, _.range(0,1, 0.05))
+var phiWeights = repeat(weightBins.length, function(){1})
+
+var uttCosts = map(function(u) {
+	return isNegation(u) ? Math.exp(-cost_neg) : Math.exp(-cost_yes)
+}, utterances)
+
+var utterancePrior = Infer({method: "enumerate"}, function(){
+  return utterances[discrete(uttCosts)]
+});
+
+var literalSemantics = {
+  "state": [1, 2, 3, 4, 5],
+  "not_amazing": [0.9925, 0.9186, 0.7876, 0.2321, 0.042],
+  "not_bad": [0.0075, 0.2897, 0.8514, 0.8694, 0.8483],
+  "not_good": [0.9926, 0.8871, 0.1582, 0.0073, 0.0081],
+  "not_okay": [0.9198, 0.7652, 0.1063, 0.0074, 0.1192],
+  "not_terrible": [0.0415, 0.4363, 0.9588, 0.9225, 0.9116],
+  "yes_amazing": [0.0077, 0.0077, 0.0426, 0.675, 0.9919],
+  "yes_bad": [0.9921, 0.9574, 0.0078, 0.0078, 0.0079],
+  "yes_good": [0.008, 0.0408, 0.8279, 0.9914, 0.993],
+  "yes_okay": [0.0078, 0.286, 0.9619, 0.7776, 0.6122],
+  "yes_terrible": [0.9593, 0.5217, 0.0753, 0.008, 0.044]
+};
+
+
+var meaning = function(words, state){
+  return flip(literalSemantics[words][state - 1]);
+};
+
+var listener0 = cache(function(utterance) {
+  Infer({method: "enumerate"}, function(){
+	  var state = uniformDraw(states);
+	//	var state = categorical ({vs: states, ps: [5,4,3,2,1]})
+
+    var m = meaning(utterance, state);
+    condition(m);
+    return state;
+	})
+}, 10000);
+
+var speaker1 = cache(function(state, speakerGoals) {
+  Infer({method: "enumerate"}, function(){
+
+    var utterance = sample(utterancePrior);
+    var L0 = listener0(utterance);
+
+    var epistemicUtility = L0.score(state);
+    var socialUtility = expectation(L0, function(s){return alpha*s});
+    var eUtility = speakerGoals.phi*epistemicUtility;
+    var sUtility = (1-speakerGoals.phi)*socialUtility;
+    var speakerUtility = eUtility+sUtility;
+
+    factor(speakerOptimality*speakerUtility);
+
+    return utterance;
+	})
+}, 10000);
+
+var listener1 = cache(function(utterance) {
+  Infer({method: "enumerate"}, function(){
+
+   var speakerGoals = {
+     phi: categorical ({vs: weightBins, ps: phiWeights})
+   }
+   var state = uniformDraw(states);
+	 //var state = categorical ({vs: states, ps: [5,4,3,2,1]})
+
+   var S1 = speaker1(state, speakerGoals)
+   observe(S1, utterance)
+
+   return {
+     state: state,
+     goals: speakerGoals
+   }
+
+ })
+}, 10000);
+
+var speaker2 = cache(function(state, trueTruthiness, seenTruthiness) {
+  Infer({method: "enumerate"}, function(){
+
+	 var utterance = sample(utterancePrior);
+	 var trueGoals = {phi: trueTruthiness}
+	 var seenGoals = {phi: seenTruthiness}
+
+// FIXME: L0 -> L1 
+//   var L0 = listener0(utterance);
+
+//    var epistemicUtility = L0.score(state);
+//    var socialUtility = expectation(L0, function(s){return alpha*s});
+//    var eUtility = trueGoals.phi*epistemicUtility;
+//    var sUtility = (1-trueGoals.phi)*socialUtility;
+//    var speakerUtility = eUtility+sUtility;
+
+   var L1 = listener1(utterance);
+   var L1_goal = marginalize(L1, "goals");
+   var L1_state = marginalize(L1, "state");
+
+    var epistemicUtility = L1_state.score(state);
+    var socialUtility = expectation(L1_goal, function(s){return alpha*s});
+    var eUtility = trueGoals.phi*epistemicUtility;
+    var sUtility = (1-trueGoals.phi)*socialUtility;
+    var speakerUtility = eUtility+sUtility;
+
+   //factor(speakerOptimality*speakerUtility);
+   factor(speakerOptimality2*speakerUtility*L1_goal.score(seenGoals))
+   //factor(speakerOptimality2*speakerUtility*
+//L1_goal.score({
+//              "state":state,
+//              "goals":seenGoals})
+//)
+
+   return {negation: isNegation(utterance),
+            utterance: utterance}
+
+ })
+}, 10000);
+
+speaker2(s, w1, w2);
+//speaker2(1, 0.9, 0.9)
+'
+```
+
+```{r}
+s2.predictions <- data.frame()
+for (s in c(1,2,3,4,5)){
+  
+  for (w1 in c(0.1, 0.5, 0.9)) {
+  for (w2 in c(0.1, 0.5, 0.9)) {
+    inputData <- list(
+      state = s,
+      weight1 = w1,
+      weight2 = w2
+    )
+    
+    s2 <- webppl(rsaModel, data = inputData, data_var = "inputData")
+    
+    s2.neg <- s2 %>% 
+      filter(negation) %>% 
+      summarize(negation = sum(prob)) %>%
+      mutate(state = s, weight1 = w1, weight2 = w2)
+    
+    s2.predictions <- bind_rows(s2.predictions, s2.neg)
+  }
+  }}
+
+
+###
+#     inputData <- list(
+#       state = s,
+#       weight1 = w1,
+#       weight2 = w2
+#     )
+# 
+# s2 <- webppl(rsaModel, data = inputData, data_var = "inputData")
+
+```
+
+
+```{r}
+s2.predictions %>% 
+  mutate(
+    weight1 = factor(weight1, levels = c(0.9, 0.1, 0.5),
+                         labels = c("informative", "social", "both")),
+    weight2 = factor(weight2, levels = c(0.9, 0.1, 0.5),
+                         labels = c("informative", "social", "both"))
+  ) %>%
+  ggplot(., aes( x = state, y = negation, 
+                 color = weight1, 
+                 linetype = weight2,
+                 group = interaction(weight1, weight2)
+                 ))+
+  geom_line()+
+  theme_few()+
+  scale_color_solarized(guide = guide_legend(title = "True goal")) +
+  scale_linetype_discrete(guide = guide_legend(title = "Seen goal"))
+
+```
+
