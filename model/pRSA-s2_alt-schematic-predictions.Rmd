@@ -142,32 +142,20 @@ var speaker2 = cache(function(state, trueTruthiness, seenTruthiness) {
 	 var trueGoals = {phi: trueTruthiness}
 	 var seenGoals = {phi: seenTruthiness}
 
-// FIXME: L0 -> L1 
-//   var L0 = listener0(utterance);
-
-//    var epistemicUtility = L0.score(state);
-//    var socialUtility = expectation(L0, function(s){return alpha*s});
-//    var eUtility = trueGoals.phi*epistemicUtility;
-//    var sUtility = (1-trueGoals.phi)*socialUtility;
-//    var speakerUtility = eUtility+sUtility;
-
    var L1 = listener1(utterance);
    var L1_goal = marginalize(L1, "goals");
    var L1_state = marginalize(L1, "state");
 
     var epistemicUtility = L1_state.score(state);
-    var socialUtility = expectation(L1_goal, function(s){return alpha*s});
+    var socialUtility = expectation(L1_state, function(s){return alpha*s});
     var eUtility = trueGoals.phi*epistemicUtility;
     var sUtility = (1-trueGoals.phi)*socialUtility;
     var speakerUtility = eUtility+sUtility;
 
-   //factor(speakerOptimality*speakerUtility);
    factor(speakerOptimality2*speakerUtility*L1_goal.score(seenGoals))
-   //factor(speakerOptimality2*speakerUtility*
-//L1_goal.score({
-//              "state":state,
-//              "goals":seenGoals})
-//)
+   //factor(speakerOptimality*speakerUtility);
+   //factor(speakerOptimality2*speakerUtility*L1_goal.score(seenGoals)
+   //factor(speakerOptimality2*speakerUtility*L1_goal.score({"state":state,"goals":seenGoals}))
 
    return {negation: isNegation(utterance),
             utterance: utterance}
@@ -203,15 +191,17 @@ for (s in c(1,2,3,4,5)){
   }
   }}
 
+```
 
+```{r}
 ###
-#     inputData <- list(
-#       state = s,
-#       weight1 = w1,
-#       weight2 = w2
-#     )
-# 
-# s2 <- webppl(rsaModel, data = inputData, data_var = "inputData")
+    inputData <- list(
+      state = s,
+      weight1 = w1,
+      weight2 = w2
+    )
+
+s2 <- webppl(rsaModel, data = inputData, data_var = "inputData")
 
 ```
 
