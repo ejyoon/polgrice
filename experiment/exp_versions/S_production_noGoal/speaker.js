@@ -21,29 +21,12 @@ function random(a, b) {
 }
 
 function clearForm(oForm) {
-//    var sliderVar = "";
-//    for (var i = 0; i < NUM_SLIDERS; i++) {
-//        sliderVar = "#slider" + i;
-//        $(sliderVar).slider("value", 20);
-//        $(sliderVar).css({
-//            "background": "#FFFFFF"
-//        });
-//        $(sliderVar + " .ui-slider-handle").css({
-//            "background": "#FAFAFA",
-//            "border-color": "#CCCCCC"
-//        });
-//        sliderVar = "slider" + i;
-//        document.getElementById(sliderVar).style.background = "";
-//    }
-
     var elements = oForm.elements;
-
     oForm.reset();
 
     for (var i = 0; i < elements.length; i++) {
         field_type = elements[i].type.toLowerCase();
         switch (field_type) {
-
             case "text":
             case "password":
             case "textarea":
@@ -58,15 +41,10 @@ function clearForm(oForm) {
                     elements[i].checked = false;
                 }
                 break;
-
-//            case "select":
-//                elements[i].value = "";
-//                break;
                 
             case "select-one":
             case "select-multi":
                 elements[i].selectedIndex = -1;
-//                elements[i].value = "";
                 break;
 
             default:
@@ -125,7 +103,7 @@ function getRadioCheckedValue(formNum, radio_name) {
 
 // CONDITION ASSIGNMENT
 var cond = random(4)+1;
-var expt = "polgrice_speaker";
+var expt = "polgrice_speaker_noGoal";
 
 // call the maker getter to get the cond variable 
 //var xmlHttp = null;
@@ -136,25 +114,17 @@ var expt = "polgrice_speaker";
 
 var score = shuffle(["nice", "honest", "both"]);
 var prediction = shuffle(["ask", "like"])
-
-//if (cond == 1) {
-//    state_knowledge = "known";
-//} else if (cond == 2) {
 var state_knowledge = "unknown";
-//}
-
-//var domains = shuffle(["poem", "cake", "cookie", "presentation", "painting", "review"]);
 
 var domains1 =
     shuffle(["poem", "cake", "cookie", "presentation", "song", "film", "solo", "monologue", "dance", "painting", "app", "review", "recital"]);
-var domains2 =
-    shuffle(["poem", "cake", "cookie", "presentation", "song", "film", "solo", "monologue", "dance", "painting", "app", "review", "recital"]);
-var domains = domains1.concat(domains2)
+//var domains = domains1.concat(domains1)
+var domains = domains1
 
-var states1 = shuffle(["heart1", "heart2", "heart3", "heart4", "heart5"]);
-var states2 = shuffle(["heart1", "heart2", "heart3", "heart4", "heart5"]);
-var states3 = shuffle(["heart1", "heart2", "heart3", "heart4", "heart5"]);
-var states = states1.concat(states2, states3)
+//var states1 = shuffle(["heart1", "heart2", "heart3", "heart4", "heart5"]);
+var states1 = shuffle(["heart1", "heart2", "heart3", "heart4"]);
+//var states = states1.concat(states1, states1)
+var states = states1
 
 var posneg1 = ["was", "wasn't"];
 var posneg_code1 = ["no_neg", "neg"];
@@ -245,153 +215,83 @@ var allConditions =
  "goal": goals[3],
  "blank_utterance": blank_utterances,
 },
-{"domain": domains[4],
- "state": states[4],
- "utterance": utterances[4],
- "people": "people5",
- "goal": goals[4],
- "blank_utterance": blank_utterances,
-},
-{"domain": domains[5],
- "state": states[5],
- "utterance": utterances[5],
- "people": "people6",
- "goal": goals[5],
- "blank_utterance": blank_utterances,
-},
-{"domain": domains[6],
- "state": states[6],
- "utterance": utterances[6],
- "people": "people7",
- "goal": goals[6],
- "blank_utterance": blank_utterances,
-},
-{"domain": domains[7],
- "state": states[7],
- "utterance": utterances[7],
- "people": "people8",
- "goal": goals[7],
- "blank_utterance": blank_utterances,
-},
-{"domain": domains[8],
- "state": states[8],
- "utterance": utterances[8],
- "people": "people9",
- "goal": goals[8],
- "blank_utterance": blank_utterances,
-},
-{"domain": domains[9],
- "state": states[9],
- "utterance": utterances[9],
- "people": "people10",
- "goal": goals[9],
- "blank_utterance": blank_utterances,
-},
-{"domain": domains[10],
- "state": states[10],
- "utterance": utterances[10],
- "people": "people11",
- "goal": goals[10],
- "blank_utterance": blank_utterances,
-},
-{"domain": domains[11],
- "state": states[11],
- "utterance": utterances[11],
- "people": "people12",
- "goal": goals[11],
- "blank_utterance": blank_utterances,
-},
-{"domain": domains[12],
- "state": states[12],
- "utterance": utterances[12],
- "people": "people13",
- "goal": goals[12],
- "blank_utterance": blank_utterances,
-},
-{"domain": domains[13],
- "state": states[13],
- "utterance": utterances[13],
- "people": "people14",
- "goal": goals[13],
- "blank_utterance": blank_utterances,
-},
-{"domain": domains[14],
- "state": states[14],
- "utterance": utterances[14],
- "people": "people15",
- "goal": goals[14],
- "blank_utterance": blank_utterances,
-},
-//{"domain": domains[15],
-// "state": states[15],
-// "utterance": utterances[15],
-// "people": "people16",
-// "goal": goals[15],
+//{"domain": domains[4],
+// "state": states[4],
+// "utterance": utterances[4],
+// "people": "people5",
+// "goal": goals[4],
 // "blank_utterance": blank_utterances,
 //},
-//{"domain": domains[16],
-// "state": states[16],
-// "utterance": utterances[16],
-// "people": "people17",
-// "goal": goals[16],
+//{"domain": domains[5],
+// "state": states[5],
+// "utterance": utterances[5],
+// "people": "people6",
+// "goal": goals[5],
 // "blank_utterance": blank_utterances,
 //},
-//{"domain": domains[17],
-// "state": states[17],
-// "utterance": utterances[17],
-// "people": "people18",
-// "goal": goals[17],
+//{"domain": domains[6],
+// "state": states[6],
+// "utterance": utterances[6],
+// "people": "people7",
+// "goal": goals[6],
 // "blank_utterance": blank_utterances,
 //},
-//{"domain": domains[18],
-// "state": states[18],
-// "utterance": utterances[18],
-// "people": "people19",
-// "goal": goals[18],
+//{"domain": domains[7],
+// "state": states[7],
+// "utterance": utterances[7],
+// "people": "people8",
+// "goal": goals[7],
 // "blank_utterance": blank_utterances,
 //},
-//{"domain": domains[19],
-// "state": states[19],
-// "utterance": utterances[19],
-// "people": "people20",
-// "goal": goals[19],
+//{"domain": domains[8],
+// "state": states[8],
+// "utterance": utterances[8],
+// "people": "people9",
+// "goal": goals[8],
 // "blank_utterance": blank_utterances,
 //},
-//{"domain": domains[20],
-// "state": states[20],
-// "utterance": utterances[20],
-// "people": "people21",
-// "goal": goals[20],
+//{"domain": domains[9],
+// "state": states[9],
+// "utterance": utterances[9],
+// "people": "people10",
+// "goal": goals[9],
 // "blank_utterance": blank_utterances,
 //},
-//{"domain": domains[21],
-// "state": states[21],
-// "utterance": utterances[21],
-// "people": "people22",
-// "goal": goals[21],
+//{"domain": domains[10],
+// "state": states[10],
+// "utterance": utterances[10],
+// "people": "people11",
+// "goal": goals[10],
 // "blank_utterance": blank_utterances,
 //},
-//{"domain": domains[22],
-// "state": states[22],
-// "utterance": utterances[22],
-// "people": "people23",
-// "goal": goals[22],
+//{"domain": domains[11],
+// "state": states[11],
+// "utterance": utterances[11],
+// "people": "people12",
+// "goal": goals[11],
 // "blank_utterance": blank_utterances,
 //},
-//{"domain": domains[23],
-// "state": states[23],
-// "utterance": utterances[23],
-// "people": "people24",
-// "goal": goals[23],
+//{"domain": domains[12],
+// "state": states[12],
+// "utterance": utterances[12],
+// "people": "people13",
+// "goal": goals[12],
 // "blank_utterance": blank_utterances,
 //},
-//{"domain": domains[24],
-// "state": states[24],
-// "utterance": utterances[24],
-// "people": "people25",
-// "goal": goals[24],
+//{"domain": domains[13],
+// "state": states[13],
+// "utterance": utterances[13],
+// "people": "people14",
+// "goal": goals[13],
 // "blank_utterance": blank_utterances,
-//}
+//},
+//{"domain": domains[14],
+// "state": states[14],
+// "utterance": utterances[14],
+// "people": "people15",
+// "goal": goals[14],
+// "blank_utterance": blank_utterances,
+//},
    ]
 //        )
 ];
@@ -432,39 +332,22 @@ speakers25 = shuffle(speakers[24]);
 var sents = {
     states: {
         heart1: {
-            state: "20"
+            state: "25"
         },
         heart2: {
-            state: "40"
+            state: "50"
         },
         heart3: {
-            state: "60"
+            state: "75"
         },
         heart4: {
-            state: "80"
-        },
-        heart5: {
             state: "100"
         }
+//        heart5: {
+//            state: "100"
+//        }
     },
-//    utterances: {
-//        terrible: {
-//            sent_utterance: " <b>\"Your BB was terrible,\"</b> SP said to LS.  "
-//        },
-//        bad: {
-//            sent_utterance: " <b>\"Your BB was bad,\"</b> SP said to LS."
-//        },
-//        okay: {
-//            sent_utterance: " <b>\"Your BB was okay,\"</b> SP said to LS."
-//        },
-//        good: {
-//            sent_utterance: " <b>\"Your BB was good,\"</b> SP said to LS."
-//        },
-//        amazing: {
-//            sent_utterance: " <b>\"Your BB was amazing,\"</b> SP said to LS."
-//        },
-//    },
-//
+
     blank_utterances: {
       universal: {
           sent_utterance: " <b>\"______________,\"</b> SP said."
@@ -583,23 +466,7 @@ var sents = {
             BB: "performance",
         },
     },
-    //    states: {
-    //        terrible: {
-    //            state: " <b>everyone thought LS's BB was terrible</b>,"        
-    //        },
-    //        bad: {
-    //            state: " <b>everyone thought LS's BB was bad</b>,"        
-    //        },
-    //        okay: {
-    //            state: " <b>everyone thought LS's BB was just okay</b>,"        
-    //        },
-    //        good: {
-    //            state: " <b>everyone thought LS's BB was good</b>,"        
-    //        },
-    //        amazing: {
-    //            state: " <b>everyone thought LS's BB was amazing</b>,"        
-    //        },
-    //    },
+
     goals: {
         both: {
             goal: " <b>If SP wanted to BOTH make LS feel good AND give accurate and informative feedback</b>, <br><br>"
@@ -782,30 +649,8 @@ var experiment = {
         state: [],
         posneg: [],
         keyword:[],
-//        utterance: [],
         people: [],
         goal: [],
-        //    context: [],
-//        goal0: score[0],
-//        goal1: score[1],
-//        goal2: score[2],
-        //    goal3: score[3],
-        //    prediction0: prediction[0],
-        //    prediction1: prediction[1],
-//        goalProb0: [],
-//        goalProb1: [],
-//        goalProb2: [],
-//        goalProb3: [],
-//        goalProb4: [],
-//        goalProb5: [],
-//        goalProb6: [],
-//        goalProb7: [],
-//        goalProb8: [],
-//        goalProb9: [],
-        //    judgment: [],
-        //    stateProb: [],
-        //    predictedProb0: [],
-        //    predictedProb1: [],
         language: [],
         expt_aim: [],
         goal_thoughts: [],
@@ -837,38 +682,14 @@ var experiment = {
         if (window.self == window.top | turk.workerId.length > 0) {
 
             if (numComplete > 0) {
-
-//                var prob0 = parseInt(document.getElementById("hiddenSliderValue0").value) / 40.00;
-//                var prob1 = parseInt(document.getElementById("hiddenSliderValue1").value) / 40.00;
-//                var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
-//                var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
-//                var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
-//                var prob5 = parseInt(document.getElementById("hiddenSliderValue5").value) / 40.00;
-//                var prob6 = parseInt(document.getElementById("hiddenSliderValue6").value) / 40.00;
-//                var prob7 = parseInt(document.getElementById("hiddenSliderValue7").value) / 40.00;
-//                var prob8 = parseInt(document.getElementById("hiddenSliderValue8").value) / 40.00;
-//                var prob9 = parseInt(document.getElementById("hiddenSliderValue9").value) / 40.00;
-
                 experiment.data.order.push(numComplete);
                 experiment.data.goal.push(trial.goal);
-//                experiment.data.utterance.push(trial.utterance);
                 experiment.data.domain.push(trial.domain);
                 experiment.data.state.push(trial.state);
-//                experiment.data.goalProb0.push(prob0);
-//                experiment.data.goalProb1.push(prob1);
-//                experiment.data.goalProb2.push(prob2);
-//                experiment.data.goalProb3.push(prob3);
-//                experiment.data.goalProb4.push(prob4);
-//                experiment.data.goalProb5.push(prob5);
-//                experiment.data.goalProb6.push(prob6);
-//                experiment.data.goalProb7.push(prob7);
-//                experiment.data.goalProb8.push(prob8);
-//                experiment.data.goalProb9.push(prob9);
                 experiment.data.posneg.push($("#posneg_choice").val()),
                 experiment.data.keyword.push($("#keyword_choice").val()),
 
                 clearForm(document.forms[0]);
-                //      clearForm(document.forms[1]);
 
                 //Clear stars
                 $(".rating-stars").attr({
@@ -898,20 +719,12 @@ var experiment = {
                 showSlide("stage");
                 $("#context").html(sent_materials[3] + sent_materials[7] + sent_materials[1]);
 //                $("#context2").html(sent_materials[11]);
-                $("#question").html(sent_materials[12] + sent_materials[4]);
+                $("#question0").html(sent_materials[4]);
                 $("#question2").html(sent_materials[0]);
                 $(".rating-stars").attr("style", "width: " +
                     state + "%");
 
-                //      $("#rating-stars").on("click", 
-                //			    	function(event) {
-                //						var selection = $("#rating-stars").val();
-                //			});
 
-
-//                for (var i = 0; i <= NUM_SLIDERS; i++) {
-//                    $("#utterance" + i).html(sents["utterances"][utterances[i]]["sent_utterance"]);
-//                }
                 for (var i = 0; i < 2; i++) {
                     $("#posneg" + i).html(posneg[i]);
                 }
