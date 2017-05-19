@@ -153,25 +153,23 @@ var prediction = shuffle(["ask", "like"])
 
 var domains1 = 
     shuffle(["poem", "cake", "cookie", "presentation", "song", "film", "solo", "monologue", "dance", "painting", "app", "review", "recital"]);
-var domains = domains1.concat(domains1, domains1, domains1)
+var domains = domains1.concat(domains1, domains1)
 
 var states1 = 
-    ["heart1", "heart2", "heart3", "heart4", "heart5"];
+    ["heart1", "heart2", "heart3", "heart4"];
 var states2 = 
-    ["heart2", "heart3", "heart4", "heart5","heart1"];
+    ["heart2", "heart3", "heart4", "heart1"];
 var states3 = 
-    ["heart3", "heart4", "heart5","heart1", "heart2"];
+    ["heart3", "heart4", "heart1", "heart2"];
 var states4 = 
-    ["heart4", "heart5","heart1", "heart2", "heart3"];
-var states5 = 
-    ["heart5","heart1", "heart2", "heart3", "heart4"];
-var states = states1.concat(states2, states3, states4, states5, states1, states2, states3, states4, states5)
+    ["heart4", "heart1", "heart2", "heart3"];
+var states = states1.concat(states2, states3, states4, states1, states2, states3, states4)
 
 var utterances1 = 
-    ["yes_terrible", "not_bad", "yes_okay", "not_good", "yes_amazing"];
+    ["yes_terrible", "not_bad", "not_good", "yes_amazing"];
 var utterances2 = 
-    ["not_terrible", "yes_bad", "not_okay", "yes_good", "not_amazing"];
-var utterances = utterances1.concat(utterances1, utterances1, utterances1, utterances1, utterances2, utterances2, utterances2, utterances2, utterances2)
+    ["not_terrible", "yes_bad", "yes_good", "not_amazing"];
+var utterances = utterances1.concat(utterances1, utterances1, utterances1, utterances2, utterances2, utterances2, utterances2)
 
 
 var goals = 
@@ -368,96 +366,96 @@ shuffle(
  "utterance": utterances[31],
  "people": "people32",
 },
-{"domain": domains[32],
- "state": states[32],
- "utterance": utterances[32],
- "people": "people33",
-},
-{"domain": domains[33],
- "state": states[33],
- "utterance": utterances[33],
- "people": "people34",
-},
-{"domain": domains[34],
- "state": states[34],
- "utterance": utterances[34],
- "people": "people35",
-},
-{"domain": domains[35],
- "state": states[35],
- "utterance": utterances[35],
- "people": "people36",
-},
-{"domain": domains[36],
- "state": states[36],
- "utterance": utterances[36],
- "people": "people37",
-},
-{"domain": domains[37],
- "state": states[37],
- "utterance": utterances[37],
- "people": "people38",
-},
-{"domain": domains[38],
- "state": states[38],
- "utterance": utterances[38],
- "people": "people39",
-},
-{"domain": domains[39],
- "state": states[39],
- "utterance": utterances[39],
- "people": "people40",
-},
-{"domain": domains[40],
- "state": states[40],
- "utterance": utterances[40],
- "people": "people41",
-},
-{"domain": domains[41],
- "state": states[41],
- "utterance": utterances[41],
- "people": "people42",
-},
-{"domain": domains[42],
- "state": states[42],
- "utterance": utterances[42],
- "people": "people43",
-},
-{"domain": domains[43],
- "state": states[43],
- "utterance": utterances[43],
- "people": "people44",
-},
-{"domain": domains[44],
- "state": states[44],
- "utterance": utterances[44],
- "people": "people45",
-},
-{"domain": domains[45],
- "state": states[45],
- "utterance": utterances[45],
- "people": "people46",
-},
-{"domain": domains[46],
- "state": states[46],
- "utterance": utterances[46],
- "people": "people47",
-},
-{"domain": domains[47],
- "state": states[47],
- "utterance": utterances[47],
- "people": "people48",
-},
-{"domain": domains[48],
- "state": states[48],
- "utterance": utterances[48],
- "people": "people49",
-},
-{"domain": domains[49],
- "state": states[49],
- "utterance": utterances[49],
- "people": "people50",
-},
+//{"domain": domains[32],
+// "state": states[32],
+// "utterance": utterances[32],
+// "people": "people33",
+//},
+//{"domain": domains[33],
+// "state": states[33],
+// "utterance": utterances[33],
+// "people": "people34",
+//},
+//{"domain": domains[34],
+// "state": states[34],
+// "utterance": utterances[34],
+// "people": "people35",
+//},
+//{"domain": domains[35],
+// "state": states[35],
+// "utterance": utterances[35],
+// "people": "people36",
+//},
+//{"domain": domains[36],
+// "state": states[36],
+// "utterance": utterances[36],
+// "people": "people37",
+//},
+//{"domain": domains[37],
+// "state": states[37],
+// "utterance": utterances[37],
+// "people": "people38",
+//},
+//{"domain": domains[38],
+// "state": states[38],
+// "utterance": utterances[38],
+// "people": "people39",
+//},
+//{"domain": domains[39],
+// "state": states[39],
+// "utterance": utterances[39],
+// "people": "people40",
+//},
+//{"domain": domains[40],
+// "state": states[40],
+// "utterance": utterances[40],
+// "people": "people41",
+//},
+//{"domain": domains[41],
+// "state": states[41],
+// "utterance": utterances[41],
+// "people": "people42",
+//},
+//{"domain": domains[42],
+// "state": states[42],
+// "utterance": utterances[42],
+// "people": "people43",
+//},
+//{"domain": domains[43],
+// "state": states[43],
+// "utterance": utterances[43],
+// "people": "people44",
+//},
+//{"domain": domains[44],
+// "state": states[44],
+// "utterance": utterances[44],
+// "people": "people45",
+//},
+//{"domain": domains[45],
+// "state": states[45],
+// "utterance": utterances[45],
+// "people": "people46",
+//},
+//{"domain": domains[46],
+// "state": states[46],
+// "utterance": utterances[46],
+// "people": "people47",
+//},
+//{"domain": domains[47],
+// "state": states[47],
+// "utterance": utterances[47],
+// "people": "people48",
+//},
+//{"domain": domains[48],
+// "state": states[48],
+// "utterance": utterances[48],
+// "people": "people49",
+//},
+//{"domain": domains[49],
+// "state": states[49],
+// "utterance": utterances[49],
+// "people": "people50",
+//},
     ])
 ]); 
 //}
@@ -528,20 +526,20 @@ speakers50 = shuffle(speakers[49]);
 var sents = {
     states: {
         heart1: {
-            state: "20"
+            state: "25"
         },
         heart2: {
-            state: "40"
+            state: "50"
         },
         heart3: {
-            state: "60"
+            state: "75"
         },
         heart4: {
-            state: "80"
-        },
-        heart5: {
             state: "100"
-        }
+        },
+//        heart5: {
+//            state: "100"
+//        }
     },
     utterances: {
         yes_terrible: {
