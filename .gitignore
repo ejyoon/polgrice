@@ -1,6 +1,8 @@
 auth.json
 settings.json
 my_own_auth.json
+hit_modes.json
+history.csv
 model/results/
 *.synctex.gz
 *.aux
@@ -13,3 +15,4 @@ conference/cogsci2017/abstract_rmd/politeness.pdf
 conference/cogsci2017/abstract_rmd/politeness.tex
 production-results/
 anonymized-results-key.csv
+anonymize_workerids.py
