@@ -88,37 +88,22 @@ function ValidateSliderFormPart2(form){
     return true;
 }
     
-//function ValidateStar(form) {
-//		var judgment = $(".rating-stars").attr("style");
-//		judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
-//		//console.log("judgment: ", judgment); for debuggging
-//		if (judgment == 0) {
-//			//Else respondent didn't make a response
-//            alert ( "Please answer this question." );
-//		    judgment = $(".rating-stars").attr("style");
-//		    judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
-//            return false;
-//		} else {
-//            return true;
-//        }
-//}
-
 function ValidateStar(form) {
 		var judgment = $(".rating-stars").attr("style");
 		judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
-    return true;
 		//console.log("judgment: ", judgment); for debuggging
-//		if (judgment == 0) {
-//			//Else respondent didn't make a response
-//            alert ( "Please answer this question." );
-//		    judgment = $("#test").attr("style");
-//		    judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
-//            return false;
-//		} else {
-//            return true;
-//        }
+		if (judgment == 0) {
+			//Else respondent didn't make a response
+            alert ( "Please answer this question." );
+		    judgment = $(".rating-stars").attr("style");
+		    judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
+            return false;
+		} else {
+            return true;
+        }
 }
-    
+
+
 //function ValidateSliderFormPart1(form){ 
 //    var i = NUM_SLIDERS-1;
 //    var sliderVar = "slider" + i;
@@ -307,7 +292,7 @@ document.getElementById('form2').hidden=false;}">Next</button>
 -->
   <div align="center" class="star-rating rating-md rating-active">
     <div class="rating-container rating-gly-star" data-content="&#xe005;&#xe005;&#xe005;">
-      <div class="rating-stars-q" id="state" data-content="&#xe005;&#xe005;&#xe005;">
+      <div class="rating-stars" data-content="&#xe005;&#xe005;&#xe005;">
       </div>
     </div>
   </div>
@@ -326,23 +311,7 @@ document.getElementById('form2').hidden=false;}">Next</button>
     
     <p id="question3"></p>
 <br>
-
 <form name="judgment">
- <!--
-  ###############################################################
-  Star-ratings
-  http://www.jqueryscript.net/other/Simple-jQuery-Star-Rating-System-For-Bootstrap-3.html
--->  
-  <div id="test" name= "star" align="center">
-    <input id="rating-system" type="number" class="rating" 
-    	min="0" max="3" step="1" 
-    	data-showCaption="true" showClear="false" hoverEnabled="false">
-  </div>
-  <!--star-ratings
-  ###############################################################
-  -->    
-
-
 <!--
 <table align = "center"><tr>
 <td align="center">
@@ -355,12 +324,24 @@ document.getElementById('form2').hidden=false;}">Next</button>
   </tr>
 </table>
 -->
+ <!--
+  ###############################################################
+  Star-ratings
+  http://www.jqueryscript.net/other/Simple-jQuery-Star-Rating-System-For-Bootstrap-3.html
+  -->
+  <div id="test" name= "star" align="center">
+    <input id="rating-system" type="number" class="rating" 
+    	min="0" max="5" step="1" 
+    	data-showCaption="true" showClear="false" hoverEnabled="false">
+  </div>
+  <!--star-ratings
+  ###############################################################
+  -->    
 </form>
-
 
     <br>
     <button type="button" id="next2" onclick="this.blur(); if
-    (ValidateStar(document.star)) {
+    (ValidateStar(document.judgment)) {
 experiment.next();                                                       
 }">Next</button>
     </div>
@@ -397,7 +378,7 @@ experiment.next();
 <div class="slide" id="finished">
   You're finished - thanks for participating! Submitting to Mechanical Turk...
 </div>
-<script src="L2_S_prior_3star.js"></script>
+<script src="L2_S_prior.js"></script>
 
 </body>
 </html>
