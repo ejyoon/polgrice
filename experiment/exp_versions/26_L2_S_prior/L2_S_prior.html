@@ -91,16 +91,17 @@ function ValidateSliderFormPart2(form){
 function ValidateStar(form) {
 		var judgment = $(".rating-stars").attr("style");
 		judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
+        return true;
 		//console.log("judgment: ", judgment); for debuggging
-		if (judgment == 0) {
-			//Else respondent didn't make a response
-            alert ( "Please answer this question." );
-		    judgment = $(".rating-stars").attr("style");
-		    judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
-            return false;
-		} else {
-            return true;
-        }
+//		if (judgment == 0) {
+//			//Else respondent didn't make a response
+//            alert ( "Please answer this question." );
+//		    judgment = $(".rating-stars").attr("style");
+//		    judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
+//            return false;
+//		} else {
+//            return true;
+//        }
 }
 
 
@@ -278,41 +279,46 @@ document.getElementById('form2').hidden=false;}">Next</button>
 <span id="form2">
         <p id="question2"></p>
     
- <!--
+  <form name="judgment">
+
+<!--
   ###############################################################
   Star-ratings
   http://www.jqueryscript.net/other/Simple-jQuery-Star-Rating-System-For-Bootstrap-3.html
   -->
-<!--
-  <div id="test" name= "star" align="center">
-    <input id="rating-system" type="number" class="rating" 
-    	min="0" max="5" step="1" 
-    	data-showCaption="true" showClear="false" hoverEnabled="false">
-  </div>
--->
   <div align="center" class="star-rating rating-md rating-active">
     <div class="rating-container rating-gly-star" data-content="&#xe005;&#xe005;&#xe005;">
-      <div class="rating-stars" data-content="&#xe005;&#xe005;&#xe005;">
+      <div class="rating-stars" id="given_state" data-content="&#xe005;&#xe005;&#xe005;">
       </div>
     </div>
   </div>
-<!--
-  <div align="center" class="star-rating rating-sm rating-active">
-    <div class="rating-container rating-gly-star" data-content="">
-      <div class="rating-stars" data-content="">
-      </div>
-    </div>
-  </div>
--->
   <!--star-ratings
   ###############################################################
+  -->  
+      
+<!--
+  ###############################################################
+  Star-ratings
+  http://www.jqueryscript.net/other/Simple-jQuery-Star-Rating-System-For-Bootstrap-3.html
+  -->
+     <div align="center" class="star-rating rating-md rating-active">
+    <div class="rating-container rating-gly-star" data-content="&#xe005;&#xe005;&#xe005;">
+      <div class="rating-stars" name="guessed_state" id="answer" data-content="&#xe005;&#xe005;&#xe005;">
+      </div>
+    </div>
+  </div>
+ <!--star-ratings
+  ###############################################################
   -->    
+      
 <br>
     
     <p id="question3"></p>
 <br>
-<form name="judgment">
+
+    </form>   
 <!--
+<form name="judgment">
 <table align = "center"><tr>
 <td align="center">
   <tr>
@@ -323,22 +329,10 @@ document.getElementById('form2').hidden=false;}">Next</button>
     <td><input type="radio" name="judgment" value = "1"></td>
   </tr>
 </table>
--->
- <!--
-  ###############################################################
-  Star-ratings
-  http://www.jqueryscript.net/other/Simple-jQuery-Star-Rating-System-For-Bootstrap-3.html
-  -->
-  <div id="test" name= "star" align="center">
-    <input id="rating-system" type="number" class="rating" 
-    	min="0" max="5" step="1" 
-    	data-showCaption="true" showClear="false" hoverEnabled="false">
-  </div>
-  <!--star-ratings
-  ###############################################################
-  -->    
 </form>
-
+-->
+    </span>
+    
     <br>
     <button type="button" id="next2" onclick="this.blur(); if
     (ValidateStar(document.judgment)) {
