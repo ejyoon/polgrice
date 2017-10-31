@@ -295,26 +295,45 @@ document.getElementById('form2').hidden=false;}">Next</button>
   <!--star-ratings
   ###############################################################
   -->  
+ 
+      
+<br>
+    
+    <p id="question3"></p>
+<br>
       
 <!--
   ###############################################################
   Star-ratings
   http://www.jqueryscript.net/other/Simple-jQuery-Star-Rating-System-For-Bootstrap-3.html
   -->
-     <div align="center" class="star-rating rating-md rating-active">
+<!--
+<div align="center" class="star-rating rating-md">
     <div class="rating-container rating-gly-star" data-content="&#xe005;&#xe005;&#xe005;">
-      <div class="rating-stars" name="guessed_state" id="answer" data-content="&#xe005;&#xe005;&#xe005;">
+      <div class="rating-stars" name="guessed_state" id="answer" type="number" min="0" max="5" step="1" data-content="&#xe005;&#xe005;&#xe005;"
+              	data-showCaption="true" showClear="false" hoverEnabled="false">
       </div>
     </div>
+  </div>
+-->
+  <div id="test" name= "star" align="center">
+    <input id="answer" type="number" class="rating" 
+    	min="0" max="3" step="1" 
+    	data-showCaption="true" showClear="false" hoverEnabled="false">
   </div>
  <!--star-ratings
   ###############################################################
   -->    
+
       
-<br>
-    
-    <p id="question3"></p>
-<br>
+<!--
+ <div id="test" name= "star" align="center">
+    <input id="rating-system" type="number" class="rating" 
+    	min="0" max="5" step="1" 
+    	data-showCaption="true" showClear="false" hoverEnabled="false">
+  </div>      
+-->
+      
 
     </form>   
 <!--

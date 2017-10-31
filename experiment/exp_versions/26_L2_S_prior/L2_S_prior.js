@@ -1066,7 +1066,7 @@ var experiment = {
 //      var prob3 = getRadioCheckedValue(1, "state");
 //      experiment.stateRatings[currentTrialNum] = getRadioCheckedValue(1, "state");    
 //      var judgment = $(".rating-stars").attr("style");
-      var judgment = $("#answer").attr("style");
+      var judgment = $(".rating-stars").attr("style");
       judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
 //      var judgment = getRadioCheckedValue(0, "judgment");
 //      var judgment = document.getElementsByName("judgment");
@@ -1118,13 +1118,13 @@ var experiment = {
 //							    state + "%");
       $("#given_state").attr("style","width: " +
 							    state + "%");
-      $("#answer").attr("style","width: " +
-							    0 + "%");
+      $("#rating-stars").attr("style","width: " +
+							    20 + "%");
 
-        //      $("#rating-stars").on("click", 
-//			    	function(event) {
-//						var selection = $("#rating-stars").val();
-//			});
+              $("#rating-stars").on("click", 
+			    	function(event) {
+						var selection = $("#rating-stars").val();
+			});
         
       
       for (var i = 0; i <= 4; i++)
