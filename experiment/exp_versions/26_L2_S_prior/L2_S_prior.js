@@ -572,125 +572,143 @@ var sents = {
     },
     utterances: {
         practice1: {
-            sent_utterance: " Did SP think the BB deserved 2 out of 3 hearts?"
+            sent_utterance: " How did people feel about the BB? (not a trick question)"
         },        
         practice2: {
-            sent_utterance: " Did SP think the BB deserved 3 out of 3 hearts?"
+            sent_utterance: " How did people feel about the BB? "
         },        
         practice3: {
-            sent_utterance: " Did SP think the BB deserved 0 out of 3 hearts?"
+            sent_utterance: " How did people feel about the BB? "
         },        
         yes_terrible: {
-            sent_utterance: " Do you think SP thought the BB was <b>terrible</b>?"
+            sent_utterance: " How did LS THINK people felt about the BB?"
         },        
         yes_bad: {
-            sent_utterance: " Do you think SP thought the BB was <b>bad</b>?"
+            sent_utterance: " How did LS THINK people felt about the BB?"
         },        
         yes_okay: {
-            sent_utterance: " Do you think SP thought the BB was <b>okay</b>?"
+            sent_utterance: " How did LS THINK people felt about the BB?"
         },        
         yes_good: {
-            sent_utterance: " Do you think SP thought the BB was <b>good</b>?"
+            sent_utterance: " How did LS THINK people felt about the BB?"
         },        
         yes_amazing: {
-            sent_utterance: " Do you think SP thought the BB was <b>amazing</b>?"
+            sent_utterance: " How did LS THINK people felt about the BB?"
         },
         not_terrible: {
-            sent_utterance: " Do you think SP thought the BB <b>wasn't terrible</b>?"
+            sent_utterance: " How did LS THINK people felt about the BB?"
         },        
         not_bad: {
-            sent_utterance: " Do you think SP thought the BB <b>wasn't bad</b>?"
+            sent_utterance: " How did LS THINK people felt about the BB?"
         },        
         not_okay: {
-            sent_utterance: " Do you think SP thought the BB <b>wasn't okay</b>?"
+            sent_utterance: " How did LS THINK people felt about the BB?"
         },        
         not_good: {
-            sent_utterance: " Do you think SP thought the BB <b>wasn't good</b>?"
+            sent_utterance: " How did LS THINK people felt about the BB?"
         },        
         not_amazing: {
-            sent_utterance: " Do you think SP thought the BB <b>wasn't amazing</b>?"
+            sent_utterance: " How did LS THINK people felt about the BB?"
         },
     },
     
     domains: {
-       presentation: {
+       presentation_pr: {
             sent_precontext: "Imagine that", 
             sent_context: " LS approached SP, who had just seen LS's presentation, and asked \"How was my presentation?\"",
             sent_context2: " SP saw a presentation.",
             BB: "presentation",
 	},
-	   cookie: {
+	   cookie_pr: {
             sent_precontext: "Imagine that", 
             sent_context: " LS approached SP, who had just tasted LS's cookie, and asked \"How did my cookie taste?\"", 
             sent_context2: " SP tasted a cookie.",
             BB: "cookie",
 	},
-	   poem: {
+	   poem_pr: {
             sent_precontext: "Imagine that", 
             sent_context: " LS approached SP, who had just read LS's poem, and asked \"How was my poem?\"", 
             sent_context2: " SP read a poem.",
             BB: "poem",
 	},        
-	   cake: {
-            sent_precontext: "Imagine that", 
-            sent_context: " LS approached SP, who had just tasted LS's cake, and asked \"How did my cake taste?\"", 
-            sent_context2: " SP tasted a cake.",
+        presentation: {
+            sent_precontext: "Imagine that LS just gave a presentation, ",
+            sent_context: " LS approached SP, who knows a lot about giving presentations, and asked \"How was my presentation?\"",
+            sent_context2: " SP saw the presentation.",
+            BB: "presentation",
+        },
+        cookie: {
+            sent_precontext: "Imagine that LS baked some cookies, ",
+            sent_context: " LS approached SP, who knows a lot about baking, and asked \"How did my cookie taste?\"",
+            sent_context2: " SP tasted the cookie.",
+            BB: "cookie",
+        },
+        poem: {
+            sent_precontext: "Imagine that LS wrote a poem, ",
+            sent_context: " LS approached SP, who knows a lot about poems, and asked \"How was my poem?\"",
+            sent_context2: " SP read the poem.",
+            BB: "poem",
+        },
+        cake: {
+            sent_precontext: "Imagine that LS baked a cake, ",
+            sent_context: " LS approached SP, who knows a lot about baking, and asked \"How did my cake taste?\"",
+            sent_context2: " SP tasted the cake.",
             BB: "cake",
-	},
-	   song: {
-            sent_precontext: "Imagine that", 
-            sent_context: " LS approached SP, who had just heard LS's song, and asked \"How was my song?\"", 
-            sent_context2: " SP heard a song.",
+        },
+        song: {
+            sent_precontext: "Imagine that LS composed a song, ",
+            sent_context: " LS approached SP, who knows a lot about composing songs, and asked \"How was my song?\"",
+            sent_context2: " SP heard the song.",
             BB: "song",
-	},
-	   film: {
-            sent_precontext: "Imagine that", 
-            sent_context: " LS approached SP, who had just seen LS's movie, and asked \"How was my movie?\"", 
-            sent_context2: " SP saw a movie.",
+        },
+        film: {
+            sent_precontext: "Imagine that LS filmed a movie, ",
+            sent_context: " LS approached SP, who knows a lot about movies, and asked \"How was my movie?\"",
+            sent_context2: " SP saw the movie.",
             BB: "movie",
-	},
-	   solo: {
-            sent_precontext: "Imagine that", 
-            sent_context: " LS approached SP, who had just heard LS's solo, and asked \"How was my solo?\"", 
-            sent_context2: " SP heard a cello solo.",
+        },
+        solo: {
+            sent_precontext: "Imagine that LS played a cello solo part at a concert, ",
+            sent_context: " LS approached SP, who knows a lot about playing cello, and asked \"How was my solo?\"",
+            sent_context2: " SP heard the solo.",
             BB: "solo",
-	},        
-	   dance: {
-            sent_precontext: "Imagine that", 
-            sent_context: " LS approached SP, who had just seen LS's dance, and asked \"How was my dance?\"", 
-            sent_context2: " SP saw a tap dance performance.",
+        },
+        dance: {
+            sent_precontext: "Imagine that LS gave a tap dance performance, ",
+            sent_context: " LS approached SP, who knows a lot about tap dance, and asked \"How was my dance?\"",
+            sent_context2: " SP saw the dance.",
             BB: "dance",
-	},   
-	   painting: {
-            sent_precontext: "Imagine that", 
-            sent_context: " LS approached SP, who had just seen LS's painting, and asked \"How was my painting?\"", 
-            sent_context2: " SP saw a painting.",
+        },
+        painting: {
+            sent_precontext: "Imagine that LS drew a painting, ",
+            sent_context: " LS approached SP, who knows a lot about paintings, and asked \"How was my painting?\"",
+            sent_context2: " SP saw the painting.",
             BB: "painting",
-	}, 
-	   monologue: {
-            sent_precontext: "Imagine that", 
-            sent_context: " LS approached SP, who had just heard LS's monologue, and asked \"How was my monologue?\"", 
-            sent_context2: " SP heard a monologue in a school play.",
+        },
+        monologue: {
+            sent_precontext: "Imagine that LS gave a monologue during a school play, ",
+            sent_context: " LS approached SP, who knows a lot about giving monologues, and asked \"How was my monologue?\"",
+            sent_context2: " SP heard the monologue.",
             BB: "monologue",
-	},
-	   app: {
-            sent_precontext: "Imagine that", 
-            sent_context: " LS approached SP, who looked at LS's mobile app, and asked \"How was my app?\"", 
-            sent_context2: " SP saw a mobile app.",
+        },
+        app: {
+            sent_precontext: "Imagine that LS designed a mobile app, ",
+            sent_context: " LS approached SP, who knows a lot about mobile apps, and asked \"How was my app?\"",
+            sent_context2: " SP saw the app.",
             BB: "app",
-	},
-	   review: {
-            sent_precontext: "Imagine that", 
-            sent_context: " LS approached SP, who had just read LS's review, and asked \"How was my review?\"", 
-            sent_context2: " SP read a review for a book.",
+        },
+        review: {
+            sent_precontext: "Imagine that LS wrote a review for a book, ",
+            sent_context: " LS approached SP, who knows a lot about writing reviews, and asked \"How was my review?\"",
+            sent_context2: " SP read the review.",
             BB: "review",
-	},
-	   recital: {
-            sent_precontext: "Imagine that", 
-            sent_context: " LS approached SP, who had just attended LS's recital, and asked \"How was my recital performance?\"", 
-            sent_context2: " SP attended a piano recital.",
-            BB: "recital performance",
-	},
+        },
+        recital: {
+            sent_precontext: "Imagine that LS had a piano recital, ",
+            sent_context: " LS approached SP, who knows a lot about playing piano, and asked \"How was my performance?\"",
+            sent_context2: " SP attended the recital.",
+            BB: "performance",
+        },
     },
 //    states: {
 //        terrible: {
@@ -962,7 +980,7 @@ function doSentSubs (sents, polite, domain, utterance, people)
         knowledge = " but had no idea what people thought about it."
     }
 
-    feeling = "Here's how SP felt about the BB, on a scale of 0 to 3 hearts:"
+    feeling = "here's how people felt about the BB, on a scale of 0 to 3 hearts:"
     question = "Based on what SP said, how likely do you think that <b>SP's goal</b> was to be:"     
     question2 = "How would SP <b>actually</b> rate LS's BB? <br>Please select the number of stars you think SP would actually give:";
     question3 = "Based on what SP said, how likely is it for you to <b>like SP</b>?";
@@ -1066,7 +1084,7 @@ var experiment = {
 //      var prob3 = getRadioCheckedValue(1, "state");
 //      experiment.stateRatings[currentTrialNum] = getRadioCheckedValue(1, "state");    
 //      var judgment = $(".rating-stars").attr("style");
-      var judgment = $(".rating-stars").attr("style");
+      var judgment = $(".rating-stars").eq(1).attr("style");
       judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
 //      var judgment = getRadioCheckedValue(0, "judgment");
 //      var judgment = document.getElementsByName("judgment");
@@ -1112,14 +1130,14 @@ var experiment = {
 //        goal = trial.goal;
         sent_materials = doSentSubs(sents, state, domain, utterance, people);
       showSlide("stage");
-      $("#context").html(sent_materials[3] + sent_materials[1]);  
+      $("#context").html(sent_materials[3] + "and");  
       $("#question").html(sent_materials[8]); 
 //      $(".rating-stars").attr("style","width: " +
 //							    state + "%");
       $("#given_state").attr("style","width: " +
 							    state + "%");
-      $("#rating-stars").attr("style","width: " +
-							    20 + "%");
+//      $('input.rating').attr("style","width: " +
+//							    20 + "%");
 
               $("#rating-stars").on("click", 
 			    	function(event) {
