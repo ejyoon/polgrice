@@ -45,8 +45,8 @@ var speakerOptimality = 2;
 var speakerOptimality2 = 2;
 var alpha = 1;
 
-var s = inputData.state[0];
-var w = inputData.weight[0];
+// var s = inputData.state[0];
+// var w = inputData.weight[0];
 
 var round = function(x){
 	return Math.round(x * 100) / 100
@@ -65,6 +65,9 @@ var uttCosts = map(function(u) {
 var utterancePrior = Infer({method: "enumerate"}, function(){
   return utterances[discrete(uttCosts)]
 });
+
+var StatePrior = Categorical({vs: states, ps:[20,10,3,2,1]})
+
 
 var literalSemantics = {
   "state": [1, 2, 3, 4, 5],
@@ -87,7 +90,8 @@ var meaning = function(words, state){
 
 var listener0 = cache(function(utterance) {
   Infer({method: "enumerate"}, function(){
-	  var state = uniformDraw(states);
+	  //var state = uniformDraw(states);
+    var state = sample(StatePrior)
 	//	var state = categorical ({vs: states, ps: [5,4,3,2,1]})
 
     var m = meaning(utterance, state);
@@ -120,20 +124,33 @@ var listener1 = cache(function(utterance) {
    var speakerGoals = {
      phi: categorical ({vs: weightBins, ps: phiWeights})
    }
-   var state = uniformDraw(states);
-	 //var state = categorical ({vs: states, ps: [5,4,3,2,1]})
+   // var state = uniformDraw(states);
+    var state = sample(StatePrior)
 
    var S1 = speaker1(state, speakerGoals)
    observe(S1, utterance)
 
    return {
      state: state,
-     goals: speakerGoals
+     phi: speakerGoals.phi
    }
 
  })
 }, 10000);
+listener1("not_terrible")
+'
 
+l1.rs <- webppl(rsaModel) %>%
+  mutate(state = factor(state))
+
+ggplot(l1.rs, aes( x = phi, y = prob, color = state, group = state))+
+  geom_line()
+
+```
+
+
+```{r}
+speakerModel <- '
 var speaker2 = cache(function(state, truthiness) {
   Infer({method: "enumerate"}, function(){
 
