@@ -71,14 +71,14 @@ var litSemantics = _.fromPairs(map(function(u){
   }, utterances))
 
 // display(litSemantics.not_terrible)
-// 
+//
 // var litSemKern = map(function(u){
 //       var litParams = litSemantics.u;
 //       display(litParams)
 //       return sample(litParams, {driftKernel: kernelFn})
 //     }, utterances)
 // display(litSemKern)
-// 
+//
 
   var RSAparameters = {
     speakerOptimality: uniformDrift({a: 0, b: 20, width:2}),
@@ -109,7 +109,7 @@ var litSemantics = _.fromPairs(map(function(u){
     });
   }, 10000);
 
-  var speaker1 = cache(function(state, speakerGoals) {
+  var speaker1 = cache(function(state, phi) {
     Infer({method: "enumerate"}, function(){
       var utterance = sample(utterancePrior);
 
@@ -122,8 +122,8 @@ var litSemantics = _.fromPairs(map(function(u){
 //       var socialUtility = expectation(L0, function(s){return alpha*s});
       var socialUtility = expectation(L0, function(s){return s});
 
-      var eUtility = speakerGoals.phi*epistemicUtility;
-      var sUtility = (1-speakerGoals.phi)*socialUtility;
+      var eUtility = phi*epistemicUtility;
+      var sUtility = (1-phi)*socialUtility;
 
       var speakerUtility = eUtility+sUtility;
 //     	var speakerUtility = eUtility; //actual(1)
@@ -137,19 +137,17 @@ var litSemantics = _.fromPairs(map(function(u){
   var listener1 = cache(function(utterance) {
     Infer({method: "enumerate"}, function(){
 
-      var speakerGoals = {
-        phi:categorical ({vs: weightBins, ps: phiWeights})
-      }
+      var phi = categorical ({vs: weightBins, ps: phiWeights})
 
       var state = uniformDraw(states);
 //       var state = categorical({vs: states, ps: [4, 3, 2, 1]}) // FIXME: shouldn't it be conditional on the true state?
-      
-      var S1 = speaker1(state, speakerGoals)
+
+      var S1 = speaker1(state, phi)
       observe(S1, utterance)
 
       return {
         state: state,
-        goals: speakerGoals
+        phi: phi
       }
     })
   }, 10000)
@@ -157,34 +155,43 @@ var litSemantics = _.fromPairs(map(function(u){
   var speaker2 = cache(function(exptCondInfo) {
     Enumerate(function(){
       var state = exptCondInfo.state;
-      var s1Goals = exptCondInfo.goalWeights1;
-      var s2Goals = exptCondInfo.goalWeights2;
-      var s2Goals2 = exptCondInfo.goalWeights3;
+
+      var S1_phi = exptCondInfo.S1_phi;
+
+      var selfpres_phi = exptCondInfo.selfpres_phi;
+      var social_phi = exptCondInfo.social_phi;
+      var informative_phi = exptCondInfo.informative_phi;
+
       var utterance = sample(utterancePrior);
 //       var alpha = RSAparameters.alpha;
 
-      var L1 = listener1(utterance)
-	  var L1_goal = marginalize(L1, "goals");
+    var L1 = listener1(utterance)
+	  var L1_goal = marginalize(L1, "phi");
 	  var L1_state = marginalize(L1, "state");
 
     var epistemicUtility = L1_state.score(state);
-//     var socialUtility = expectation(L1_state, function(s){return alpha*s});
+    var selfpresUtility = L1_goal.score(S1_phi);
     var socialUtility = expectation(L1_state, function(s){return s});
-    var eUtility = s1Goals.phi*epistemicUtility;
-    var sUtility = (1-s1Goals.phi)*socialUtility;
-    var speakerUtility = eUtility+sUtility;
 
-    var selfEpiUtility = L1.score({"state":state,"goals":s1Goals})
-    var selfEUtility = s2Goals.phi*selfEpiUtility;
-    var selfSUtility = (1-s2Goals.phi)*socialUtility;
-var speakerSelfUtility = selfEUtility+selfSUtility;
+
+    var speakerMixedUtility = informative_phi*epistemicUtility +
+                              selfpres_phi*selfpresUtility +
+                              social_phi*socialUtility
+
+
+//     var selfEUtility = s2Goals.phi*selfEpiUtility;
+//     var selfSUtility = (1-s2Goals.phi)*socialUtility;
+// var speakerSelfUtility = selfEUtility+selfSUtility;
+
+
+// var selfEpiUtility = L1.score({"state":state,"phi":s1Goals})
+
 
 	// FIXME: triple mixed utility - self(5)
-    var selfPresUtility = s2Goals.phi*L1_goal.score(s1Goals)
-    var trueEUtility = s2Goals2.phi*L1_state.score(state);
-    var trueSUtility = (1-s2Goals2.phi)*socialUtility;
-    var speakerMixedUtility = selfPresUtility+trueEUtility+trueSUtility
-	var speakerPartialMixedUtility = selfPresUtility+trueEUtility
+    // var selfPresUtility = s2Goals.phi*
+    // var trueEUtility = s2Goals2.phi*epistemicUtility;
+    // var trueSUtility = (1-s2Goals2.phi)*socialUtility;
+	// var speakerPartialMixedUtility = selfPresUtility+trueEUtility
 
 
 //    	factor(RSAparameters.speakerOptimality*speakerUtility); // actual(2)
@@ -192,8 +199,8 @@ var speakerSelfUtility = selfEUtility+selfSUtility;
 // factor(RSAparameters.speakerOptimality*speakerSelfUtility); // self(2)
 //     factor(RSAparameters.speakerOptimality * L1_state.score(state)); // self(3)
 //    factor(RSAparameters.speakerOptimality * L1_goal.score(intendedGoals)); // self(4)
-// 	factor(RSAparameters.speakerOptimality*speakerMixedUtility); // self(5)
-	factor(RSAparameters.speakerOptimality*speakerPartialMixedUtility); // self(６)
+	factor(RSAparameters.speakerOptimality * speakerMixedUtility); // self(5)
+	// factor(RSAparameters.speakerOptimality*speakerPartialMixedUtility); // self(６)
 
       return utterance
 
@@ -203,15 +210,14 @@ var speakerSelfUtility = selfEUtility+selfSUtility;
 
   var goalWeightsAndPostPred = map(function(goal){
 
-    var goalWeights1 = {
-      phi: sample(goalWeightPrior, {driftKernel: kernelFn})
-    }
-    var goalWeights2 = {
-      phi: sample(goalWeightPrior, {driftKernel: kernelFn})
-    }
-    var goalWeights3 = {
-      phi: sample(goalWeightPrior, {driftKernel: kernelFn})
-    }
+    var S1_phi = sample(goalWeightPrior, {driftKernel: kernelFn})
+
+    var selfpres_phi = uniformDrift({a: 0, b: 1, width: 0.2})
+    var informative_phi = uniformDrift({a: 0, b: 1, width: 0.2})
+    var social_phi = uniformDrift({a: 0, b: 1, width: 0.2})
+
+    var normalized_phis = normalize([selfpres_phi, informative_phi, social_phi])
+
     var postPred = map(function(state){
 
       var utteranceData = _.filter(data, {true_state: state, goal: goal});
@@ -219,9 +225,10 @@ var speakerSelfUtility = selfEUtility+selfSUtility;
       var exptConditionInfo = {
         state: state,
         utterance: false,
-        goalWeights1: goalWeights1,
-        goalWeights2: goalWeights2,
-        goalWeights3: goalWeights3
+        S1_phi: S1_phi,
+        selfpres_phi: normalized_phis[0],
+        informative_phi: normalized_phis[1],
+        social_phi: normalized_phis[2]
       };
 
       //       var RSApredictions = speaker1(exptConditionInfo.state,
@@ -257,11 +264,11 @@ var speakerSelfUtility = selfEUtility+selfSUtility;
         utt: "negation",
         val: negEndorsement
       }])
-      
+
 //       return _.flattenDeep([litSemantics, {
 //       	key: "litSem",
-//       	goal: "NA", 
-//       	state: state, 
+//       	goal: "NA",
+//       	state: state,
 //       	utt: u,
 //       	val: m
 //       }])
@@ -270,9 +277,10 @@ var speakerSelfUtility = selfEUtility+selfSUtility;
 
     return [
       postPred,
-      {key: "phiTrue", goal: goal, state: "NA", utt: "NA", val: goalWeights3.phi}, // FIXME: 
-      {key: "phiSelf", goal: goal, state: "NA", utt: "NA", val: goalWeights2.phi}, // FIXME: 
-      {key: "phi", goal: goal, state: "NA", utt: "NA", val: goalWeights1.phi}
+      {key: "phi_informative", goal: goal, state: "NA", utt: "NA", val: informative_phi}, // FIXME:
+      {key: "phi_Selfpres", goal: goal, state: "NA", utt: "NA", val: selfpres_phi}, // FIXME:
+      {key: "phi_social", goal: goal, state: "NA", utt: "NA", val: social_phi}, // FIXME:
+      {key: "phi_s1", goal: goal, state: "NA", utt: "NA", val: S1_phi}
     ]
 
   }, goals)
