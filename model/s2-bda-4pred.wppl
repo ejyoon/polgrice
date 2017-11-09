@@ -141,8 +141,8 @@ var litSemantics = _.fromPairs(map(function(u){
         phi:categorical ({vs: weightBins, ps: phiWeights})
       }
 
-//       var state = uniformDraw(states);
-      var state = categorical({vs: states, ps: [4, 3, 2, 1]}) // FIXME: shouldn't it be conditional on the true state?
+      var state = uniformDraw(states);
+//       var state = categorical({vs: states, ps: [4, 3, 2, 1]}) // FIXME: shouldn't it be conditional on the true state?
       
       var S1 = speaker1(state, speakerGoals)
       observe(S1, utterance)
@@ -184,14 +184,16 @@ var speakerSelfUtility = selfEUtility+selfSUtility;
     var trueEUtility = s2Goals2.phi*L1_state.score(state);
     var trueSUtility = (1-s2Goals2.phi)*socialUtility;
     var speakerMixedUtility = selfPresUtility+trueEUtility+trueSUtility
-	
+	var speakerPartialMixedUtility = selfPresUtility+trueEUtility
+
 
 //    	factor(RSAparameters.speakerOptimality*speakerUtility); // actual(2)
 //       factor(RSAparameters.speakerOptimality * L1.score({"state":state, "goals":s1Goals}))
 // factor(RSAparameters.speakerOptimality*speakerSelfUtility); // self(2)
 //     factor(RSAparameters.speakerOptimality * L1_state.score(state)); // self(3)
 //    factor(RSAparameters.speakerOptimality * L1_goal.score(intendedGoals)); // self(4)
-	factor(RSAparameters.speakerOptimality*speakerMixedUtility); // self(5)
+// 	factor(RSAparameters.speakerOptimality*speakerMixedUtility); // self(5)
+	factor(RSAparameters.speakerOptimality*speakerPartialMixedUtility); // self(６)
 
       return utterance
 
@@ -294,12 +296,12 @@ var speakerSelfUtility = selfEUtility+selfSUtility;
 
 
 
-var numSamples = 10;
+var numSamples = 40000;
 var method = "MCMC";
 var samples = numSamples;
 var burn = numSamples / 2;
 var posterior = Infer({model, method, samples, burn, verbose: true})
-var filename = 'bda-s2_self5_3heart_paramAdj-mcmc'+
+var filename = 'bda-s2_self6_3heart_paramAdj-mcmc'+
 numSamples+'_burn'+burn+'_chain'+index+'.json'
 
 json.write(filename, posterior)
