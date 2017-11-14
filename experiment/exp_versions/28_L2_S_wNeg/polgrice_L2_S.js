@@ -341,13 +341,13 @@ var sents = {
     },
     goals: {
         nice: {
-            goal: " <b>SP wanted to be nice (but not necessarily honest): "
+            goal: " <b>SP wanted to make LS feel good,<b> rather than give informative feedback: "
         },
         honest: {
-            goal: " <b>SP wanted to be honest (but not necessarily nice): "            
+            goal: " <b>SP wanted to give as accurate and informative feedback as possible,<b> rather than make LS feel good: "            
         },
         both: {
-            goal: " <b>SP wanted to be both nice and honest: "            
+            goal: " <b>SP wanted to both make LS feel good and give accurate and informative feedback: "            
         }  
     },
 
