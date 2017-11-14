@@ -401,6 +401,7 @@ var numConditions = allConditions.length;
 var allTrialOrders = allConditions;
 var numTrials = allTrialOrders.length;
 var shuffledOrder = shuffledSampleArray(allTrialOrders.length, numTrials);
+shuffledOrder = shuffledOrder.filter(item => ![0, 1, 2].includes(item))
 var currentTrialNum = 0;
 var trial;
 var numComplete = 0;
