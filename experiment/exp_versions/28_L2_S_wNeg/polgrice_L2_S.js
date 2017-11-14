@@ -2,10 +2,10 @@ var filename = "EJY_polgrice_goals_v4"
 var condCounts = "1,5;2,5;" //Example: "1,20;2,20;3,20"
 
 // ---------------- HELPER ------------------
-var NUM_SLIDERS = 3;
-var NUM_SLIDERS1 = 3;
-var NUM_SLIDERS2 = 2;
-
+//var NUM_SLIDERS = 3;
+//var NUM_SLIDERS1 = 3;
+//var NUM_SLIDERS2 = 2;
+//
 function showSlide(id) {
   $(".slide").hide();
   $("#"+id).show();
@@ -17,54 +17,6 @@ function random(a,b) {
     return Math.floor(Math.random()*a);
   } else {
     return Math.floor(Math.random()*(b-a+1)) + a;
-  }
-}
-
-function clearForm(oForm) {
-  var sliderVar = "";
-  for(var i=0; i<NUM_SLIDERS; i++)
-  {
-    sliderVar = "#slider" + i;
-    $(sliderVar).slider("value", 20);
-    $(sliderVar).css({"background":"#FFFFFF"});
-    $(sliderVar + " .ui-slider-handle").css({
-        "background":"#FAFAFA",
-        "border-color": "#CCCCCC" });
-    sliderVar = "slider" + i;
-    document.getElementById(sliderVar).style.background = "";
-  }
-  
-  var elements = oForm.elements; 
-  
-  oForm.reset();
-
-  for(var i=0; i<elements.length; i++) {
-    field_type = elements[i].type.toLowerCase();
-    switch(field_type) {
-    
-      case "text": 
-      case "password": 
-      case "textarea":
-            case "hidden":	
-        
-        elements[i].value = ""; 
-        break;
-          
-      case "radio":
-      case "checkbox":
-          if (elements[i].checked) {
-            elements[i].checked = false; 
-        }
-        break;
-  
-      case "select-one":
-      case "select-multi":
-                  elements[i].selectedIndex = -1;
-        break;
-  
-      default: 
-        break;
-    }
   }
 }
 
@@ -123,6 +75,40 @@ function getRadioCheckedValue(formNum, radio_name)
    return '';
 }
 
+function clearForm(oForm) {
+    var elements = oForm.elements;
+    oForm.reset();
+
+    for (var i = 0; i < elements.length; i++) {
+        field_type = elements[i].type.toLowerCase();
+        switch (field_type) {
+            case "text":
+            case "password":
+            case "textarea":
+            case "hidden":
+
+                elements[i].value = "";
+                break;
+
+            case "radio":
+            case "checkbox":
+                if (elements[i].checked) {
+                    elements[i].checked = false;
+                }
+                break;
+                
+            case "select-one":
+            case "select-multi":
+                elements[i].selectedIndex = -1;
+                break;
+
+            default:
+                break;
+        }
+    }
+}
+
+
 
 // ---------------- PARAMETERS ------------------
 
@@ -149,28 +135,21 @@ var prediction = shuffle(["ask", "like"])
 
 //var domains = shuffle(["poem", "cake", "cookie", "presentation", "painting", "review"]);
 
+var domains0 = shuffle(["practice1", "practice2", "practice3"])
 var domains1 = 
     shuffle(["poem", "cake", "cookie", "presentation", "song", "film", "solo", "monologue", "dance", "painting", "app", "review", "recital"]);
-var domains = domains1.concat(domains1, domains1)
+var domains = domains0.concat(domains1, domains1, domains1)
 
-var states1 = 
-    ["terrible", "bad", "okay", "good", "amazing"];
-var states2 = 
-    ["bad", "okay", "good", "amazing", "terrible"];
-var states3 = 
-    ["okay", "good", "amazing", "terrible", "bad"];
-var states4 = 
-    ["good", "amazing", "terrible", "bad", "okay"];
-var states5 = 
-    ["amazing", "terrible", "bad", "okay", "good"];
-var states = states1.concat(states2, states3, states4, states5, states1)
+var states0 = ["heart2", "heart1", "heart0"];
+var states = states0.concat(states0, states0, states0, states0, states0, states0, states0, states0)
 
+var utterances0 = ["practice1", "practice2", "practice3"];
 var utterances1 = 
-    ["yes_terrible", "not_bad", "yes_okay", 
+    ["yes_terrible", "not_bad", 
      "not_good", "yes_amazing","not_terrible", 
-     "yes_bad", "not_okay", "yes_good", 
+     "yes_bad", "yes_good", 
      "not_amazing"];
-var utterances = utterances1.concat(utterances1, utterances1)
+var utterances = utterances0.concat(utterances1, utterances1, utterances1)
 
 var goals1 = 
     ["nice", "honest", "both"];
@@ -192,7 +171,7 @@ var speakers = [];
 
 var allConditions = [];
 
-for (var i = 0; i < 30; i++) {
+for (var i = 0; i < 27; i++) { // FIXME:how many trials?
     allConditions.push(
     {"domain": domains[i],
  "state": states[i],
@@ -203,7 +182,7 @@ for (var i = 0; i < 30; i++) {
     )
 }
 
-var allConditions = shuffle([shuffle(allConditions)]);
+//var allConditions = shuffle([shuffle(allConditions)]);
 
 var keys = ["SP", "LS"];
 var values = [];
@@ -223,6 +202,15 @@ for(var i=0; i<values.length; i++){
 
 var sents = {
     utterances: {
+        practice1: {
+            sent_utterance: " Did SP think the BB deserved 2 out of 3 hearts?"
+        },        
+        practice2: {
+            sent_utterance: " Did SP think the BB deserved 3 out of 3 hearts?"
+        },        
+        practice3: {
+            sent_utterance: " Did SP think the BB deserved 0 out of 3 hearts?"
+        },        
         yes_terrible: {
             sent_utterance: " <b>\"It was terrible,\"</b> SP said."
         },        
@@ -256,7 +244,22 @@ var sents = {
     },
     
     domains: {
-       presentation: {
+       practice1: {
+            sent_precontext: "Imagine that SP just saw a presentation.", 
+            sent_context: "Here's how SP felt about the presentation, on a scale of 0 to 3 hearts:",
+            BB: "presentation",
+	},
+ 	   practice2: {
+            sent_precontext: "Imagine that SP tasted some cookies.", 
+            sent_context: "Here's how SP felt about the cookies, on a scale of 0 to 3 hearts:", 
+            BB: "cookie",
+	},
+	   practice3: {
+            sent_precontext: "Imagine that SP read a poem.", 
+            sent_context: "Here's how SP felt about the poem, on a scale of 0 to 3 hearts:", 
+            BB: "poem"}
+        ,
+      presentation: {
             sent_precontext: "Imagine that LS just gave a presentation, ", 
             sent_context: " LS approached SP, who had just seen LS's presentation, and asked \"How was my presentation?\"",
             BB: "presentation",
@@ -323,20 +326,17 @@ var sents = {
 	},
     },
     states: {
-        terrible: {
-            state: " <b>everyone thought LS's BB was terrible</b>,"        
+        heart0: {
+            state: "0"
         },
-        bad: {
-            state: " <b>everyone thought LS's BB was bad</b>,"        
+        heart1: {
+            state: "33.33"
         },
-        okay: {
-            state: " <b>everyone thought LS's BB was just okay</b>,"        
+        heart2: {
+            state: "66.66"
         },
-        good: {
-            state: " <b>everyone thought LS's BB was good</b>,"        
-        },
-        amazing: {
-            state: " <b>everyone thought LS's BB was amazing</b>,"        
+        heart3: {
+            state: "100"
         },
     },
     goals: {
@@ -396,8 +396,9 @@ function doSentSubs (sents, polite, domain, utterance, people, goal)
 }
 
 var numConditions = allConditions.length;
-var chooseCondition = random(0, numConditions-1);
-var allTrialOrders = allConditions[chooseCondition];
+//var chooseCondition = random(0, numConditions-1);
+//var allTrialOrders = allConditions[chooseCondition];
+var allTrialOrders = allConditions;
 var numTrials = allTrialOrders.length;
 var shuffledOrder = shuffledSampleArray(allTrialOrders.length, numTrials);
 var currentTrialNum = 0;
@@ -418,7 +419,7 @@ var experiment = {
     order: [],
     knowledge: state_knowledge,
     domain: [],
-//    state: [],
+    state: [],
     utterance: [],
     people: [],
     goal: [],
@@ -459,22 +460,84 @@ var experiment = {
     setTimeout(function() {turk.submit(experiment.data) }, 1500);
   },
     
+    practice: function() {
+    // Allow experiment to start if it's a turk worker OR if it's a test run
+	if (window.self == window.top | turk.workerId.length > 0) {
+
+    if (numComplete > 0) {
+      var judgment = getRadioCheckedValue(0, "judgment");
+        
+      experiment.data.order.push(numComplete);
+      experiment.data.utterance.push(trial.utterance);
+      experiment.data.domain.push(trial.domain);
+      experiment.data.state.push(trial.state);
+      experiment.data.judgment.push(judgment);
+
+      clearForm(document.forms[0]);
+      clearForm(document.forms[1]);
+
+      //Clear stars
+      $(".rating-stars").attr({"style":"width: 0%"});
+        
+    }
+    if (numComplete >= 3) {
+    	$('.bar').css('width', (200.0 * numComplete/numTrials) + 'px');
+    	$("#trial-num").html(numComplete);
+    	$("#total-num").html(numTrials);
+    	experiment.next();
+    } else {
+    	$('.bar').css('width', (200.0 * numComplete/numTrials) + 'px');
+    	$("#trial-num").html(numComplete);
+    	$("#total-num").html(numTrials);
+    	currentTrialNum = numComplete;
+    	trial = allTrialOrders[numComplete];
+//    	trial = allTrialOrders[shuffledOrder[numComplete]];
+        utterance = trial.utterance;
+        state = trial.state;
+        domain = trial.domain;
+        context = trial.context;
+        people = trial.people;
+        goal = trial.goal;
+        sent_materials = doSentSubs(sents, state, domain, utterance, people, goal);
+      showSlide("practice");
+//      $("#context").html(sent_materials[3] + sent_materials[1]);  
+//      $("#question").html(sent_materials[8]); 
+      $(".rating-stars").attr("style","width: " +
+							    state + "%");
+
+        //      $("#rating-stars").on("click", 
+//			    	function(event) {
+//						var selection = $("#rating-stars").val();
+//			});
+        
+      
+      for (var i = 0; i <= 4; i++)
+      {         
+        $("#score" + 10*i).html(score[i]);
+      }
+      $("#question2_pr").html(sent_materials[3] + "<br><br>" + sent_materials[1]);    
+      $("#question3_pr").html(sent_materials[0]);    
+      numComplete++;      
+    }}
+  },
+    
   next: function() {
     // Allow experiment to start if it's a turk worker OR if it's a test run
 	if (window.self == window.top | turk.workerId.length > 0) {
 
     if (numComplete > 0) {
 
-      var prob0 = parseInt(document.getElementById("hiddenSliderValue0").value) / 40.00;
-      var prob1 = parseInt(document.getElementById("hiddenSliderValue1").value) / 40.00;
-      var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
+//      var prob0 = parseInt(document.getElementById("hiddenSliderValue0").value) / 40.00;
+//      var prob1 = parseInt(document.getElementById("hiddenSliderValue1").value) / 40.00;
+//      var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
 //      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
 //      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
 //      var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
 
 //      var prob3 = getRadioCheckedValue(1, "state");
 //      experiment.stateRatings[currentTrialNum] = getRadioCheckedValue(1, "state");    
-      var judgment = $(".rating-stars").attr("style");
+      var judgment = $(".rating-stars").eq(1).attr("style");
+//      var judgment = $(".rating-stars").attr("style");
       judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
 
         
@@ -491,9 +554,7 @@ var experiment = {
       experiment.data.goal.push(goal);
       experiment.data.judgment.push(judgment);
       
-      clearForm(document.forms[0]);
-      clearForm(document.forms[1]);
-
+ 
       //Clear stars
       $(".rating-stars").attr({"style":"width: 0%"});
         
@@ -535,109 +596,3 @@ var experiment = {
     }}
   }
 }
-
-// scripts for sliders
-$("#slider0").slider({
-               animate: true,
-               orientation: "vertical",
-               max: 40 , min: 0, step: 1, value: 20,
-               slide: function( event, ui ) {
-                   $("#slider0 .ui-slider-handle").css({
-                      "background":"#E0F5FF",
-                      "border-color": "#001F29"
-                   });
-               },
-               change: function( event, ui ) {
-                   $('#hiddenSliderValue0').attr('value', ui.value);
-                   $("#slider0").css({"background":"#99D6EB"});
-                   $("#slider0 .ui-slider-handle").css({
-                     "background":"#667D94",
-                     "border-color": "#001F29" });
-               }});
-$("#slider1").slider({
-               animate: true,
-               orientation: "vertical",
-               max: 40 , min: 0, step: 1, value: 20,
-               slide: function( event, ui ) {
-                   $("#slider1 .ui-slider-handle").css({
-                      "background":"#E0F5FF",
-                      "border-color": "#001F29"
-                   });
-               },
-               change: function( event, ui ) {
-                   $('#hiddenSliderValue1').attr('value', ui.value);
-                   $("#slider1").css({"background":"#99D6EB"});
-                   $("#slider1 .ui-slider-handle").css({
-                     "background":"#667D94",
-                     "border-color": "#001F29" });
-               }});
-$("#slider2").slider({
-               animate: true,
-               orientation: "vertical",
-               max: 40 , min: 0, step: 1, value: 20,
-               slide: function( event, ui ) {
-                   $("#slider2 .ui-slider-handle").css({
-                      "background":"#E0F5FF",
-                      "border-color": "#001F29"
-                   });
-               },
-               change: function( event, ui ) {
-                   $('#hiddenSliderValue2').attr('value', ui.value);
-                   $("#slider2").css({"background":"#99D6EB"});
-                   $("#slider2 .ui-slider-handle").css({
-                     "background":"#667D94",
-                     "border-color": "#001F29" });
-               }});
-//$("#slider3").slider({
-//               animate: true,
-//               orientation: "vertical",
-//               max: 40 , min: 0, step: 1, value: 20,
-//               slide: function( event, ui ) {
-//                   $("#slider3 .ui-slider-handle").css({
-//                      "background":"#E0F5FF",
-//                      "border-color": "#001F29"
-//                   });
-//               },
-//               change: function( event, ui ) {
-//                   $('#hiddenSliderValue3').attr('value', ui.value);
-//                   $("#slider3").css({"background":"#99D6EB"});
-//                   $("#slider3 .ui-slider-handle").css({
-//                     "background":"#667D94",
-//                     "border-color": "#001F29" });
-//               }});
-
-$("#slider3").slider({
-               animate: true,
-               max: 40 , min: 0, step: 1, value: 20,
-               slide: function( event, ui ) {
-                   $("#slider3 .ui-slider-handle").css({
-                      "background":"#E0F5FF",
-                      "border-color": "#001F29"
-                   });
-               },
-               change: function( event, ui ) {
-                   $('#hiddenSliderValue3').attr('value', ui.value);
-                   $("#slider3").css({"background":"#99D6EB"});
-                   $("#slider3 .ui-slider-handle").css({
-                     "background":"#667D94",
-                     "border-color": "#001F29" });
-               }});
-
-$("#slider4").slider({
-               animate: true,
-               max: 40 , min: 0, step: 1, value: 20,
-               slide: function( event, ui ) {
-                   $("#slider4 .ui-slider-handle").css({
-                      "background":"#E0F5FF",
-                      "border-color": "#001F29"
-                   });
-               },
-               change: function( event, ui ) {
-                   $('#hiddenSliderValue4').attr('value', ui.value);
-                   $("#slider4").css({"background":"#99D6EB"});
-                   $("#slider4 .ui-slider-handle").css({
-                     "background":"#667D94",
-                     "border-color": "#001F29" });
-               }});
-
-
