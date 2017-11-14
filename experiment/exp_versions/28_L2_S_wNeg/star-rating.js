@@ -434,7 +434,7 @@
     };
 
     $.fn.rating.defaults = {
-        stars: 5,
+        stars: 3,
         glyphicon: true,
         symbol: null,
         ratingClass: '',
