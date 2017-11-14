@@ -170,29 +170,22 @@ var domains = domains1.concat(domains2)
 //    ["GOOD", "AMAZING","TERRIBLE","BAD","OKAY"];
 //var states5 = 
 //    ["AMAZING","TERRIBLE","BAD","OKAY","GOOD"];
+var states0 = 
+    ["heart0", "heart1", "heart2", "heart3"];
 var states1 = 
-    ["heart1", "heart2", "heart3", "heart4", "heart5"];
+    ["heart1", "heart2", "heart3", "heart0"];
 var states2 = 
-    ["heart2", "heart3", "heart4", "heart5","heart1"];
+    ["heart2", "heart3", "heart0","heart1"];
 var states3 = 
-    ["heart3", "heart4", "heart5","heart1", "heart2"];
-var states4 = 
-    ["heart4", "heart5","heart1", "heart2", "heart3"];
-var states5 = 
-    ["heart5","heart1", "heart2", "heart3", "heart4"];
-var states = states1.concat(states2, states3, states4, states5)
+    ["heart3","heart0", "heart1", "heart2"];
+var states = states0.concat(states1, states2, states3, states0, states1, states2, states3)
 
 var utterances1 = 
-    ["terrible", "bad", "okay", "good", "amazing"];
-var utterances2 = 
-    ["terrible", "bad", "okay", "good", "amazing"];
-var utterances3 = 
-    ["terrible", "bad", "okay", "good", "amazing"];
-var utterances4 = 
-    ["terrible", "bad", "okay", "good", "amazing"];
-var utterances5 = 
-    ["terrible", "bad", "okay", "good", "amazing"];
-var utterances = utterances1.concat(utterances2, utterances3,utterances4,utterances5)
+    ["yes_terrible", "not_bad", 
+     "not_good", "yes_amazing","not_terrible", 
+     "yes_bad", "yes_good", 
+     "not_amazing"];
+var utterances = utterances1.concat(utterances1, utterances1, utterances1)
 
 var goals0 = [shuffle(["nice", "honest"])];
 var goals = goals0.concat(goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0)
@@ -415,38 +408,62 @@ speakers25 = shuffle(speakers[24]);
 
 var sents = {
     states: {
+        heart0: {
+            state: "0"
+        },
         heart1: {
-            state: "20"
+            state: "33.33"
         },
         heart2: {
-            state: "40"
+            state: "66.67"
         },
         heart3: {
-            state: "60"
-        },
-        heart4: {
-            state: "80"
-        },
-        heart5: {
             state: "100"
         }
+
     },
     utterances: {
-        terrible: {
-            sent_utterance: " <b>\"Your BB was terrible,\"</b> SP said to LS.  "
+        practice1: {
+            sent_utterance: " Did SP think the BB deserved 2 out of 3 hearts?"
         },        
-        bad: {
-            sent_utterance: " <b>\"Your BB was bad,\"</b> SP said to LS."
+        practice2: {
+            sent_utterance: " Did SP think the BB deserved 3 out of 3 hearts?"
         },        
-        okay: {
-            sent_utterance: " <b>\"Your BB was okay,\"</b> SP said to LS." 
+        practice3: {
+            sent_utterance: " Did SP think the BB deserved 0 out of 3 hearts?"
+        },        
+        yes_terrible: {
+            sent_utterance: " <b>\"It was terrible,\"</b> SP said."
+        },        
+        yes_bad: {
+            sent_utterance: " <b>\"It was bad,\"</b> SP said."
+        },        
+        yes_okay: {
+            sent_utterance: " <b>\"It was okay,\"</b> SP said."
+        },        
+        yes_good: {
+            sent_utterance: " <b>\"It was good,\"</b> SP said."
+        },        
+        yes_amazing: {
+            sent_utterance: " <b>\"It was amazing,\"</b> SP said."
         },
-        good: {
-            sent_utterance: " <b>\"Your BB was good,\"</b> SP said to LS." 
+        not_terrible: {
+            sent_utterance: " <b>\"It wasn't terrible,\"</b> SP said."
+        },        
+        not_bad: {
+            sent_utterance: " <b>\"It wasn't bad,\"</b> SP said."
+        },        
+        not_okay: {
+            sent_utterance: " <b>\"It wasn't okay,\"</b> SP said."
+        },        
+        not_good: {
+            sent_utterance: " <b>\"It wasn't good,\"</b> SP said."
+        },        
+        not_amazing: {
+            sent_utterance: " <b>\"It wasn't amazing,\"</b> SP said."
         },
-        amazing: {
-            sent_utterance: " <b>\"Your BB was amazing,\"</b> SP said to LS."         },
     },
+    
     
     domains: {
        presentation: {
