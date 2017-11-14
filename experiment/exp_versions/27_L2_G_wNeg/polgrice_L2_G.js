@@ -2,8 +2,8 @@ var filename = "EJY_polgrice_goals_v4"
 var condCounts = "1,5;2,5;" //Example: "1,20;2,20;3,20"
 
 // ---------------- HELPER ------------------
-var NUM_SLIDERS = 3;
-var NUM_SLIDERS1 = 3;
+var NUM_SLIDERS = 2;
+var NUM_SLIDERS1 = 2;
 var NUM_SLIDERS2 = 2;
 
 function showSlide(id) {
@@ -128,10 +128,10 @@ function getRadioCheckedValue(formNum, radio_name)
 
 // CONDITION ASSIGNMENT
 // var cond = random(3)+1;
-var expt = "polgrice_uttJudg";
+var expt = "polgrice_L2_G_2goals";
 //var cond = random(2)+1;
 //var cond = 1;
-var cond = "uttJudg"
+var cond = "L2_G_2goals"
 
 // call the maker getter to get the cond variable 
 //var xmlHttp = null;
@@ -140,7 +140,7 @@ var cond = "uttJudg"
 //xmlHttp.send( null );
 //var cond = xmlHttp.responseText;
 
-var score = shuffle(["nice", "honest", "mean"]);
+var score = shuffle(["nice", "honest"]);
 var prediction = shuffle(["ask", "like"])
 
 //if (cond == 1) {
@@ -194,8 +194,8 @@ var utterances5 =
     ["terrible", "bad", "okay", "good", "amazing"];
 var utterances = utterances1.concat(utterances2, utterances3,utterances4,utterances5)
 
-var goals = 
-    ["nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean","nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean", "nice", "honest", "mean"];
+var goals0 = [shuffle(["nice", "honest"])];
+var goals = goals0.concat(goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0)
 
     var allConditions = 
 shuffle(
@@ -207,151 +207,176 @@ shuffle(
  "state": states[0],
  "utterance": utterances[0],
  "people": "people1",
- "goal": goals[0],
+ "goal1": goals[0][0],
+ "goal2": goals[0][1],
 },
 {"domain": domains[1],
  "state": states[1],
  "utterance": utterances[1],
  "people": "people2",
- "goal": goals[1],
+ "goal1": goals[1][0],
+ "goal2": goals[1][1],
 },
 {"domain": domains[2],
  "state": states[2],
  "utterance": utterances[2],
  "people": "people3",
- "goal": goals[2],
+ "goal1": goals[2][0],
+ "goal2": goals[2][1],
 },
 {"domain": domains[3],
  "state": states[3],
  "utterance": utterances[3],
  "people": "people4",
- "goal": goals[3],
+ "goal1": goals[3][0],
+ "goal2": goals[3][1],
 },
 {"domain": domains[4],
  "state": states[4],
  "utterance": utterances[4],
  "people": "people5",
- "goal": goals[4],
+ "goal1": goals[4][0],
+ "goal2": goals[4][1],
 },
 {"domain": domains[5],
  "state": states[5],
  "utterance": utterances[5],
  "people": "people6",
- "goal": goals[5],
+ "goal1": goals[5][0],
+ "goal2": goals[5][1],
 },
 {"domain": domains[6],
  "state": states[6],
  "utterance": utterances[6],
  "people": "people7",
- "goal": goals[6],
+ "goal1": goals[6][0],
+ "goal2": goals[6][1],
 },
 {"domain": domains[7],
  "state": states[7],
  "utterance": utterances[7],
  "people": "people8",
- "goal": goals[7],
+ "goal1": goals[7][0],
+ "goal2": goals[7][1],
 },
 {"domain": domains[8],
  "state": states[8],
  "utterance": utterances[8],
  "people": "people9",
- "goal": goals[8],
+ "goal1": goals[8][0],
+ "goal2": goals[8][1],
 },
 {"domain": domains[9],
  "state": states[9],
  "utterance": utterances[9],
  "people": "people10",
- "goal": goals[9],
+ "goal1": goals[9][0],
+ "goal2": goals[9][1],
 },
 {"domain": domains[10],
  "state": states[10],
  "utterance": utterances[10],
  "people": "people11",
- "goal": goals[10],
+ "goal1": goals[10][0],
+ "goal2": goals[10][1],
 },
 {"domain": domains[11],
  "state": states[11],
  "utterance": utterances[11],
  "people": "people12",
- "goal": goals[11],
+ "goal1": goals[11][0],
+ "goal2": goals[11][1],
 },
 {"domain": domains[12],
  "state": states[12],
  "utterance": utterances[12],
  "people": "people13",
- "goal": goals[12],
+ "goal1": goals[12][0],
+ "goal2": goals[12][1],
 },
 {"domain": domains[13],
  "state": states[13],
  "utterance": utterances[13],
  "people": "people14",
- "goal": goals[13],
+ "goal1": goals[13][0],
+ "goal2": goals[13][1],
 },
 {"domain": domains[14],
  "state": states[14],
  "utterance": utterances[14],
  "people": "people15",
- "goal": goals[14],
+ "goal1": goals[14][0],
+ "goal2": goals[14][1],
 },
 {"domain": domains[15],
  "state": states[15],
  "utterance": utterances[15],
  "people": "people16",
- "goal": goals[15],
+ "goal1": goals[15][0],
+ "goal2": goals[15][1],
 },
 {"domain": domains[16],
  "state": states[16],
  "utterance": utterances[16],
  "people": "people17",
- "goal": goals[16],
+ "goal1": goals[16][0],
+ "goal2": goals[16][1],
 },
 {"domain": domains[17],
  "state": states[17],
  "utterance": utterances[17],
  "people": "people18",
- "goal": goals[17],
+ "goal1": goals[17][0],
+ "goal2": goals[17][1],
 },
 {"domain": domains[18],
  "state": states[18],
  "utterance": utterances[18],
  "people": "people19",
- "goal": goals[18],
+ "goal1": goals[18][0],
+ "goal2": goals[18][1],
 },
 {"domain": domains[19],
  "state": states[19],
  "utterance": utterances[19],
  "people": "people20",
- "goal": goals[19],
+ "goal1": goals[19][0],
+ "goal2": goals[19][1],
 },
 {"domain": domains[20],
  "state": states[20],
  "utterance": utterances[20],
  "people": "people21",
- "goal": goals[20],
+ "goal1": goals[20][0],
+ "goal2": goals[20][1],
 },
 {"domain": domains[21],
  "state": states[21],
  "utterance": utterances[21],
  "people": "people22",
- "goal": goals[21],
+ "goal1": goals[21][0],
+ "goal2": goals[21][1],
 },
 {"domain": domains[22],
  "state": states[22],
  "utterance": utterances[22],
  "people": "people23",
- "goal": goals[22],
+ "goal1": goals[22][0],
+ "goal2": goals[22][1],
 },
 {"domain": domains[23],
  "state": states[23],
  "utterance": utterances[23],
  "people": "people24",
- "goal": goals[23],
+ "goal": goals[23][0],
+ "goal2": goals[23][1],
 },
 {"domain": domains[24],
  "state": states[24],
  "utterance": utterances[24],
  "people": "people25",
- "goal": goals[24],
+ "goal1": goals[24][0],
+ "goal2": goals[24][1],
 }
     ])
 ]); 
@@ -522,14 +547,11 @@ var sents = {
 //    },
     goals: {
         nice: {
-            goal: " <b>SP wanted to be nice, so "
+            goal: "make LS feel good"
         },
         honest: {
-            goal: " <b>SP wanted to be honest, so "            
-        },
-        mean: {
-            goal: " <b>SP wanted to be mean, so "            
-        }  
+            goal: "give informative feedback"            
+        } 
     },
     people: {
         people1: {
@@ -642,7 +664,8 @@ function doSentSubs (sents, polite, domain, utterance, people, goal)
     context = sents["domains"][domain]["sent_context"];
     context2 = sents["domains"][domain]["sent_context2"];
     state = sents["states"][state]["state"]
-    goal = sents["goals"][goal]["goal"]
+    goal1 = sents["goals"][goal1]["goal"]
+    goal2 = sents["goals"][goal2]["goal"]
     if (state_knowledge == "known") {
         knowledge = " <b>and LS knew it</b>."
     } else if (state_knowledge == "unknown") {
@@ -666,11 +689,12 @@ function doSentSubs (sents, polite, domain, utterance, people, goal)
     question2 = question2.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     question3 = question3.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     knowledge = knowledge.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
-    goal = goal.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
+    goal1 = goal1.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
+    goal2 = goal2.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
     feeling = feeling.replace("BB",BB).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("SP",SP).replace("LS",LS).replace("LS",LS).replace("LS",LS);   
 
     
-    return [utterance, context, state, precontext, question, question2, question3, knowledge, goal, feeling, context2];
+    return [utterance, context, state, precontext, question, question2, question3, knowledge, goal1, goal2, feeling, context2];
 }
 
 var numConditions = allConditions.length;
@@ -701,15 +725,15 @@ var experiment = {
     people: [],
 //    goal: [],
 //    context: [],
-    goal0: score[0],
-    goal1: score[1],
-    goal2: score[2],
+    goal0: goals0[0],
+    goal1: goals0[1],
+//    goal2: score[2],
 //    goal3: score[3],
 //    prediction0: prediction[0],
 //    prediction1: prediction[1],
     goalProb0: [],
     goalProb1: [],
-    goalProb2: [],
+//    goalProb2: [],
 //    judgment: [],
 //    stateProb: [],
 //    predictedProb0: [],
@@ -745,7 +769,7 @@ var experiment = {
 
       var prob0 = parseInt(document.getElementById("hiddenSliderValue0").value) / 40.00;
       var prob1 = parseInt(document.getElementById("hiddenSliderValue1").value) / 40.00;
-      var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
+//      var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
 //      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
 //      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
 //      var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
@@ -764,7 +788,7 @@ var experiment = {
       experiment.data.state.push(trial.state);
       experiment.data.goalProb0.push(prob0);
       experiment.data.goalProb1.push(prob1);
-      experiment.data.goalProb2.push(prob2);
+//      experiment.data.goalProb2.push(prob2);
 //      experiment.data.stateProb.push(prob3);
 //      experiment.data.predictedProb0.push(prob3);
 //      experiment.data.predictedProb1.push(prob4);
@@ -794,8 +818,9 @@ var experiment = {
         domain = trial.domain;
         context = trial.context;
         people = trial.people;
-        goal = trial.goal;
-        sent_materials = doSentSubs(sents, state, domain, utterance, people, goal);
+        goal1 = trial.goal1;
+        goal2 = trial.goal2;
+        sent_materials = doSentSubs(sents, state, domain, utterance, people, goal1, goal2);
       showSlide("stage");
       $("#context").html(sent_materials[3] + sent_materials[7] + sent_materials[1]);  
       $("#context2").html(sent_materials[0]);  
@@ -804,17 +829,10 @@ var experiment = {
       $(".rating-stars").attr("style","width: " +
 							    state + "%");
 
-        //      $("#rating-stars").on("click", 
-//			    	function(event) {
-//						var selection = $("#rating-stars").val();
-//			});
-        
       
-      for (var i = 0; i <= 4; i++)
-      {         
-        $("#score" + 10*i).html(score[i]);
-      }
-      $("#question2").html(sent_materials[9]);    
+      $("#score0").html(sent_materials[8]);
+      $("#score10").html(sent_materials[9]);
+      $("#question2").html(sent_materials[10]);    
       $("#question3").html(sent_materials[0]);    
       numComplete++;      
     }}
