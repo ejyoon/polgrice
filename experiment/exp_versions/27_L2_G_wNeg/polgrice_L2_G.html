@@ -36,7 +36,7 @@
   </p>
   <button type="button" 
           onclick="this.blur(); 
-                   experiment.next();
+                   experiment.practice();
                                  ">Start</button>
   
   <p class="block-text"><br> <b> Note: you won't be able to preview this HIT before accepting it because it's so short. </b></p>
@@ -204,6 +204,52 @@ function pressEnter(e) {
 </script>
 
 </script>
+    
+    <div class="slide" id="practice">
+    <div id="practice_slide">
+<span id="form2">
+    <br><br>
+        <p id="question2_pr"></p>
+    
+ <!--
+  ###############################################################
+  Star-ratings
+  http://www.jqueryscript.net/other/Simple-jQuery-Star-Rating-System-For-Bootstrap-3.html
+  -->
+  <div id="test" name= "star" align="center">
+    <input id="rating-system" type="number" class="rating" 
+    	min="0" max="3" step="1" 
+    	data-showCaption="true" showClear="false" hoverEnabled="false">
+  </div>
+  <!--star-ratings
+  ###############################################################
+  -->     
+<br>
+    
+    <p id="question3_pr"></p>
+<br>
+<form name="judgment">
+<table align = "center"><tr>
+<td>
+  <tr>
+  	<td>No</td>
+    <td>Yes</td>    
+  </tr>
+  	<td><input type="radio" name="judgment" value = "0"></td>
+    <td><input type="radio" name="judgment" value = "1"></td>
+  </tr>
+</table>
+</form>
+
+    <br>
+    <button type="button" id="next" onclick="this.blur(); if
+    (ValidateForm(document.judgment)) {
+experiment.practice();                                                       
+}">Next</button>
+        </span>
+    </div>
+</div>
+
 
 
 <div class="slide" id="stage">

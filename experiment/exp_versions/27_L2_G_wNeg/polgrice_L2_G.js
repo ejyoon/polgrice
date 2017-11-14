@@ -151,11 +151,10 @@ var prediction = shuffle(["ask", "like"])
 
 //var domains = shuffle(["poem", "cake", "cookie", "presentation", "painting", "review"]);
 
+var domains0 = shuffle(["practice1", "practice2", "practice3"])
 var domains1 = 
     shuffle(["poem", "cake", "cookie", "presentation", "song", "film", "solo", "monologue", "dance", "painting", "app", "review", "recital"]);
-var domains2 = 
-    shuffle(["poem", "cake", "cookie", "presentation", "song", "film", "solo", "monologue", "dance", "painting", "app", "review", "recital"]);
-var domains = domains1.concat(domains2)
+var domains = domains0.concat(domains1, domains1, domains1)
 
 //var states = 
 //    ["terrible", "bad", "terrible", "bad", "terrible", "bad"];
@@ -170,6 +169,7 @@ var domains = domains1.concat(domains2)
 //    ["GOOD", "AMAZING","TERRIBLE","BAD","OKAY"];
 //var states5 = 
 //    ["AMAZING","TERRIBLE","BAD","OKAY","GOOD"];
+var states_pr = ["heart2", "heart1", "heart0"];
 var states0 = 
     ["heart0", "heart1", "heart2", "heart3"];
 var states1 = 
@@ -178,22 +178,22 @@ var states2 =
     ["heart2", "heart3", "heart0","heart1"];
 var states3 = 
     ["heart3","heart0", "heart1", "heart2"];
-var states = states0.concat(states1, states2, states3, states0, states1, states2, states3)
+var states = states_pr.concat(states0, states1, states2, states3, states0, states1, states2, states3)
 
+var utterances0 = ["practice1", "practice2", "practice3"];
 var utterances1 = 
     ["yes_terrible", "not_bad", 
      "not_good", "yes_amazing","not_terrible", 
      "yes_bad", "yes_good", 
      "not_amazing"];
-var utterances = utterances1.concat(utterances1, utterances1, utterances1)
+var utterances = utterances0.concat(utterances1, utterances1, utterances1, utterances1)
 
 var goals0 = [shuffle(["nice", "honest"])];
-//var goals = goals0.concat(goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0, goals0)
-var goals = Array(32).fill(goals0[0], goals0[1])
+var goals = Array(35).fill(goals0[0], goals0[1])
 
 var allConditions = [];
 
-for (var i = 0; i < 32; i++) {
+for (var i = 0; i < 35; i++) {
     allConditions.push(
     {"domain": domains[i],
  "state": states[i],
@@ -205,192 +205,8 @@ for (var i = 0; i < 32; i++) {
     )
 }
 
-var allConditions = shuffle([shuffle(allConditions)]);
-
-//var allConditions = 
-//shuffle(
-//    [
-//    
-//shuffle(
-//    [
-//{"domain": domains[0],
-// "state": states[0],
-// "utterance": utterances[0],
-// "people": "people1",
-// "goal1": goals[0][0],
-// "goal2": goals[0][1],
-//},
-//{"domain": domains[1],
-// "state": states[1],
-// "utterance": utterances[1],
-// "people": "people2",
-// "goal1": goals[1][0],
-// "goal2": goals[1][1],
-//},
-//{"domain": domains[2],
-// "state": states[2],
-// "utterance": utterances[2],
-// "people": "people3",
-// "goal1": goals[2][0],
-// "goal2": goals[2][1],
-//},
-//{"domain": domains[3],
-// "state": states[3],
-// "utterance": utterances[3],
-// "people": "people4",
-// "goal1": goals[3][0],
-// "goal2": goals[3][1],
-//},
-//{"domain": domains[4],
-// "state": states[4],
-// "utterance": utterances[4],
-// "people": "people5",
-// "goal1": goals[4][0],
-// "goal2": goals[4][1],
-//},
-//{"domain": domains[5],
-// "state": states[5],
-// "utterance": utterances[5],
-// "people": "people6",
-// "goal1": goals[5][0],
-// "goal2": goals[5][1],
-//},
-//{"domain": domains[6],
-// "state": states[6],
-// "utterance": utterances[6],
-// "people": "people7",
-// "goal1": goals[6][0],
-// "goal2": goals[6][1],
-//},
-//{"domain": domains[7],
-// "state": states[7],
-// "utterance": utterances[7],
-// "people": "people8",
-// "goal1": goals[7][0],
-// "goal2": goals[7][1],
-//},
-//{"domain": domains[8],
-// "state": states[8],
-// "utterance": utterances[8],
-// "people": "people9",
-// "goal1": goals[8][0],
-// "goal2": goals[8][1],
-//},
-//{"domain": domains[9],
-// "state": states[9],
-// "utterance": utterances[9],
-// "people": "people10",
-// "goal1": goals[9][0],
-// "goal2": goals[9][1],
-//},
-//{"domain": domains[10],
-// "state": states[10],
-// "utterance": utterances[10],
-// "people": "people11",
-// "goal1": goals[10][0],
-// "goal2": goals[10][1],
-//},
-//{"domain": domains[11],
-// "state": states[11],
-// "utterance": utterances[11],
-// "people": "people12",
-// "goal1": goals[11][0],
-// "goal2": goals[11][1],
-//},
-//{"domain": domains[12],
-// "state": states[12],
-// "utterance": utterances[12],
-// "people": "people13",
-// "goal1": goals[12][0],
-// "goal2": goals[12][1],
-//},
-//{"domain": domains[13],
-// "state": states[13],
-// "utterance": utterances[13],
-// "people": "people14",
-// "goal1": goals[13][0],
-// "goal2": goals[13][1],
-//},
-//{"domain": domains[14],
-// "state": states[14],
-// "utterance": utterances[14],
-// "people": "people15",
-// "goal1": goals[14][0],
-// "goal2": goals[14][1],
-//},
-//{"domain": domains[15],
-// "state": states[15],
-// "utterance": utterances[15],
-// "people": "people16",
-// "goal1": goals[15][0],
-// "goal2": goals[15][1],
-//},
-//{"domain": domains[16],
-// "state": states[16],
-// "utterance": utterances[16],
-// "people": "people17",
-// "goal1": goals[16][0],
-// "goal2": goals[16][1],
-//},
-//{"domain": domains[17],
-// "state": states[17],
-// "utterance": utterances[17],
-// "people": "people18",
-// "goal1": goals[17][0],
-// "goal2": goals[17][1],
-//},
-//{"domain": domains[18],
-// "state": states[18],
-// "utterance": utterances[18],
-// "people": "people19",
-// "goal1": goals[18][0],
-// "goal2": goals[18][1],
-//},
-//{"domain": domains[19],
-// "state": states[19],
-// "utterance": utterances[19],
-// "people": "people20",
-// "goal1": goals[19][0],
-// "goal2": goals[19][1],
-//},
-//{"domain": domains[20],
-// "state": states[20],
-// "utterance": utterances[20],
-// "people": "people21",
-// "goal1": goals[20][0],
-// "goal2": goals[20][1],
-//},
-//{"domain": domains[21],
-// "state": states[21],
-// "utterance": utterances[21],
-// "people": "people22",
-// "goal1": goals[21][0],
-// "goal2": goals[21][1],
-//},
-//{"domain": domains[22],
-// "state": states[22],
-// "utterance": utterances[22],
-// "people": "people23",
-// "goal1": goals[22][0],
-// "goal2": goals[22][1],
-//},
-//{"domain": domains[23],
-// "state": states[23],
-// "utterance": utterances[23],
-// "people": "people24",
-// "goal1": goals[23][0],
-// "goal2": goals[23][1],
-//},
-//{"domain": domains[24],
-// "state": states[24],
-// "utterance": utterances[24],
-// "people": "people25",
-// "goal1": goals[24][0],
-// "goal2": goals[24][1],
-//}
-//    ])
-//]); 
-//}
+//var allConditions = shuffle([shuffle(allConditions)]);
+var allConditions = [allConditions];
 
 speakers = shuffle([["John","Bob",], ["Hailey", "Mika"], ["Karen", "Jenny"], ["Kyle", "James"], ["Sean", "Chris"],
                     ["Lucy", "Sarah"], ["Bill", "Tom"], ["Heather", "Grace"], ["Jake", "Kevin"], ["Ann", "Diana"],
@@ -483,7 +299,25 @@ var sents = {
     
     
     domains: {
-       presentation: {
+        practice1: {
+            sent_precontext: "Imagine that SP just saw a presentation.", 
+            sent_context: "Here's how SP felt about the presentation, on a scale of 0 to 3 hearts:",
+             sent_context2: " SP saw the presentation.",
+           BB: "presentation",
+	},
+ 	   practice2: {
+            sent_precontext: "Imagine that SP tasted some cookies.", 
+            sent_context: "Here's how SP felt about the cookies, on a scale of 0 to 3 hearts:", 
+            sent_context2: " SP tasted the cookies.",
+          BB: "cookie",
+	},
+	   practice3: {
+            sent_precontext: "Imagine that SP read a poem.", 
+            sent_context: "Here's how SP felt about the poem, on a scale of 0 to 3 hearts:", 
+            sent_context2: " SP read the poem.",
+            BB: "poem"}
+        ,
+      presentation: {
             sent_precontext: "Imagine that LS just gave a presentation, ", 
             sent_context: " LS approached SP and asked \"How was my presentation?\"",
             sent_context2: " SP saw the presentation.",
@@ -691,7 +525,7 @@ var sents = {
     }
 };
 
-function doSentSubs (sents, polite, domain, utterance, people, goal)
+function doSentSubs (sents, polite, domain, utterance, people, goal1, goal2)
 {
     utterance = sents["utterances"][utterance]["sent_utterance"];
     precontext = sents["domains"][domain]["sent_precontext"];
@@ -736,6 +570,7 @@ var chooseCondition = random(0, numConditions-1);
 var allTrialOrders = allConditions[chooseCondition];
 var numTrials = allTrialOrders.length;
 var shuffledOrder = shuffledSampleArray(allTrialOrders.length, numTrials);
+shuffledOrder = shuffledOrder.filter(item => ![0, 1, 2].includes(item))
 var currentTrialNum = 0;
 var trial;
 var numComplete = 0;
@@ -768,7 +603,7 @@ var experiment = {
     goalProb0: [],
     goalProb1: [],
 //    goalProb2: [],
-//    judgment: [],
+    judgment: [],
 //    stateProb: [],
 //    predictedProb0: [],
 //    predictedProb1: [],
@@ -795,6 +630,69 @@ var experiment = {
     setTimeout(function() {turk.submit(experiment.data) }, 1500);
   },
     
+   practice: function() {
+    // Allow experiment to start if it's a turk worker OR if it's a test run
+	if (window.self == window.top | turk.workerId.length > 0) {
+
+    if (numComplete > 0) {
+      var judgment = getRadioCheckedValue(0, "judgment");
+        
+      experiment.data.order.push(numComplete);
+      experiment.data.utterance.push(trial.utterance);
+      experiment.data.domain.push(trial.domain);
+      experiment.data.state.push(trial.state);
+      experiment.data.judgment.push(judgment);
+
+      clearForm(document.forms[0]);
+      clearForm(document.forms[1]);
+
+      //Clear stars
+      $(".rating-stars").attr({"style":"width: 0%"});
+        
+    }
+    if (numComplete >= 3) {
+    	$('.bar').css('width', (200.0 * numComplete/numTrials) + 'px');
+    	$("#trial-num").html(numComplete);
+    	$("#total-num").html(numTrials);
+    	experiment.next();
+    } else {
+    	$('.bar').css('width', (200.0 * numComplete/numTrials) + 'px');
+    	$("#trial-num").html(numComplete);
+    	$("#total-num").html(numTrials);
+    	currentTrialNum = numComplete;
+    	trial = allTrialOrders[numComplete];
+//    	trial = allTrialOrders[shuffledOrder[numComplete]];
+        utterance = trial.utterance;
+        state = trial.state;
+        domain = trial.domain;
+        context = trial.context;
+        people = trial.people;
+        goal1 = trial.goal1;
+        goal2 = trial.goal2;
+        sent_materials = doSentSubs(sents, state, domain, utterance, people, goal1, goal2);
+      showSlide("practice");
+//      $("#context").html(sent_materials[3] + sent_materials[1]);  
+//      $("#question").html(sent_materials[8]); 
+      $(".rating-stars").attr("style","width: " +
+							    state + "%");
+
+        //      $("#rating-stars").on("click", 
+//			    	function(event) {
+//						var selection = $("#rating-stars").val();
+//			});
+        
+      
+      for (var i = 0; i <= 4; i++)
+      {         
+        $("#score" + 10*i).html(score[i]);
+      }
+      $("#question2_pr").html(sent_materials[3] + "<br><br>" + sent_materials[1]);    
+      $("#question3_pr").html(sent_materials[0]);    
+      numComplete++;      
+    }}
+  },
+ 
+    
   next: function() {
     // Allow experiment to start if it's a turk worker OR if it's a test run
 	if (window.self == window.top | turk.workerId.length > 0) {
@@ -803,18 +701,6 @@ var experiment = {
 
       var prob0 = parseInt(document.getElementById("hiddenSliderValue0").value) / 40.00;
       var prob1 = parseInt(document.getElementById("hiddenSliderValue1").value) / 40.00;
-//      var prob2 = parseInt(document.getElementById("hiddenSliderValue2").value) / 40.00;
-//      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
-//      var prob3 = parseInt(document.getElementById("hiddenSliderValue3").value) / 40.00;
-//      var prob4 = parseInt(document.getElementById("hiddenSliderValue4").value) / 40.00;
-
-//      var prob3 = getRadioCheckedValue(1, "state");
-//      experiment.stateRatings[currentTrialNum] = getRadioCheckedValue(1, "state");    
-//      var judgment = $(".rating-stars").attr("style");
-//      judgment = parseInt(judgment.replace(/[^\d.]/g, ''));
-//      var judgment = getRadioCheckedValue(0, "judgment");
-//      var judgment = document.getElementsByName("judgment");
-//      var judgment = getRadioCheckedValue(1, "judgment");
         
       experiment.data.order.push(numComplete);
       experiment.data.utterance.push(trial.utterance);
@@ -822,12 +708,6 @@ var experiment = {
       experiment.data.state.push(trial.state);
       experiment.data.goalProb0.push(prob0);
       experiment.data.goalProb1.push(prob1);
-//      experiment.data.goalProb2.push(prob2);
-//      experiment.data.stateProb.push(prob3);
-//      experiment.data.predictedProb0.push(prob3);
-//      experiment.data.predictedProb1.push(prob4);
-//      experiment.data.goal.push(goal);
-//      experiment.data.judgment.push(judgment);
       
       clearForm(document.forms[0]);
       clearForm(document.forms[1]);
