@@ -14,8 +14,8 @@ library(magrittr)
 library(ggthemes)
 library(forcats)
 # set path to working dir
-local.path <- "~/Documents/research/polgrice/"
-#local.path <- "~/Documents/Research/polgrice_GIT/"
+# local.path <- "~/Documents/research/polgrice/"
+local.path <- "~/Documents/Research/polgrice_GIT/"
 ```
 
 ```{r}
@@ -90,7 +90,7 @@ var meaning = function(words, state){
 
 var listener0 = cache(function(utterance) {
   Infer({method: "enumerate"}, function(){
-	  //var state = uniformDraw(states);
+	//  var state = uniformDraw(states);
     var state = sample(StatePrior)
 	//	var state = categorical ({vs: states, ps: [5,4,3,2,1]})
 
@@ -124,8 +124,8 @@ var listener1 = cache(function(utterance) {
    var speakerGoals = {
      phi: categorical ({vs: weightBins, ps: phiWeights})
    }
-   // var state = uniformDraw(states);
-    var state = sample(StatePrior)
+    var state = uniformDraw(states);
+   // var state = sample(StatePrior)
 
    var S1 = speaker1(state, speakerGoals)
    observe(S1, utterance)
@@ -137,7 +137,28 @@ var listener1 = cache(function(utterance) {
 
  })
 }, 10000);
-listener1("not_terrible")
+
+var speaker2 = cache(function(state, truthiness) {
+  Infer({method: "enumerate"}, function(){
+
+	 var utterance = sample(utterancePrior);
+	 var intendedGoals = {phi: truthiness}
+
+   var L1 = listener1(utterance)
+
+   factor(speakerOptimality2 * L1.score({
+              "state":state,
+              "goals":intendedGoals
+    }))
+
+   return {negation: isNegation(utterance),
+            utterance: utterance}
+
+ })
+}, 10000);
+
+//listener1("not_amazing")
+speaker2(1, 0.5);
 '
 
 l1.rs <- webppl(rsaModel) %>%
@@ -148,6 +169,23 @@ ggplot(l1.rs, aes( x = phi, y = prob, color = state, group = state))+
 
 ```
 
+```{r}
+l1.all2 <- l1.all2 %>% mutate(prior = factor(prior, levels = c("neither", "L0_only", "L1_only", "both")))
+
+ggplot(l1.all2, aes( x = phi, y = prob, color = state, group = state))+
+  geom_line() +
+  facet_grid(prior~.)+
+  ggtitle("L1 prediction on phi given \"not amazing\", \n faceted by state prior setting")
+
+ggplot(l1.all %>%
+         group_by(state, prior) %>%
+         summarise(prob = sum(prob)), 
+       aes( x = state, y = prob, fill = state, group = state))+
+  geom_bar(position=position_dodge(), stat = "identity") +
+  facet_grid(prior~.)+
+  ggtitle("L1 prediction on state given \"not terrible\", \n faceted by state prior setting")
+
+```
 
 ```{r}
 speakerModel <- '
@@ -170,8 +208,12 @@ var speaker2 = cache(function(state, truthiness) {
  })
 }, 10000);
 
-speaker2(s, w);
+speaker2(1, 0.4);
 '
+
+fullModel = paste(rsaModel, speakerModel, sep="\n\n")
+
+s2.rs <- webppl(fullModel)
 ```
 
 ```{r}
