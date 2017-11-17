@@ -1,4 +1,4 @@
-// webppl s2-bda-postcogsci17.wppl --require webppl-json
+// webppl s2-bda-4pred.wppl --require webppl-json 1
 // requires webppl package: webppl-json
 
 var index = last(process.argv) // load index as last command line index
@@ -51,14 +51,13 @@ var data = json.read('data/utterance_3heart_registered.json')
 var litSemanticsPosteriorObj = _.fromPairs(map(function(u){
   return [u, _.fromPairs(map(function(s){
     var litParams = _.filter(literalSemantics, {state: s, utterance: u})[0]
-//     display(litParams)
     return [s, {a: litParams.posterior_b1, b: litParams.posterior_b2}]
   }, states))]
 }, utterances))
 
 
 var goals = _.uniq(_.map(data, "goal"));
-var states = _.uniq(_.map(data, "true_state")); // need to create smoothers around these states
+var states = _.uniq(_.map(data, "true_state"));
 
 
 var model = function(){
@@ -69,16 +68,6 @@ var litSemantics = _.fromPairs(map(function(u){
       return [s, beta(litParams)]
     }, states))]
   }, utterances))
-
-// display(litSemantics.not_terrible)
-//
-// var litSemKern = map(function(u){
-//       var litParams = litSemantics.u;
-//       display(litParams)
-//       return sample(litParams, {driftKernel: kernelFn})
-//     }, utterances)
-// display(litSemKern)
-//
 
   var RSAparameters = {
     speakerOptimality: uniformDrift({a: 0, b: 20, width:2}),
@@ -140,7 +129,6 @@ var litSemantics = _.fromPairs(map(function(u){
       var phi = categorical ({vs: weightBins, ps: phiWeights})
 
       var state = uniformDraw(states);
-//       var state = categorical({vs: states, ps: [4, 3, 2, 1]}) // FIXME: shouldn't it be conditional on the true state?
 
       var S1 = speaker1(state, phi)
       observe(S1, utterance)
@@ -183,15 +171,7 @@ var litSemantics = _.fromPairs(map(function(u){
 //     var selfSUtility = (1-s2Goals.phi)*socialUtility;
 // var speakerSelfUtility = selfEUtility+selfSUtility;
 
-
 // var selfEpiUtility = L1.score({"state":state,"phi":s1Goals})
-
-
-	// FIXME: triple mixed utility - self(5)
-    // var selfPresUtility = s2Goals.phi*
-    // var trueEUtility = s2Goals2.phi*epistemicUtility;
-    // var trueSUtility = (1-s2Goals2.phi)*socialUtility;
-	// var speakerPartialMixedUtility = selfPresUtility+trueEUtility
 
 
 //    	factor(RSAparameters.speakerOptimality*speakerUtility); // actual(2)
@@ -265,21 +245,13 @@ var litSemantics = _.fromPairs(map(function(u){
         val: negEndorsement
       }])
 
-//       return _.flattenDeep([litSemantics, {
-//       	key: "litSem",
-//       	goal: "NA",
-//       	state: state,
-//       	utt: u,
-//       	val: m
-//       }])
-
     }, states)
 
     return [
       postPred,
-      {key: "phi_informative", goal: goal, state: "NA", utt: "NA", val: informative_phi}, // FIXME:
-      {key: "phi_Selfpres", goal: goal, state: "NA", utt: "NA", val: selfpres_phi}, // FIXME:
-      {key: "phi_social", goal: goal, state: "NA", utt: "NA", val: social_phi}, // FIXME:
+      {key: "phi_informative", goal: goal, state: "NA", utt: "NA", val: informative_phi}, 
+      {key: "phi_Selfpres", goal: goal, state: "NA", utt: "NA", val: selfpres_phi}, 
+      {key: "phi_social", goal: goal, state: "NA", utt: "NA", val: social_phi}, 
       {key: "phi_s1", goal: goal, state: "NA", utt: "NA", val: S1_phi}
     ]
 
@@ -309,7 +281,7 @@ var method = "MCMC";
 var samples = numSamples;
 var burn = numSamples / 2;
 var posterior = Infer({model, method, samples, burn, verbose: true})
-var filename = 'bda-s2_self6_3heart_paramAdj-mcmc'+
+var filename = 'bda-s2_self5_3heart_paramAdj-mcmc'+
 numSamples+'_burn'+burn+'_chain'+index+'.json'
 
 json.write(filename, posterior)
