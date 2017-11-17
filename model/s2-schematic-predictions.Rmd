@@ -21,11 +21,11 @@ local.path <- "~/Documents/Research/polgrice_GIT/"
 ```{r}
 rsaModel <-'
 var utterances = [
-  "yes_terrible","yes_bad","yes_okay","yes_good","yes_amazing",
-  "not_terrible","not_bad","not_okay","not_good","not_amazing"
+  "yes_terrible","yes_bad","yes_good","yes_amazing",
+  "not_terrible","not_bad","not_good","not_amazing"
   ];
 
-var states = [1,2,3,4,5];
+var states = [0, 1, 2, 3];
 
 var statePrior = function(){
   return uniformDraw(states);
@@ -40,20 +40,12 @@ var marginalize = function(dist, key){
 }
 
 var cost_yes = 1;
-var cost_neg = 2;
-var speakerOptimality = 2;
-var speakerOptimality2 = 2;
-var alpha = 1;
-
-// var s = inputData.state[0];
-// var w = inputData.weight[0];
+var cost_neg = 1.5;
+var speakerOptimality = 5;
 
 var round = function(x){
 	return Math.round(x * 100) / 100
 }
-
-// var phiWeights = [1, 1, 1, 1, 1, 1, 1, 1, 1]
-// var weightBins = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 
 var weightBins = map(round, _.range(0,1, 0.05))
 var phiWeights = repeat(weightBins.length, function(){1})
@@ -66,21 +58,16 @@ var utterancePrior = Infer({method: "enumerate"}, function(){
   return utterances[discrete(uttCosts)]
 });
 
-var StatePrior = Categorical({vs: states, ps:[20,10,3,2,1]})
-
-
-var literalSemantics = {
-  "state": [1, 2, 3, 4, 5],
-  "not_amazing": [0.9925, 0.9186, 0.7876, 0.2321, 0.042],
-  "not_bad": [0.0075, 0.2897, 0.8514, 0.8694, 0.8483],
-  "not_good": [0.9926, 0.8871, 0.1582, 0.0073, 0.0081],
-  "not_okay": [0.9198, 0.7652, 0.1063, 0.0074, 0.1192],
-  "not_terrible": [0.0415, 0.4363, 0.9588, 0.9225, 0.9116],
-  "yes_amazing": [0.0077, 0.0077, 0.0426, 0.675, 0.9919],
-  "yes_bad": [0.9921, 0.9574, 0.0078, 0.0078, 0.0079],
-  "yes_good": [0.008, 0.0408, 0.8279, 0.9914, 0.993],
-  "yes_okay": [0.0078, 0.286, 0.9619, 0.7776, 0.6122],
-  "yes_terrible": [0.9593, 0.5217, 0.0753, 0.008, 0.044]
+var literalSemantics = { // 0 -> 0.001, 1 -> 0.999
+  "state": [0, 1, 2, 3],
+  "not_terrible": [0.001, 0.353, 0.980, 0.863],
+  "not_bad": [0.020, 0.157, 0.999, 0.902],
+  "not_good": [0.961, 0.863, 0.039, 0.020],
+  "not_amazing": [0.961, 0.980, 0.627, 0.039],
+  "yes_terrible": [0.961, 0.627, 0.039, 0.039],
+  "yes_bad": [0.980, 0.882, 0.039, 0.020],
+  "yes_good": [0.001, 0.020, 0.941, 0.999],
+  "yes_amazing": [0.001, 0.001, 0.216, 0.980]
 };
 
 
@@ -90,26 +77,23 @@ var meaning = function(words, state){
 
 var listener0 = cache(function(utterance) {
   Infer({method: "enumerate"}, function(){
-	//  var state = uniformDraw(states);
-    var state = sample(StatePrior)
-	//	var state = categorical ({vs: states, ps: [5,4,3,2,1]})
-
+	var state = uniformDraw(states);
     var m = meaning(utterance, state);
     condition(m);
     return state;
 	})
 }, 10000);
 
-var speaker1 = cache(function(state, speakerGoals) {
+var speaker1 = cache(function(state, phi) {
   Infer({method: "enumerate"}, function(){
 
     var utterance = sample(utterancePrior);
     var L0 = listener0(utterance);
 
     var epistemicUtility = L0.score(state);
-    var socialUtility = expectation(L0, function(s){return alpha*s});
-    var eUtility = speakerGoals.phi*epistemicUtility;
-    var sUtility = (1-speakerGoals.phi)*socialUtility;
+    var socialUtility = expectation(L0, function(s){return s});
+    var eUtility = phi*epistemicUtility;
+    var sUtility = (1-phi)*socialUtility;
     var speakerUtility = eUtility+sUtility;
 
     factor(speakerOptimality*speakerUtility);
@@ -121,69 +105,99 @@ var speaker1 = cache(function(state, speakerGoals) {
 var listener1 = cache(function(utterance) {
   Infer({method: "enumerate"}, function(){
 
-   var speakerGoals = {
-     phi: categorical ({vs: weightBins, ps: phiWeights})
-   }
+   var phi = categorical ({vs: weightBins, ps: phiWeights})
     var state = uniformDraw(states);
-   // var state = sample(StatePrior)
 
-   var S1 = speaker1(state, speakerGoals)
+   var S1 = speaker1(state, phi)
    observe(S1, utterance)
 
    return {
      state: state,
-     phi: speakerGoals.phi
+     phi: phi
    }
 
  })
 }, 10000);
 
-var speaker2 = cache(function(state, truthiness) {
+var speaker2 = cache(function(state, s1_phi, selfpres_phi, social_phi, informative_phi) {
   Infer({method: "enumerate"}, function(){
 
 	 var utterance = sample(utterancePrior);
-	 var intendedGoals = {phi: truthiness}
 
    var L1 = listener1(utterance)
+	  var L1_goal = marginalize(L1, "phi");
+	  var L1_state = marginalize(L1, "state");
 
-   factor(speakerOptimality2 * L1.score({
-              "state":state,
-              "goals":intendedGoals
-    }))
+    var epistemicUtility = L1_state.score(state);
+    var selfpresUtility = L1_goal.score(s1_phi);
+   var socialUtility = expectation(L1_state, function(s){return s});
+
+  var speakerMixedUtility = informative_phi*epistemicUtility +
+                            selfpres_phi*selfpresUtility +
+                            social_phi*socialUtility
+
+//	factor(speakerOptimality * speakerMixedUtility); // triple mixture
+//	factor(speakerOptimality * informative_phi*epistemicUtility); // true informative only
+//	factor(speakerOptimality * social_phi*socialUtility); // true social only
+//	factor(speakerOptimality * selfpres_phi*selfpresUtility); // self-presentational only
+//	factor(speakerOptimality * (social_phi*socialUtility + selfpres_phi*selfpresUtility)); // true social + self pres
+	factor(speakerOptimality * (informative_phi*epistemicUtility + selfpres_phi*selfpresUtility)); // true informative + self pres
+	factor(speakerOptimality * (informative_phi*epistemicUtility + social_phi*socialUtility)); // true informative + true social
+
+
 
    return {negation: isNegation(utterance),
-            utterance: utterance}
+            utterance: utterance,
+            s1_phi: s1_phi, 
+            selfpres_phi: selfpres_phi, 
+            social_phi: social_phi, 
+            informative_phi: informative_phi, 
+            cost_neg: cost_neg,
+            speakerOptimality: speakerOptimality
+}
 
  })
 }, 10000);
 
 //listener1("not_amazing")
-speaker2(1, 0.5);
+speaker2(1, 0.1, 0.01, 0.6, 0.4);
 '
 
-l1.rs <- webppl(rsaModel) %>%
-  mutate(state = factor(state))
+# l1.rs <- webppl(rsaModel) %>%
+#   mutate(state = factor(state))
+# 
+# ggplot(l1.rs, aes( x = phi, y = prob, color = state, group = state))+
+#   geom_line()
 
-ggplot(l1.rs, aes( x = phi, y = prob, color = state, group = state))+
-  geom_line()
+s2.informative_social <- webppl(rsaModel) %>%
+  mutate(model = "informative + social") %>%
+  separate(utterance, c("positivity","utterance")) %>%
+  mutate(utterance = fct_relevel(utterance, 
+                                "terrible", "bad", "good", "amazing"))
 
+s2.informative_social %>% 
+  ggplot(., aes( x = utterance, y = prob, 
+                 color = positivity, group = positivity))+
+  geom_line()+
+  theme_few()+
+  scale_color_solarized()
 ```
 
 ```{r}
-l1.all2 <- l1.all2 %>% mutate(prior = factor(prior, levels = c("neither", "L0_only", "L1_only", "both")))
-
-ggplot(l1.all2, aes( x = phi, y = prob, color = state, group = state))+
-  geom_line() +
-  facet_grid(prior~.)+
-  ggtitle("L1 prediction on phi given \"not amazing\", \n faceted by state prior setting")
-
-ggplot(l1.all %>%
-         group_by(state, prior) %>%
-         summarise(prob = sum(prob)), 
-       aes( x = state, y = prob, fill = state, group = state))+
-  geom_bar(position=position_dodge(), stat = "identity") +
-  facet_grid(prior~.)+
-  ggtitle("L1 prediction on state given \"not terrible\", \n faceted by state prior setting")
+# l1.all2 <- l1.all2 %>% mutate(prior = factor(prior, levels = c("neither", "L0_only", "L1_only", "both")))
+# 
+# ggplot(l1.all2, aes( x = phi, y = prob, color = state, group = state))+
+#   geom_line() +
+#   facet_grid(prior~.)+
+#   ggtitle("L1 prediction on phi given \"not amazing\", \n faceted by state prior setting")
+# 
+# ggplot(l1.all %>%
+#          group_by(state, prior) %>%
+#          summarise(prob = sum(prob)), 
+#        aes( x = state, y = prob, fill = state, group = state))+
+#   geom_bar(position=position_dodge(), stat = "identity") +
+#   facet_grid(prior~.)+
+#   ggtitle("L1 prediction on state given \"not terrible\", \n faceted by state prior setting")
 
 ```
 
