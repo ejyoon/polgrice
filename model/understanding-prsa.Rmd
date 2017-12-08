@@ -1,0 +1,410 @@
+---
+title: "Politeness S2 predictions"
+output: html_notebook
+---
+
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(rwebppl)
+library(jsonlite)
+library(magrittr)
+library(ggthemes)
+library(forcats)
+library(knitr)
+library(gganimate)
+# set path to working dir
+local.path <- "~/Documents/research/polgrice/"
+#local.path <- "~/Documents/Research/polgrice_GIT/"
+```
+
+
+```{r languageUtils}
+language <- '
+var cost_yes = 1;
+var cost_neg = 2;
+
+var isNegation = function(utt){
+  return (utt.split("_")[0] == "not")
+};
+
+var utterances = [
+  "yes_terrible","yes_bad","yes_okay","yes_good","yes_amazing",
+  "not_terrible","not_bad","not_okay","not_good","not_amazing"
+  ];
+
+var uttCosts = map(function(u) {
+	return isNegation(u) ? Math.exp(-cost_neg) : Math.exp(-cost_yes)
+}, utterances)
+
+var utterancePrior = Infer({method: "enumerate"}, function(){
+  return utterances[discrete(uttCosts)]
+});
+
+var literalSemantics = {
+  "state": [1, 2, 3, 4, 5],
+  "not_amazing": [0.9925, 0.9186, 0.7876, 0.2321, 0.042],
+  "not_bad": [0.0075, 0.2897, 0.8514, 0.8694, 0.8483],
+  "not_good": [0.9926, 0.8871, 0.1582, 0.0073, 0.0081],
+  "not_okay": [0.9198, 0.7652, 0.1063, 0.0074, 0.1192],
+  "not_terrible": [0.0415, 0.4363, 0.9588, 0.9225, 0.9116],
+  "yes_amazing": [0.0077, 0.0077, 0.0426, 0.675, 0.9919],
+  "yes_bad": [0.9921, 0.9574, 0.0078, 0.0078, 0.0079],
+  "yes_good": [0.008, 0.0408, 0.8279, 0.9914, 0.993],
+  "yes_okay": [0.0078, 0.286, 0.9619, 0.7776, 0.6122],
+  "yes_terrible": [0.9593, 0.5217, 0.0753, 0.008, 0.044]
+};
+
+
+var meaning = function(words, state){
+  return flip(literalSemantics[words][state - 1]);
+};
+'
+```
+
+```{r utils}
+utils <- '
+var states = [1,2,3,4,5];
+
+var statePrior = function(){
+  return uniformDraw(states);
+};
+
+var speakerOptimality = 2;
+var speakerOptimality2 = 2;
+var alpha = 1;
+
+// var s = inputData.state[0];
+// var w = inputData.weight[0];
+
+var round = function(x){
+	return Math.round(x * 100) / 100
+}
+
+// var phiWeights = [1, 1, 1, 1, 1, 1, 1, 1, 1]
+// var weightBins = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+
+var weightBins = map(round, _.range(0,1, 0.05))
+var phiWeights = repeat(weightBins.length, function(){1})
+
+
+var StatePrior = Categorical({vs: states, ps:[1,1,1,1,1]})
+'
+```
+
+
+
+```{r}
+prsa <-'
+var listener0 = cache(function(utterance) {
+  Infer({method: "enumerate"}, function(){
+    var state = sample(StatePrior)
+
+    var m = meaning(utterance, state);
+    condition(m);
+    return state;
+	})
+}, 10000);
+
+var speaker1 = cache(function(state, phi) {
+  Infer({method: "enumerate"}, function(){
+
+    var utterance = sample(utterancePrior);
+    var L0 = listener0(utterance);
+
+    var epistemicUtility = L0.score(state);
+    var socialUtility = expectation(L0, function(s){return alpha*s});
+    var eUtility = phi*epistemicUtility;
+    var sUtility = (1-phi)*socialUtility;
+    var speakerUtility = eUtility+sUtility;
+
+    factor(speakerOptimality*speakerUtility);
+
+    return utterance;
+	})
+}, 10000);
+
+var listener1 = cache(function(utterance) {
+  Infer({method: "enumerate"}, function(){
+
+   var phi = categorical ({vs: weightBins, ps: phiWeights})
+    var state = sample(StatePrior)
+
+   var S1 = speaker1(state, phi)
+   observe(S1, utterance)
+
+   return { state, phi }
+
+ })
+}, 10000);
+'
+```
+
+```{r}
+literalListenerCall <- '
+_.fromPairs(_.flatten(map(function(u){
+  var post = listener0(u)
+  var stateObj = map(function(s){
+    [u + "_" + s, Math.exp(post.score(s))]
+  }, states)
+  return stateObj
+}, utterances)))
+'
+```
+
+```{r}
+pragmaticListenerCall <- '
+_.fromPairs(_.flatten(map(function(u){
+  var post = listener1(u)
+  var stateObj = _.flatten(map(function(phi){
+      map(function(s){
+            [u + "_" + s + "_" + phi*100, Math.exp(post.score({state: s, phi: phi}))]
+          }, states)
+    }, weightBins))
+  return stateObj
+}, utterances)))
+'
+```
+
+
+```{r}
+speakerCall <- '
+_.flatten(
+map(function(phi){
+    map(function(s){
+      var speakProbs = speaker1(s, phi)
+      var uttObj = _.fromPairs(map(function(u){
+        [u, Math.exp(speakProbs.score(u))]
+      }, utterances))
+       return extend(uttObj,{ state: s, phi: phi, })
+    }, states)
+}, weightBins))
+'
+```
+
+### L0 viz
+
+```{r}
+rs.l0 <- webppl(paste(utils, language, prsa, literalListenerCall,  sep = '\n'))
+
+
+rs.l0.tidy <- data.frame(rs.l0) %>% gather(utt_state, prob) %>%
+  separate(utt_state, into=c("positive", "utt", "state")) %>% 
+    mutate(utterance = paste(positive, utt),
+                utterance = factor(utterance,
+                                   levels = c("yes terrible",
+                                              "yes bad",
+                                              "yes okay",
+                                              "yes good",
+                                              "yes amazing",
+                                              "not terrible",
+                                              "not bad",
+                                              "not okay",
+                                              "not good",
+                                              "not amazing")))
+```
+
+#### L0 static
+
+```{r}
+fig.l0 <- ggplot(rs.l0.tidy %>%
+                   mutate(positive = 
+                          factor(positive, levels = c("yes", "not")),
+                          utt = factor(utt, 
+                                       levels = c("terrible", 
+                                                  "bad",
+                                                  "okay",
+                                                  "good", 
+                                                  "amazing"))),
+       aes( x = state, y = prob, group = state, fill = state) )+
+  geom_bar(position = position_dodge(), stat = 'identity', color = 'black')+
+  scale_y_continuous(limits = c(0, 0.6), breaks = c(0, 0.25, 0.5))+
+  facet_grid(positive~utt)+
+  scale_fill_manual(values =  rev(brewer.pal(5,"RdBu")))+
+  guides(fill = F)+
+  ylab("Literal listener probability")
+
+ggsave("img/l0.pdf", width = 7, height = 4)
+```
+
+### S1 viz
+
+```{r}
+rs.s1 <- webppl(paste(utils, language, prsa, speakerCall,  sep = '\n'))
+
+
+rs.s1.tidy <- rs.s1 %>%
+  gather(utt, prob, -state, -phi)
+```
+
+
+#### S1 movie
+
+```{r}
+mov.s1 <- rs.s1.tidy %>%
+  separate(utt, into = c("positive", "utterance")) %>%
+  mutate(positive = factor(positive, levels = c("not", "yes")),
+         utterance = factor(utterance, levels = c("terrible", "bad", "okay", "good", "amazing")),
+         phi = 1 - phi) %>%
+  filter(state %in% c(1, 3, 5))%>%
+  ggplot(., aes( x = utterance, fill = positive, y = prob ))+
+  geom_bar(stat = 'identity', position = position_dodge(), color = 'black', aes(frame = phi))+
+  facet_wrap(~state, nrow = 1)+
+  scale_fill_solarized()+
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))+
+  scale_y_continuous(limits = c(0, 0.6), breaks = c(0, 0.25, 0.5))+
+  ylab("Speaker production probability")+
+  ggtitle("relative social utility = ")
+
+gganimate(mov.s1, "img/s1.gif", ani.width=600, ani.height=250, interval = 0.3)
+```
+
+#### S1 static
+
+```{r}
+fig.s1 <- rs.s1.tidy %>%
+  filter(state %in% c(1, 3, 5),
+         phi %in% c(0.00, 0.30, 0.50, 0.70, 0.95)) %>%
+  separate(utt, into = c("positive", "utterance")) %>%
+  mutate(positive = factor(positive, levels = c("not", "yes")),
+         utterance = factor(utterance, levels = c("terrible", "bad", "okay", "good", "amazing")),
+         phi = 1 - phi) %>%
+  ggplot(., aes( x = utterance, fill = positive, y = prob ))+
+  geom_bar(stat = 'identity', position = position_dodge(), color = 'black')+
+  facet_grid(state~phi, labeller = label_both)+
+  scale_fill_solarized()+
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
+        strip.text.y = element_text(angle = 0))+
+  scale_y_continuous(limits = c(0, 0.6), breaks = c(0, 0.25, 0.5))+
+  ylab("Speaker production probability")
+
+ggsave("img/s1.pdf", width = 8, height = 4)
+```
+
+
+### L1 viz
+
+
+
+```{r}
+rs.l1 <- webppl(paste(utils, language, prsa, pragmaticListenerCall,  sep = '\n'))
+
+rs.l1.tidy <- data.frame(rs.l1) %>% gather(utt_state, prob) %>%
+  separate(utt_state, into = c("positive", "utt", "state", "phi"), sep  = "_") %>%
+  mutate(positive =
+    factor(positive, levels = c("yes", "not")),
+      utt = factor(utt, levels = c(
+                      "terrible",
+                      "bad",
+                      "okay",
+                      "good",
+                      "amazing"
+                      )),
+    phi = as.numeric(phi) / 100,
+    phi = 1 - phi
+  )
+  
+
+ggplot(rs.l1.tidy, aes ( x = state, y = phi, fill = prob))+
+  geom_tile(colour = "grey95") + 
+  scale_fill_gradient(low = "white", high = "steelblue")+
+  facet_grid(positive ~ utt)+
+  scale_y_continuous(limits = c(0, 1), breaks = c(0, 0.5, 1))+
+  guides(fill = F)+
+  ylab("speaker's relative social utility")
+  
+ggsave("img/l1.pdf", width = 8, height = 4)
+```
+
+)#### L0 static
+
+```{r}
+fig.l0 <- ggplot(rs.l0.tidy,
+       aes( x = state, y = prob, group = state, fill = state) )+
+  geom_bar(position = position_dodge(), stat = 'identity', color = 'black')+
+  scale_y_continuous(limits = c(0, 0.6), breaks = c(0, 0.25, 0.5))+
+  facet_grid(positive~utt)+
+  scale_fill_manual(values =  rev(brewer.pal(5,"RdBu")))+
+  guides(fill = F)+
+  ylab("Literal listener probability")
+
+ggsave("img/l0.pdf", width = 7, height = 4)
+```
+
+
+
+```{r}
+
+
+l1.rs <- webppl(rsaModel) %>%
+  mutate(state = factor(state))
+
+ggplot(l1.rs, aes( x = phi, y = prob, color = state, group = state))+
+  geom_line()
+
+```
+
+
+```{r}
+speakerModel <- '
+var speaker2 = cache(function(state, truthiness) {
+  Infer({method: "enumerate"}, function(){
+
+	 var utterance = sample(utterancePrior);
+	 var intendedGoals = {phi: truthiness}
+
+   var L1 = listener1(utterance)
+
+   factor(speakerOptimality2 * L1.score({
+              "state":state,
+              "goals":intendedGoals
+    }))
+
+   return {negation: isNegation(utterance),
+            utterance: utterance}
+
+ })
+}, 10000);
+
+speaker2(s, w);
+'
+```
+
+```{r}
+s2.predictions <- data.frame()
+for (s in c(1,2,3,4,5)){
+  
+  for (w in c(0.1, 0.5, 0.9)) {
+    inputData <- list(
+      state = s,
+      weight = w
+    )
+    
+    s2 <- webppl(rsaModel, data = inputData, data_var = "inputData")
+    
+    s2.neg <- s2 %>% 
+      filter(negation) %>% 
+      summarize(negation = sum(prob)) %>%
+      mutate(state = s, weight = w)
+    
+    s2.predictions <- bind_rows(s2.predictions, s2.neg)
+  }
+}
+```
+
+
+```{r}
+s2.predictions %>% 
+  mutate(
+    weight = factor(weight, levels = c(0.9, 0.1, 0.5),
+                         labels = c("informative", "social", "both"))
+  ) %>%
+  ggplot(., aes( x = state, y = negation, 
+                 color = weight, group = weight))+
+  geom_line()+
+  theme_few()+
+  scale_color_solarized()
+```
+
